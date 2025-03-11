@@ -35,15 +35,23 @@ class SearchCtrl extends BaseController
     public function search()
     {
         $lang = session()->get('lang') ?? 'en';
-        $keyword = $this->request->getGet('q');
-        $new_keyword = $keyword;
+        $keyword = $this->request->getGet('q'); // Ambil query parameter
 
-        $current_lang_segment = $this->request->uri->getSegment(1);
+        // Buat canonical URL dengan query string jika ada
+        $canonical = base_url("$lang/" . ($lang === 'id' ? 'cari' : 'search'));
+        if (!empty($keyword)) {
+            $canonical .= "?q=" . urlencode($keyword);
+        }
 
-        $url_prefix = $lang === 'id' ? 'cari' : 'search';
+        // Pastikan current_url() mempertimbangkan query string
+        $currentFullUrl = current_url();
+        if (!empty($_SERVER['QUERY_STRING'])) {
+            $currentFullUrl .= '?' . $_SERVER['QUERY_STRING'];
+        }
 
-        if ($current_lang_segment !== $lang) {
-            return redirect()->to(base_url("{$lang}/{$url_prefix}/{$new_keyword}"));
+        // Cegah infinite redirect loop
+        if ($currentFullUrl !== $canonical) {
+            return redirect()->to($canonical);
         }
 
         $nama_tentang = $this->TentangModel->getNamaTentang();
@@ -53,23 +61,54 @@ class SearchCtrl extends BaseController
         $olehOlehResults = $this->OlehOlehModel->searchOlehOleh($keyword);
         $wisataResults = $this->WisataModel->searchTempatWisata($keyword);
 
-        $title = $keyword ? "$keyword - $nama_tentang" : "Hasil Pencarian - $nama_tentang";
+        $head = $lang === 'id' ? 'Hasil Pencarian Dengan Kata Kunci' : 'Search Results with Keyword';
+        $title = $head . ' "' . $keyword . '"';
+        $OGtitle = $head . ' ' . $keyword;
 
-        $head = $lang === 'id' ? 'Artikel Wisata' : 'Travel Articles';
+        $headWisata = $lang === 'id' ? 'Hasil Pencarian Wisata Dengan Kata Kunci' : 'Search Results with Keyword';
+        $titleWisata = $headWisata . ' "' . $keyword . '"';
 
-        $title = $head . ' : #' . $keyword;
+        $headOlehOleh = $lang === 'id' ? 'Hasil Pencarian Oleh Oleh Dengan Kata Kunci' : 'Search Results with Keyword';
+        $titleOlehOleh = $headOlehOleh . ' "' . $keyword . '"';
+
+        $headArtikel = $lang === 'id' ? 'Hasil Pencarian Artikel Dengan Kata Kunci' : 'Search Results with Keyword';
+        $titleArtikel = $headArtikel . ' "' . $keyword . '"';
+
+
+
+        $image = base_url('assets-baru/img/error_logo.webp');
+
+        $metaOG = [
+            'title'       => $OGtitle,
+            'description' => $OGtitle,
+            'image'       => $image,
+            'url'         => $canonical,
+            'type'        => 'article',
+        ];
+
+        $meta = (object) [
+            'meta_title_id' => $title ?? '',
+            'meta_title_en' => $title ?? '',
+            'meta_description_id' =>  $title ?? '',
+            'meta_description_en' =>  $title ?? ''
+        ];
 
         $data = [
             'kategori' => $this->KategoriModel->getKategori(),
             'kategoriwisata' => $this->KategoriWisataModel->getKategoriWisata(),
             'kategoriOlehOleh' => $this->KategoriOlehOlehModel->getKategoriOlehOleh(),
-
             'artikel' => $artikelResults,
             'oleholeh' => $olehOlehResults,
             'wisata' => $wisataResults,
             'tentang' => $this->TentangModel->getTentangDepan(),
             'title' => $title,
-            'lang' => $lang
+            'lang' => $lang,
+            'canonical' => $canonical,
+            'metaOG' => $metaOG,
+            'meta' => $meta,
+            'titleWisata' => $titleWisata,
+            'titleOlehOleh' => $titleOlehOleh,
+            'titleArtikel' => $titleArtikel,
         ];
 
         return view('user/search', $data);

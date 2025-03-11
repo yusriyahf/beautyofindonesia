@@ -51,9 +51,11 @@ class TempatWisataModel extends Model
             ->orLike('tb_provinsi.nama_provinsi', $keyword)
             ->orLike('tb_provinsi.nama_provinsi_eng', $keyword)
             ->groupEnd()
+            ->orderBy('tb_tempatwisata.id_wisata', 'DESC') // Tambahkan order by DESC di sini
             ->get()
             ->getResultArray();
     }
+
 
 
     public function getWisataByKotakabupaten($id_kotakabupaten)

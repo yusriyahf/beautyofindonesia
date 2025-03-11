@@ -218,7 +218,7 @@ $routes->group('en', function ($routes) {
     $routes->get('article/(:segment)/(:segment)', 'user\Homectrl::viewArtikel/$1/$2');
 
     $routes->get('destinations', 'Wisata::index');
-    $routes->get('destinations/(:segm qent)', 'Wisata::kategoriWisata/$1');
+    $routes->get('destinations/(:segment)', 'Wisata::kategoriWisata/$1');
     $routes->get('destinations/(:segment)/(:segment)', 'Wisata::detail/$1/$2');
 
     $routes->get('nature-tourism/(:any)', 'Wisata::kategoriWisata/$1');

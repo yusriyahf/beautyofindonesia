@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title">
-                            <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($title); ?></h4>
+                            <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($titleWisata); ?></h4>
                         </div>
                     </div>
                     <?php if (!empty($wisata)): ?>
@@ -40,10 +40,10 @@
                                         <div class="bg-white border border-top-0 p-4 flex-grow-1">
                                             <div class="mb-2">
                                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2 
-        <?= current_url() === base_url($lang . ($lang === 'en' ? '/categories/' : '/kategori/') .
-                                ($lang === 'en' ? ($row['slug_kategori_en'] ?? '') : ($row['slug_kategori'] ?? ''))) ? 'active' : '' ?>"
-                                                    href="<?= base_url($lang . ($lang === 'en' ? '/categories/' : '/kategori/') .
-                                                                ($lang === 'en' ? ($row['slug_kategori_en'] ?? '') : ($row['slug_kategori'] ?? ''))) ?>">
+        <?= current_url() === base_url($lang . ($lang === 'en' ? '/destinations/' : '/wisata/') .
+                                ($lang === 'en' ? ($row['slug_kategori_wisata_en'] ?? '') : ($row['slug_kategori_wisata'] ?? ''))) ? 'active' : '' ?>"
+                                                    href="<?= base_url($lang . ($lang === 'en' ? '/destinations/' : '/wisata/') .
+                                                                ($lang === 'en' ? ($row['slug_kategori_wisata_en'] ?? '') : ($row['slug_kategori_wisata'] ?? ''))) ?>">
                                                     <?= esc($lang === 'en' ? ($row['nama_kategori_wisata_en'] ?? 'Unknown Category') : ($row['nama_kategori_wisata'] ?? 'Unknown Category')) ?>
                                                 </a>
 
@@ -112,7 +112,7 @@
                             <?php $count++; ?>
                         <?php endforeach; ?>
                         <div class="col-12 text-center">
-                            <button id="loadMoreWisata" class="btn btn-primary mt-3 mb-3">Tampilkan Lebih</button>
+                            <button id="loadMoreWisata" class="btn btn-primary mt-3 mb-3"><?= $lang === 'id' ? 'Tampilkan Lebih' : 'Show More'; ?></button>
                         </div>
                         <style>
                             /* Styling card article */
@@ -158,7 +158,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title">
-                            <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($title); ?></h4>
+                            <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($titleOlehOleh); ?></h4>
                         </div>
                     </div>
                     <?php $count = 0; ?>
@@ -167,7 +167,7 @@
                             <div class="artikel-card position-relative d-flex flex-column h-100 mb-3">
                                 <a class="artikel-link" href="<?= base_url(
                                                                     $lang . '/' .
-                                                                        ($lang === 'en' ? 'article' : 'artikel') . '/' .
+                                                                        ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
                                                                         strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_oleholeh_en'] : $row['slug_kategori_oleholeh']))) . '/' .
                                                                         ($lang === 'en' ? $row['slug_en'] : $row['slug_oleholeh'])
                                                                 )  ?>">
@@ -187,11 +187,12 @@
 
                                     <div class="bg-white border border-top-0 p-4 flex-grow-1">
                                         <div class="mb-2">
-                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="#">
+                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="<?= base_url($lang . ($lang === 'en' ? '/souvenirs/' : '/oleh-oleh/') .
+                                                                                                                                    ($lang === 'en' ? ($row['slug_kategori_oleholeh_en'] ?? '') : ($row['slug_kategori_oleholeh'] ?? ''))) ?>">
                                                 <?= esc($lang === 'en' ? $row['nama_kategori_oleholeh_en'] : $row['nama_kategori_oleholeh']) ?>
                                             </a>
                                         </div>
-                                        <p class="text-body">
+                                        <p class=" text-body">
                                             <small class="location">
                                                 <i class="fas fa-map-marker-alt"></i>
                                                 <span class="location-details">
@@ -219,24 +220,35 @@
 
                                             </small>
                                         </p>
-                                        <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="#">
-                                            <?= $lang === 'en' ? $row['nama_oleholeh_enG'] : $row['nama_oleholeh']; ?>
+                                        <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url(
+                                                                                                                $lang . '/' .
+                                                                                                                    ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
+                                                                                                                    strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_oleholeh_en'] : $row['slug_kategori_oleholeh']))) . '/' .
+                                                                                                                    ($lang === 'en' ? $row['slug_en'] : $row['slug_oleholeh'])
+                                                                                                            )  ?>">
+                                            <?= $lang === 'en' ? $row['nama_oleholeh_eng'] : $row['nama_oleholeh']; ?>
                                         </a>
                                         <p style="margin-bottom: -65px;">
                                             <?php if ($lang === 'en'): ?>
-                                                <?= substr(strip_tags($row['deskripsi_oleholeh_enG']), 0, 100); ?>...
+                                                <?= substr(strip_tags($row['deskripsi_oleholeh_eng']), 0, 100); ?>...
                                             <?php else: ?>
                                                 <?= substr(strip_tags($row['deskripsi_oleholeh']), 0, 100); ?>...
                                             <?php endif; ?>
                                         </p>
                                     </div>
-                                    <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+                                    <div class="d-flex justify-content-between bg-white border border-top-0 py-3 px-4" style="border-radius: 0 0 15px 15px;">
                                         <small><i class="far fa-eye mr-2"></i>views <?= esc($row['views']); ?></small>
                                     </div>
                                 </a>
                             </div>
                         </div>
+                        <?php $count++; ?>
                     <?php endforeach; ?>
+                    <div class="col-12 text-center">
+                        <button id="loadMoreOlehOleh" class="btn btn-primary mt-3 mb-3">
+                            <?= $lang === 'id' ? 'Tampilkan Lebih' : 'Show More'; ?>
+                        </button>
+                    </div>
 
 
 
@@ -273,7 +285,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title">
-                            <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($title); ?></h4>
+                            <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($titleArtikel); ?></h4>
                         </div>
                     </div>
                     <?php $count = 0; ?>
@@ -290,12 +302,18 @@
 
                                     <div class="bg-white border border-top-0 p-4 flex-grow-1">
                                         <div class="mb-2">
-                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="#">
+                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="<?= base_url($lang . ($lang === 'en' ? '/articles/' : '/artikel/') .
+                                                                                                                                    ($lang === 'en' ? ($row['slug_kategori_en'] ?? '') : ($row['slug_kategori'] ?? ''))) ?>">
                                                 <?= esc($lang === 'en' ? $row['nama_kategori_en'] : $row['nama_kategori']) ?>
                                             </a>
                                         </div>
                                         <p class="text-body"><small><?= date('d F Y', strtotime($row['tgl_publish'])); ?></small></p>
-                                        <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="#">
+                                        <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url(
+                                                                                                                $lang . '/' .
+                                                                                                                    ($lang === 'en' ? 'article' : 'artikel') . '/' .
+                                                                                                                    strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_en'] : $row['slug_kategori']))) . '/' .
+                                                                                                                    ($lang === 'en' ? $row['slug_en'] : $row['slug'])
+                                                                                                            )  ?>">
                                             <?= $lang === 'en' ? $row['judul_artikel_en'] : $row['judul_artikel']; ?>
                                         </a>
                                         <p style="margin-bottom: -65px;">
@@ -315,7 +333,7 @@
                         <?php $count++; ?>
                     <?php endforeach; ?>
                     <div class="col-12 text-center">
-                        <button id="loadMoreArtikel" class="btn btn-primary mt-3 mb-3">Tampilkan Lebih</button>
+                        <button id="loadMoreArtikel" class="btn btn-primary mt-3 mb-3"><?= $lang === 'id' ? 'Tampilkan Lebih' : 'Show More'; ?></button>
                     </div>
 
 
@@ -382,6 +400,27 @@ echo $popupController->checkPopup();
                 loadMoreArticlesBtn.style.display = "none";
             }
         });
+
+        let visibleCountOlehOleh = 3; // Artikel yang terlihat awalnya
+        const incrementOlehOleh = 6; // Jumlah artikel yang ditampilkan setiap kali tombol diklik
+        const olehOleh = document.querySelectorAll(".oleholeh-item");
+        const loadMoreOlehOlehBtn = document.getElementById("loadMoreOlehOleh");
+        loadMoreOlehOlehBtn.addEventListener("click", function() {
+            let newVisibleCountOlehOleh = visibleCountOlehOleh + incrementOlehOleh;
+
+            // Menampilkan artikel tambahan
+            for (let i = visibleCountOlehOleh; i < newVisibleCountOlehOleh && i < olehOleh.length; i++) {
+                olehOleh[i].style.display = "block";
+            }
+
+            visibleCountOlehOleh = newVisibleCountOlehOleh;
+
+            // Sembunyikan tombol jika semua artikel sudah ditampilkan
+            if (visibleCountOlehOleh >= wisata.length) {
+                loadMoreOlehOlehBtn.style.display = "none";
+            }
+        });
+
 
         let visibleCountWisata = 3; // Artikel yang terlihat awalnya
         const incrementWisata = 6; // Jumlah artikel yang ditampilkan setiap kali tombol diklik
