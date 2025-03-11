@@ -130,9 +130,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
 
 
 
-// });
-
-// $routes->set404Override('App\Controllers\user\Homectrl::notFound');
+$routes->set404Override('App\Controllers\user\Homectrl::notFound');
 
 // Define routes for Indonesian language
 $routes->group('id', function ($routes) {

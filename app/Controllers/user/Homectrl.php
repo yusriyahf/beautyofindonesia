@@ -296,6 +296,6 @@ class Homectrl extends BaseController
 
     public function notFound()
     {
-        return redirect()->to('/');
+        return redirect()->to('/')->setStatusCode(301);
     }
 }
