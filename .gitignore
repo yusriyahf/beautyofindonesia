@@ -1,0 +1,31 @@
+# Direktori vendor & environment
+/vendor/
+/writable/
+/.env
+
+# Cache & Logs
+**/cache/*
+**/logs/*
+
+# File Editor & Sistem
+*.swp
+*.bak
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# File Composer & IDE
+composer.lock
+/node_modules/
+.idea/
+.vscode/
+
+# Cache CI4
+/public/build/
+
+# Asset Image
+/public/
+
+/zip/
+
