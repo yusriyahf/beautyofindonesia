@@ -131,7 +131,7 @@
                             $tags = preg_split('/#/', $lang === 'en' ? $artikel['tags_en'] : $artikel['tags'], -1, PREG_SPLIT_NO_EMPTY);
                             ?>
                             <?php foreach ($tags as $tag) : ?>
-                                <a href="<?= base_url($lang === 'en' ? $lang . '/article/search?q=' . urlencode(trim($tag)) : $lang . '/artikel/search?q=' . urlencode(trim($tag))) ?>"
+                                <a href="<?= base_url($lang === 'en' ? $lang . '/tag?q=' . urlencode(trim($tag)) : $lang . '/tag?q=' . urlencode(trim($tag))) ?>"
                                     class="btn btn-sm btn-outline-secondary m-1">
                                     #<?= trim($tag) ?>
                                 </a>

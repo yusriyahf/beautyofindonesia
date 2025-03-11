@@ -168,7 +168,7 @@ $routes->group('id', function ($routes) {
     $routes->get('api/wisata', 'User\WisataController::index');
 
     $routes->get('cari', 'user\Searchctrl::search');
-    $routes->get('artikel/search', 'user\Artikelctrl::searchByTag');
+    $routes->get('tag', 'user\Searchctrl::searchByTag');
 
 
     $routes->get('artikel', 'user\Artikelctrl::semuaArtikel');
@@ -212,6 +212,7 @@ $routes->group('en', function ($routes) {
     $routes->get('about', 'user\Tentangctrl::index');
 
     $routes->get('search', 'user\Searchctrl::search');
+    $routes->get('tag', 'user\Artikelctrl::searchByTag');
 
     $routes->get('article', 'user\Artikelctrl::semuaArtikel');
     $routes->get('article/(:segment)', 'user\Artikelctrl::index/$1');

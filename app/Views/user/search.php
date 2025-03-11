@@ -141,10 +141,10 @@
                             }
                         </style>
                     <?php else : ?>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="position-relative mb-3">
-                                <div class="bg-white border border-top-0 p-4">
-                                    <p>Tidak ada artikel terkait.</p>
+                                <div class="bg-white border p-4">
+                                    <p><?= $lang === 'id' ? 'Tidak ada Tempat Wisata terkait.' : 'No related tourist attractions.'; ?></p>
                                 </div>
                             </div>
                         </div>
@@ -161,120 +161,131 @@
                             <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($titleOlehOleh); ?></h4>
                         </div>
                     </div>
-                    <?php $count = 0; ?>
-                    <?php foreach ($oleholeh as $row) : ?>
-                        <div class="col-lg-4 mb-3 oleholeh-item" data-index="<?= $count; ?>" <?= $count >= 3 ? 'style="display: none;"' : '' ?>>
-                            <div class="artikel-card position-relative d-flex flex-column h-100 mb-3">
-                                <a class="artikel-link" href="<?= base_url(
-                                                                    $lang . '/' .
-                                                                        ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
-                                                                        strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_oleholeh_en'] : $row['slug_kategori_oleholeh']))) . '/' .
-                                                                        ($lang === 'en' ? $row['slug_en'] : $row['slug_oleholeh'])
-                                                                )  ?>">
+                    <?php if (!empty($oleholeh)): ?>
+                        <?php $count = 0; ?>
+                        <?php foreach ($oleholeh as $row) : ?>
+                            <div class="col-lg-4 mb-3 oleholeh-item" data-index="<?= $count; ?>" <?= $count >= 3 ? 'style="display: none;"' : '' ?>>
+                                <div class="artikel-card position-relative d-flex flex-column h-100 mb-3">
+                                    <a class="artikel-link" href="<?= base_url(
+                                                                        $lang . '/' .
+                                                                            ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
+                                                                            strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_oleholeh_en'] : $row['slug_kategori_oleholeh']))) . '/' .
+                                                                            ($lang === 'en' ? $row['slug_en'] : $row['slug_oleholeh'])
+                                                                    )  ?>">
 
-                                    <?php
-                                    // Set the default image path
-                                    $defaultImage = base_url('assets-baru/img/error_logo.webp');
+                                        <?php
+                                        // Set the default image path
+                                        $defaultImage = base_url('assets-baru/img/error_logo.webp');
 
-                                    // Check if the article image exists, use the default image if it doesn't
-                                    $imagePath = '/assets-baru/img/foto_oleholeh/' . $row['foto_oleholeh'];
-                                    $imageToDisplay = file_exists(FCPATH . '/' . $imagePath) && !empty($row['foto_oleholeh']) ? base_url($imagePath) : $defaultImage;
-                                    ?>
+                                        // Check if the article image exists, use the default image if it doesn't
+                                        $imagePath = '/assets-baru/img/foto_oleholeh/' . $row['foto_oleholeh'];
+                                        $imageToDisplay = file_exists(FCPATH . '/' . $imagePath) && !empty($row['foto_oleholeh']) ? base_url($imagePath) : $defaultImage;
+                                        ?>
 
-                                    <img class="img-fluid w-100" style="height: 150px; object-fit: cover; border-radius: 15px 15px 0 0;" src="<?= $imageToDisplay ?>" loading="lazy">
+                                        <img class="img-fluid w-100" style="height: 150px; object-fit: cover; border-radius: 15px 15px 0 0;" src="<?= $imageToDisplay ?>" loading="lazy">
 
 
 
-                                    <div class="bg-white border border-top-0 p-4 flex-grow-1">
-                                        <div class="mb-2">
-                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="<?= base_url($lang . ($lang === 'en' ? '/souvenirs/' : '/oleh-oleh/') .
-                                                                                                                                    ($lang === 'en' ? ($row['slug_kategori_oleholeh_en'] ?? '') : ($row['slug_kategori_oleholeh'] ?? ''))) ?>">
-                                                <?= esc($lang === 'en' ? $row['nama_kategori_oleholeh_en'] : $row['nama_kategori_oleholeh']) ?>
+                                        <div class="bg-white border border-top-0 p-4 flex-grow-1">
+                                            <div class="mb-2">
+                                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="<?= base_url($lang . ($lang === 'en' ? '/souvenirs/' : '/oleh-oleh/') .
+                                                                                                                                        ($lang === 'en' ? ($row['slug_kategori_oleholeh_en'] ?? '') : ($row['slug_kategori_oleholeh'] ?? ''))) ?>">
+                                                    <?= esc($lang === 'en' ? $row['nama_kategori_oleholeh_en'] : $row['nama_kategori_oleholeh']) ?>
+                                                </a>
+                                            </div>
+                                            <p class=" text-body">
+                                                <small class="location">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <span class="location-details">
+
+                                                        <?php
+                                                        $provinsiSlug = $lang === 'en'
+                                                            ? ($row['provinsi_slug_eng'] ?? strtolower(str_replace(' ', '-', $row['nama_provinsi_eng'] ?? '')))
+                                                            : ($row['provinsi_slug'] ?? strtolower(str_replace(' ', '-', $row['nama_provinsi'] ?? '')));
+                                                        $kabupatenSlug = $lang === 'en'
+                                                            ? ($row['kabupaten_slug_eng'] ?? strtolower(str_replace(' ', '-', $row['nama_kotakabupaten_eng'] ?? '')))
+                                                            : ($row['kabupaten_slug'] ?? strtolower(str_replace(' ', '-', $row['nama_kotakabupaten'] ?? '')));
+                                                        ?>
+
+                                                        <span class="kabupaten">
+                                                            <a class="kabupaten font-weight-bold" href="<?= base_url("$lang/wisata?provinsiSlug={$provinsiSlug}&kabupatenSlug={$kabupatenSlug}") ?>">
+                                                                <?= esc($lang === 'en' ? ($row['nama_kotakabupaten_eng'] ?? 'Unknown City') : ($row['nama_kotakabupaten'] ?? 'Unknown City')) ?>
+                                                            </a>
+                                                        </span>
+                                                        <span class="provinsi">
+                                                            <a class="kabupaten font-weight-bold" href="<?= base_url("$lang/wisata?provinsiSlug={$provinsiSlug}") ?>">
+                                                                <?= esc($lang === 'en' ? ($row['nama_provinsi_eng'] ?? 'Unknown Province') : ($row['nama_provinsi'] ?? 'Unknown Province')) ?>
+                                                            </a>
+                                                        </span>
+                                                    </span>
+
+                                                </small>
+                                            </p>
+                                            <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url(
+                                                                                                                    $lang . '/' .
+                                                                                                                        ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
+                                                                                                                        strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_oleholeh_en'] : $row['slug_kategori_oleholeh']))) . '/' .
+                                                                                                                        ($lang === 'en' ? $row['slug_en'] : $row['slug_oleholeh'])
+                                                                                                                )  ?>">
+                                                <?= $lang === 'en' ? $row['nama_oleholeh_eng'] : $row['nama_oleholeh']; ?>
                                             </a>
+                                            <p style="margin-bottom: -65px;">
+                                                <?php if ($lang === 'en'): ?>
+                                                    <?= substr(strip_tags($row['deskripsi_oleholeh_eng']), 0, 100); ?>...
+                                                <?php else: ?>
+                                                    <?= substr(strip_tags($row['deskripsi_oleholeh']), 0, 100); ?>...
+                                                <?php endif; ?>
+                                            </p>
                                         </div>
-                                        <p class=" text-body">
-                                            <small class="location">
-                                                <i class="fas fa-map-marker-alt"></i>
-                                                <span class="location-details">
+                                        <div class="d-flex justify-content-between bg-white border border-top-0 py-3 px-4" style="border-radius: 0 0 15px 15px;">
+                                            <small><i class="far fa-eye mr-2"></i>views <?= esc($row['views']); ?></small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <?php $count++; ?>
+                        <?php endforeach; ?>
+                        <div class="col-12 text-center">
+                            <button id="loadMoreOlehOleh" class="btn btn-primary mt-3 mb-3">
+                                <?= $lang === 'id' ? 'Tampilkan Lebih' : 'Show More'; ?>
+                            </button>
+                        </div>
 
-                                                    <?php
-                                                    $provinsiSlug = $lang === 'en'
-                                                        ? ($row['provinsi_slug_eng'] ?? strtolower(str_replace(' ', '-', $row['nama_provinsi_eng'] ?? '')))
-                                                        : ($row['provinsi_slug'] ?? strtolower(str_replace(' ', '-', $row['nama_provinsi'] ?? '')));
-                                                    $kabupatenSlug = $lang === 'en'
-                                                        ? ($row['kabupaten_slug_eng'] ?? strtolower(str_replace(' ', '-', $row['nama_kotakabupaten_eng'] ?? '')))
-                                                        : ($row['kabupaten_slug'] ?? strtolower(str_replace(' ', '-', $row['nama_kotakabupaten'] ?? '')));
-                                                    ?>
 
-                                                    <span class="kabupaten">
-                                                        <a class="kabupaten font-weight-bold" href="<?= base_url("$lang/wisata?provinsiSlug={$provinsiSlug}&kabupatenSlug={$kabupatenSlug}") ?>">
-                                                            <?= esc($lang === 'en' ? ($row['nama_kotakabupaten_eng'] ?? 'Unknown City') : ($row['nama_kotakabupaten'] ?? 'Unknown City')) ?>
-                                                        </a>
-                                                    </span>
-                                                    <span class="provinsi">
-                                                        <a class="kabupaten font-weight-bold" href="<?= base_url("$lang/wisata?provinsiSlug={$provinsiSlug}") ?>">
-                                                            <?= esc($lang === 'en' ? ($row['nama_provinsi_eng'] ?? 'Unknown Province') : ($row['nama_provinsi'] ?? 'Unknown Province')) ?>
-                                                        </a>
-                                                    </span>
-                                                </span>
 
-                                            </small>
-                                        </p>
-                                        <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url(
-                                                                                                                $lang . '/' .
-                                                                                                                    ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
-                                                                                                                    strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_oleholeh_en'] : $row['slug_kategori_oleholeh']))) . '/' .
-                                                                                                                    ($lang === 'en' ? $row['slug_en'] : $row['slug_oleholeh'])
-                                                                                                            )  ?>">
-                                            <?= $lang === 'en' ? $row['nama_oleholeh_eng'] : $row['nama_oleholeh']; ?>
-                                        </a>
-                                        <p style="margin-bottom: -65px;">
-                                            <?php if ($lang === 'en'): ?>
-                                                <?= substr(strip_tags($row['deskripsi_oleholeh_eng']), 0, 100); ?>...
-                                            <?php else: ?>
-                                                <?= substr(strip_tags($row['deskripsi_oleholeh']), 0, 100); ?>...
-                                            <?php endif; ?>
-                                        </p>
-                                    </div>
-                                    <div class="d-flex justify-content-between bg-white border border-top-0 py-3 px-4" style="border-radius: 0 0 15px 15px;">
-                                        <small><i class="far fa-eye mr-2"></i>views <?= esc($row['views']); ?></small>
-                                    </div>
-                                </a>
+                        <style>
+                            .artikel-card {
+                                border-radius: 15px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                transition: transform 0.3s, box-shadow 0.3s;
+                            }
+
+                            .artikel-card:hover {
+                                transform: translateY(-10px);
+                                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                            }
+
+                            .artikel-link {
+                                display: block;
+                                text-decoration: none;
+                                color: inherit;
+                            }
+
+                            .views-counter {
+                                color: #0091EA;
+                                transition: color 0.3s;
+                            }
+                        </style>
+                    <?php else : ?>
+                        <div class="col-lg-12">
+                            <div class="position-relative mb-3">
+                                <div class="bg-white border p-4">
+                                    <p><?= $lang === 'id' ? 'Tidak ada Oleh Oleh terkait.' : 'No related souvenirs.'; ?></p>
+
+                                </div>
                             </div>
                         </div>
-                        <?php $count++; ?>
-                    <?php endforeach; ?>
-                    <div class="col-12 text-center">
-                        <button id="loadMoreOlehOleh" class="btn btn-primary mt-3 mb-3">
-                            <?= $lang === 'id' ? 'Tampilkan Lebih' : 'Show More'; ?>
-                        </button>
-                    </div>
-
-
-
-                    <style>
-                        .artikel-card {
-                            border-radius: 15px;
-                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                            transition: transform 0.3s, box-shadow 0.3s;
-                        }
-
-                        .artikel-card:hover {
-                            transform: translateY(-10px);
-                            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-                        }
-
-                        .artikel-link {
-                            display: block;
-                            text-decoration: none;
-                            color: inherit;
-                        }
-
-                        .views-counter {
-                            color: #0091EA;
-                            transition: color 0.3s;
-                        }
-                    </style>
+                    <?php endif; ?>
 
                 </div>
             </div>
@@ -288,81 +299,92 @@
                             <h4 class="m-0 text-uppercase font-weight-bold"><?= esc($titleArtikel); ?></h4>
                         </div>
                     </div>
-                    <?php $count = 0; ?>
-                    <?php foreach ($artikel as $row) : ?>
-                        <div class="col-lg-4 mb-3 artikel-item" data-index="<?= $count; ?>" <?= $count >= 3 ? 'style="display: none;"' : '' ?>>
-                            <div class="artikel-card position-relative d-flex flex-column h-100 mb-3">
-                                <a class="artikel-link" href="<?= base_url(
-                                                                    $lang . '/' .
-                                                                        ($lang === 'en' ? 'article' : 'artikel') . '/' .
-                                                                        strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_en'] : $row['slug_kategori']))) . '/' .
-                                                                        ($lang === 'en' ? $row['slug_en'] : $row['slug'])
-                                                                )  ?>">
-                                    <img class="img-fluid w-100" style="height: 150px; object-fit: cover; border-radius: 15px 15px 0 0;" src="<?= base_url('assets-baru/img/foto_artikel/' . $row['foto_artikel']) ?>" loading="lazy">
+                    <?php if (!empty($artikel)): ?>
+                        <?php $count = 0; ?>
+                        <?php foreach ($artikel as $row) : ?>
+                            <div class="col-lg-4 mb-3 artikel-item" data-index="<?= $count; ?>" <?= $count >= 3 ? 'style="display: none;"' : '' ?>>
+                                <div class="artikel-card position-relative d-flex flex-column h-100 mb-3">
+                                    <a class="artikel-link" href="<?= base_url(
+                                                                        $lang . '/' .
+                                                                            ($lang === 'en' ? 'article' : 'artikel') . '/' .
+                                                                            strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_en'] : $row['slug_kategori']))) . '/' .
+                                                                            ($lang === 'en' ? $row['slug_en'] : $row['slug'])
+                                                                    )  ?>">
+                                        <img class="img-fluid w-100" style="height: 150px; object-fit: cover; border-radius: 15px 15px 0 0;" src="<?= base_url('assets-baru/img/foto_artikel/' . $row['foto_artikel']) ?>" loading="lazy">
 
-                                    <div class="bg-white border border-top-0 p-4 flex-grow-1">
-                                        <div class="mb-2">
-                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="<?= base_url($lang . ($lang === 'en' ? '/articles/' : '/artikel/') .
-                                                                                                                                    ($lang === 'en' ? ($row['slug_kategori_en'] ?? '') : ($row['slug_kategori'] ?? ''))) ?>">
-                                                <?= esc($lang === 'en' ? $row['nama_kategori_en'] : $row['nama_kategori']) ?>
+                                        <div class="bg-white border border-top-0 p-4 flex-grow-1">
+                                            <div class="mb-2">
+                                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2" href="<?= base_url($lang . ($lang === 'en' ? '/articles/' : '/artikel/') .
+                                                                                                                                        ($lang === 'en' ? ($row['slug_kategori_en'] ?? '') : ($row['slug_kategori'] ?? ''))) ?>">
+                                                    <?= esc($lang === 'en' ? $row['nama_kategori_en'] : $row['nama_kategori']) ?>
+                                                </a>
+                                            </div>
+                                            <p class="text-body"><small><?= date('d F Y', strtotime($row['tgl_publish'])); ?></small></p>
+                                            <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url(
+                                                                                                                    $lang . '/' .
+                                                                                                                        ($lang === 'en' ? 'article' : 'artikel') . '/' .
+                                                                                                                        strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_en'] : $row['slug_kategori']))) . '/' .
+                                                                                                                        ($lang === 'en' ? $row['slug_en'] : $row['slug'])
+                                                                                                                )  ?>">
+                                                <?= $lang === 'en' ? $row['judul_artikel_en'] : $row['judul_artikel']; ?>
                                             </a>
+                                            <p style="margin-bottom: -65px;">
+                                                <?php if ($lang === 'en'): ?>
+                                                    <?= substr(strip_tags($row['deskripsi_artikel_en']), 0, 100); ?>...
+                                                <?php else: ?>
+                                                    <?= substr(strip_tags($row['deskripsi_artikel']), 0, 100); ?>...
+                                                <?php endif; ?>
+                                            </p>
                                         </div>
-                                        <p class="text-body"><small><?= date('d F Y', strtotime($row['tgl_publish'])); ?></small></p>
-                                        <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url(
-                                                                                                                $lang . '/' .
-                                                                                                                    ($lang === 'en' ? 'article' : 'artikel') . '/' .
-                                                                                                                    strtolower(str_replace(' ', '-', ($lang === 'en' ? $row['slug_kategori_en'] : $row['slug_kategori']))) . '/' .
-                                                                                                                    ($lang === 'en' ? $row['slug_en'] : $row['slug'])
-                                                                                                            )  ?>">
-                                            <?= $lang === 'en' ? $row['judul_artikel_en'] : $row['judul_artikel']; ?>
-                                        </a>
-                                        <p style="margin-bottom: -65px;">
-                                            <?php if ($lang === 'en'): ?>
-                                                <?= substr(strip_tags($row['deskripsi_artikel_en']), 0, 100); ?>...
-                                            <?php else: ?>
-                                                <?= substr(strip_tags($row['deskripsi_artikel']), 0, 100); ?>...
-                                            <?php endif; ?>
-                                        </p>
-                                    </div>
-                                    <div class="d-flex justify-content-between bg-white border border-top-0 p-4" style="border-radius: 0 0 15px 15px;">
-                                        <!-- Optional footer for author and views -->
-                                    </div>
-                                </a>
+                                        <div class="d-flex justify-content-between bg-white border border-top-0 p-4" style="border-radius: 0 0 15px 15px;">
+                                            <!-- Optional footer for author and views -->
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <?php $count++; ?>
+                        <?php endforeach; ?>
+                        <div class="col-12 text-center">
+                            <button id="loadMoreArtikel" class="btn btn-primary mt-3 mb-3"><?= $lang === 'id' ? 'Tampilkan Lebih' : 'Show More'; ?></button>
+                        </div>
+
+
+                        <style>
+                            /* Styling card article */
+                            .artikel-card {
+                                border-radius: 15px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                transition: transform 0.3s, box-shadow 0.3s;
+                            }
+
+                            .artikel-card:hover {
+                                transform: translateY(-10px);
+                                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                            }
+
+                            /* Make the entire card a link */
+                            .artikel-link {
+                                display: block;
+                                text-decoration: none;
+                                color: inherit;
+                            }
+
+                            /* Views counter styling */
+                            .views-counter {
+                                color: #0091EA;
+                                transition: color 0.3s;
+                            }
+                        </style>
+                    <?php else : ?>
+                        <div class="col-lg-12">
+                            <div class="position-relative mb-3">
+                                <div class="bg-white border p-4">
+                                    <p><?= $lang === 'id' ? 'Tidak ada Oleh Oleh terkait.' : 'No related souvenirs.'; ?></p>
+
+                                </div>
                             </div>
                         </div>
-                        <?php $count++; ?>
-                    <?php endforeach; ?>
-                    <div class="col-12 text-center">
-                        <button id="loadMoreArtikel" class="btn btn-primary mt-3 mb-3"><?= $lang === 'id' ? 'Tampilkan Lebih' : 'Show More'; ?></button>
-                    </div>
-
-
-                    <style>
-                        /* Styling card article */
-                        .artikel-card {
-                            border-radius: 15px;
-                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                            transition: transform 0.3s, box-shadow 0.3s;
-                        }
-
-                        .artikel-card:hover {
-                            transform: translateY(-10px);
-                            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-                        }
-
-                        /* Make the entire card a link */
-                        .artikel-link {
-                            display: block;
-                            text-decoration: none;
-                            color: inherit;
-                        }
-
-                        /* Views counter styling */
-                        .views-counter {
-                            color: #0091EA;
-                            transition: color 0.3s;
-                        }
-                    </style>
+                    <?php endif; ?>
 
                 </div>
             </div>

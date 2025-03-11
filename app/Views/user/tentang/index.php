@@ -227,9 +227,11 @@
 </style>
 
 <!-- Search Box dengan Autocomplete -->
-<div class="search-container">
-    <input type="text" id="searchInput" class="search-input" placeholder="<?php echo lang('Blog.btnKetSearch'); ?>" oninput="showAutocomplete(this.value)" />
-    <button class="search-btn" onclick="searchLocation()"><?php echo lang('Blog.btnSearch'); ?></button>
+<div class="container d-flex justify-content-center align-items-center ">
+    <div class="search-container d-flex">
+        <input type="text" id="searchInput" class="form-control me-2" placeholder="<?php echo lang('Blog.btnKetSearch'); ?>" oninput="showAutocomplete(this.value)">
+        <button class="btn btn-primary" onclick="searchLocation()"><?php echo lang('Blog.btnSearch'); ?></button>
+    </div>
 </div>
 
 <div class="col-lg-7 px-0 map-container">
@@ -239,7 +241,7 @@
             <div class="spinner"></div> <!-- Spinner atau animasi lainnya -->
         </div>
     </div>
-
+</div>
 </div>
 
 

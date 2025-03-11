@@ -113,4 +113,84 @@ class SearchCtrl extends BaseController
 
         return view('user/search', $data);
     }
+
+
+    public function searchByTag()
+    {
+        $lang = session()->get('lang') ?? 'en';
+        $keyword = $this->request->getGet('q');
+        $new_keyword = $keyword;
+
+        // $current_lang_segment = $this->request->uri->getSegment(1);
+
+        // // Tentukan prefix berdasarkan bahasa (artikel untuk 'id' dan article untuk 'en')
+        // $url_prefix = $lang === 'id' ? 'tag' : 'tag';
+
+        // if ($current_lang_segment !== $lang) {
+        //     // Use urlencode for keyword to ensure it's passed correctly in the URL
+        //     return redirect()->to(base_url("{$lang}/{$url_prefix}/{$new_keyword}"));
+        // }
+
+        $canonical = base_url("$lang/" . ($lang === 'id' ? 'tag' : 'tag'));
+        if (!empty($keyword)) {
+            $canonical .= "?q=" . urlencode($keyword);
+        }
+
+        // Pastikan current_url() mempertimbangkan query string
+        $currentFullUrl = current_url();
+        if (!empty($_SERVER['QUERY_STRING'])) {
+            $currentFullUrl .= '?' . $_SERVER['QUERY_STRING'];
+        }
+
+        // Cegah infinite redirect loop
+        if ($currentFullUrl !== $canonical) {
+            return redirect()->to($canonical);
+        }
+
+        $nama_tentang = $this->TentangModel->getNamaTentang(); // Fetches `nama_tentang`
+
+
+        $today = date('Y-m-d');
+
+        $artikelResults = $this->ArtikelModel->searchArtikel($keyword, $today);
+
+
+
+        $head = $lang === 'id' ? 'Hasil Pencarian Artikel Dengan Kata Kunci' : 'Search Results for Articles with Keyword';
+
+        $title = $head . ' #' . $keyword;
+
+        $image = base_url('assets-baru/img/error_logo.webp');
+
+        $metaOG = [
+            'title'       => $title,
+            'description' => $title,
+            'image'       => $image,
+            'url'         => $canonical,
+            'type'        => 'article',
+        ];
+
+        $meta = (object) [
+            'meta_title_id' => $title ?? '',
+            'meta_title_en' => $title ?? '',
+            'meta_description_id' =>  $title ?? '',
+            'meta_description_en' =>  $title ?? ''
+        ];
+        // Data passed to the view
+        $data = [
+            'kategori' => $this->KategoriModel->getKategori(),
+            'artikel' => $artikelResults,
+            'tentang' => $this->TentangModel->getTentangDepan(),
+            'title' => $title,
+            'kategoriwisata' => $this->KategoriWisataModel->getKategoriWisata(),
+            'kategoriOlehOleh' => $this->KategoriOlehOlehModel->getKategoriOlehOleh(),
+            'lang' => $lang,
+            'meta' => $meta,
+            'canonical' => $canonical,
+            'metaOG' => $metaOG,
+            'tentang' => $this->TentangModel->getTentangDepan(),
+        ];
+
+        return view('user/tag', $data);
+    }
 }
