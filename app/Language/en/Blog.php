@@ -37,6 +37,7 @@ return [
     'btnOtherSouvenirs' => 'Other Souvenirs',
     'headerRelatedTour' => 'Destination',
     'headerRelatedSouvenirs' => 'Souvenirs',
+    'headerRelatedSouvenirss' => 'Most Popular Souvenirs',
     'headerMaps' => 'MAP OF TOURIST DESTINATIONS IN INDONESIA',
     'headerMapsDetail' => 'MAP OF LOCATIONS',
     'btnSource' => 'Source',

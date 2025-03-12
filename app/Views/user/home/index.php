@@ -65,6 +65,8 @@
                 <h6 class="slogan text-uppercase font-weight-bold mb-4"><?= $row['slogan']; ?></h6>
             <?php endforeach; ?>
         </div>
+
+        <!-- START ARTIKEL -->
         <div class="row mt-4">
             <div class="col-lg-12">
                 <div class="section-title">
@@ -152,9 +154,102 @@
                 </div>
             <?php endforeach; ?>
         </div>
+        <!-- END ARTIKEL -->
+
+        <!-- START OLEH OLEH -->
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h4 class="m-0 text-uppercase font-weight-bold"><?php echo lang('Blog.headerRelatedSouvenirss'); ?></h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <?php
+            $displayedOlehOleh = array_slice($randomOlehOleh, 0, 3); // Menampilkan hanya 3 item
+            foreach ($displayedOlehOleh as $oleh): ?>
+                <div class="col-lg-4 mb-3">
+                    <div class="artikel-card position-relative d-flex flex-column h-100 mb-3">
+                        <a class="artikel-link" href="<?= base_url(
+                                                            $lang . '/' .
+                                                                ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
+                                                                strtolower(str_replace(' ', '-', ($lang === 'en' ? $oleh['nama_kategori_oleholeh_en'] : $oleh['nama_kategori_oleholeh']))) . '/' .
+                                                                ($lang === 'en' ? $oleh['slug_en'] : $oleh['slug_oleholeh'])
+                                                        ) ?>">
+                            <?php
+                            // Set the default image path
+                            $defaultImage = base_url('assets-baru/img/error_logo.webp');
+
+                            // Check if the oleh-oleh image exists, use the default image if it doesn't
+                            $imagePath = '/assets-baru/img/foto_oleholeh/' . $oleh['foto_oleholeh'];
+                            $imageToDisplay = file_exists(FCPATH . $imagePath) && !empty($oleh['foto_oleholeh']) ? base_url($imagePath) : $defaultImage;
+                            ?>
+
+                            <img class="img-fluid lazyload" style="object-fit: cover;"
+                                src="<?= esc($imageToDisplay) ?>"
+                                alt="<?= esc($oleh['nama_oleholeh']) ?>"
+                                loading="lazy" width="300" height="200">
+
+                            <div class="bg-white border border-top-0 p-4 flex-grow-1">
+                                <div class="mb-2">
+                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                        href="<?= base_url($lang === 'en' ? $lang . '/souvenirs/' . $oleh['slug_kategori_oleholeh_en'] : $lang . '/oleh-oleh/' . $oleh['slug_kategori_oleholeh']) ?>">
+                                        <?= esc($lang === 'en' ? $oleh['nama_kategori_oleholeh_en'] : $oleh['nama_kategori_oleholeh']) ?>
+                                    </a>
 
 
 
+                                </div>
+                                <p class="text-body">
+                                    <small class="location">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span class="location-details">
+                                            <?php
+                                            $provinsiSlug = $lang === 'en'
+                                                ? ($oleh['provinsi_slug_eng'] ?? strtolower(str_replace(' ', '-', $oleh['nama_provinsi_eng'] ?? '')))
+                                                : ($oleh['provinsi_slug'] ?? strtolower(str_replace(' ', '-', $oleh['nama_provinsi'] ?? '')));
+
+                                            $kabupatenSlug = $lang === 'en'
+                                                ? ($oleh['kabupaten_slug_eng'] ?? strtolower(str_replace(' ', '-', $oleh['nama_kotakabupaten_eng'] ?? '')))
+                                                : ($oleh['kabupaten_slug'] ?? strtolower(str_replace(' ', '-', $oleh['nama_kotakabupaten'] ?? '')));
+                                            ?>
+                                            <span class="kabupaten">
+                                                <a class="kabupaten font-weight-bold" href="<?= base_url("OlehOleh?provinsiSlug={$provinsiSlug}&kabupatenSlug={$kabupatenSlug}") ?>">
+                                                    <?= esc($lang === 'en' ? ($oleh['nama_kotakabupaten_eng'] ?? 'Unknown City') : ($oleh['nama_kotakabupaten'] ?? 'Unknown City')) ?>
+                                                </a>
+                                            </span>
+                                            <span class="provinsi">
+                                                <a class="kabupaten font-weight-bold" href="<?= base_url("OlehOleh?provinsiSlug={$provinsiSlug}") ?>">
+                                                    <?= esc($lang === 'en' ? ($oleh['nama_provinsi_eng'] ?? 'Unknown Province') : ($oleh['nama_provinsi'] ?? 'Unknown Province')) ?>
+                                                </a>
+                                            </span>
+                                        </span>
+                                    </small>
+                                </p>
+                                <a class="h4 d-block mb-2 text-secondary font-weight-bold" href="<?= base_url(
+                                                                                                        $lang . '/' .
+                                                                                                            ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
+                                                                                                            strtolower(str_replace(' ', '-', ($lang === 'en' ? $oleh['nama_kategori_oleholeh_en'] : $oleh['nama_kategori_oleholeh']))) . '/' .
+                                                                                                            ($lang === 'en' ? $oleh['slug_en'] : $oleh['slug_oleholeh'])
+                                                                                                    ) ?>">
+                                    <?= esc($lang === 'en' ? $oleh['nama_oleholeh_eng'] : $oleh['nama_oleholeh']) ?>
+                                </a>
+                                <p style="margin-bottom: -40px;">
+                                    <?= esc(substr(strip_tags($lang === 'en' ? $oleh['deskripsi_oleholeh_eng'] : $oleh['deskripsi_oleholeh']), 0, 100)); ?>...
+                                </p>
+                            </div>
+                            <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+                                <small><i class="far fa-eye mr-2"></i>views <?= esc($oleh['views']); ?></small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <!-- END OLEH OLEH -->
+
+
+        <!-- START ARTIKEL -->
         <div class="row mt-5">
             <div class="col-lg-12">
                 <div class="section-title">
@@ -244,98 +339,9 @@
 
             <?php endforeach; ?>
         </div>
+        <!-- END ARTIKEL -->
 
 
-        <div class="row mt-5">
-            <div class="col-lg-12">
-                <div class="section-title">
-                    <h4 class="m-0 text-uppercase font-weight-bold"><?php echo lang('Blog.headerRelatedSouvenirs'); ?></h4>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <?php
-            $displayedOlehOleh = array_slice($randomOlehOleh, 0, 3); // Menampilkan hanya 3 item
-            foreach ($displayedOlehOleh as $oleh): ?>
-                <div class="col-lg-4 mb-3">
-                    <div class="artikel-card position-relative d-flex flex-column h-100 mb-3">
-                        <a class="artikel-link" href="<?= base_url(
-                                                            $lang . '/' .
-                                                                ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
-                                                                strtolower(str_replace(' ', '-', ($lang === 'en' ? $oleh['nama_kategori_oleholeh_en'] : $oleh['nama_kategori_oleholeh']))) . '/' .
-                                                                ($lang === 'en' ? $oleh['slug_en'] : $oleh['slug_oleholeh'])
-                                                        ) ?>">
-                            <?php
-                            // Set the default image path
-                            $defaultImage = base_url('assets-baru/img/error_logo.webp');
-
-                            // Check if the oleh-oleh image exists, use the default image if it doesn't
-                            $imagePath = '/assets-baru/img/foto_oleholeh/' . $oleh['foto_oleholeh'];
-                            $imageToDisplay = file_exists(FCPATH . $imagePath) && !empty($oleh['foto_oleholeh']) ? base_url($imagePath) : $defaultImage;
-                            ?>
-
-                            <img class="img-fluid lazyload" style="object-fit: cover;"
-                                src="<?= esc($imageToDisplay) ?>"
-                                alt="<?= esc($oleh['nama_oleholeh']) ?>"
-                                loading="lazy" width="300" height="200">
-
-                            <div class="bg-white border border-top-0 p-4 flex-grow-1">
-                                <div class="mb-2">
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                        href="<?= base_url($lang === 'en' ? $lang . '/souvenirs/' . $oleh['slug_kategori_oleholeh_en'] : $lang . '/oleh-oleh/' . $oleh['slug_kategori_oleholeh']) ?>">
-                                        <?= esc($lang === 'en' ? $oleh['nama_kategori_oleholeh_en'] : $oleh['nama_kategori_oleholeh']) ?>
-                                    </a>
-
-
-
-                                </div>
-                                <p class="text-body">
-                                    <small class="location">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span class="location-details">
-                                            <?php
-                                            $provinsiSlug = $lang === 'en'
-                                                ? ($oleh['provinsi_slug_eng'] ?? strtolower(str_replace(' ', '-', $oleh['nama_provinsi_eng'] ?? '')))
-                                                : ($oleh['provinsi_slug'] ?? strtolower(str_replace(' ', '-', $oleh['nama_provinsi'] ?? '')));
-
-                                            $kabupatenSlug = $lang === 'en'
-                                                ? ($oleh['kabupaten_slug_eng'] ?? strtolower(str_replace(' ', '-', $oleh['nama_kotakabupaten_eng'] ?? '')))
-                                                : ($oleh['kabupaten_slug'] ?? strtolower(str_replace(' ', '-', $oleh['nama_kotakabupaten'] ?? '')));
-                                            ?>
-                                            <span class="kabupaten">
-                                                <a class="kabupaten font-weight-bold" href="<?= base_url("OlehOleh?provinsiSlug={$provinsiSlug}&kabupatenSlug={$kabupatenSlug}") ?>">
-                                                    <?= esc($lang === 'en' ? ($oleh['nama_kotakabupaten_eng'] ?? 'Unknown City') : ($oleh['nama_kotakabupaten'] ?? 'Unknown City')) ?>
-                                                </a>
-                                            </span>
-                                            <span class="provinsi">
-                                                <a class="kabupaten font-weight-bold" href="<?= base_url("OlehOleh?provinsiSlug={$provinsiSlug}") ?>">
-                                                    <?= esc($lang === 'en' ? ($oleh['nama_provinsi_eng'] ?? 'Unknown Province') : ($oleh['nama_provinsi'] ?? 'Unknown Province')) ?>
-                                                </a>
-                                            </span>
-                                        </span>
-                                    </small>
-                                </p>
-                                <a class="h4 d-block mb-2 text-secondary font-weight-bold" href="<?= base_url(
-                                                                                                        $lang . '/' .
-                                                                                                            ($lang === 'en' ? 'souvenirs' : 'oleh-oleh') . '/' .
-                                                                                                            strtolower(str_replace(' ', '-', ($lang === 'en' ? $oleh['nama_kategori_oleholeh_en'] : $oleh['nama_kategori_oleholeh']))) . '/' .
-                                                                                                            ($lang === 'en' ? $oleh['slug_en'] : $oleh['slug_oleholeh'])
-                                                                                                    ) ?>">
-                                    <?= esc($lang === 'en' ? $oleh['nama_oleholeh_eng'] : $oleh['nama_oleholeh']) ?>
-                                </a>
-                                <p style="margin-bottom: -40px;">
-                                    <?= esc(substr(strip_tags($lang === 'en' ? $oleh['deskripsi_oleholeh_eng'] : $oleh['deskripsi_oleholeh']), 0, 100)); ?>...
-                                </p>
-                            </div>
-                            <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
-                                <small><i class="far fa-eye mr-2"></i>views <?= esc($oleh['views']); ?></small>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-
-        </div>
 
     </div>
 </div>
@@ -645,8 +651,6 @@
 
 
 
-
-<!-- yooo -->
 
 <div class="container-fluid bg-dark pt-5 px-sm-3 px-md-5 mt-5">
     <div class="row py-4 d-flex align-items-stretch">

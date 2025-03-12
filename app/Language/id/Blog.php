@@ -35,6 +35,7 @@ return [
     'btnOtherSouvenirs' => 'Oleh-Oleh Lainnya',
     'headerRelatedTour' => 'Wisata',
     'headerRelatedSouvenirs' => 'Oleh-Oleh',
+    'headerRelatedSouvenirss' => 'Oleh-Oleh Terpopuler',
     'headerMaps' => 'PETA TEMPAT WISATA DI INDONESIA',
     'headerMapsDetail' => 'PETA LOKASI',
     'headerAllTour' => 'Semua Wisata',
