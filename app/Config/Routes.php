@@ -46,6 +46,20 @@ $routes->get('logout', 'Login::logout');
 $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('dashboard', 'admin\Dashboardctrl::index');
 
+    $routes->get('popup', 'admin\Popup::index');
+    $routes->get('popup/tambah', 'admin\Popup::tambah');
+    $routes->post('popup/proses_tambah', 'admin\Popup::proses_tambah');
+    $routes->get('popup/edit/(:num)', 'admin\Popup::edit/$1');
+    $routes->post('popup/proses_edit/(:num)', 'admin\Popup::proses_edit/$1');
+    $routes->get('popup/delete/(:any)', 'admin\Popup::delete/$1');
+
+    $routes->get('tampilpopup', 'admin\TampilPopup::index');
+    $routes->get('tampilpopup/tambah', 'admin\TampilPopup::tambah');
+    $routes->post('tampilpopup/proses_tambah', 'admin\TampilPopup::proses_tambah');
+    $routes->get('tampilpopup/edit/(:num)', 'admin\TampilPopup::edit/$1');
+    $routes->post('tampilpopup/proses_edit/(:num)', 'admin\TampilPopup::proses_edit/$1');
+    $routes->get('tampilpopup/delete/(:any)', 'admin\TampilPopup::delete/$1');
+
     $routes->get('kategori/index', 'admin\Kategori::index');
     $routes->get('kategori/tambah', 'admin\Kategori::tambah');
     $routes->post('kategori/proses_tambah', 'admin\Kategori::proses_tambah');

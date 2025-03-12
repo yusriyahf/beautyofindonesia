@@ -61,19 +61,33 @@
                     </a><!--//nav-link-->
                 </li><!--//nav-item-->
 
-                <!--<li class="nav-item">-->
-                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                <!--<a class="nav-link" href="<?= base_url('admin/penulis/index') ?>">-->
-                <!--    <span class="nav-icon">-->
-                <!--        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-activity" viewBox="0 0 16 16">-->
-                <!--            <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.33L10 12.036l1.53-4.208A.5.5 0 0 1 12 7.5h3.5a.5.5 0 0 1 0 1h-3.15l-1.88 5.17a.5.5 0 0 1-.94 0L6 3.964 4.47 8.171A.5.5 0 0 1 4 8.5H.5a.5.5 0 0 1 0-1h3.15l1.88-5.17A.5.5 0 0 1 6 2Z" />-->
-                <!--        </svg>-->
-                <!--    </span>-->
-                <!--    <span class="nav-link-text">Penulis</span>-->
-                <!--</a>-->
-                <!--//nav-link-->
-                <!--</li>-->
-                <!--//nav-item-->
+                <!-- TAMPIL POPUP -->
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('admin/tampilpopup') ?>">
+                        <span class="nav-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-text">Tampil Popup</span>
+                    </a>
+                </li>
+
+                <!-- LIST POPUP -->
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('admin/popup') ?>">
+                        <span class="nav-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
+                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-text">Popup</span>
+                    </a>
+                </li>
+
+
 
                 <li class="nav-item">
                     <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
@@ -110,7 +124,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/kategori_wisata/index"); ?>">
+                    <a class="nav-link" href="<?= base_url("admin/kategori_wisata/index"); ?>">
                         <span class="nav-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
                                 <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm1.94 3.783a6.96 6.96 0 0 0 1.29 1.373 13.077 13.077 0 0 1-1.167-3.27A6.963 6.963 0 0 0 1.94 11.783ZM8 15.25c.276 0 .553-.72.74-1.708a13.07 13.07 0 0 1-1.48 0C7.447 14.53 7.724 15.25 8 15.25ZM5.925 11.917c.54.095 1.105.154 1.575.173v-3.08H5.172v2.646c.23.086.473.167.754.261Zm4.293 0c.281-.094.524-.175.754-.26V8.083H8.5v3.08c.47-.019 1.035-.078 1.575-.173ZM4.287 6.5h2.213V3.417a12.5 12.5 0 0 0-1.171.2c-.32.076-.63.168-.925.274a6.2 6.2 0 0 0-.525 2.608Zm5.213 0h2.213a6.2 6.2 0 0 0-.525-2.608 12.5 12.5 0 0 0-1.171-.2V6.5ZM7.705 6.5h.59V3.353a11.057 11.057 0 0 0-.59 0V6.5ZM2.272 10.34a7.076 7.076 0 0 1-.1-4.1 13.306 13.306 0 0 1 1.16-3.122 6.96 6.96 0 0 0-1.09 7.223ZM13.828 10.34a6.96 6.96 0 0 0 1.09-7.223 13.306 13.306 0 0 1 1.16 3.122 7.076 7.076 0 0 1-.1 4.1ZM10.612 1.74c.32.076.63.168.925.274a6.2 6.2 0 0 1 .525 2.608H9.85V3.417a12.5 12.5 0 0 1 1.171-.2ZM2.882 2.014c.295-.106.605-.198.925-.274a12.5 12.5 0 0 1 1.17-.2V6.5H2.765a6.2 6.2 0 0 1 .525-2.608ZM14.06 11.783a6.963 6.963 0 0 0-.123-2.896 13.077 13.077 0 0 1-1.167 3.27 6.96 6.96 0 0 0 1.29-1.373ZM2.333 12.56a6.94 6.94 0 0 0 3.46 2.268 12.95 12.95 0 0 1-.885-2.56 13.077 13.077 0 0 1-2.575-.96Zm9.427 0a13.078 13.078 0 0 1-2.575.96c-.194.823-.48 1.765-.885 2.56a6.94 6.94 0 0 0 3.46-2.268Z" />
