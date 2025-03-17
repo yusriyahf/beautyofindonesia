@@ -24,24 +24,15 @@
                     </a><!--//nav-link-->
                 </li><!--//nav-item-->
 
-                <li class="nav-item">
-                    <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                    <a class="nav-link" href="<?= base_url('admin/kategori/index') ?>">
-                        <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
-                                <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-text">Kategori</span>
-                    </a><!--//nav-link-->
-                </li><!--//nav-item-->
+
 
                 <li class="nav-item">
                     <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
                     <a class="nav-link" href="<?= base_url('admin/meta/index') ?>">
                         <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
-                                <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+                                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                                <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0M7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0" />
                             </svg>
                         </span>
                         <span class="nav-link-text">Meta</span>
@@ -52,9 +43,9 @@
                     <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
                     <a class="nav-link" href="<?= base_url('admin/artikel/index') ?>">
                         <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
-                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+                                <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2" />
+                                <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0" />
                             </svg>
                         </span>
                         <span class="nav-link-text">Artikel</span>
@@ -104,8 +95,9 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/provinsi/index"); ?>">
                         <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-map" viewBox="0 0 16 16">
-                                <path d="M15.817.113A.5.5 0 0 0 15.5 0a.49.49 0 0 0-.192.041L10 2.243 5.692.041A.497.497 0 0 0 5.5 0a.5.5 0 0 0-.183.037L.683 1.634a.5.5 0 0 0-.183.363v13.305a.5.5 0 0 0 .683.471l4.5-1.8 4.308 2.202a.497.497 0 0 0 .442 0l4.5-2.25a.5.5 0 0 0 .275-.447V.5a.5.5 0 0 0-.391-.487ZM5 1.058l4 2v11.884l-4-2V1.058ZM1 2.02l3-1.2v11.884l-3 1.2V2.02ZM15 13.98l-3 1.5V3.595l3-1.5V13.98Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                             </svg>
                         </span>
                         <span class="nav-link-text">Provinsi</span>
@@ -115,8 +107,9 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/kabupaten/index"); ?>">
                         <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-map-fill" viewBox="0 0 16 16">
-                                <path d="M15.817.113A.5.5 0 0 0 15.5 0a.49.49 0 0 0-.192.041L10 2.243 5.692.041A.497.497 0 0 0 5.5 0a.5.5 0 0 0-.183.037L.683 1.634a.5.5 0 0 0-.183.363v13.305a.5.5 0 0 0 .683.471l4.5-1.8 4.308 2.202a.497.497 0 0 0 .442 0l4.5-2.25a.5.5 0 0 0 .275-.447V.5a.5.5 0 0 0-.391-.487ZM5 1.058l4 2v11.884l-4-2V1.058ZM1 2.02l3-1.2v11.884l-3 1.2V2.02ZM15 13.98l-3 1.5V3.595l3-1.5V13.98Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                             </svg>
                         </span>
                         <span class="nav-link-text">Kabupaten</span>
@@ -124,10 +117,24 @@
                 </li>
 
                 <li class="nav-item">
+                    <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                    <a class="nav-link" href="<?= base_url('admin/kategori/index') ?>">
+                        <span class="nav-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                                <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-text">Kategori Artikel</span>
+                    </a><!--//nav-link-->
+                </li><!--//nav-item-->
+
+                <li class="nav-item">
                     <a class="nav-link" href="<?= base_url("admin/kategori_wisata/index"); ?>">
                         <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
-                                <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm1.94 3.783a6.96 6.96 0 0 0 1.29 1.373 13.077 13.077 0 0 1-1.167-3.27A6.963 6.963 0 0 0 1.94 11.783ZM8 15.25c.276 0 .553-.72.74-1.708a13.07 13.07 0 0 1-1.48 0C7.447 14.53 7.724 15.25 8 15.25ZM5.925 11.917c.54.095 1.105.154 1.575.173v-3.08H5.172v2.646c.23.086.473.167.754.261Zm4.293 0c.281-.094.524-.175.754-.26V8.083H8.5v3.08c.47-.019 1.035-.078 1.575-.173ZM4.287 6.5h2.213V3.417a12.5 12.5 0 0 0-1.171.2c-.32.076-.63.168-.925.274a6.2 6.2 0 0 0-.525 2.608Zm5.213 0h2.213a6.2 6.2 0 0 0-.525-2.608 12.5 12.5 0 0 0-1.171-.2V6.5ZM7.705 6.5h.59V3.353a11.057 11.057 0 0 0-.59 0V6.5ZM2.272 10.34a7.076 7.076 0 0 1-.1-4.1 13.306 13.306 0 0 1 1.16-3.122 6.96 6.96 0 0 0-1.09 7.223ZM13.828 10.34a6.96 6.96 0 0 0 1.09-7.223 13.306 13.306 0 0 1 1.16 3.122 7.076 7.076 0 0 1-.1 4.1ZM10.612 1.74c.32.076.63.168.925.274a6.2 6.2 0 0 1 .525 2.608H9.85V3.417a12.5 12.5 0 0 1 1.171-.2ZM2.882 2.014c.295-.106.605-.198.925-.274a12.5 12.5 0 0 1 1.17-.2V6.5H2.765a6.2 6.2 0 0 1 .525-2.608ZM14.06 11.783a6.963 6.963 0 0 0-.123-2.896 13.077 13.077 0 0 1-1.167 3.27 6.96 6.96 0 0 0 1.29-1.373ZM2.333 12.56a6.94 6.94 0 0 0 3.46 2.268 12.95 12.95 0 0 1-.885-2.56 13.077 13.077 0 0 1-2.575-.96Zm9.427 0a13.078 13.078 0 0 1-2.575.96c-.194.823-.48 1.765-.885 2.56a6.94 6.94 0 0 0 3.46-2.268Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                                <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
                             </svg>
                         </span>
                         <span class="nav-link-text">Kategori Wisata</span>
@@ -137,8 +144,9 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/kategori_oleholeh/index"); ?>">
                         <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gift-fill" viewBox="0 0 16 16">
-                                <path d="M8 1.5a2.5 2.5 0 0 1 2 4.001V6h4v6a2 2 0 0 1-2 2h-3v-5H7v5H4a2 2 0 0 1-2-2V6h4v-.499A2.5 2.5 0 1 1 8 1.5Zm0 1A1.5 1.5 0 0 0 6.5 4H7V3a1 1 0 0 1 1-1Zm2.5 0A1 1 0 0 0 9 3v1h.5A1.5 1.5 0 1 0 10.5 2.5Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                                <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
                             </svg>
                         </span>
                         <span class="nav-link-text">Kategori Oleh-Oleh</span>
@@ -159,8 +167,8 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/oleh_oleh/index"); ?>">
                         <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket-fill" viewBox="0 0 16 16">
-                                <path d="M8 1a2 2 0 0 1 2 2v1h3.5a.5.5 0 0 1 .48.637l-1.5 6A.5.5 0 0 1 12 11H4a.5.5 0 0 1-.48-.363l-1.5-6A.5.5 0 0 1 2.5 4H6V3a2 2 0 0 1 2-2Zm-3.44 8h6.88L12.62 5H3.38l1.18 4ZM8 12a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
                             </svg>
                         </span>
                         <span class="nav-link-text">Oleh - Oleh</span>

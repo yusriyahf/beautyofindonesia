@@ -146,6 +146,9 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
 
 $routes->set404Override('App\Controllers\user\Homectrl::notFound');
 
+$routes->get('oleholeh/whatsapp-click/(:num)', 'OlehOleh::countWhatsappClick/$1');
+
+
 // Define routes for Indonesian language
 $routes->group('id', function ($routes) {
     $routes->get('tentang', 'user\Tentangctrl::index');

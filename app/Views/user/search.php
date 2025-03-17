@@ -427,6 +427,7 @@ echo $popupController->checkPopup();
         const incrementOlehOleh = 6; // Jumlah artikel yang ditampilkan setiap kali tombol diklik
         const olehOleh = document.querySelectorAll(".oleholeh-item");
         const loadMoreOlehOlehBtn = document.getElementById("loadMoreOlehOleh");
+
         loadMoreOlehOlehBtn.addEventListener("click", function() {
             let newVisibleCountOlehOleh = visibleCountOlehOleh + incrementOlehOleh;
 

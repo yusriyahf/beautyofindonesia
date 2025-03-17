@@ -295,4 +295,14 @@ class OlehOleh extends BaseController
 
         return view('user/oleholeh/kategori', $data);
     }
+
+    public function countWhatsappClick($id)
+    {
+
+        // Update jumlah klik WhatsApp berdasarkan ID oleh-oleh
+        $this->OlehOlehModel->incrementWhatsappClicks($id);
+
+        // Redirect ke link WhatsApp
+        return redirect()->to("https://wa.me/" . esc($this->request->getGet('nomor_tlp')));
+    }
 }

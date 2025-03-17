@@ -51,10 +51,12 @@ class TempatWisataModel extends Model
             ->orLike('tb_provinsi.nama_provinsi', $keyword)
             ->orLike('tb_provinsi.nama_provinsi_eng', $keyword)
             ->groupEnd()
-            ->orderBy('tb_tempatwisata.id_wisata', 'DESC') // Tambahkan order by DESC di sini
+            ->orderBy('tb_tempatwisata.id_wisata', 'DESC') // Order by DESC
+            // ->limit(20) // Batasi hasil hanya 50 data
             ->get()
             ->getResultArray();
     }
+
 
 
 

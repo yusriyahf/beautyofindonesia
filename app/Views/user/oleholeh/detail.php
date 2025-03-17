@@ -72,7 +72,9 @@
 
                         <!-- Contact and Views Section -->
                         <div>
-                            <a href="https://wa.me/<?= esc($oleh['nomor_tlp']) ?>" target="_blank" class="btn btn-primary mb-2">
+                            <a href="<?= base_url('oleholeh/whatsapp-click/' . $oleh['id_oleholeh'] . '?nomor_tlp=' . urlencode($oleh['nomor_tlp'])) ?>"
+                                target="_blank"
+                                class="btn btn-primary mb-2">
                                 <i class="fab fa-whatsapp"></i> <?= lang('Blog.btnContact'); ?>
                             </a>
                             <a href="<?= esc($oleh['link_website']) ?>" target="_blank" class="btn btn-secondary mb-2">

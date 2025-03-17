@@ -28,8 +28,16 @@ class OlehOlehModel extends Model
         'meta_title_id',
         'meta_title_en',
         'meta_description_id',
-        'meta_description_en'
+        'meta_description_en',
+        'whatsapp_clicks'
     ];
+
+    public function incrementWhatsappClicks($id)
+    {
+        return $this->where('id_oleholeh', $id)
+            ->set('whatsapp_clicks', 'whatsapp_clicks + 1', false)
+            ->update();
+    }
 
     public function searchOlehOleh($keyword)
     {
