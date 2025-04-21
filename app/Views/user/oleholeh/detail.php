@@ -81,7 +81,7 @@
                                 <i class="fas fa-globe"></i> Website
                             </a>
                             <div style="font-size: 0.850rem; color: gray;">
-                                <i class="fas fa-eye"></i> views <?= $oleh['views']; ?>
+                                <i class="fas fa-eye"></i> <?php echo lang('Blog.views'); ?> <?= $oleh['views']; ?>
                             </div>
                         </div>
                     </div>

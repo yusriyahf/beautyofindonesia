@@ -61,7 +61,7 @@ class SearchCtrl extends BaseController
         $olehOlehResults = $this->OlehOlehModel->searchOlehOleh($keyword);
         $wisataResults = $this->WisataModel->searchTempatWisata($keyword);
 
-        dd($wisataResults);
+        // dd($wisataResults);
 
         $head = $lang === 'id' ? 'Hasil Pencarian Dengan Kata Kunci' : 'Search Results with Keyword';
         $title = $head . ' "' . $keyword . '"';

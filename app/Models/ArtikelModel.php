@@ -26,7 +26,10 @@ class ArtikelModel extends Model
           'tgl_publish',
           'foto_artikel',
           'slug',
-          'slug_en'
+          'slug_en',
+          'iklan_banner',
+          'iklan_sidebar',
+          'iklan_footer',
      ];
 
 
@@ -74,7 +77,7 @@ class ArtikelModel extends Model
           return $this->db->table('tb_artikel')
                ->join('tb_kategori', 'tb_kategori.id_kategori=tb_artikel.id_kategori')
                ->join('tb_penulis', 'tb_penulis.id_penulis=tb_artikel.id_penulis')
-                ->orderBy('RAND()')
+               ->orderBy('RAND()')
                ->limit(3)
                ->get()->getResultArray();
      }

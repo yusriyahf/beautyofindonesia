@@ -16,6 +16,7 @@ class Filters extends BaseConfig
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
 		'auth' => \App\Filters\UsersAuthFilter::class,
 		'languagefilter' => \App\Filters\LanguageFilter::class,
+		'redirectOleholeh' => \App\Filters\RedirectOleholeh::class,
 	];
 
 	// Always applied before every request
@@ -65,5 +66,6 @@ class Filters extends BaseConfig
 	 */
 	public $filters = [
 		'usersAuth' => \App\Filters\UsersAuthFilter::class,
+		'redirectOleholeh' => ['before' => ['oleholeh']],
 	];
 }
