@@ -5,8 +5,15 @@
 <div class="container-fluid pt-5 mb-3">
     <div class="container">
         <div class="row">
+
             <div class="col-lg-8">
                 <!-- News Detail Start -->
+                <?php if (!empty($artikel['iklan_banner']) && $artikel['iklan_banner'] == 'ada') : ?>
+                    <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+                <?php else : ?>
+                    <img src="<?= base_url('assets-baru/img/banner_utama2.png'); ?>" alt="" width="100%" class="mb-3">
+                <?php endif; ?>
+
                 <div class="position-relative mb-3">
                     <div class="image-container">
                         <?php
@@ -64,6 +71,7 @@
 
 
             <div class="col-lg-4">
+                <img src="<?= base_url('assets-baru/img/banner_sidebar.png'); ?>" alt="" width="100%" class="mb-3">
                 <!-- Popular News Start -->
                 <div class="mb-3">
                     <div class="section-title mb-0">
@@ -140,6 +148,10 @@
                     </div>
                 </div>
                 <!-- Tags End -->
+            </div>
+
+            <div class="col-lg-12">
+                <img src="<?= base_url('assets-baru/img/banner_footer.png'); ?>" alt="" width="100%" class="mb-3">
             </div>
         </div>
     </div>

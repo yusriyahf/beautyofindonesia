@@ -41,4 +41,5 @@ return [
     'headerMaps' => 'MAP OF TOURIST DESTINATIONS IN INDONESIA',
     'headerMapsDetail' => 'MAP OF LOCATIONS',
     'btnSource' => 'Source',
+    'views' => 'Views'
 ];

@@ -2,57 +2,7 @@
 <?= $this->Section('content'); ?>
 
 <!-- Main News Slider Start -->
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 px-0">
-            <div class="owl-carousel main-carousel position-relative  shadow-slider">
-                <!-- Gambar Slider 1 -->
-                <div class="position-relative overflow-hidden slider-container">
-                    <img class="img-fluid w-100 h-100 lazyload"
-                        data-src="<?= base_url('asset-user/uploads/Slider1-1.webp') ?>"
-                        style="object-fit: cover;"
-                        alt="Slider 1"
-                        loading="lazy">
 
-                </div>
-
-                <!-- Gambar Slider 2 -->
-                <div class="position-relative overflow-hidden slider-container">
-                    <img class="img-fluid w-100 h-100 lazyload"
-                        data-src="<?= base_url('asset-user/uploads/Slider2-1.webp') ?>"
-                        style="object-fit: cover; object-position: 10% center;"
-                        alt="Slider 2"
-                        loading="lazy">
-
-                </div>
-            </div>
-        </div>
-
-        <style>
-            /* Default slider height for desktop */
-            .slider-container {
-                height: 500px;
-            }
-
-            /* Responsive slider height for mobile */
-            @media (max-width: 768px) {
-                .slider-container {
-                    height: 300px;
-                }
-            }
-
-            @media (max-width: 576px) {
-                .slider-container {
-                    height: 200px;
-                }
-            }
-
-            .shadow-slider {
-                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            }
-        </style>
-    </div>
-</div>
 <!-- Main News Slider End -->
 
 
@@ -239,7 +189,7 @@
                                 </p>
                             </div>
                             <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
-                                <small><i class="far fa-eye mr-2"></i>views <?= esc($oleh['views']); ?></small>
+                                <small><i class="far fa-eye mr-2"></i><?php echo lang('Blog.views'); ?> <?= esc($oleh['views']); ?></small>
                             </div>
                         </a>
                     </div>
