@@ -239,7 +239,7 @@
                                 </p>
                             </div>
                             <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
-                                <small><i class="far fa-eye mr-2"></i>views <?= esc($oleh['views']); ?></small>
+                                <small><i class="far fa-eye mr-2"></i><?php echo lang('Blog.views'); ?> <?= esc($oleh['views']); ?></small>
                             </div>
                         </a>
                     </div>

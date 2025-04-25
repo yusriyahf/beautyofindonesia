@@ -40,4 +40,5 @@ return [
     'headerMapsDetail' => 'PETA LOKASI',
     'headerAllTour' => 'Semua Wisata',
     'btnSource' => 'Sumber Foto',
+    'views' => 'Telah dilihat sebanyak'
 ];

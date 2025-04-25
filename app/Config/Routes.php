@@ -41,6 +41,14 @@ $routes->post('login/process', 'Login::process');
 $routes->get('logout', 'Login::logout');
 
 // Daftarkan rute-rute admin di sini
+$routes->get('sitemap.xml', 'Sitemap::index');
+// $routes->get('sitemap.xml', function () {
+//     return response()
+//         ->setHeader('Content-Type', 'application/xml; charset=UTF-8')
+//         ->setBody(trim(file_get_contents(FCPATH . 'sitemap.xml')));
+// });
+
+// $routes->addRedirect('oleholeh', 'id/oleh-oleh');
 
 
 $routes->group('admin', ['filter' => 'auth'], function ($routes) {
@@ -130,7 +138,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('tempat_wisata/index', 'admin\TempatWisata::index');
     $routes->get('tempat_wisata/tambah', 'admin\TempatWisata::tambah');
     $routes->post('tempat_wisata/proses_tambah', 'admin\TempatWisata::proses_tambah');
-    $routes->get('tempat_wisata/edit/(:num)', 'admin\TempatWisata::edit/$1');
+    $routes->get('tempat_wisatapra/edit/(:num)', 'admin\TempatWisata::edit/$1');
     $routes->post('tempat_wisata/proses_edit/(:num)', 'admin\TempatWisata::proses_edit/$1');
     $routes->get('tempat_wisata/delete/(:num)', 'admin\TempatWisata::delete/$1');
 
@@ -140,11 +148,34 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('oleh_oleh/edit/(:num)', 'admin\OlehOleh::edit/$1');
     $routes->post('oleh_oleh/proses_edit/(:num)', 'admin\OlehOleh::proses_edit/$1');
     $routes->get('oleh_oleh/delete/(:num)', 'admin\OlehOleh::delete/$1');
+
+
+    $routes->get('admin/iklan', 'admin\Iklan::index');
+    $routes->get('admin/iklan/tambah', 'admin\Iklan::tambah');
+    $routes->post('admin/iklan/tambah', 'admin\Iklan::proses_tambah');
+    $routes->get('admin/iklan/edit/(:num)', 'admin\Iklan::edit/$1');
+    $routes->post('admin/iklan/edit/(:num)', 'admin\Iklan::proses_edit/$1');
+    $routes->get('admin/iklan/delete/(:num)', 'admin\Iklan::delete/$1');
+
+    $routes->get('komisi', 'admin\Komisi::index');
+    $routes->get('komisi/tambah', 'admin\Komisi::tambah');
+    $routes->post('komisi/tambah', 'admin\Komisi::proses_tambah');
+    $routes->get('komisi/edit/(:num)', 'admin\Komisi::edit/$1');
+    $routes->post('komisi/edit/(:num)', 'admin\Komisi::proses_edit/$1');
+    $routes->get('komisi/delete/(:num)', 'admin\Komisi::delete/$1');
+
 });
 
+$routes->group('marketing', function ($routes) {
+    $routes->get('artikeliklan', 'ArtikelIklan::index');
+    $routes->get('artikeliklan/tambah', 'ArtikelIklan::tambah');
+    $routes->post('artikeliklan/proses_tambah', 'ArtikelIklan::proses_tambah');
+    $routes->get('artikeliklan/edit/(:num)', 'ArtikelIklan::edit/$1');
+    $routes->post('artikeliklan/proses_edit/(:num)', 'ArtikelIklan::proses_edit/$1');
+    $routes->get('artikeliklan/delete/(:any)', 'ArtikelIklan::delete/$1');
+});
 
-
-$routes->set404Override('App\Controllers\user\Homectrl::notFound');
+// $routes->set404Override('App\Controllers\user\Homectrl::notFound');
 
 $routes->get('oleholeh/whatsapp-click/(:num)', 'OlehOleh::countWhatsappClick/$1');
 

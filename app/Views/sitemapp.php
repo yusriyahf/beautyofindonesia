@@ -3,7 +3,8 @@
 header('Content-Type: application/xml; charset=utf-8');
 
 // Fungsi untuk mendapatkan waktu saat ini dalam format ISO 8601
-function getCurrentTimestamp() {
+function getCurrentTimestamp()
+{
     return gmdate('Y-m-d\TH:i:s+00:00');
 }
 
@@ -77,5 +78,3 @@ foreach ($dynamicUrls as $key => $value) {
 // Outputkan XML
 echo $dom->saveXML();
 die;
-
-?>
