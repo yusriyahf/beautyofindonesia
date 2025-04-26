@@ -2,30 +2,37 @@
 
 namespace App\Controllers\admin;
 
+use App\Models\ArtikelIklanModel;
 use App\Models\ArtikelModel;
+use App\Models\HargaIklanModel;
 use App\Models\KategoriModel;
 use App\Models\PenulisModel;
 use App\Models\TentangModel;
 use CodeIgniter\Config\Services;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class Artikel extends BaseController
 {
 
     private $ArtikelModel;
+    private $hargaIklanModel;
     private $KategoriModel;
     private $PenulisModel;
     private $TentangModel;
+    private $ArtikelIklanModel;
 
 
     public function __construct()
     {
+        $this->hargaIklanModel = new HargaIklanModel();
         $this->ArtikelModel = new ArtikelModel();
         $this->KategoriModel = new KategoriModel();
         $this->PenulisModel = new PenulisModel();
         $this->TentangModel = new TentangModel();
+        $this->ArtikelIklanModel = new ArtikelIklanModel();
     }
 
-     public function index()
+    public function index()
     {
         // Pengecekan apakah pengguna sudah login atau belum
         if (!session()->get('logged_in')) {
@@ -121,6 +128,7 @@ class Artikel extends BaseController
                     'deskripsi_artikel' => $this->request->getPost("deskripsi_artikel"),
                     'deskripsi_artikel_en' => $this->request->getPost("deskripsi_artikel_en"),
                     'tags' => $this->request->getPost("tags"),
+                    
                     'tags_en' => $this->request->getPost("tags_en"),
                     'sumber_foto' => $this->request->getPost("sumber_foto"),
                     'meta_title_id' => $this->request->getPost("meta_title_id"),
@@ -235,5 +243,77 @@ class Artikel extends BaseController
 
         session()->setFlashdata('success', 'Artikel berhasil dihapus');
         return redirect()->to(base_url('admin/artikel/index'));
+    }
+
+    // Artikel Iklan
+    public function artikel_iklan()
+    {
+        // Cek apakah user sudah login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        // Ambil data artikel beriklan berdasarkan filter tanggal jika ada
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+
+        $all_data = $this->ArtikelIklanModel->getArtikelIklanByDateFilter($startDate, $endDate) ?? [];
+
+        // Validasi
+        $validation = \Config\Services::validation();
+
+        return view('admin/artikel/artikel_iklan', [
+            'all_data' => $all_data,
+            'validation' => $validation
+        ]);
+    }
+
+    public function tambah_artikel_iklan()
+    {
+        $artikelModel = new \App\Models\ArtikelModel();
+        $hargaIklanModel = new \App\Models\HargaIklanModel(); // model harga iklan
+
+        $data['artikel'] = $artikelModel->findAll(); // object
+        $data['harga_iklan'] = $hargaIklanModel->findAll(); // object
+
+        return view('admin/artikel/tambah_artikel_iklan', $data);
+    }
+
+    public function simpan_iklan()
+    {
+        $model = new \App\Models\ArtikelIklanModel();
+
+        // Ambil ID user dari session
+    $idPenulis = session()->get('id_user');
+
+    $hargaData = $this->hargaIklanModel->find($this->request->getPost('id_iklan'));
+    $hargaPerBulan = (int) $hargaData['harga'];
+    $rentangBulan = (int) $this->request->getPost('rentang_bulan');
+    $totalHarga = $hargaPerBulan * $rentangBulan;
+
+
+    // Validasi jika tidak ada ID user di session
+    if (!$idPenulis) {
+        return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
+    }
+
+        $data = [
+            'id_artikel'        => $this->request->getPost('id_artikel'),
+            'id_harga_iklan'     => $this->request->getPost('id_iklan'), // dari dropdown harga
+            'id_penulis'        => $idPenulis,
+            'rentang_bulan'     => $this->request->getPost('rentang_bulan'),
+            'total_harga'     => $totalHarga,
+            'tanggal_mulai'     => $this->request->getPost('tanggal_mulai'),
+            'tanggal_selesai'   => $this->request->getPost('tanggal_selesai'),
+            'tanggal_pengajuan' => date('Y-m-d'), // bisa disesuaikan default
+            'status_iklan'      => 'Diajukan',     // default
+            'catatan_admin'     => $this->request->getPost('catatan_admin'),
+            'created_at'        => date('Y-m-d H:i:s'),
+            'updated_at'        => date('Y-m-d H:i:s'),
+        ];
+
+        $model->insert($data);
+
+        return redirect()->to(base_url('admin/artikel/artikel_beriklan'))->with('success', 'Data iklan berhasil disimpan');
     }
 }
