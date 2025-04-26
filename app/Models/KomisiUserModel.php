@@ -9,5 +9,5 @@ class KomisiUserModel extends Model
     protected $table = 'tb_komisi_user';
     protected $primaryKey = 'id';
     protected $returnType = 'array';
-    protected $allowedFields = ['id_popup', 'user_id', 'jumlah', 'keterangan'];
+    protected $allowedFields = ['id_popup', 'user_id', 'jumlah', 'keterangan', 'tanggal_dibuat'];
 }

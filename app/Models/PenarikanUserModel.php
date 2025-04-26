@@ -6,8 +6,8 @@ use CodeIgniter\Model;
 
 class PenarikanUserModel extends Model
 {
-    protected $table = 'tb_penarikan_user';
-    protected $primaryKey = 'id';
+    protected $table = 'tb_penarikan_komisi';
+    protected $primaryKey = 'id_penarikan_komisi';
     protected $returnType = 'array';
-    protected $allowedFields = ['id_popup', 'user_id', 'jumlah', 'status', 'tanggal_pengajuan', 'tanggal_persetujuan', 'catatan'];
+    protected $allowedFields = ['id_penarikan_komisi ', 'user_id', 'jumlah', 'status', 'tanggal_pengajuan', 'tanggal_persetujuan'];
 }
