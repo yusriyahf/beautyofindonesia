@@ -119,6 +119,9 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
     $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
 
+    $routes->get('artikel/artikel_beriklan', 'admin\Artikel::artikel_iklan');
+    $routes->get('admin/artikel/tambah_artikel_iklan', 'Admin\ArtikelIklan::tambah_artikel_iklan');
+
     $routes->get('penulis/index', 'admin\Penulis::index');
     $routes->get('penulis/tambah', 'admin\Penulis::tambah');
     $routes->post('penulis/proses_tambah', 'admin\Penulis::proses_tambah');
@@ -177,6 +180,11 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('oleh_oleh/edit/(:num)', 'admin\OlehOleh::edit/$1');
     $routes->post('oleh_oleh/proses_edit/(:num)', 'admin\OlehOleh::proses_edit/$1');
     $routes->get('oleh_oleh/delete/(:num)', 'admin\OlehOleh::delete/$1');
+
+    $routes->get('profile/index', 'admin\Profile::index');
+    $routes->get('Profile/edit/(:num)', 'admin\Profile::edit/$1');
+    $routes->post('Profile/update/(:num)', 'admin\Profile::update/$1');
+
 });
 
 $routes->group('marketing', function ($routes) {
@@ -188,7 +196,15 @@ $routes->group('marketing', function ($routes) {
     $routes->get('artikeliklan/delete/(:any)', 'ArtikelIklan::delete/$1');
 });
 
-// $routes->set404Override('App\Controllers\user\Homectrl::notFound');
+$routes->group('marketing', function ($routes) {
+    $routes->get('artikeliklan', 'ArtikelIklan::index');
+    $routes->get('artikeliklan/tambah', 'ArtikelIklan::tambah');
+    $routes->post('artikeliklan/proses_tambah', 'ArtikelIklan::proses_tambah');
+    $routes->get('artikeliklan/edit/(:num)', 'ArtikelIklan::edit/$1');
+    $routes->post('artikeliklan/proses_edit/(:num)', 'ArtikelIklan::proses_edit/$1');
+    $routes->get('artikeliklan/delete/(:any)', 'ArtikelIklan::delete/$1');
+});
+
 
 $routes->get('oleholeh/whatsapp-click/(:num)', 'OlehOleh::countWhatsappClick/$1');
 

@@ -19,7 +19,8 @@
                         <div class="app-utility-item app-user-dropdown dropdown">
                             <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><img src="<?= base_url('assets/images/user.png') ?>" alt="user profile"></a>
                             <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-                                <li><a class="dropdown-item" href="<?= site_url('logout') ?>">Log Out</a></li>
+                                <li><a href="<?= base_url('admin/profile') ?>" class="dropdown-item"><i class="fa-solid fa-user"></i> Detail Profile</a></li>
+                                <li><a class="dropdown-item" href="<?= site_url('logout') ?>" style="color: red;"><i class="fa-solid fa-right-from-bracket" style="color: #ff0000;"></i> Log Out</a></li>
                             </ul>
                         </div><!--//app-user-dropdown-->
                     </div><!--//app-utilities-->
