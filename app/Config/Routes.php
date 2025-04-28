@@ -90,6 +90,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('komisi/delete/(:any)', 'admin\Users::delete/$1');
 
     // Artikel Iklan
+    $routes->get('artikeliklan', 'admin\ArtikelIklan::index');
     $routes->get('artikeliklan/tambah', 'admin\ArtikelIklan::tambah');
     $routes->post('artikeliklan/proses_tambah', 'admin\ArtikelIklan::proses_tambah');
     $routes->get('artikeliklan/edit/(:num)', 'admin\ArtikelIklan::edit/$1');
