@@ -19,6 +19,8 @@
     
     <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet">
     <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
     <!-- App CSS -->
     <link id="theme-style" rel="stylesheet" href="<?= base_url('assets/css/portal.css') ?>">
