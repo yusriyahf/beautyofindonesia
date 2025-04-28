@@ -66,7 +66,7 @@
 
                         <div class="mt-4">
                             <button type="submit" class="btn btn-success">Ajukan Iklan</button>
-                            <a href="<?= base_url('admin/artikel_iklan') ?>" class="btn btn-secondary">Kembali</a>
+                            <a href="<?= base_url('admin/artikel/artikel_beriklan') ?>" class="btn btn-secondary">Kembali</a>
                         </div>
                     </form>
                 </div><!--//app-card-->
