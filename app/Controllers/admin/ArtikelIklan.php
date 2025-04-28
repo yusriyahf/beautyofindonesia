@@ -171,40 +171,66 @@ class ArtikelIklan extends BaseController
     public function ubahStatus()
     {
         $id = $this->request->getPost('id'); // id dari tb_artikel_iklan
-        $status = $this->request->getPost('status'); // disetujui / ditolak
+        $status = $this->request->getPost('status'); // diterima / ditolak
         $nama_iklan = $this->request->getPost('nama_iklan'); // Iklan Banner / Iklan Sidebar / Iklan Footer
         $id_artikel = $this->request->getPost('id_artikel'); // id artikel terkait
-
+        $tanggal_mulai = $this->request->getPost('tanggal_mulai'); // tanggal mulai iklan (user input)
+        $durasi_bulan = (int) $this->request->getPost('durasi_bulan'); // durasi bulan (user input)
+    
         // Validasi status
-        if (!in_array($status, ['disetujui', 'ditolak'])) {
+        if (!in_array($status, ['diterima', 'ditolak'])) {
             return redirect()->back()->with('error', 'Status tidak valid.');
         }
-
+    
+        // Data yang mau diupdate di tb_artikel_iklan
+        $dataIklan = [
+            'status_iklan' => $status
+        ];
+    
+        if ($status === 'diterima') {
+            if (!$tanggal_mulai || !$durasi_bulan) {
+                return redirect()->back()->with('error', 'Tanggal mulai dan durasi bulan wajib diisi.');
+            }
+    
+            // Hitung tanggal selesai otomatis
+            $tanggal_mulai_obj = new \DateTime($tanggal_mulai);
+            $tanggal_selesai_obj = clone $tanggal_mulai_obj;
+            $tanggal_selesai_obj->modify("+{$durasi_bulan} months");
+    
+            $dataIklan['tanggal_mulai'] = $tanggal_mulai_obj->format('Y-m-d');
+            $dataIklan['tanggal_selesai'] = $tanggal_selesai_obj->format('Y-m-d');
+        } else { // kalau ditolak
+            $dataIklan['tanggal_mulai'] = null;
+            $dataIklan['tanggal_selesai'] = null;
+        }
+    
         // Update status iklan di tb_artikel_iklan
-        $this->ArtikelIklanModel->update($id, ['status' => $status]);
-
+        $this->ArtikelIklanModel->update($id, $dataIklan);
+    
         // Mapping nama_iklan ke kolom database
         $mapping = [
             'Iklan Banner' => 'iklan_banner',
             'Iklan Sidebar' => 'iklan_sidebar',
             'Iklan Footer' => 'iklan_footer'
         ];
-
+    
         // Validasi nama_iklan
         if (!array_key_exists($nama_iklan, $mapping)) {
             return redirect()->back()->with('error', 'Nama iklan tidak valid.');
         }
-
+    
         // Tentukan kolom yang akan diubah
         $kolomIklan = $mapping[$nama_iklan];
-
-        // Ubah kolom iklan di tb_artikel berdasarkan id_artikel
+    
+        // Ubah kolom iklan di tb_artikel
         $this->Artikel->update($id_artikel, [
-            $kolomIklan => $status === 'disetujui' ? 'tidak' : 'ada'
+            $kolomIklan => ($status === 'diterima') ? 'tidak' : 'ada'
         ]);
-
+    
         return redirect()->back()->with('success', 'Status berhasil diubah.');
     }
+    
+
 
 
     // public function ubahStatus()
