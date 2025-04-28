@@ -12,7 +12,7 @@ class ArtikelIklanModel extends Model
     protected $allowedFields = [
         'id_iklan',
         'id_artikel',
-        'id_penulis',
+        'id_marketing',
         'id_harga_iklan',
         'status_iklan',
         'total_harga',
@@ -40,7 +40,7 @@ class ArtikelIklanModel extends Model
         ')
             ->join('tb_artikel', 'tb_artikel.id_artikel = tb_artikel_iklan.id_artikel')
             ->join('tb_harga_iklan', 'tb_harga_iklan.id_harga_iklan = tb_artikel_iklan.id_harga_iklan')
-            ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_penulis');
+            ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_marketing');
 
         // Filter berdasarkan tanggal jika ada
         if ($startDate) {
@@ -66,7 +66,7 @@ class ArtikelIklanModel extends Model
         ')
             ->join('tb_artikel', 'tb_artikel.id_artikel = tb_artikel_iklan.id_artikel')
             ->join('tb_harga_iklan', 'tb_harga_iklan.id_harga_iklan = tb_artikel_iklan.id_harga_iklan')
-            ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_penulis')
+            ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_marketing')
             ->findAll();
     }
 }

@@ -128,7 +128,7 @@ class Artikel extends BaseController
                     'deskripsi_artikel' => $this->request->getPost("deskripsi_artikel"),
                     'deskripsi_artikel_en' => $this->request->getPost("deskripsi_artikel_en"),
                     'tags' => $this->request->getPost("tags"),
-                    
+
                     'tags_en' => $this->request->getPost("tags_en"),
                     'sumber_foto' => $this->request->getPost("sumber_foto"),
                     'meta_title_id' => $this->request->getPost("meta_title_id"),
@@ -281,39 +281,49 @@ class Artikel extends BaseController
 
     public function simpan_iklan()
     {
+        // Memuat model yang diperlukan
         $model = new \App\Models\ArtikelIklanModel();
+        $hargaIklanModel = new \App\Models\HargaIklanModel();
 
         // Ambil ID user dari session
-    $idPenulis = session()->get('id_user');
+        $idPenulis = session()->get('id_user');
 
-    $hargaData = $this->hargaIklanModel->find($this->request->getPost('id_iklan'));
-    $hargaPerBulan = (int) $hargaData['harga'];
-    $rentangBulan = (int) $this->request->getPost('rentang_bulan');
-    $totalHarga = $hargaPerBulan * $rentangBulan;
+        // Validasi jika tidak ada ID user di session
+        if (!$idPenulis) {
+            return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
+        }
 
+        // Ambil harga iklan berdasarkan ID yang dipilih
+        $hargaData = $hargaIklanModel->find($this->request->getPost('id_harga_iklan'));
+        if (!$hargaData) {
+            return redirect()->back()->with('error', 'Harga iklan tidak ditemukan.');
+        }
 
-    // Validasi jika tidak ada ID user di session
-    if (!$idPenulis) {
-        return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
-    }
+        // Ambil harga per bulan dan rentang bulan dari input
+        $hargaPerBulan = (int) $hargaData['harga'];
+        $rentangBulan = (int) $this->request->getPost('rentang_bulan');
 
+        // Hitung total harga
+        $totalHarga = $hargaPerBulan * $rentangBulan;
+
+        // Menyiapkan data untuk disimpan
         $data = [
             'id_artikel'        => $this->request->getPost('id_artikel'),
-            'id_harga_iklan'     => $this->request->getPost('id_iklan'), // dari dropdown harga
-            'id_penulis'        => $idPenulis,
-            'rentang_bulan'     => $this->request->getPost('rentang_bulan'),
-            'total_harga'     => $totalHarga,
-            'tanggal_mulai'     => $this->request->getPost('tanggal_mulai'),
-            'tanggal_selesai'   => $this->request->getPost('tanggal_selesai'),
-            'tanggal_pengajuan' => date('Y-m-d'), // bisa disesuaikan default
-            'status_iklan'      => 'Diajukan',     // default
+            'id_harga_iklan'    => $this->request->getPost('id_harga_iklan'),
+            'id_marketing'      => $idPenulis,
+            'rentang_bulan'     => $rentangBulan,
+            'total_harga'       => $totalHarga,
+            'tanggal_pengajuan' => date('Y-m-d'), // Tanggal pengajuan otomatis
+            'status_iklan'      => 'Diajukan',    // Status default adalah 'Diajukan'
             'catatan_admin'     => $this->request->getPost('catatan_admin'),
             'created_at'        => date('Y-m-d H:i:s'),
             'updated_at'        => date('Y-m-d H:i:s'),
         ];
 
+        // Menyimpan data iklan ke database
         $model->insert($data);
 
+        // Kembali ke halaman artikel beriklan dengan pesan sukses
         return redirect()->to(base_url('admin/artikel/artikel_beriklan'))->with('success', 'Data iklan berhasil disimpan');
     }
 }

@@ -71,7 +71,7 @@
                                                 <td class="text-center"><?= $i++ ?></td>
                                                 <td class="text-center"><?= esc($item['judul_artikel']) ?></td> 
                                                 <td class="text-center"><?= esc($item['id_harga_iklan']) ?></td>
-                                                <td class="text-center"><?= esc($item['id_penulis']) ?></td>
+                                                <td class="text-center"><?= esc($item['id_marketing']) ?></td>
                                                 <td class="text-center"><?= esc($item['rentang_bulan']) ?> Bulan</td>
                                                 <td class="text-center"><?= esc($item['total_harga']) ?></td>
                                                 <td class="text-center"><?= esc($item['status_iklan']) ?></td>
