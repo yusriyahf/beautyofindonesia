@@ -123,7 +123,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('meta/delete/(:any)', 'admin\MetaController::delete/$1');
 
     // Artikel
-    
+
     $routes->get('artikel/index', 'admin\Artikel::index');
     $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
     $routes->get('artikel/tambah', 'admin\Artikel::tambah');
@@ -200,14 +200,13 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     // artikel beriklan
     $routes->get('artikel/artikel_beriklan', 'admin\IklanController::index');
     $routes->get('artikel/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('artikel/proses_tambah', 'admin\IklanController::proses_tambah');
-
+    $routes->post('artikel/proses_tambah2', 'admin\IklanController::proses_tambah');
 });
 
 $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
     // Dashboard
     $routes->get('dashboard', 'admin\Dashboardctrl::index');
-    
+
     // Artikel Penulis
     $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
     $routes->get('artikel/tambah', 'penulis\Artikel::tambah');

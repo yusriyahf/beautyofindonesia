@@ -44,7 +44,8 @@ class IklanController extends BaseController
             switch ($iklan['tipe_content']) {
                 case 'artikel':
                     $data = $this->artikelModel->find($iklan['id_content']);
-                    $judul = $data['judul_artikel'] ?? $judul;
+                    $judul = $data->judul_artikel ?? $judul;
+
                     break;
 
                 case 'wisata':
@@ -81,28 +82,12 @@ class IklanController extends BaseController
 
     public function proses_tambah()
     {
-        // Debugging: Memastikan fungsi dipanggil
-        log_message('debug', 'Masuk ke fungsi simpan_iklan');
 
-        // Cek data POST
-        $postData = $this->request->getPost();
-        var_dump($postData); // Debugging untuk melihat data yang diterima
 
-        // Jika data POST valid, simpan data ke database (logika penyimpanan)
-        // Misalnya, jika menggunakan model untuk menyimpan data:
-        $model = new ArtikelIklanModel();
-        if ($model->save($postData)) {
-            log_message('debug', 'Data berhasil disimpan');
-        } else {
-            log_message('debug', 'Gagal menyimpan data');
-        }
-
-        // Cek apakah data berhasil disimpan
-        exit; // Berhenti untuk debug
-        $idPenulis = session()->get('id_user');
-        if (!$idPenulis) {
-            return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
-        }
+        // $idPenulis = session()->get('id_user');
+        // if (!$idPenulis) {
+        //     return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
+        // }
 
         $idHargaIklan = $this->request->getPost('id_harga_iklan');
         $hargaData = $this->hargaIklanModel->find($idHargaIklan);
@@ -111,20 +96,18 @@ class IklanController extends BaseController
             return redirect()->back()->with('error', 'Harga iklan tidak ditemukan.');
         }
 
-        // Ambil data harga dan hitung total
-        $hargaPerBulan = (int) $hargaData['harga'];
-        $rentangBulan = (int) $this->request->getPost('rentang_bulan');
-        $totalHarga = $hargaPerBulan * $rentangBulan;
-
-        // Ambil tipe dan ID konten dari POST
+        $rentangBulan = $this->request->getPost('rentang_bulan');
         $tipeContent = $this->request->getPost('tipe_content');
         $idContent = $this->request->getPost('id_content');
+        $totalHargaFix = $this->request->getPost('total_harga');
+        $totalHargaFix = floatval(preg_replace('/[^\d]/', '', $totalHargaFix));
+
 
         // Validasi konten
         $modelMap = [
             'artikel'    => $this->artikelModel,
-            'wisata'     => $this->wisataModel,
-            'oleh_oleh'  => $this->olehOlehModel,
+            'tempatwisata'     => $this->wisataModel,
+            'oleholeh'  => $this->olehOlehModel,
         ];
 
         if (!isset($modelMap[$tipeContent]) || !$modelMap[$tipeContent]->find($idContent)) {
@@ -136,11 +119,12 @@ class IklanController extends BaseController
             'id_content'        => $idContent,
             'tipe_content'      => $tipeContent,
             'id_harga_iklan'    => $idHargaIklan,
-            'id_marketing'      => $idPenulis,
+            'id_marketing'      => 1,
+            // 'id_marketing'      => $idPenulis,
             'rentang_bulan'     => $rentangBulan,
-            'total_harga'       => $totalHarga,
+            'total_harga'       => $totalHargaFix,
             'tanggal_pengajuan' => date('Y-m-d'),
-            'status_iklan'      => 'Diajukan',
+            'status_iklan'      => 'diajukan',
             'catatan_admin'     => $this->request->getPost('catatan_admin'),
             'created_at'        => date('Y-m-d H:i:s'),
             'updated_at'        => date('Y-m-d H:i:s'),
@@ -148,7 +132,7 @@ class IklanController extends BaseController
 
         // Simpan ke database pakai model
         if ($this->artikelIklanModel->insert($data)) {
-            return redirect()->to('/iklan')->with('success', 'Pengajuan iklan berhasil disimpan.');
+            return redirect()->to(base_url('admin/artikel/artikel_beriklan'))->with('success', 'Pengajuan iklan berhasil disimpan.');
         } else {
             // Ambil error jika insert gagal
             $errors = $this->artikelIklanModel->errors();

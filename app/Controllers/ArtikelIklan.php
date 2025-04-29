@@ -19,6 +19,7 @@ class ArtikelIklan extends BaseController
         $validation = \Config\Services::validation();
         return view('marketing/iklan/index', [
             'all_data_artikeliklan' => $all_data_artikeliklan,
+            dd($all_data_artikeliklan),
             'validation' => $validation
         ]);
     }

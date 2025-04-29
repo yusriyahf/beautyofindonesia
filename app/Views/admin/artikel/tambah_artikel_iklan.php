@@ -12,7 +12,7 @@
         <div class="row g-4 settings-section">
             <div class="col-12">
                 <div class="app-card app-card-settings shadow-sm p-4">
-                    <form method="post" action="<?= base_url('/admin/artikel/proses_tambah') ?>">
+                    <form method="post" action="<?= base_url('/admin/artikel/proses_tambah2') ?>">
                         <?= csrf_field() ?>
 
                         <!-- Dropdown Tipe Konten -->
@@ -21,8 +21,8 @@
                             <select id="tipe_content" name="tipe_content" class="form-control" onchange="resetKonten(); loadKonten();">
                                 <option value="">-- Pilih Tipe Konten --</option>
                                 <option value="artikel" <?= esc($_GET['tipe_content'] ?? '') == 'artikel' ? 'selected' : '' ?>>Artikel</option>
-                                <option value="wisata" <?= esc($_GET['tipe_content'] ?? '') == 'wisata' ? 'selected' : '' ?>>Wisata</option>
-                                <option value="oleh_oleh" <?= esc($_GET['tipe_content'] ?? '') == 'oleh_oleh' ? 'selected' : '' ?>>Oleh-oleh</option>
+                                <option value="tempatwisata" <?= esc($_GET['tipe_content'] ?? '') == 'tempatwisata' ? 'selected' : '' ?>>Wisata</option>
+                                <option value="oleholeh" <?= esc($_GET['tipe_content'] ?? '') == 'oleholeh' ? 'selected' : '' ?>>Oleh-oleh</option>
                             </select>
                         </div>
 
@@ -42,7 +42,7 @@
                         <!-- Dropdown Konten -->
                         <div class="mb-3">
                             <label for="id_konten" class="form-label">Pilih Konten</label>
-                            <select name="id_konten" id="id_konten" class="form-select" required disabled>
+                            <select name="id_content" id="id_konten" class="form-select" required disabled>
                                 <option value="">-- Pilih Konten --</option>
                             </select>
                         </div>
@@ -61,7 +61,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Total Harga</label>
-                            <input type="text" class="form-control" id="total_harga" readonly>
+                            <input type="text" name="total_harga" class="form-control" id="total_harga" readonly>
                         </div>
 
                         <div class="mb-3">
@@ -115,11 +115,11 @@
             data = semuaArtikel;
             valueKey = 'id_artikel';
             textKey = 'judul_artikel';
-        } else if (tipeContent === 'wisata') {
+        } else if (tipeContent === 'tempatwisata') {
             data = semuaWisata;
             valueKey = 'id_wisata';
             textKey = 'nama_wisata_ind';
-        } else if (tipeContent === 'oleh_oleh') {
+        } else if (tipeContent === 'oleholeh') {
             data = semuaOlehOleh;
             valueKey = 'id_oleholeh';
             textKey = 'nama_oleholeh';

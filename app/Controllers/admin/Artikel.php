@@ -242,6 +242,4 @@ class Artikel extends BaseController
         session()->setFlashdata('success', 'Artikel berhasil dihapus');
         return redirect()->to(base_url('admin/artikel/index'));
     }
-
-    
 }
