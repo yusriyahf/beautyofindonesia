@@ -198,9 +198,9 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
 
     // artikel beriklan
-    $routes->get('artikel/artikel_beriklan', 'admin\Artikel::artikel_iklan');
-    $routes->get('admin/artikel/tambah_artikel_iklan', 'Admin\Artikel::tambah_artikel_iklan');
-    $routes->post('artikel/proses_tambah', 'admin\Artikel::simpan_iklan');
+    $routes->get('artikel/artikel_beriklan', 'admin\IklanController::index');
+    $routes->get('artikel/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
+    $routes->post('artikel/proses_tambah', 'admin\IklanController::proses_tambah');
 
 });
 

@@ -12,27 +12,38 @@
         <div class="row g-4 settings-section">
             <div class="col-12">
                 <div class="app-card app-card-settings shadow-sm p-4">
-                    <form method="post" action="<?= base_url('admin/artikel/simpan_iklan') ?>">
+                    <form method="post" action="<?= base_url('/admin/artikel/proses_tambah') ?>">
                         <?= csrf_field() ?>
 
-                        <!-- Dropdown Harga Iklan -->
+                        <!-- Dropdown Tipe Konten -->
+                        <div class="mb-3">
+                            <label for="tipe_content" class="form-label">Tipe Konten</label>
+                            <select id="tipe_content" name="tipe_content" class="form-control" onchange="resetKonten(); loadKonten();">
+                                <option value="">-- Pilih Tipe Konten --</option>
+                                <option value="artikel" <?= esc($_GET['tipe_content'] ?? '') == 'artikel' ? 'selected' : '' ?>>Artikel</option>
+                                <option value="wisata" <?= esc($_GET['tipe_content'] ?? '') == 'wisata' ? 'selected' : '' ?>>Wisata</option>
+                                <option value="oleh_oleh" <?= esc($_GET['tipe_content'] ?? '') == 'oleh_oleh' ? 'selected' : '' ?>>Oleh-oleh</option>
+                            </select>
+                        </div>
+
+                        <!-- Dropdown Tipe Iklan -->
                         <div class="mb-3">
                             <label for="id_iklan" class="form-label">Pilih Tipe Iklan</label>
-                            <select name="id_harga_iklan" id="id_iklan" class="form-select" required onchange="filterArtikel(); hitungTotalHarga();">
+                            <select name="id_harga_iklan" id="id_iklan" class="form-select" required onchange="hitungTotalHarga(); loadKonten();">
                                 <option value="">-- Pilih Harga Iklan --</option>
                                 <?php foreach ($harga_iklan as $h): ?>
-                                    <option value="<?= $h['id_harga_iklan'] ?>" data-nama="<?= esc($h['nama']) ?>" data-harga="<?= $h['harga'] ?>">
+                                    <option value="<?= $h['id_harga_iklan'] ?>" data-harga="<?= $h['harga'] ?>">
                                         <?= esc($h['nama']) ?> - Rp<?= number_format($h['harga'], 0, ',', '.') ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
 
-                        <!-- Dropdown Artikel -->
+                        <!-- Dropdown Konten -->
                         <div class="mb-3">
-                            <label for="id_artikel" class="form-label">Pilih Artikel</label>
-                            <select name="id_artikel" id="id_artikel" class="form-select" required disabled>
-                                <option value="">-- Pilih Artikel --</option>
+                            <label for="id_konten" class="form-label">Pilih Konten</label>
+                            <select name="id_konten" id="id_konten" class="form-select" required disabled>
+                                <option value="">-- Pilih Konten --</option>
                             </select>
                         </div>
 
@@ -42,8 +53,6 @@
                             <input type="hidden" name="id_marketing" value="<?= session()->get('id_user') ?>">
                             <input type="text" class="form-control" value="<?= esc(session()->get('username')) ?>" readonly>
                         </div>
-
-
 
                         <div class="mb-3">
                             <label class="form-label">Rentang Bulan</label>
@@ -55,14 +64,11 @@
                             <input type="text" class="form-control" id="total_harga" readonly>
                         </div>
 
-
-                        <!-- Tanggal Pengajuan (otomatis) -->
                         <div class="mb-3">
                             <label class="form-label">Tanggal Pengajuan</label>
                             <input type="text" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
                         </div>
 
-                        <!-- Catatan Admin -->
                         <div class="mb-3">
                             <label for="catatan_admin" class="form-label">Catatan Admin (Opsional)</label>
                             <textarea name="catatan_admin" id="catatan_admin" rows="3" class="form-control"></textarea>
@@ -80,45 +86,53 @@
 </div><!--//app-content-->
 
 <script>
-    // Semua data artikel
     const semuaArtikel = <?= json_encode($artikel) ?>;
+    const semuaWisata = <?= json_encode($wisata) ?>;
+    const semuaOlehOleh = <?= json_encode($oleholeh) ?>;
 
-    function filterArtikel() {
-        const idIklanSelect = document.getElementById('id_iklan');
-        const selectedOption = idIklanSelect.options[idIklanSelect.selectedIndex];
-        const tipeIklanNama = selectedOption.getAttribute('data-nama');
+    function resetKonten() {
+        document.getElementById('id_konten').innerHTML = '<option value="">-- Pilih Konten --</option>';
+        document.getElementById('id_konten').disabled = true;
+    }
 
-        const artikelSelect = document.getElementById('id_artikel');
-        artikelSelect.innerHTML = '<option value="">-- Pilih Artikel --</option>'; // Reset artikel
+    function loadKonten() {
+        const tipeContent = document.getElementById('tipe_content').value;
+        const kontenDropdown = document.getElementById('id_konten');
 
-        if (!idIklanSelect.value) {
-            artikelSelect.disabled = true; // Disable kalau belum pilih iklan
+        // Reset isi
+        kontenDropdown.innerHTML = '<option value="">-- Pilih Konten --</option>';
+        kontenDropdown.disabled = true;
+
+        if (!tipeContent) {
             return;
         }
 
-        artikelSelect.disabled = false; // Enable setelah pilih iklan
+        let data = [];
+        let valueKey = '';
+        let textKey = '';
 
-        // Tentukan kolom filter berdasarkan tipe iklan
-        let kolomFilter = '';
-        if (tipeIklanNama.toLowerCase().includes('banner')) {
-            kolomFilter = 'iklan_banner';
-        } else if (tipeIklanNama.toLowerCase().includes('sidebar')) {
-            kolomFilter = 'iklan_sidebar';
-        } else if (tipeIklanNama.toLowerCase().includes('footer')) {
-            kolomFilter = 'iklan_footer';
-        } else {
-            return;
+        if (tipeContent === 'artikel') {
+            data = semuaArtikel;
+            valueKey = 'id_artikel';
+            textKey = 'judul_artikel';
+        } else if (tipeContent === 'wisata') {
+            data = semuaWisata;
+            valueKey = 'id_wisata';
+            textKey = 'nama_wisata_ind';
+        } else if (tipeContent === 'oleh_oleh') {
+            data = semuaOlehOleh;
+            valueKey = 'id_oleholeh';
+            textKey = 'nama_oleholeh';
         }
 
-        // Filter artikel yang punya "iya" di kolom yang sesuai
-        semuaArtikel.forEach(a => {
-            if (a[kolomFilter] === 'tidak') {
-                const opt = document.createElement('option');
-                opt.value = a.id_artikel;
-                opt.textContent = a.judul_artikel;
-                artikelSelect.appendChild(opt);
-            }
+        data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item[valueKey];
+            option.textContent = item[textKey];
+            kontenDropdown.appendChild(option);
         });
+
+        kontenDropdown.disabled = false;
     }
 
     function hitungTotalHarga() {

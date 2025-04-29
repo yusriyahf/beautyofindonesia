@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-4 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100 me-2">Filter</button>
-                    <a href="<?= base_url('admin/tambah_artikel_iklan') ?>" class="btn btn-secondary w-100">Tampilkan Semua</a>
+                    <a href="<?= base_url('admin/artikel_iklan') ?>" class="btn btn-secondary w-100">Tampilkan Semua</a>
                 </div>
             </div>
         </form>
@@ -40,6 +40,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
+                                        <th class="text-center">Tipe Konten</th>
                                         <th class="text-center">Judul Artikel</th>
                                         <th class="text-center">Tipe Iklan</th>
                                         <th class="text-center">ID Penulis</th>
@@ -69,14 +70,15 @@
                                     ?>
                                             <tr>
                                                 <td class="text-center"><?= $i++ ?></td>
-                                                <td class="text-center"><?= esc($item['judul_artikel']) ?></td> 
-                                                <td class="text-center"><?= esc($item['id_harga_iklan']) ?></td>
-                                                <td class="text-center"><?= esc($item['id_marketing']) ?></td>
-                                                <td class="text-center"><?= esc($item['rentang_bulan']) ?> Bulan</td>
-                                                <td class="text-center"><?= esc($item['total_harga']) ?></td>
-                                                <td class="text-center"><?= esc($item['status_iklan']) ?></td>
-                                                <td class="text-center"><?= esc($item['tanggal_mulai']) ?></td>
-                                                <td class="text-center"><?= esc($item['tanggal_selesai']) ?></td>
+                                                <td class="text-center"><?= esc($item['tipe_content']) ?></td> <!-- Tipe Konten -->
+                                                <td class="text-center"><?= esc($item['judul_artikel']) ?></td> <!-- Judul Artikel -->
+                                                <td class="text-center"><?= esc($item['id_harga_iklan']) ?></td> <!-- Tipe Iklan -->
+                                                <td class="text-center"><?= esc($item['id_marketing']) ?></td> <!-- ID Penulis -->
+                                                <td class="text-center"><?= esc($item['rentang_bulan']) ?> Bulan</td> <!-- Rentang Bulan -->
+                                                <td class="text-center"><?= esc($item['total_harga']) ?></td> <!-- Total Harga -->
+                                                <td class="text-center"><?= esc($item['status_iklan']) ?></td> <!-- Status Iklan -->
+                                                <td class="text-center"><?= esc($item['tanggal_mulai']) ?></td> <!-- Tanggal Mulai -->
+                                                <td class="text-center"><?= esc($item['tanggal_selesai']) ?></td> <!-- Tanggal Selesai -->
                                                 <td class="text-center">
                                                     <div class="d-grid gap-2">
                                                         <a href="<?= base_url('admin/artikel_iklan/edit/' . $item['id_iklan']) ?>" class="btn btn-primary">Ubah</a>
@@ -89,13 +91,12 @@
                                     } else {
                                         ?>
                                         <tr>
-                                            <td colspan="9" class="text-center">Tidak ada data yang tersedia.</td>
+                                            <td colspan="11" class="text-center">Tidak ada data yang tersedia.</td>
                                         </tr>
                                     <?php
                                     }
                                     ?>
                                 </tbody>
-
                             </table>
                         </div><!--//table-responsive-->
                     </div><!--//app-card-body-->

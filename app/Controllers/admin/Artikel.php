@@ -19,7 +19,6 @@ class Artikel extends BaseController
     private $KategoriModel;
     private $PenulisModel;
     private $TentangModel;
-    private $ArtikelIklanModel;
 
 
     public function __construct()
@@ -29,7 +28,6 @@ class Artikel extends BaseController
         $this->KategoriModel = new KategoriModel();
         $this->PenulisModel = new PenulisModel();
         $this->TentangModel = new TentangModel();
-        $this->ArtikelIklanModel = new ArtikelIklanModel();
     }
 
     public function index()
@@ -245,85 +243,5 @@ class Artikel extends BaseController
         return redirect()->to(base_url('admin/artikel/index'));
     }
 
-    // Artikel Iklan
-    public function artikel_iklan()
-    {
-        // Cek apakah user sudah login
-        if (!session()->get('logged_in')) {
-            return redirect()->to(base_url('login'));
-        }
-
-        // Ambil data artikel beriklan berdasarkan filter tanggal jika ada
-        $startDate = $this->request->getGet('start_date');
-        $endDate = $this->request->getGet('end_date');
-
-        $all_data = $this->ArtikelIklanModel->getArtikelIklanByDateFilter($startDate, $endDate) ?? [];
-
-        // Validasi
-        $validation = \Config\Services::validation();
-
-        return view('admin/artikel/artikel_iklan', [
-            'all_data' => $all_data,
-            'validation' => $validation
-        ]);
-    }
-
-    public function tambah_artikel_iklan()
-    {
-        $artikelModel = new \App\Models\ArtikelModel();
-        $hargaIklanModel = new \App\Models\HargaIklanModel(); // model harga iklan
-
-        $data['artikel'] = $artikelModel->findAll(); // object
-        $data['harga_iklan'] = $hargaIklanModel->findAll(); // object
-
-        return view('admin/artikel/tambah_artikel_iklan', $data);
-    }
-
-    public function simpan_iklan()
-    {
-        // Memuat model yang diperlukan
-        $model = new \App\Models\ArtikelIklanModel();
-        $hargaIklanModel = new \App\Models\HargaIklanModel();
-
-        // Ambil ID user dari session
-        $idPenulis = session()->get('id_user');
-
-        // Validasi jika tidak ada ID user di session
-        if (!$idPenulis) {
-            return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
-        }
-
-        // Ambil harga iklan berdasarkan ID yang dipilih
-        $hargaData = $hargaIklanModel->find($this->request->getPost('id_harga_iklan'));
-        if (!$hargaData) {
-            return redirect()->back()->with('error', 'Harga iklan tidak ditemukan.');
-        }
-
-        // Ambil harga per bulan dan rentang bulan dari input
-        $hargaPerBulan = (int) $hargaData['harga'];
-        $rentangBulan = (int) $this->request->getPost('rentang_bulan');
-
-        // Hitung total harga
-        $totalHarga = $hargaPerBulan * $rentangBulan;
-
-        // Menyiapkan data untuk disimpan
-        $data = [
-            'id_artikel'        => $this->request->getPost('id_artikel'),
-            'id_harga_iklan'    => $this->request->getPost('id_harga_iklan'),
-            'id_marketing'      => $idPenulis,
-            'rentang_bulan'     => $rentangBulan,
-            'total_harga'       => $totalHarga,
-            'tanggal_pengajuan' => date('Y-m-d'), // Tanggal pengajuan otomatis
-            'status_iklan'      => 'Diajukan',    // Status default adalah 'Diajukan'
-            'catatan_admin'     => $this->request->getPost('catatan_admin'),
-            'created_at'        => date('Y-m-d H:i:s'),
-            'updated_at'        => date('Y-m-d H:i:s'),
-        ];
-
-        // Menyimpan data iklan ke database
-        $model->insert($data);
-
-        // Kembali ke halaman artikel beriklan dengan pesan sukses
-        return redirect()->to(base_url('admin/artikel/artikel_beriklan'))->with('success', 'Data iklan berhasil disimpan');
-    }
+    
 }
