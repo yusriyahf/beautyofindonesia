@@ -4,31 +4,73 @@ namespace App\Controllers\admin;
 
 use App\Models\ArtikelIklanModel;
 use App\Models\ArtikelModel;
+use App\Models\HargaIklanModel;
+use App\Models\OlehOlehModel;
+use App\Models\TempatWisataModel;
+use App\Models\UserModel;
 
 class ArtikelIklan extends BaseController
 {
-    private $ArtikelIklanModel;
-    private $Artikel;
+    protected $artikelIklanModel;
+    protected $artikelModel;
+    protected $wisataModel;
+    protected $olehOlehModel;
+    protected $hargaIklanModel;
+    protected $UserModel;
 
     public function __construct()
     {
-        $this->ArtikelIklanModel = new ArtikelIklanModel();
-        $this->Artikel = new ArtikelModel();
+        $this->artikelIklanModel = new ArtikelIklanModel();
+        $this->artikelModel = new ArtikelModel();
+        $this->wisataModel = new TempatWisataModel();
+        $this->olehOlehModel = new OlehOlehModel();
+        $this->hargaIklanModel = new HargaIklanModel();
+        $this->UserModel = new UserModel();
     }
 
     public function index()
     {
-        $all_data_artikeliklan = $this->ArtikelIklanModel->getArtikelIklan();
+        $all_data = $this->artikelIklanModel->getArtikelIklan();
         $validation = \Config\Services::validation();
+        foreach ($all_data as &$iklan) {
+            $judul = 'Tidak ditemukan';
+
+            switch ($iklan['tipe_content']) {
+                case 'artikel':
+                    $data = $this->artikelModel->find($iklan['id_content']);
+                    $judul = $data->judul_artikel ?? $judul;
+
+                    break;
+
+                case 'tempatwisata':
+                    $data = $this->wisataModel->find($iklan['id_content']);
+                    $judul = $data['nama_wisata_ind'] ?? $judul;
+                    break;
+
+                case 'oleholeh':
+                    $data = $this->olehOlehModel->find($iklan['id_content']);
+                    $judul = $data['nama_oleholeh'] ?? $judul;
+                    break;
+            }
+
+            $iklan['judul_konten'] = $judul;
+            // Ambil nama iklan dari tb_harga_iklan
+            $harga = $this->hargaIklanModel->find($iklan['id_harga_iklan']);
+            $iklan['nama'] = $harga['nama'] ?? 'Tidak ditemukan';
+
+            // Ambil username dari tb_users
+            $user = $this->UserModel->find($iklan['id_marketing']);
+            $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
+        }
         return view('admin/artikel_iklan/index', [
-            'all_data_artikeliklan' => $all_data_artikeliklan,
+            'all_data_artikeliklan' => $all_data,
             'validation' => $validation
         ]);
     }
 
     public function tambah()
     {
-        $listPopup = $this->ArtikelIklanModel->asObject()->findAll();
+        $listPopup = $this->artikelIklanModel->asObject()->findAll();
 
         $validation = \Config\Services::validation();
 
@@ -73,7 +115,7 @@ class ArtikelIklan extends BaseController
             'foto_popup' => $namaFoto,
         ];
 
-        $this->ArtikelIklanModel->save($data);
+        $this->artikelIklanModel->save($data);
 
         session()->setFlashdata('success', 'Data berhasil disimpan');
         return redirect()->to(base_url('admin/popup'));
@@ -82,7 +124,7 @@ class ArtikelIklan extends BaseController
 
     public function edit($id_popup)
     {
-        $popup = $this->ArtikelIklanModel->asObject()->find($id_popup);
+        $popup = $this->artikelIklanModel->asObject()->find($id_popup);
 
         $validation = \Config\Services::validation();
 
@@ -95,7 +137,7 @@ class ArtikelIklan extends BaseController
     // Artikel.php (Controller)
     public function proses_edit($id_popup = null)
     {
-        $popupData = $this->ArtikelIklanModel->find($id_popup);
+        $popupData = $this->artikelIklanModel->find($id_popup);
 
         if (!$popupData) {
             return redirect()->back()->with('error', 'Data tidak ditemukan');
@@ -140,7 +182,7 @@ class ArtikelIklan extends BaseController
             'foto_popup' => $namaFoto,
         ];
 
-        $this->ArtikelIklanModel->update($id_popup, $data);
+        $this->artikelIklanModel->update($id_popup, $data);
 
         session()->setFlashdata('success', 'Data berhasil diperbarui');
         return redirect()->to(base_url('admin/popup'));
@@ -149,7 +191,7 @@ class ArtikelIklan extends BaseController
     public function delete($id = false)
     {
         // Cari data popup berdasarkan ID
-        $popupData = $this->ArtikelIklanModel->asObject()->find($id);
+        $popupData = $this->artikelIklanModel->asObject()->find($id);
 
         if (!$popupData) {
             session()->setFlashdata('error', 'Data Popup tidak ditemukan');
@@ -162,7 +204,7 @@ class ArtikelIklan extends BaseController
         }
 
         // Hapus data dari database
-        $this->ArtikelIklanModel->delete($id);
+        $this->artikelIklanModel->delete($id);
 
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to(base_url('admin/popup'));
@@ -173,7 +215,7 @@ class ArtikelIklan extends BaseController
         $id = $this->request->getPost('id'); // id dari tb_artikel_iklan
         $status = $this->request->getPost('status_iklan'); // disetujui / ditolak
         $nama_iklan = $this->request->getPost('nama_iklan'); // Iklan Banner / Iklan Sidebar / Iklan Footer
-        $id_artikel = $this->request->getPost('id_artikel'); // id artikel terkait
+        $id_content = $this->request->getPost('id_content'); // id artikel terkait
         $tanggal_mulai = $this->request->getPost('tanggal_mulai'); // tanggal mulai iklan (user input)
         $durasi_bulan = (int) $this->request->getPost('durasi_bulan'); // durasi bulan (user input)
 
@@ -213,7 +255,7 @@ class ArtikelIklan extends BaseController
         }
 
         // Update status iklan di tb_artikel_iklan
-        $this->ArtikelIklanModel->update($id, $dataIklan);
+        $this->artikelIklanModel->update($id, $dataIklan);
 
         // Validasi nama_iklan hanya jika statusnya 'ditolak' atau 'diterima'
         if (!array_key_exists($nama_iklan, $mapping)) {
@@ -223,8 +265,8 @@ class ArtikelIklan extends BaseController
         // Tentukan kolom yang akan diubah
         $kolomIklan = $mapping[$nama_iklan];
 
-        // Ubah kolom iklan di tb_artikel berdasarkan id_artikel
-        $this->Artikel->update($id_artikel, [
+        // Ubah kolom iklan di tb_artikel berdasarkan id_content
+        $this->artikelModel->update($id_content, [
             $kolomIklan => $status === 'diterima' ? 'tidak' : 'ada'
         ]);
 
@@ -240,13 +282,13 @@ class ArtikelIklan extends BaseController
     //     $id = $this->request->getPost('id');
     //     $status = $this->request->getPost('status');
     //     $nama_iklan = $this->request->getPost('nama_iklan');
-    //     $id_artikel = $this->request->getPost('id_artikel');
+    //     $id_content = $this->request->getPost('id_content');
 
     //     // Validasi status
     //     if (!in_array($status, ['disetujui', 'ditolak'])) {
     //         return redirect()->back()->with('error', 'Status tidak valid.');
     //     }
-    //     $this->ArtikelIklanModel->update($id, ['status' => $status]);
+    //     $this->artikelIklanModel->update($id, ['status' => $status]);
 
     //     $this->Artikel->update();
 
@@ -258,7 +300,7 @@ class ArtikelIklan extends BaseController
     //     $id = $this->request->getPost('id');
     //     $status = $this->request->getPost('status');
     //     $status = $this->request->getPost('status');
-    //     $id_artikel = $this->request->getPost('id_artikel');
+    //     $id_content = $this->request->getPost('id_content');
 
     //     // Validasi status
     //     if (!in_array($status, ['disetujui', 'ditolak'])) {
@@ -273,7 +315,7 @@ class ArtikelIklan extends BaseController
 
     //     // Ambil iklan yang berelasi (anggap kamu punya kolom 'id_iklan' atau relasi pivot)
     //     $iklanModel = new \App\Models\IklanModel(); // pastikan modelnya sesuai
-    //     $relasiIklan = $iklanModel->where('id_artikel', $id)->findAll(); // sesuaikan jika nama kolom beda
+    //     $relasiIklan = $iklanModel->where('id_content', $id)->findAll(); // sesuaikan jika nama kolom beda
 
     //     // Siapkan update iklan
     //     $updateData = ['status' => $status];
