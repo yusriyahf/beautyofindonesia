@@ -48,15 +48,6 @@
                                         <th class="text-center" valign="middle">Judul Artikel (English)</th>
                                         <th class="text-center" valign="middle">Kategori Artikel</th>
                                         <th class="text-center" valign="middle">Penulis Artikel</th>
-                                        <th class="text-center" valign="middle">Deskripsi Artikel</th>
-                                        <th class="text-center" valign="middle">Deskripsi Artikel (English)</th>
-                                        <th class="text-center" valign="middle">Tags (ID)</th>
-                                        <th class="text-center" valign="middle">Tags (EN)</th>
-                                        <th class="text-center" valign="middle">Meta Title (ID)</th>
-                                        <th class="text-center" valign="middle">Meta Title (EN)</th>
-                                        <th class="text-center" valign="middle">Meta Deskripsi (ID)</th>
-                                        <th class="text-center" valign="middle">Meta Deskripsi (EN)</th>
-                                        <th class="text-center" valign="middle">Foto Artikel</th>
                                         <th class="text-center" valign="middle">Tanggal Upload</th>
                                         <th class="text-center" valign="middle">Aksi</th>
                                     </tr>
@@ -92,24 +83,10 @@
                                             <td class="text-center" valign="middle"><?= isset($tampilArtikel['judul_artikel_en']) ? $tampilArtikel['judul_artikel_en'] : 'Judul Tidak Tersedia' ?></td>
                                             <td class="text-center" valign="middle"><?= isset($tampilArtikel['nama_kategori']) ? $tampilArtikel['nama_kategori'] : 'Kategori Tidak Tersedia' ?></td>
                                             <td class="text-center" valign="middle"><?= isset($tampilArtikel['nama_penulis']) ? $tampilArtikel['nama_penulis'] : 'Penulis Tidak Tersedia' ?></td>
-                                            <td class="text-center col-4" valign="middle">
-                                                <?= isset($tampilArtikel['deskripsi_artikel']) ? substr(strip_tags($tampilArtikel['deskripsi_artikel']), 0, 60) . '...' : 'Deskripsi Tidak Tersedia' ?>
-                                            </td>
-                                            <td class="text-center col-4" valign="middle">
-                                                <?= isset($tampilArtikel['deskripsi_artikel_en']) ? substr(strip_tags($tampilArtikel['deskripsi_artikel_en']), 0, 60) . '...' : 'Deskripsi Tidak Tersedia' ?>
-                                            </td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['tags']) ? $tampilArtikel['tags'] : 'Tag Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['tags_en']) ? $tampilArtikel['tags_en'] : 'Tag Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['meta_title_id']) ? $tampilArtikel['meta_title_id'] : 'Meta Title Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['meta_title_en']) ? $tampilArtikel['meta_title_en'] : 'Meta Title Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['meta_description_id']) ? $tampilArtikel['meta_description_id'] : 'Meta Deskripsi Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['meta_description_en']) ? $tampilArtikel['meta_description_en'] : 'Meta Deskripsi Tidak Tersedia' ?></td>
-                                            <td class="text-center col-2" valign="middle">
-                                                <img src="<?= base_url() . 'assets-baru/img/foto_artikel/' . (isset($tampilArtikel['foto_artikel']) ? $tampilArtikel['foto_artikel'] : 'default.jpg') ?>" class="img-fluid" alt="Foto Artikel">
-                                            </td>
                                             <td class="text-center" valign="middle"><?= $tglPublish ?></td>
                                             <td valign="middle">
                                                 <div class="d-grid gap-2">
+                                                    <a href="<?= base_url('admin/artikel/viewArtikel/' . $tampilArtikel['id_artikel'] . '/' . $tampilArtikel['slug']) ?>" class="btn btn-danger">View</a>
                                                     <a href="<?= base_url('admin/artikel/delete') . '/' . $tampilArtikel['id_artikel'] ?>" class="btn btn-danger">Hapus</a>
                                                     <a href="<?= base_url('admin/artikel/edit') . '/' . $tampilArtikel['id_artikel'] ?>" class="btn btn-primary">Ubah</a>
                                                 </div>
