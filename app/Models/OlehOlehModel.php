@@ -29,7 +29,11 @@ class OlehOlehModel extends Model
         'meta_title_en',
         'meta_description_id',
         'meta_description_en',
-        'whatsapp_clicks'
+        'whatsapp_clicks',
+        'iklan_banner',
+        'iklan_sidebar',
+        'iklan_footer',
+
     ];
 
     public function incrementWhatsappClicks($id)

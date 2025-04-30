@@ -26,6 +26,18 @@ class ArtikelIklanModel extends Model
         'diperbarui_pada'
     ];
 
+    public function getArtikelIklanAnjay()
+    {
+        return $this->select('
+                    tb_artikel_iklan.*,
+                    tb_harga_iklan.nama as nama_iklan,
+                    tb_users.full_name as nama_marketing
+                ')
+            ->join('tb_harga_iklan', 'tb_harga_iklan.id_harga_iklan = tb_artikel_iklan.id_harga_iklan', 'left')
+            ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_marketing', 'left')
+            ->findAll();
+    }
+
     // Mendapatkan artikel iklan dengan informasi terkait
     public function getArtikelIklanByDateFilter($startDate = null, $endDate = null)
     {
@@ -55,6 +67,8 @@ class ArtikelIklanModel extends Model
         // Menggunakan get() untuk menjalankan query
         return $builder->get()->getResultArray();
     }
+
+
 
     public function getArtikelIklan()
     {

@@ -35,13 +35,18 @@
                                 <thead class="atas">
                                     <tr>
                                         <th class="text-center" valign="middle">No</th>
-                                        <th class="text-center" valign="middle">Artikel</th>
+                                        <th class="text-center" valign="middle">Judul Konten</th>
+                                        <th class="text-center" valign="middle">Tipe Konten</th>
+                                        <th class="text-center" valign="middle">Marketing</th>
                                         <th class="text-center" valign="middle">Iklan</th>
-                                        <th class="text-center" valign="middle">User</th>
+
+
+
                                         <th class="text-center" valign="middle">Durasi Bulan</th>
                                         <th class="text-center" valign="middle">Tgl Mulai</th>
                                         <th class="text-center" valign="middle">Tgl Selesai</th>
                                         <th class="text-center" valign="middle">Status</th>
+                                        <th class="text-center" valign="middle">Harga</th>
                                         <th class="text-center" valign="middle">Kontak</th>
                                         <th class="text-center" valign="middle">Aksi</th>
                                     </tr>
@@ -52,9 +57,11 @@
                                     <?php foreach ($all_data_artikeliklan as $artikelIklan) : ?>
                                         <tr class="text-center">
                                             <td class="cell"><?= $i++ ?></td>
-                                            <td class="cell"><?= esc($artikelIklan['judul_artikel'] ?? 'N/A') ?></td>
+                                            <td class="cell"><?= esc($artikelIklan['judul_content'] ?? 'Tidak ditemukan') ?></td>
+
+                                            <td class="cell"><?= esc($artikelIklan['tipe_content'] ?? 'N/A') ?></td>
+                                            <td class="cell"><?= esc($artikelIklan['nama_marketing'] ?? 'N/A') ?></td>
                                             <td class="cell"><?= esc($artikelIklan['nama_iklan'] ?? 'N/A') ?></td>
-                                            <td class="cell"><?= esc($artikelIklan['username'] ?? 'N/A') ?></td>
                                             <td class="cell"><?= esc($artikelIklan['rentang_bulan'] ?? 'N/A') ?> Bulan</td>
 
                                             <td class="cell">
@@ -108,6 +115,7 @@
                                             <td class="cell">
                                                 <span class="badge <?= $badgeClass ?>"><?= $status ?></span>
                                             </td>
+                                            <td class="cell"><?= esc($artikelIklan['total_harga'] ?? 'N/A') ?></td>
 
                                             <td class="cell">
                                                 <?php if (!empty($artikelIklan['kontak'])) : ?>
@@ -136,6 +144,7 @@
                                             </td>
                                         </tr>
 
+                                        <!-- TEMPAT MODAL -->
                                         <!-- Modal Acc -->
                                         <div class="modal fade" id="accModal<?= $artikelIklan['id_iklan'] ?>" tabindex="-1" aria-labelledby="accModalLabel<?= $artikelIklan['id_iklan'] ?>" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -146,8 +155,9 @@
 
                                                         <input type="hidden" name="id" value="<?= $artikelIklan['id_iklan'] ?>">
                                                         <input type="hidden" name="status_iklan" value="diterima">
+                                                        <input type="hidden" name="tipe_content" value="<?= esc($artikelIklan['tipe_content']) ?>">
                                                         <input type="hidden" name="nama_iklan" value="<?= esc($artikelIklan['nama_iklan']) ?>">
-                                                        <input type="hidden" name="id_artikel" value="<?= $artikelIklan['id_artikel'] ?>">
+                                                        <input type="hidden" name="id_content" value="<?= $artikelIklan['id_content'] ?>">
                                                         <input type="hidden" name="durasi_bulan" value="<?= $durasiBulan ?>">
 
                                                         <div class="modal-header bg-success text-white">
@@ -158,8 +168,8 @@
                                                         <div class="modal-body">
                                                             <p>Anda akan menyetujui permintaan tampil iklan ini:</p>
                                                             <ul class="mb-3">
-                                                                <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_artikel']) ?></strong></li>
-                                                                <li>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
+                                                                <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_content']) ?></strong></li>
+                                                                <li>Nama Iklan: <strong><?= esc($artikelIklan['id_harga_iklan']) ?></strong></li>
                                                                 <li>Durasi: <strong><?= $durasiBulan ?> Bulan</strong></li>
                                                             </ul>
 
@@ -215,7 +225,7 @@
                                         </script>
 
 
-                                        <!-- Modal Tolak -->
+                                        <!-- MODAL TOLAK -->
                                         <div class="modal fade" id="tolakModal<?= $artikelIklan['id_iklan'] ?>" tabindex="-1" aria-labelledby="tolakModalLabel<?= $artikelIklan['id_iklan'] ?>" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -224,7 +234,7 @@
                                                         <input type="hidden" name="id" value="<?= $artikelIklan['id_iklan'] ?>">
                                                         <input type="hidden" name="status_iklan" value="ditolak">
                                                         <input type="hidden" name="nama_iklan" value="<?= esc($artikelIklan['nama_iklan']) ?>">
-                                                        <input type="hidden" name="id_artikel" value="<?= $artikelIklan['id_artikel'] ?>">
+                                                        <input type="hidden" name="id_content" value="<?= $artikelIklan['id_content'] ?>">
 
                                                         <div class="modal-header bg-danger text-white">
                                                             <h5 class="modal-title" id="tolakModalLabel<?= $artikelIklan['id_iklan'] ?>">Konfirmasi Penolakan</h5>
@@ -234,7 +244,7 @@
                                                         <div class="modal-body">
                                                             <p>Anda akan menolak permintaan tampil iklan ini:</p>
                                                             <ul class="mb-3">
-                                                                <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_artikel']) ?></strong></li>
+                                                                <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_content']) ?></strong></li>
                                                                 <li>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
                                                             </ul>
                                                         </div>
@@ -249,6 +259,10 @@
                                                 </div>
                                             </div>
                                         </div>
+
+
+
+
 
                                     <?php endforeach; ?>
                                 </tbody>

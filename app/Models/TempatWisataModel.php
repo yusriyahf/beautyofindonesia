@@ -8,7 +8,7 @@ class TempatWisataModel extends Model
 {
     protected $table = 'tb_tempatwisata';
     protected $primaryKey = 'id_wisata';
-    protected $returnType = 'array'; // Ensures findAll() returns arrays
+    protected $returnType = 'array';
     protected $allowedFields = [
         'id_kategori_wisata',
         'nama_wisata_ind',
