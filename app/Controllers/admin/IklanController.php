@@ -8,6 +8,7 @@ use App\Models\ArtikelModel;
 use App\Models\TempatWisataModel;
 use App\Models\OlehOlehModel;
 use App\Models\HargaIklanModel;
+use App\Models\UserModel;
 use Config\Services;
 
 class IklanController extends BaseController
@@ -17,6 +18,7 @@ class IklanController extends BaseController
     protected $wisataModel;
     protected $olehOlehModel;
     protected $hargaIklanModel;
+    protected $UserModel;
 
     public function __construct()
     {
@@ -25,6 +27,7 @@ class IklanController extends BaseController
         $this->wisataModel = new TempatWisataModel();
         $this->olehOlehModel = new OlehOlehModel();
         $this->hargaIklanModel = new HargaIklanModel();
+        $this->UserModel = new UserModel();
     }
 
     public function index()
@@ -33,8 +36,8 @@ class IklanController extends BaseController
             return redirect()->to(base_url('login'));
         }
 
-        $startDate = $this->request->getGet('start_date');
-        $endDate = $this->request->getGet('end_date');
+        $startDate = $this->request->getGet('created_at');
+        $endDate = $this->request->getGet('updated_at');
 
         $all_data = $this->artikelIklanModel->getArtikelIklanByDateFilter($startDate, $endDate) ?? [];
 
@@ -48,7 +51,7 @@ class IklanController extends BaseController
 
                     break;
 
-                case 'wisata':
+                case 'tempatwisata':
                     $data = $this->wisataModel->find($iklan['id_content']);
                     $judul = $data['nama_wisata_ind'] ?? $judul;
                     break;
@@ -60,6 +63,13 @@ class IklanController extends BaseController
             }
 
             $iklan['judul_konten'] = $judul;
+            // Ambil nama iklan dari tb_harga_iklan
+            $harga = $this->hargaIklanModel->find($iklan['id_harga_iklan']);
+            $iklan['nama'] = $harga['nama'] ?? 'Tidak ditemukan';
+
+            // Ambil username dari tb_users
+            $user = $this->UserModel->find($iklan['id_marketing']);
+            $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
         }
 
         return view('admin/artikel/artikel_iklan', [
@@ -139,4 +149,27 @@ class IklanController extends BaseController
             return redirect()->back()->withInput()->with('error', 'Gagal menyimpan data: ' . implode(', ', $errors));
         }
     }
+
+    // public function delete($id = false)
+    // {
+    //     // Cari data iklan berdasarkan ID
+    //     $iklanData = $this->artikelIklanModel->asObject()->find($id);
+
+    //     if (!$iklanData) {
+    //         session()->setFlashdata('error', 'Data iklan tidak ditemukan');
+    //         return redirect()->to(base_url('admin/artikel/artikel_beriklan'));
+    //     }
+
+    //     // Jika suatu saat ada file gambar terkait iklan, tambahkan penghapusan file di sini
+    //     // Contoh (opsional, jika ada file):
+    //     // if ($iklanData->gambar && file_exists('uploads/iklan/' . $iklanData->gambar)) {
+    //     //     unlink('uploads/iklan/' . $iklanData->gambar);
+    //     // }
+
+    //     // Hapus data dari database
+    //     $this->artikelIklanModel->delete($id);
+
+    //     session()->setFlashdata('success', 'Data iklan berhasil dihapus');
+    //     return redirect()->to(base_url('admin/artikel/artikel_beriklan'));
+    // }
 }
