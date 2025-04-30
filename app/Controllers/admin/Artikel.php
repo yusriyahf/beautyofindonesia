@@ -73,7 +73,7 @@ class Artikel extends BaseController
             'foto_artikel' => $foto_artikel // Menyertakan foto artikel ke data yang dikirimkan ke view
         ];
 
-        return view('user/home/detail', $data);
+        return view('admin/artikel/detail', $data);
     }
 
 
