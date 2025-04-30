@@ -6,6 +6,7 @@
         <div class="row g-3 mb-4 align-items-center justify-content-between">
             <div class="col-auto">
                 <h1 class="app-page-title mb-0">Daftar Permintaan Tampil Iklan</h1>
+                <p class="text-muted mb-0">Kelola semua permintaan artikel beriklan di sini</p>
             </div>
         </div>
 
@@ -28,14 +29,66 @@
 
         <div class="tab-content" id="orders-table-tab-content">
             <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+                <!-- Filter Section -->
+                <div class="app-card app-card-settings shadow-sm p-4 mb-4">
+                    <div class="app-card-body">
+                        <form method="get" action="<?= base_url('admin/artikel_iklan') ?>">
+                            <div class="row align-items-end">
+                                <div class="col-md-3 mb-3">
+                                    <label for="start_date" class="form-label">Tanggal Mulai</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control"
+                                        value="<?= esc($_GET['start_date'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="end_date" class="form-label">Tanggal Akhir</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control"
+                                        value="<?= esc($_GET['end_date'] ?? '') ?>">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="status" class="form-label">Status Iklan</label>
+                                    <select id="status" name="status" class="form-select">
+                                        <option value="">Semua Status</option>
+                                        <option value="diajukan" <?= (($_GET['status'] ?? '') == 'diajukan') ? 'selected' : '' ?>>Diajukan</option>
+                                        <option value="diterima" <?= (($_GET['status'] ?? '') == 'diterima') ? 'selected' : '' ?>>Disetujui</option>
+                                        <option value="ditolak" <?= (($_GET['status'] ?? '') == 'ditolak') ? 'selected' : '' ?>>Ditolak</option>
+                                        <option value="berjalan" <?= (($_GET['status'] ?? '') == 'berjalan') ? 'selected' : '' ?>>Berjalan</option>
+                                        <option value="selesai" <?= (($_GET['status'] ?? '') == 'selesai') ? 'selected' : '' ?>>Selesai</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3 d-grid gap-2 d-md-flex">
+                                    <button type="submit" class="btn app-btn-primary me-md-2">
+                                        <i class="fas fa-filter me-1"></i> Filter
+                                    </button>
+                                    <a href="<?= base_url('admin/artikel_iklan') ?>" class="btn btn-secondary">
+                                        <i class="fas fa-sync-alt me-1"></i> Reset
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Data Table Section -->
                 <div class="app-card app-card-orders-table shadow-sm mb-5">
+                    <div class="app-card-header p-3">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-auto">
+                                <h4 class="app-card-title">Daftar Artikel Beriklan</h4>
+                            </div>
+                            <div class="col-auto">
+                                <div class="card-header-action">
+                                    <span class="badge bg-success me-2">Total: <?= count($all_data_artikeliklan) ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="app-card-body">
                         <div class="table-responsive">
                             <table class="table app-table-hover mb-0 text-left">
                                 <thead class="atas">
                                     <tr>
                                         <th class="text-center" valign="middle">No</th>
-                                        <th class="text-center" valign="middle">Artikel</th>
+                                        <th class="text-center" valign="middle">Tipe Konten</th>
+                                        <th class="text-center" valign="middle">Judul Konten</th>
                                         <th class="text-center" valign="middle">Iklan</th>
                                         <th class="text-center" valign="middle">User</th>
                                         <th class="text-center" valign="middle">Durasi Bulan</th>
@@ -52,7 +105,8 @@
                                     <?php foreach ($all_data_artikeliklan as $artikelIklan) : ?>
                                         <tr class="text-center">
                                             <td class="cell"><?= $i++ ?></td>
-                                            <td class="cell"><?= esc($artikelIklan['judul_artikel'] ?? 'N/A') ?></td>
+                                            <td class="cell"><?= esc($artikelIklan['tipe_content'] ?? 'N/A') ?></td>
+                                            <td class="cell"><?= esc($artikelIklan['judul_konten'] ?? 'N/A') ?></td>
                                             <td class="cell"><?= esc($artikelIklan['nama_iklan'] ?? 'N/A') ?></td>
                                             <td class="cell"><?= esc($artikelIklan['username'] ?? 'N/A') ?></td>
                                             <td class="cell"><?= esc($artikelIklan['rentang_bulan'] ?? 'N/A') ?> Bulan</td>
@@ -147,7 +201,8 @@
                                                         <input type="hidden" name="id" value="<?= $artikelIklan['id_iklan'] ?>">
                                                         <input type="hidden" name="status_iklan" value="diterima">
                                                         <input type="hidden" name="nama_iklan" value="<?= esc($artikelIklan['nama_iklan']) ?>">
-                                                        <input type="hidden" name="id_artikel" value="<?= $artikelIklan['id_artikel'] ?>">
+                                                        <input type="hidden" name="tipe_content" value="<?= esc($artikelIklan['tipe_content']) ?>">
+                                                        <input type="hidden" name="id_content" value="<?= $artikelIklan['id_content'] ?>">
                                                         <input type="hidden" name="durasi_bulan" value="<?= $durasiBulan ?>">
 
                                                         <div class="modal-header bg-success text-white">
@@ -224,7 +279,7 @@
                                                         <input type="hidden" name="id" value="<?= $artikelIklan['id_iklan'] ?>">
                                                         <input type="hidden" name="status_iklan" value="ditolak">
                                                         <input type="hidden" name="nama_iklan" value="<?= esc($artikelIklan['nama_iklan']) ?>">
-                                                        <input type="hidden" name="id_artikel" value="<?= $artikelIklan['id_artikel'] ?>">
+                                                        <input type="hidden" name="id_content" value="<?= $artikelIklan['id_content'] ?>">
 
                                                         <div class="modal-header bg-danger text-white">
                                                             <h5 class="modal-title" id="tolakModalLabel<?= $artikelIklan['id_iklan'] ?>">Konfirmasi Penolakan</h5>
