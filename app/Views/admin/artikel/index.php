@@ -7,100 +7,125 @@
             <div class="col-auto">
                 <h1 class="app-page-title mb-0">Daftar Artikel</h1>
             </div>
-
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a href="<?php echo base_url() . "admin/artikel/tambah" ?>" class="btn btn-primary me-md-2">+ Tambah Artikel</a>
+            <div class="col-auto">
+                <a href="<?= base_url("admin/artikel/tambah") ?>" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Tambah Artikel
+                </a>
             </div>
         </div>
 
-        <!-- Date Filter Form -->
-        <form method="get" action="<?= base_url('admin/artikel') ?>" class="mb-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="start_date" class="form-label">Tanggal Mulai</label>
-                    <input type="date" id="start_date" name="start_date" class="form-control" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>">
-                </div>
-                <div class="col-md-4">
-                    <label for="end_date" class="form-label">Tanggal Akhir</label>
-                    <input type="date" id="end_date" name="end_date" class="form-control" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
-                </div>
-                <div class="col-md-4 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100 me-2" style="background-color: #0d6efd; border-color: #0d6efd; color: white;">
-                        Filter
-                    </button>
-
-                    <a href="<?= base_url('admin/artikel/index') ?>" class="btn btn-secondary w-100">Tampilkan Semua</a>
-                </div>
-
+        <!-- Filter Card -->
+        <div class="app-card app-card-settings shadow-sm p-4 mb-4">
+            <div class="app-card-body">
+                <form method="get" action="<?= base_url('admin/artikel') ?>">
+                    <div class="row align-items-end">
+                        <div class="col-md-4 mb-3">
+                            <label for="start_date" class="form-label">Tanggal Mulai</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control" 
+                                value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="end_date" class="form-label">Tanggal Akhir</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control" 
+                                value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
+                        </div>
+                        <div class="col-md-4 mb-3 d-flex">
+                            <button type="submit" class="btn btn-primary me-2 flex-grow-1">
+                                <i class="fas fa-filter me-1"></i> Filter
+                            </button>
+                            <a href="<?= base_url('admin/artikel/index') ?>" class="btn btn-outline-secondary flex-grow-1">
+                                <i class="fas fa-sync-alt me-1"></i> Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
 
-        <div class="tab-content" id="orders-table-tab-content">
-            <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
-                <div class="app-card app-card-orders-table shadow-sm mb-5">
-                    <div class="app-card-body">
-                        <div class="table-responsive">
-                            <table class="table app-table-hover mb-0 text-left">
-                                <thead class="atas">
-                                    <tr>
-                                        <th class="text-center" valign="middle">No</th>
-                                        <th class="text-center" valign="middle">Judul Artikel</th>
-                                        <th class="text-center" valign="middle">Judul Artikel (English)</th>
-                                        <th class="text-center" valign="middle">Kategori Artikel</th>
-                                        <th class="text-center" valign="middle">Penulis Artikel</th>
-                                        <th class="text-center" valign="middle">Tanggal Upload</th>
-                                        <th class="text-center" valign="middle">Aksi</th>
-                                    </tr>
-                                </thead>
-
-                                <?php
-                                // Sort the articles by 'tgl_publish' in descending order
+        <!-- Articles Table -->
+        <div class="app-card app-card-orders-table shadow-sm mb-5">
+            <div class="app-card-body">
+                <div class="table-responsive">
+                    <?php if (empty($all_data_artikel)): ?>
+                        <div class="alert alert-info text-center">
+                            <i class="fas fa-info-circle me-2"></i> Tidak ada artikel ditemukan
+                        </div>
+                    <?php else: ?>
+                        <table class="table app-table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="5%">No</th>
+                                    <th>Judul Artikel</th>
+                                    <th>Judul (English)</th>
+                                    <th class="text-center" width="12%">Kategori</th>
+                                    <th class="text-center" width="12%">Penulis</th>
+                                    <th class="text-center" width="12%">Tanggal</th>
+                                    <th class="text-center" width="15%">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                // Sort articles by publish date
                                 usort($all_data_artikel, function ($a, $b) {
                                     return strtotime($b['tgl_publish']) - strtotime($a['tgl_publish']);
                                 });
+                                
+                                $i = 1; 
+                                foreach ($all_data_artikel as $tampilArtikel): 
+                                    // Date filter check
+                                    $startDate = $_GET['start_date'] ?? null;
+                                    $endDate = $_GET['end_date'] ?? null;
+                                    $tglPublish = $tampilArtikel['tgl_publish'];
+                                    
+                                    if (($startDate && $tglPublish < $startDate) || ($endDate && $tglPublish > $endDate)) {
+                                        continue;
+                                    }
                                 ?>
-
-
-                                <tbody>
-                                    <?php $i = 1; ?>
-                                    <?php foreach ($all_data_artikel as $tampilArtikel) : ?>
-                                        <!-- Check if the tgl_publish is within the selected date range -->
-                                        <?php
-                                        $startDate = isset($_GET['start_date']) ? $_GET['start_date'] : null;
-                                        $endDate = isset($_GET['end_date']) ? $_GET['end_date'] : null;
-                                        $tglPublish = $tampilArtikel['tgl_publish'];
-
-                                        if (
-                                            ($startDate && $tglPublish < $startDate) ||
-                                            ($endDate && $tglPublish > $endDate)
-                                        ) {
-                                            continue; // Skip this row if it's not in the date range
-                                        }
-                                        ?>
-                                        <tr>
-                                            <td class="text-center" valign="middle"><?= $i++ ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['judul_artikel']) ? $tampilArtikel['judul_artikel'] : 'Judul Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['judul_artikel_en']) ? $tampilArtikel['judul_artikel_en'] : 'Judul Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['nama_kategori']) ? $tampilArtikel['nama_kategori'] : 'Kategori Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= isset($tampilArtikel['nama_penulis']) ? $tampilArtikel['nama_penulis'] : 'Penulis Tidak Tersedia' ?></td>
-                                            <td class="text-center" valign="middle"><?= $tglPublish ?></td>
-                                            <td valign="middle">
-                                                <div class="d-grid gap-2">
-                                                    <a href="<?= base_url('admin/artikel/viewArtikel/' . $tampilArtikel['id_artikel'] . '/' . $tampilArtikel['slug']) ?>" class="btn btn-danger">View</a>
-                                                    <a href="<?= base_url('admin/artikel/delete') . '/' . $tampilArtikel['id_artikel'] ?>" class="btn btn-danger">Hapus</a>
-                                                    <a href="<?= base_url('admin/artikel/edit') . '/' . $tampilArtikel['id_artikel'] ?>" class="btn btn-primary">Ubah</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div><!--//table-responsive-->
-                    </div><!--//app-card-body-->
-                </div><!--//app-card-->
-            </div><!--//tab-pane-->
-        </div><!--//tab-content-->
-    </div><!--//container-xl-->
-</div><!--//app-content-->
+                                <tr>
+                                    <td class="text-center align-middle"><?= $i++ ?></td>
+                                    <td class="align-middle">
+                                        <?= $tampilArtikel['judul_artikel'] ?? 'Judul Tidak Tersedia' ?>
+                                    </td>
+                                    <td class="align-middle">
+                                        <?= $tampilArtikel['judul_artikel_en'] ?? 'Judul Tidak Tersedia' ?>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <span class="badge bg-info">
+                                            <?= $tampilArtikel['nama_kategori'] ?? 'Kategori Tidak Tersedia' ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <?= $tampilArtikel['nama_penulis'] ?? 'Penulis Tidak Tersedia' ?>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <?= date('d M Y', strtotime($tglPublish)) ?>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="<?= base_url('admin/artikel/viewArtikel/' . $tampilArtikel['id_artikel'] . '/' . $tampilArtikel['slug']) ?>" 
+                                                class="btn btn-sm btn-info" title="Lihat">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="<?= base_url('admin/artikel/edit/' . $tampilArtikel['id_artikel']) ?>" 
+                                                class="btn btn-sm btn-warning" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="<?= base_url('admin/artikel/delete/' . $tampilArtikel['id_artikel']) ?>" 
+                                                class="btn btn-sm btn-danger" title="Hapus"
+                                                onclick="return confirm('Yakin ingin menghapus artikel ini?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?= $this->endSection('content') ?>
