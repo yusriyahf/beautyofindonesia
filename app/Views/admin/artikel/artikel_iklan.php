@@ -153,7 +153,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="actionDropdown<?= $item['id_iklan'] ?>">
                                                     <li>
-                                                        <a class="dropdown-item" href="<?= base_url('admin/artikel_iklan/edit/' . $item['id_iklan']) ?>">
+                                                        <a class="dropdown-item" href="<?= base_url('admin/artikel/edit_artikel_iklan/' . $item['id_iklan']) ?>">
                                                             <i class="fas fa-edit me-2"></i>Edit
                                                         </a>
                                                     </li>
