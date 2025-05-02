@@ -8,7 +8,7 @@ class ArtikelModel extends Model
 {
      protected $table = "tb_artikel";
      protected $primaryKey = "id_artikel";
-     protected $returnType = "object";
+     protected $returnType = "array";
      protected $allowedFields = [
           'judul_artikel',
           'judul_artikel_en',

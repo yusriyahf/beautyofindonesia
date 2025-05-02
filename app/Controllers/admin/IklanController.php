@@ -47,8 +47,7 @@ class IklanController extends BaseController
             switch ($iklan['tipe_content']) {
                 case 'artikel':
                     $data = $this->artikelModel->find($iklan['id_content']);
-                    $judul = $data->judul_artikel ?? $judul;
-
+                    $judul = $data['judul_artikel'] ?? $judul;
                     break;
 
                 case 'tempatwisata':
@@ -149,6 +148,54 @@ class IklanController extends BaseController
             return redirect()->back()->withInput()->with('error', 'Gagal menyimpan data: ' . implode(', ', $errors));
         }
     }
+
+    public function edit($id)
+    {
+        // Cek login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        // Ambil data iklan
+        $iklan = $this->artikelIklanModel->find($id);
+        if (!$iklan) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan.');
+        }
+
+        // Ambil semua harga iklan
+        $harga_iklan = $this->hargaIklanModel->findAll();
+
+        // Ambil konten sesuai tipe
+        $artikel_terpilih = $wisata_terpilih = $oleholeh_terpilih = [];
+
+        switch ($iklan['tipe_content']) {
+            case 'artikel':
+                $artikel_terpilih = $this->artikelModel->find($iklan['id_content']);
+                break;
+            case 'tempatwisata':
+                $wisata_terpilih = $this->wisataModel->find($iklan['id_content']);
+                break;
+            case 'oleholeh':
+                $oleholeh_terpilih = $this->olehOlehModel->find($iklan['id_content']);
+                break;
+        }
+
+        // Ambil data marketing
+        $marketing = $this->UserModel->find($iklan['id_marketing']);
+
+        // Kirim ke view
+        return view('admin/artikel/edit_artikel_iklan', [
+            'iklan' => $iklan,
+            'harga_iklan' => $harga_iklan,
+            'artikel_terpilih' => $artikel_terpilih,
+            'wisata_terpilih' => $wisata_terpilih,
+            'oleholeh_terpilih' => $oleholeh_terpilih,
+            'marketing' => $marketing,
+            'validation' => \Config\Services::validation(),
+        ]);
+    }
+
+
 
     // public function delete($id = false)
     // {
