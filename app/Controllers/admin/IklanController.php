@@ -47,8 +47,7 @@ class IklanController extends BaseController
             switch ($iklan['tipe_content']) {
                 case 'artikel':
                     $data = $this->artikelModel->find($iklan['id_content']);
-                    $judul = $data->judul_artikel ?? $judul;
-
+                    $judul = $data['judul_artikel'] ?? $judul;
                     break;
 
                 case 'tempatwisata':
