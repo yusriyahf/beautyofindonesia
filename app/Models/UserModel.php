@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
     protected $table = 'tb_users'; // Nama tabel di database
-    protected $primaryKey = 'id'; // Nama kolom primary key
+    protected $primaryKey = 'id_user'; // Nama kolom primary key
     protected $allowedFields = [
         'photo_user',
         'username',
@@ -27,8 +27,7 @@ class UserModel extends Model
     protected $returnType = 'array'; // Mengembalikan hasil sebagai array
 
     // Validasi aturan input untuk user
-    protected $validationRules = [
-    ];
+    protected $validationRules = [];
 
     // Custom error messages untuk validasi
     protected $validationMessages = [

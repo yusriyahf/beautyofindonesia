@@ -37,13 +37,20 @@ class Artikel extends BaseController
             return redirect()->to(base_url('login'));
             // Ubah 'login' sesuai dengan halaman login Anda
         }
-        $all_data_artikel = $this->ArtikelModel->getArtikel();
+
+        $startDate = $this->request->getGet('start_date');
+        $endDate   = $this->request->getGet('end_date');
+
+        $all_data_artikel = $this->ArtikelModel->getArtikel(10, $startDate, $endDate);
+
         $validation = \Config\Services::validation();
         return view('admin/artikel/index', [
             'all_data_artikel' => $all_data_artikel,
-            'validation' => $validation
+            'validation' => $validation,
+            'pager' => $this->ArtikelModel->pager
         ]);
     }
+
     public function viewArtikel($id_artikel, $slug)
     {
         $lang = session()->get('lang') ?? 'id'; // 'id' as default if not set

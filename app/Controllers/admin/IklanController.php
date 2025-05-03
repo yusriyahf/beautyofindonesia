@@ -18,7 +18,7 @@ class IklanController extends BaseController
     protected $wisataModel;
     protected $olehOlehModel;
     protected $hargaIklanModel;
-    protected $UserModel;
+    protected $UsersModel;
 
     public function __construct()
     {
@@ -27,7 +27,7 @@ class IklanController extends BaseController
         $this->wisataModel = new TempatWisataModel();
         $this->olehOlehModel = new OlehOlehModel();
         $this->hargaIklanModel = new HargaIklanModel();
-        $this->UserModel = new UserModel();
+        $this->UsersModel = new UserModel();
     }
 
     public function index()
@@ -67,7 +67,7 @@ class IklanController extends BaseController
             $iklan['nama'] = $harga['nama'] ?? 'Tidak ditemukan';
 
             // Ambil username dari tb_users
-            $user = $this->UserModel->find($iklan['id_marketing']);
+            $user = $this->UsersModel->find($iklan['id_marketing']);
             $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
         }
 
@@ -181,7 +181,7 @@ class IklanController extends BaseController
         }
 
         // Ambil data marketing
-        $marketing = $this->UserModel->find($iklan['id_marketing']);
+        $marketing = $this->UsersModel->find($iklan['id_marketing']);
 
         // Kirim ke view
         return view('admin/artikel/edit_artikel_iklan', [

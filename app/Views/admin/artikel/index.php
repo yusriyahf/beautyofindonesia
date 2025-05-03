@@ -21,12 +21,12 @@
                     <div class="row align-items-end">
                         <div class="col-md-4 mb-3">
                             <label for="start_date" class="form-label">Tanggal Mulai</label>
-                            <input type="date" id="start_date" name="start_date" class="form-control" 
+                            <input type="date" id="start_date" name="start_date" class="form-control"
                                 value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="end_date" class="form-label">Tanggal Akhir</label>
-                            <input type="date" id="end_date" name="end_date" class="form-control" 
+                            <input type="date" id="end_date" name="end_date" class="form-control"
                                 value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>">
                         </div>
                         <div class="col-md-4 mb-3 d-flex">
@@ -64,60 +64,59 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                // Sort articles by publish date
-                                usort($all_data_artikel, function ($a, $b) {
-                                    return strtotime($b['tgl_publish']) - strtotime($a['tgl_publish']);
-                                });
-                                
-                                $i = 1; 
-                                foreach ($all_data_artikel as $tampilArtikel): 
-                                    // Date filter check
+                                <?php
+                                // Get the current page number
+                                $page = $pager->getCurrentPage('artikel');  // Get the current page for 'artikel' pagination
+                                $offset = ($page - 1) * 10; // Calculate the offset for the current page
+
+                                $i = $offset + 1; // Start the numbering from the correct offset
+                                foreach ($all_data_artikel as $tampilArtikel):
+                                    // Filter by date (as you have done)
                                     $startDate = $_GET['start_date'] ?? null;
                                     $endDate = $_GET['end_date'] ?? null;
                                     $tglPublish = $tampilArtikel['tgl_publish'];
-                                    
+
                                     if (($startDate && $tglPublish < $startDate) || ($endDate && $tglPublish > $endDate)) {
                                         continue;
                                     }
                                 ?>
-                                <tr>
-                                    <td class="text-center align-middle"><?= $i++ ?></td>
-                                    <td class="align-middle">
-                                        <?= $tampilArtikel['judul_artikel'] ?? 'Judul Tidak Tersedia' ?>
-                                    </td>
-                                    <td class="align-middle">
-                                        <?= $tampilArtikel['judul_artikel_en'] ?? 'Judul Tidak Tersedia' ?>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <span class="badge bg-info">
-                                            <?= $tampilArtikel['nama_kategori'] ?? 'Kategori Tidak Tersedia' ?>
-                                        </span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <?= $tampilArtikel['nama_penulis'] ?? 'Penulis Tidak Tersedia' ?>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <?= date('d M Y', strtotime($tglPublish)) ?>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <a href="<?= base_url('admin/artikel/viewArtikel/' . $tampilArtikel['id_artikel'] . '/' . $tampilArtikel['slug']) ?>" 
-                                                class="btn btn-sm btn-info" title="Lihat">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="<?= base_url('admin/artikel/edit/' . $tampilArtikel['id_artikel']) ?>" 
-                                                class="btn btn-sm btn-warning" title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="<?= base_url('admin/artikel/delete/' . $tampilArtikel['id_artikel']) ?>" 
-                                                class="btn btn-sm btn-danger" title="Hapus"
-                                                onclick="return confirm('Yakin ingin menghapus artikel ini?')">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="text-center align-middle"><?= $i++ ?></td>
+                                        <td class="align-middle">
+                                            <?= $tampilArtikel['judul_artikel'] ?? 'Judul Tidak Tersedia' ?>
+                                        </td>
+                                        <td class="align-middle">
+                                            <?= $tampilArtikel['judul_artikel_en'] ?? 'Judul Tidak Tersedia' ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <span class="badge bg-info">
+                                                <?= $tampilArtikel['nama_kategori'] ?? 'Kategori Tidak Tersedia' ?>
+                                            </span>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= $tampilArtikel['nama_penulis'] ?? 'Penulis Tidak Tersedia' ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= date('d M Y', strtotime($tglPublish)) ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a href="<?= base_url('admin/artikel/viewArtikel/' . $tampilArtikel['id_artikel'] . '/' . $tampilArtikel['slug']) ?>"
+                                                    class="btn btn-sm btn-info" title="Lihat">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="<?= base_url('admin/artikel/edit/' . $tampilArtikel['id_artikel']) ?>"
+                                                    class="btn btn-sm btn-warning" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="<?= base_url('admin/artikel/delete/' . $tampilArtikel['id_artikel']) ?>"
+                                                    class="btn btn-sm btn-danger" title="Hapus"
+                                                    onclick="return confirm('Yakin ingin menghapus artikel ini?')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -125,6 +124,11 @@
                 </div>
             </div>
         </div>
+
+        <div class="mt-3">
+            <?= $pager->links('artikel', 'bootstrap_full') ?>
+        </div>
+
     </div>
 </div>
 

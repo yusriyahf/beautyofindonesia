@@ -18,7 +18,7 @@
                             <i class="fas fa-ad me-2"></i>Form Pengajuan Iklan Baru
                         </h4>
                     </div>
-                    
+
                     <div class="app-card-body">
                         <form method="post" action="<?= base_url('/admin/artikel/proses_tambah2') ?>">
                             <?= csrf_field() ?>
@@ -28,7 +28,9 @@
                                 <h5 class="mb-3 border-bottom pb-2">
                                     <i class="fas fa-tags me-2"></i>Paket Iklan
                                 </h5>
-                                
+                                <img src="<?= base_url('assets/images/layout iklan.png'); ?>" style="width: 100%; display: block; margin: 0 auto;" alt="">
+
+
                                 <div class="mb-3">
                                     <label for="id_iklan" class="form-label fw-bold">Pilih Paket</label>
                                     <select name="id_harga_iklan" id="id_iklan" class="form-select" required onchange="hitungTotalHarga(); loadKonten();">
@@ -40,7 +42,7 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                
+
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="form-label fw-bold">Durasi (Bulan)</label>
@@ -54,14 +56,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>  
-                            
+                            </div>
+
                             <!-- Konten Section -->
                             <div class="mb-4">
                                 <h5 class="mb-3 border-bottom pb-2">
                                     <i class="fas fa-file-alt me-2"></i>Pilih Konten
                                 </h5>
-                                
+
                                 <div class="mb-3">
                                     <label for="tipe_content" class="form-label fw-bold">Jenis Konten</label>
                                     <select id="tipe_content" name="tipe_content" class="form-select" onchange="resetKonten(); loadKonten();">
@@ -71,7 +73,7 @@
                                         <option value="oleholeh" <?= esc($_GET['tipe_content'] ?? '') == 'oleholeh' ? 'selected' : '' ?>>Oleh-oleh</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="id_konten" class="form-label fw-bold">Pilih Konten Spesifik</label>
                                     <select name="id_content" id="id_konten" class="form-select" required disabled>
@@ -79,14 +81,14 @@
                                     </select>
                                 </div>
                             </div>
-                            
-                            
+
+
                             <!-- Informasi Tambahan -->
                             <div class="mb-4">
                                 <h5 class="mb-3 border-bottom pb-2">
                                     <i class="fas fa-info-circle me-2"></i>Informasi Tambahan
                                 </h5>
-                                
+
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Pemohon</label>
                                     <div class="card border-0 bg-light">
@@ -102,13 +104,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="catatan_admin" class="form-label fw-bold">Catatan Tambahan</label>
                                     <textarea name="catatan_admin" id="catatan_admin" rows="3" class="form-control" placeholder="Masukkan catatan atau instruksi khusus..."></textarea>
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex justify-content-end gap-3 pt-3 border-top">
                                 <a href="<?= base_url('admin/artikel/artikel_beriklan') ?>" class="btn btn-outline-secondary px-4">
                                     <i class="fas fa-times me-2"></i> Batal
@@ -121,7 +123,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Panduan Section -->
             <div class="col-12 col-lg-4">
                 <div class="app-card app-card-settings shadow-sm p-4 h-100">
@@ -134,14 +136,14 @@
                         <div class="alert alert-light border">
                             <h6 class="fw-bold mb-3"><i class="fas fa-file-alt me-2"></i>Tentang Konten</h6>
                             <p class="small">Pilih konten yang ingin dipromosikan dari daftar artikel, wisata, atau oleh-oleh yang tersedia.</p>
-                            
+
                             <h6 class="fw-bold mb-3 mt-4"><i class="fas fa-tags me-2"></i>Tentang Paket</h6>
                             <p class="small">Setiap paket memiliki durasi dan harga berbeda. Total biaya akan otomatis terhitung berdasarkan durasi yang dipilih.</p>
-                            
+
                             <h6 class="fw-bold mb-3 mt-4"><i class="fas fa-clock me-2"></i>Proses Verifikasi</h6>
                             <p class="small">Pengajuan akan diproses dalam 1-2 hari kerja setelah dikirim.</p>
                         </div>
-                        
+
                         <div class="alert alert-warning border mt-4">
                             <h6 class="fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Perhatian</h6>
                             <ul class="small mt-2 ps-3 mb-0">
