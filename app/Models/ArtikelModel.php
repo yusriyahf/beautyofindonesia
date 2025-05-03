@@ -21,7 +21,7 @@ class ArtikelModel extends Model
           'sumber_foto',
           'meta_title_id',
           'meta_title_en',
-          'meta_deskription_id',
+          'meta_description_id',
           'meta_description_en',
           'tgl_publish',
           'foto_artikel',

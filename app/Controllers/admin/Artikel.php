@@ -138,7 +138,7 @@ class Artikel extends BaseController
                     'sumber_foto' => $this->request->getPost("sumber_foto"),
                     'meta_title_id' => $this->request->getPost("meta_title_id"),
                     'meta_title_en' => $this->request->getPost("meta_title_en"),
-                    'meta_deskription_id' => $this->request->getPost("meta_deskription_id"),
+                    'meta_description_id' => $this->request->getPost("meta_description_id"),
                     'meta_description_en' => $this->request->getPost("meta_description_en"),
                     'tgl_publish' => $this->request->getPost("tgl_publish"),
                     'foto_artikel' => $newName,
@@ -191,7 +191,6 @@ class Artikel extends BaseController
             'meta_title_en' => $this->request->getPost("meta_title_en"),
             'meta_description_id' => $this->request->getPost("meta_description_id"),
             'meta_description_en' => $this->request->getPost("meta_description_en"),
-            'tgl_publish' => $this->request->getPost("tgl_publish"),
             'slug' => url_title($this->request->getPost('judul_artikel'), '-', TRUE)
         ];
 
