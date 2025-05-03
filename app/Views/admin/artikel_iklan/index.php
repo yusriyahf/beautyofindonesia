@@ -198,6 +198,10 @@
                                                         <?= csrf_field() ?>
                                                         <?php $durasiBulan = isset($artikelIklan['rentang_bulan']) ? (int)$artikelIklan['rentang_bulan'] : 0; ?>
 
+                                                        <!-- untuk pemasukan komisi -->
+                                                        <input type="hidden" name="user_id" value="<?= $artikelIklan['id_marketing'] ?>">
+                                                        <input type="hidden" name="total_harga" value="<?= $artikelIklan['total_harga'] ?>">
+
                                                         <input type="hidden" name="id" value="<?= $artikelIklan['id_iklan'] ?>">
                                                         <input type="hidden" name="status_iklan" value="diterima">
                                                         <input type="hidden" name="nama_iklan" value="<?= esc($artikelIklan['nama_iklan']) ?>">

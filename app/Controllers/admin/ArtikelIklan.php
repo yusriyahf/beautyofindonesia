@@ -6,6 +6,7 @@ use App\Models\ArtikelIklanModel;
 use App\Models\ArtikelModel;
 use App\Models\HargaIklanModel;
 use App\Models\OlehOlehModel;
+use App\Models\PemasukanUserModel;
 use App\Models\TempatWisataModel;
 use App\Models\UserModel;
 
@@ -17,6 +18,7 @@ class ArtikelIklan extends BaseController
     protected $olehOlehModel;
     protected $hargaIklanModel;
     protected $UserModel;
+    protected $PemasukanUserModel;
 
     public function __construct()
     {
@@ -26,6 +28,7 @@ class ArtikelIklan extends BaseController
         $this->olehOlehModel = new OlehOlehModel();
         $this->hargaIklanModel = new HargaIklanModel();
         $this->UserModel = new UserModel();
+        $this->PemasukanUserModel = new PemasukanUserModel();
     }
 
     public function index()
@@ -215,7 +218,7 @@ class ArtikelIklan extends BaseController
         $id = $this->request->getPost('id'); // id dari tb_artikel_iklan
         $status = $this->request->getPost('status_iklan'); // disetujui / ditolak
         $nama_iklan = $this->request->getPost('nama_iklan'); // Iklan Banner / Iklan Sidebar / Iklan Footer
-        $id_artikel = $this->request->getPost('id_artikel'); // id artikel terkait
+        $id_artikel = $this->request->getPost('id_content'); // id artikel terkait
         $tanggal_mulai = $this->request->getPost('tanggal_mulai'); // tanggal mulai iklan (user input)
         $durasi_bulan = (int) $this->request->getPost('durasi_bulan'); // durasi bulan (user input)
 
@@ -248,6 +251,18 @@ class ArtikelIklan extends BaseController
 
             $dataIklan['tanggal_mulai'] = $tanggal_mulai_obj->format('Y-m-d');
             $dataIklan['tanggal_selesai'] = $tanggal_selesai_obj->format('Y-m-d');
+
+            // Insert Komisi Pemasukan
+            $user_id = $this->request->getPost('user_id');
+            $total_harga = (float) $this->request->getPost('total_harga');
+
+            $dataPemasukan = [
+                'user_id'    => $user_id,
+                'jumlah'    => $total_harga,
+                'tanggal'    => date('Y-m-d'),
+            ];
+
+            $this->PemasukanUserModel->insert($dataPemasukan);
         } else {
             // Kalau ditolak, kosongkan tanggal_mulai dan tanggal_selesai
             $dataIklan['tanggal_mulai'] = null;
