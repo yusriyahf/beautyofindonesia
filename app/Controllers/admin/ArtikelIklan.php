@@ -259,6 +259,7 @@ class ArtikelIklan extends BaseController
             $dataPemasukan = [
                 'user_id'    => $user_id,
                 'jumlah'    => $total_harga,
+                'status'    => 'disetujui',
                 'tanggal'    => date('Y-m-d'),
             ];
 

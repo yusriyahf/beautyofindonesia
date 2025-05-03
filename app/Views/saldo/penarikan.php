@@ -5,7 +5,18 @@
     <div class="container-xl">
         <h1 class="app-page-title">Penarikan Saldo</h1>
         <hr class="mb-4">
+
         <div class="row g-4 settings-section">
+            <div class="col-md-12 col-lg-4">
+                <div class="app-card app-card-stat shadow-sm h-100">
+                    <div class="app-card-body p-3 p-lg-4">
+                        <h4 class="stats-type mb-1">Saldo</h4>
+                        <div class="stats-figure">Rp <?= number_format($total_pemasukan) ?></div>
+
+                    </div>
+                    <a class="app-card-link-mask" href="#"></a>
+                </div>
+            </div>
             <div class="col-12 col-md-8">
                 <div class="app-card app-card-settings shadow-sm p-4">
                     <div class="card-body">
@@ -24,7 +35,7 @@
                                             id="jumlah"
                                             name="jumlah"
                                             min="1"
-                                            max="50000"
+                                            max=<?= $total_pemasukan; ?>
                                             placeholder="Masukkan jumlah saldo"
                                             value="<?= old('jumlah') ?>"
                                             required>
