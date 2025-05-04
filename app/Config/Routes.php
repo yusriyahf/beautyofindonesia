@@ -190,6 +190,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('artikel/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
     $routes->post('artikel/proses_tambah2', 'admin\IklanController::proses_tambah');
     $routes->get('artikel/edit_artikel_iklan/(:num)', 'admin\IklanController::edit/$1');
+    $routes->get('artikel/artikel_beriklan/detail/(:num)', 'admin\IklanController::detail/$1');
 });
 
 $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
