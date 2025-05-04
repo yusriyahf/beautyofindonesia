@@ -20,6 +20,7 @@
     <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet">
     <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
 
     <!-- App CSS -->
