@@ -37,13 +37,20 @@ class Artikel extends BaseController
             return redirect()->to(base_url('login'));
             // Ubah 'login' sesuai dengan halaman login Anda
         }
-        $all_data_artikel = $this->ArtikelModel->getArtikel();
+
+        $startDate = $this->request->getGet('start_date');
+        $endDate   = $this->request->getGet('end_date');
+
+        $all_data_artikel = $this->ArtikelModel->getArtikel(10, $startDate, $endDate);
+
         $validation = \Config\Services::validation();
         return view('admin/artikel/index', [
             'all_data_artikel' => $all_data_artikel,
-            'validation' => $validation
+            'validation' => $validation,
+            'pager' => $this->ArtikelModel->pager
         ]);
     }
+
     public function viewArtikel($id_artikel, $slug)
     {
         $lang = session()->get('lang') ?? 'id'; // 'id' as default if not set
@@ -131,7 +138,7 @@ class Artikel extends BaseController
                     'sumber_foto' => $this->request->getPost("sumber_foto"),
                     'meta_title_id' => $this->request->getPost("meta_title_id"),
                     'meta_title_en' => $this->request->getPost("meta_title_en"),
-                    'meta_deskription_id' => $this->request->getPost("meta_deskription_id"),
+                    'meta_description_id' => $this->request->getPost("meta_description_id"),
                     'meta_description_en' => $this->request->getPost("meta_description_en"),
                     'tgl_publish' => $this->request->getPost("tgl_publish"),
                     'foto_artikel' => $newName,
@@ -184,7 +191,6 @@ class Artikel extends BaseController
             'meta_title_en' => $this->request->getPost("meta_title_en"),
             'meta_description_id' => $this->request->getPost("meta_description_id"),
             'meta_description_en' => $this->request->getPost("meta_description_en"),
-            'tgl_publish' => $this->request->getPost("tgl_publish"),
             'slug' => url_title($this->request->getPost('judul_artikel'), '-', TRUE)
         ];
 

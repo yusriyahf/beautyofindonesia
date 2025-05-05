@@ -55,17 +55,11 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     // Dashboard
     $routes->get('dashboard', 'admin\Dashboardctrl::index');
 
-    // $routes->get('saldo', 'admin\Komisi::saldo');
-    // app/Config/Routes.php
-    $routes->get('saldo/(:num)', 'admin\Komisi::saldo/$1');
+    $routes->get('saldo', 'admin\Komisi::saldo/$1');
     $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
     $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
-
-    // $routes->get('saldo', 'admin\Komisi::saldo');
-    // app/Config/Routes.php
-    $routes->get('saldo/(:num)', 'admin\Komisi::saldo/$1');
-    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
-    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
+    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
+    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
 
     // Users
     $routes->get('users', 'admin\Users::index');
@@ -75,19 +69,13 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('users/proses_edit/(:num)', 'admin\Users::proses_edit/$1');
     $routes->get('users/delete/(:any)', 'admin\Users::delete/$1');
 
-    $routes->get('komisi', 'admin\Users::index');
-    $routes->get('komisi/tambah', 'admin\Users::tambah');
-    $routes->post('komisi/proses_tambah', 'admin\Users::proses_tambah');
-    $routes->get('komisi/edit/(:num)', 'admin\Users::edit/$1');
-    $routes->post('komisi/proses_edit/(:num)', 'admin\Users::proses_edit/$1');
-    $routes->get('komisi/delete/(:any)', 'admin\Users::delete/$1');
+    $routes->get('komisi', 'admin\Komisi::index');
+    $routes->get('komisi/tambah', 'admin\Komisi::tambah');
+    $routes->post('komisi/proses_tambah', 'admin\Komisi::proses_tambah');
+    $routes->get('komisi/edit/(:num)', 'admin\Komisi::edit/$1');
+    $routes->post('komisi/proses_edit/(:num)', 'admin\Komisi::proses_edit/$1');
+    $routes->get('komisi/delete/(:any)', 'admin\Komisi::delete/$1');
 
-    $routes->get('komisi', 'admin\Users::index');
-    $routes->get('komisi/tambah', 'admin\Users::tambah');
-    $routes->post('komisi/proses_tambah', 'admin\Users::proses_tambah');
-    $routes->get('komisi/edit/(:num)', 'admin\Users::edit/$1');
-    $routes->post('komisi/proses_edit/(:num)', 'admin\Users::proses_edit/$1');
-    $routes->get('komisi/delete/(:any)', 'admin\Users::delete/$1');
 
     // Artikel Iklan
     $routes->get('artikeliklan', 'admin\ArtikelIklan::index');
@@ -202,7 +190,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('artikel/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
     $routes->post('artikel/proses_tambah2', 'admin\IklanController::proses_tambah');
     $routes->get('artikel/edit_artikel_iklan/(:num)', 'admin\IklanController::edit/$1');
-
+    $routes->get('artikel/artikel_beriklan/detail/(:num)', 'admin\IklanController::detail/$1');
 });
 
 $routes->group('penulis', ['filter' => 'auth'], function ($routes) {

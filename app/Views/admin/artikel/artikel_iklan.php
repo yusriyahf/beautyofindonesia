@@ -23,13 +23,13 @@
                     <div class="row align-items-end">
                         <div class="col-md-3 mb-3">
                             <label for="start_date" class="form-label">Tanggal Mulai</label>
-                            <input type="date" id="start_date" name="start_date" class="form-control" 
-                                   value="<?= esc($_GET['start_date'] ?? '') ?>">
+                            <input type="date" id="start_date" name="start_date" class="form-control"
+                                value="<?= esc($_GET['start_date'] ?? '') ?>">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="end_date" class="form-label">Tanggal Akhir</label>
-                            <input type="date" id="end_date" name="end_date" class="form-control" 
-                                   value="<?= esc($_GET['end_date'] ?? '') ?>">
+                            <input type="date" id="end_date" name="end_date" class="form-control"
+                                value="<?= esc($_GET['end_date'] ?? '') ?>">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="status" class="form-label">Status Iklan</label>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="app-card-body">
                 <div class="table-responsive">
                     <table class="table app-table-hover mb-0">
@@ -89,7 +89,7 @@
                         </thead>
                         <tbody>
                             <?php if (!empty($all_data) && is_array($all_data)) : ?>
-                                <?php 
+                                <?php
                                 $i = 1;
                                 $startDate = $_GET['start_date'] ?? null;
                                 $endDate = $_GET['end_date'] ?? null;
@@ -99,12 +99,12 @@
                                     <?php
                                     $tanggalMulai = $item['tanggal_mulai'];
                                     $statusIklan = $item['status_iklan'];
-                                    
+
                                     // Filter logic
                                     if ($startDate && $tanggalMulai < $startDate) continue;
                                     if ($endDate && $tanggalMulai > $endDate) continue;
                                     if ($statusFilter && $statusIklan != $statusFilter) continue;
-                                    
+
                                     // Status badge styling
                                     $badgeClass = [
                                         'diajukan' => 'bg-warning',
@@ -146,20 +146,25 @@
                                         </td>
                                         <td class="cell text-center">
                                             <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" 
-                                                        id="actionDropdown<?= $item['id_iklan'] ?>" 
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                                    id="actionDropdown<?= $item['id_iklan'] ?>"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-h"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="actionDropdown<?= $item['id_iklan'] ?>">
+                                                    <li>
+                                                        <a class="dropdown-item" href="<?= base_url('admin/artikel/artikel_beriklan/detail/' . $item['id_iklan']) ?>">
+                                                            <i class="fas fa-eye me-2"></i>View Detail
+                                                        </a>
+                                                    </li>
                                                     <li>
                                                         <a class="dropdown-item" href="<?= base_url('admin/artikel/edit_artikel_iklan/' . $item['id_iklan']) ?>">
                                                             <i class="fas fa-edit me-2"></i>Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item text-danger" href="<?= base_url('admin/artikel/delete/' . $item['id_iklan']) ?>" 
-                                                           onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                                        <a class="dropdown-item text-danger" href="<?= base_url('admin/artikel/delete/' . $item['id_iklan']) ?>"
+                                                            onclick="return confirm('Yakin ingin menghapus data ini?')">
                                                             <i class="fas fa-trash me-2"></i>Hapus
                                                         </a>
                                                     </li>
@@ -185,7 +190,7 @@
                     </table>
                 </div>
             </div>
-            
+
             <!-- Pagination -->
             <div class="app-card-footer px-3 py-2 border-top">
                 <nav aria-label="Page navigation">
@@ -214,18 +219,22 @@
         border: none;
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     }
+
     .app-card-header {
         background-color: #f8f9fa;
         border-bottom: 1px solid #e9ecef;
     }
+
     .table th {
         font-weight: 600;
         background-color: #f8f9fa;
     }
+
     .badge {
         font-weight: 500;
         padding: 5px 8px;
     }
+
     .dropdown-menu {
         min-width: 10rem;
     }

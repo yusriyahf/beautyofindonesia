@@ -72,7 +72,7 @@
                                             <option value="income">Pemasukan</option>
                                             <option value="expense">Pengeluaran</option>
                                         </select>
-                                        <a class="btn app-btn-primary ms-2" href="#">
+                                        <a class="btn app-btn-primary ms-2" href="<?= base_url('admin/saldo/penarikan'); ?>">
                                             <i class="fa fa-plus"></i> Tarik Saldo
                                         </a>
                                     </div>

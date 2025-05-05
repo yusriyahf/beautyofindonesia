@@ -21,7 +21,7 @@ class ArtikelModel extends Model
           'sumber_foto',
           'meta_title_id',
           'meta_title_en',
-          'meta_deskription_id',
+          'meta_description_id',
           'meta_description_en',
           'tgl_publish',
           'foto_artikel',
@@ -32,14 +32,28 @@ class ArtikelModel extends Model
           'iklan_footer',
      ];
 
-
-     public function getArtikel()
+     // with paginate
+     public function getArtikel($perPage = 10, $startDate = null, $endDate = null)
      {
-          return $this->db->table('tb_artikel')
-               ->join('tb_kategori', 'tb_kategori.id_kategori=tb_artikel.id_kategori')
-               ->join('tb_penulis', 'tb_penulis.id_penulis=tb_artikel.id_penulis')
-               ->get()->getResultArray();
+          $builder = $this->table('tb_artikel')
+               ->select('tb_artikel.*, tb_kategori.nama_kategori, tb_penulis.nama_penulis')
+               ->join('tb_kategori', 'tb_kategori.id_kategori = tb_artikel.id_kategori')
+               ->join('tb_penulis', 'tb_penulis.id_penulis = tb_artikel.id_penulis')
+               ->orderBy('tgl_publish', 'DESC');
+
+          if ($startDate) {
+               $builder->where('tgl_publish >=', $startDate);
+          }
+
+          if ($endDate) {
+               $builder->where('tgl_publish <=', $endDate);
+          }
+
+          return $builder->paginate($perPage, 'artikel');
      }
+
+
+
 
      public function getAllArtikelWithKategori($limit = 10, $offset = 0)
      {

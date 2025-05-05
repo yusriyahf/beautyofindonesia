@@ -27,8 +27,7 @@ class UserModel extends Model
     protected $returnType = 'array'; // Mengembalikan hasil sebagai array
 
     // Validasi aturan input untuk user
-    protected $validationRules = [
-    ];
+    protected $validationRules = [];
 
     // Custom error messages untuk validasi
     protected $validationMessages = [

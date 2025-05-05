@@ -6,6 +6,7 @@ use App\Models\ArtikelIklanModel;
 use App\Models\ArtikelModel;
 use App\Models\HargaIklanModel;
 use App\Models\OlehOlehModel;
+use App\Models\PemasukanUserModel;
 use App\Models\TempatWisataModel;
 use App\Models\UserModel;
 
@@ -17,6 +18,7 @@ class ArtikelIklan extends BaseController
     protected $olehOlehModel;
     protected $hargaIklanModel;
     protected $UserModel;
+    protected $PemasukanUserModel;
 
     public function __construct()
     {
@@ -26,11 +28,12 @@ class ArtikelIklan extends BaseController
         $this->olehOlehModel = new OlehOlehModel();
         $this->hargaIklanModel = new HargaIklanModel();
         $this->UserModel = new UserModel();
+        $this->PemasukanUserModel = new PemasukanUserModel();
     }
 
     public function index()
     {
-        $all_data_artikeliklan = $this->ArtikelIklanModel->getArtikelIklan();
+        $all_data = $this->artikelIklanModel->getArtikelIklan();
         $validation = \Config\Services::validation();
         foreach ($all_data as &$iklan) {
             $judul = 'Tidak ditemukan';
@@ -70,7 +73,7 @@ class ArtikelIklan extends BaseController
 
     public function tambah()
     {
-        $listPopup = $this->ArtikelIklanModel->asObject()->findAll();
+        $listPopup = $this->artikelIklanModel->asObject()->findAll();
 
         $validation = \Config\Services::validation();
 
@@ -115,7 +118,7 @@ class ArtikelIklan extends BaseController
             'foto_popup' => $namaFoto,
         ];
 
-        $this->ArtikelIklanModel->save($data);
+        $this->artikelIklanModel->save($data);
 
         session()->setFlashdata('success', 'Data berhasil disimpan');
         return redirect()->to(base_url('admin/popup'));
@@ -124,7 +127,7 @@ class ArtikelIklan extends BaseController
 
     public function edit($id_popup)
     {
-        $popup = $this->ArtikelIklanModel->asObject()->find($id_popup);
+        $popup = $this->artikelIklanModel->asObject()->find($id_popup);
 
         $validation = \Config\Services::validation();
 
@@ -137,7 +140,7 @@ class ArtikelIklan extends BaseController
     // Artikel.php (Controller)
     public function proses_edit($id_popup = null)
     {
-        $popupData = $this->ArtikelIklanModel->find($id_popup);
+        $popupData = $this->artikelIklanModel->find($id_popup);
 
         if (!$popupData) {
             return redirect()->back()->with('error', 'Data tidak ditemukan');
@@ -182,7 +185,7 @@ class ArtikelIklan extends BaseController
             'foto_popup' => $namaFoto,
         ];
 
-        $this->ArtikelIklanModel->update($id_popup, $data);
+        $this->artikelIklanModel->update($id_popup, $data);
 
         session()->setFlashdata('success', 'Data berhasil diperbarui');
         return redirect()->to(base_url('admin/popup'));
@@ -191,7 +194,7 @@ class ArtikelIklan extends BaseController
     public function delete($id = false)
     {
         // Cari data popup berdasarkan ID
-        $popupData = $this->ArtikelIklanModel->asObject()->find($id);
+        $popupData = $this->artikelIklanModel->asObject()->find($id);
 
         if (!$popupData) {
             session()->setFlashdata('error', 'Data Popup tidak ditemukan');
@@ -204,7 +207,7 @@ class ArtikelIklan extends BaseController
         }
 
         // Hapus data dari database
-        $this->ArtikelIklanModel->delete($id);
+        $this->artikelIklanModel->delete($id);
 
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to(base_url('admin/popup'));
@@ -215,7 +218,7 @@ class ArtikelIklan extends BaseController
         $id = $this->request->getPost('id'); // id dari tb_artikel_iklan
         $status = $this->request->getPost('status_iklan'); // disetujui / ditolak
         $nama_iklan = $this->request->getPost('nama_iklan'); // Iklan Banner / Iklan Sidebar / Iklan Footer
-        $id_artikel = $this->request->getPost('id_artikel'); // id artikel terkait
+        $id_artikel = $this->request->getPost('id_content'); // id artikel terkait
         $tanggal_mulai = $this->request->getPost('tanggal_mulai'); // tanggal mulai iklan (user input)
         $durasi_bulan = (int) $this->request->getPost('durasi_bulan'); // durasi bulan (user input)
 
@@ -248,6 +251,19 @@ class ArtikelIklan extends BaseController
 
             $dataIklan['tanggal_mulai'] = $tanggal_mulai_obj->format('Y-m-d');
             $dataIklan['tanggal_selesai'] = $tanggal_selesai_obj->format('Y-m-d');
+
+            // Insert Komisi Pemasukan
+            $user_id = $this->request->getPost('user_id');
+            $total_harga = (float) $this->request->getPost('total_harga');
+
+            $dataPemasukan = [
+                'user_id'    => $user_id,
+                'jumlah'    => $total_harga,
+                'status'    => 'disetujui',
+                'tanggal'    => date('Y-m-d'),
+            ];
+
+            $this->PemasukanUserModel->insert($dataPemasukan);
         } else {
             // Kalau ditolak, kosongkan tanggal_mulai dan tanggal_selesai
             $dataIklan['tanggal_mulai'] = null;
@@ -266,7 +282,7 @@ class ArtikelIklan extends BaseController
         $kolomIklan = $mapping[$nama_iklan];
 
         // Ubah kolom iklan di tb_artikel berdasarkan id_artikel
-        $this->Artikel->update($id_artikel, [
+        $this->artikelModel->update($id_artikel, [
             $kolomIklan => $status === 'diterima' ? 'tidak' : 'ada'
         ]);
 
@@ -276,7 +292,7 @@ class ArtikelIklan extends BaseController
 
     // public function tambah()
     // {
-    //     $listPopup = $this->ArtikelIklanModel->asObject()->findAll();
+    //     $listPopup = $this->artikelIklanModel->asObject()->findAll();
 
     //     $validation = \Config\Services::validation();
 
@@ -321,7 +337,7 @@ class ArtikelIklan extends BaseController
     //         'foto_popup' => $namaFoto,
     //     ];
 
-    //     $this->ArtikelIklanModel->save($data);
+    //     $this->artikelIklanModel->save($data);
 
     //     session()->setFlashdata('success', 'Data berhasil disimpan');
     //     return redirect()->to(base_url('admin/popup'));
@@ -330,7 +346,7 @@ class ArtikelIklan extends BaseController
 
     // public function edit($id_popup)
     // {
-    //     $popup = $this->ArtikelIklanModel->asObject()->find($id_popup);
+    //     $popup = $this->artikelIklanModel->asObject()->find($id_popup);
 
     //     $validation = \Config\Services::validation();
 
@@ -343,7 +359,7 @@ class ArtikelIklan extends BaseController
     // // Artikel.php (Controller)
     // public function proses_edit($id_popup = null)
     // {
-    //     $popupData = $this->ArtikelIklanModel->find($id_popup);
+    //     $popupData = $this->artikelIklanModel->find($id_popup);
 
     //     if (!$popupData) {
     //         return redirect()->back()->with('error', 'Data tidak ditemukan');
@@ -388,7 +404,7 @@ class ArtikelIklan extends BaseController
     //         'foto_popup' => $namaFoto,
     //     ];
 
-    //     $this->ArtikelIklanModel->update($id_popup, $data);
+    //     $this->artikelIklanModel->update($id_popup, $data);
 
     //     session()->setFlashdata('success', 'Data berhasil diperbarui');
     //     return redirect()->to(base_url('admin/popup'));
@@ -397,7 +413,7 @@ class ArtikelIklan extends BaseController
     // public function delete($id = false)
     // {
     //     // Cari data popup berdasarkan ID
-    //     $popupData = $this->ArtikelIklanModel->asObject()->find($id);
+    //     $popupData = $this->artikelIklanModel->asObject()->find($id);
 
     //     if (!$popupData) {
     //         session()->setFlashdata('error', 'Data Popup tidak ditemukan');
@@ -410,7 +426,7 @@ class ArtikelIklan extends BaseController
     //     }
 
     //     // Hapus data dari database
-    //     $this->ArtikelIklanModel->delete($id);
+    //     $this->artikelIklanModel->delete($id);
 
     //     session()->setFlashdata('success', 'Data berhasil dihapus');
     //     return redirect()->to(base_url('admin/popup'));
@@ -452,7 +468,7 @@ class ArtikelIklan extends BaseController
     //     }
 
     //     // Ambil artikel
-    //     $artikel = $this->ArtikelIklanModel->find($id);
+    //     $artikel = $this->artikelIklanModel->find($id);
     //     if (!$artikel) {
     //         return redirect()->back()->with('error', 'Artikel tidak ditemukan.');
     //     }
@@ -477,7 +493,7 @@ class ArtikelIklan extends BaseController
     //         }
     //     }
 
-    //     $this->ArtikelIklanModel->update($id, $updateData);
+    //     $this->artikelIklanModel->update($id, $updateData);
 
     //     return redirect()->back()->with('success', 'Status berhasil diubah.');
     // }

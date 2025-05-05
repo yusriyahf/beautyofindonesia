@@ -4,7 +4,7 @@
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="app-page-title mb-0">Tambah Artikel Beriklan</h1>
+            <h1 class="app-page-title mb-0">Buat Iklan Baru</h1>
             <a href="<?= base_url('admin/artikel/artikel_beriklan') ?>" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i> Kembali
             </a>
@@ -15,105 +15,168 @@
                 <div class="app-card app-card-settings shadow-sm p-4">
                     <div class="app-card-header mb-4">
                         <h4 class="app-card-title text-primary">
-                            <i class="fas fa-ad me-2"></i>Form Pengajuan Iklan Baru
+                            <i class="fas fa-plus-circle me-2"></i>Formulir Iklan Baru
                         </h4>
                     </div>
-                    
+
                     <div class="app-card-body">
-                        <form method="post" action="<?= base_url('/admin/artikel/proses_tambah2') ?>">
+                        <form method="post" action="<?= base_url('/admin/artikel/proses_tambah2') ?>" enctype="multipart/form-data" class="needs-validation" novalidate>
                             <?= csrf_field() ?>
 
-                            <!-- Paket Iklan Section -->
-                            <div class="mb-4">
-                                <h5 class="mb-3 border-bottom pb-2">
-                                    <i class="fas fa-tags me-2"></i>Paket Iklan
-                                </h5>
-                                
-                                <div class="mb-3">
-                                    <label for="id_iklan" class="form-label fw-bold">Pilih Paket</label>
-                                    <select name="id_harga_iklan" id="id_iklan" class="form-select" required onchange="hitungTotalHarga(); loadKonten();">
-                                        <option value="">-- Pilih paket iklan --</option>
-                                        <?php foreach ($harga_iklan as $h): ?>
-                                            <option value="<?= $h['id_harga_iklan'] ?>" data-harga="<?= $h['harga'] ?>">
-                                                <?= esc($h['nama']) ?> - Rp<?= number_format($h['harga'], 0, ',', '.') ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
+                            <!-- Step 1: Paket Iklan -->
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">1</div>
+                                    <h5 class="mb-0">Paket Iklan</h5>
                                 </div>
                                 
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Durasi (Bulan)</label>
-                                        <input type="number" class="form-control" id="rentang_bulan" name="rentang_bulan" min="1" required oninput="hitungTotalHarga()">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Total Biaya</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-white">Rp</span>
-                                            <input type="text" name="total_harga" class="form-control fw-bold text-success" id="total_harga" readonly>
+                                <div class="ps-5">
+                                    <div class="alert alert-info mb-4">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <div>
+                                                <strong>Perhatian:</strong> Gambar di bawah menunjukkan posisi iklan Anda akan ditampilkan
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>  
-                            
-                            <!-- Konten Section -->
-                            <div class="mb-4">
-                                <h5 class="mb-3 border-bottom pb-2">
-                                    <i class="fas fa-file-alt me-2"></i>Pilih Konten
-                                </h5>
-                                
-                                <div class="mb-3">
-                                    <label for="tipe_content" class="form-label fw-bold">Jenis Konten</label>
-                                    <select id="tipe_content" name="tipe_content" class="form-select" onchange="resetKonten(); loadKonten();">
-                                        <option value="">-- Pilih Jenis Konten --</option>
-                                        <option value="artikel" <?= esc($_GET['tipe_content'] ?? '') == 'artikel' ? 'selected' : '' ?>>Artikel</option>
-                                        <option value="tempatwisata" <?= esc($_GET['tipe_content'] ?? '') == 'tempatwisata' ? 'selected' : '' ?>>Wisata</option>
-                                        <option value="oleholeh" <?= esc($_GET['tipe_content'] ?? '') == 'oleholeh' ? 'selected' : '' ?>>Oleh-oleh</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="id_konten" class="form-label fw-bold">Pilih Konten Spesifik</label>
-                                    <select name="id_content" id="id_konten" class="form-select" required disabled>
-                                        <option value="">-- Pilih konten terlebih dahulu --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            
-                            <!-- Informasi Tambahan -->
-                            <div class="mb-4">
-                                <h5 class="mb-3 border-bottom pb-2">
-                                    <i class="fas fa-info-circle me-2"></i>Informasi Tambahan
-                                </h5>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Pemohon</label>
-                                    <div class="card border-0 bg-light">
-                                        <div class="card-body py-2">
-                                            <input type="hidden" name="id_marketing" value="<?= session()->get('id_user') ?>">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fas fa-user-circle me-3 fs-4 text-muted"></i>
-                                                <div>
-                                                    <div class="fw-semibold"><?= esc(session()->get('username')) ?></div>
-                                                    <small class="text-muted">Tanggal: <?= date('d/m/Y') ?></small>
-                                                </div>
+                                    
+                                    <img src="<?= base_url('assets/images/layout-iklan.png'); ?>" class="img-fluid rounded border mb-4" alt="Layout Iklan">
+                                    
+                                    <div class="mb-3">
+                                        <label for="id_iklan" class="form-label fw-semibold">Pilih Paket <span class="text-danger">*</span></label>
+                                        <select name="id_harga_iklan" id="id_iklan" class="form-select" required onchange="hitungTotalHarga()">
+                                            <option value="" selected disabled>-- Pilih paket iklan --</option>
+                                            <?php foreach ($harga_iklan as $h): ?>
+                                                <option value="<?= $h['id_harga_iklan'] ?>" data-harga="<?= $h['harga'] ?>">
+                                                    <?= esc($h['nama']) ?> - Rp<?= number_format($h['harga'], 0, ',', '.') ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <div class="invalid-feedback">Silakan pilih paket iklan</div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Durasi (Bulan) <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control" id="rentang_bulan" name="rentang_bulan" min="1" required oninput="hitungTotalHarga()">
+                                            <div class="invalid-feedback">Silakan isi durasi iklan</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Total Biaya</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-white">Rp</span>
+                                                <input type="text" name="total_harga" class="form-control fw-bold text-success" id="total_harga" readonly>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <!-- Step 2: Pilih Konten -->
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">2</div>
+                                    <h5 class="mb-0">Pilih Konten</h5>
+                                </div>
                                 
-                                <div class="mb-3">
-                                    <label for="catatan_admin" class="form-label fw-bold">Catatan Tambahan</label>
-                                    <textarea name="catatan_admin" id="catatan_admin" rows="3" class="form-control" placeholder="Masukkan catatan atau instruksi khusus..."></textarea>
+                                <div class="ps-5">
+                                    <div class="mb-3">
+                                        <label for="tipe_content" class="form-label fw-semibold">Jenis Konten <span class="text-danger">*</span></label>
+                                        <select id="tipe_content" name="tipe_content" class="form-select" required onchange="resetKonten(); loadKonten();">
+                                            <option value="" selected disabled>-- Pilih Jenis Konten --</option>
+                                            <option value="artikel">Artikel</option>
+                                            <option value="tempatwisata">Wisata</option>
+                                            <option value="oleholeh">Oleh-oleh</option>
+                                        </select>
+                                        <div class="invalid-feedback">Silakan pilih jenis konten</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="id_konten" class="form-label fw-semibold">Judul Konten <span class="text-danger">*</span></label>
+                                        <select name="id_content" id="id_konten" class="form-select" required disabled>
+                                            <option value="" selected disabled>-- Pilih konten --</option>
+                                        </select>
+                                        <div class="invalid-feedback">Silakan pilih konten</div>
+                                    </div>
                                 </div>
                             </div>
+
                             
-                            <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-                                <a href="<?= base_url('admin/artikel/artikel_beriklan') ?>" class="btn btn-outline-secondary px-4">
-                                    <i class="fas fa-times me-2"></i> Batal
-                                </a>
-                                <button type="submit" class="btn btn-success px-4">
+
+                            <!-- Step 3: Upload Gambar -->
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">3</div>
+                                    <h5 class="mb-0">Gambar Iklan</h5>
+                                </div>
+                                
+                                <div class="ps-5">
+                                    <div class="alert alert-light border mb-4">
+                                        <small class="d-block text-muted mb-2"><strong>Rekomendasi:</strong></small>
+                                        <small class="d-block mb-1"><i class="fas fa-check-circle text-success me-2"></i>Ukuran ideal: 1200x630 piksel</small>
+                                        <small class="d-block mb-1"><i class="fas fa-check-circle text-success me-2"></i>Format: JPG, PNG (maks. 2MB)</small>
+                                        <small class="d-block"><i class="fas fa-check-circle text-success me-2"></i>Gambar jelas dan relevan dengan konten</small>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="thumbnail_iklan" class="form-label fw-semibold">Upload Gambar <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control" id="thumbnail_iklan" name="thumbnail_iklan" accept="image/*" required>
+                                        <div class="invalid-feedback">Silakan upload gambar iklan</div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Preview Gambar</label>
+                                        <div class="border rounded p-3 text-center bg-light" style="min-height: 150px;">
+                                            <img id="thumbnail_preview" src="<?= base_url('assets/images/default-image-icon.jpg') ?>" alt="Preview Gambar" class="img-fluid" style="max-height: 200px;">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="alt_text" class="form-label fw-semibold">Deskripsi Gambar (Alt Text) <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="alt_text" name="alt_text" placeholder="Contoh: Pantai Sanur saat matahari terbenam" required>
+                                        <div class="invalid-feedback">Silakan isi deskripsi gambar</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Informasi Tambahan -->
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">4</div>
+                                    <h5 class="mb-0">Informasi Tambahan</h5>
+                                </div>
+                                
+                                <div class="ps-5">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Pemohon</label>
+                                        <div class="card border">
+                                            <div class="card-body py-2">
+                                                <input type="hidden" name="id_marketing" value="<?= session()->get('id_user') ?>">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0">
+                                                        <i class="fas fa-user-circle fs-3 text-muted"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <div class="fw-semibold"><?= esc(session()->get('username')) ?></div>
+                                                        <small class="text-muted">ID: <?= session()->get('id_user') ?> • Tanggal: <?= date('d/m/Y') ?></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="catatan_admin" class="form-label fw-semibold">Catatan Tambahan</label>
+                                        <textarea name="catatan_admin" id="catatan_admin" rows="3" class="form-control" placeholder="Masukkan catatan atau instruksi khusus (opsional)"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between pt-4 border-top">
+                                <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">
+                                    <i class="fas fa-times me-2"></i> Batalkan
+                                </button>
+                                <button type="submit" class="btn btn-primary px-4">
                                     <i class="fas fa-paper-plane me-2"></i> Ajukan Iklan
                                 </button>
                             </div>
@@ -121,32 +184,63 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Panduan Section -->
             <div class="col-12 col-lg-4">
                 <div class="app-card app-card-settings shadow-sm p-4 h-100">
                     <div class="app-card-header mb-4">
                         <h4 class="app-card-title text-primary">
-                            <i class="fas fa-question-circle me-2"></i>Panduan Singkat
+                            <i class="fas fa-lightbulb me-2"></i>Panduan & Tips
                         </h4>
                     </div>
                     <div class="app-card-body">
-                        <div class="alert alert-light border">
-                            <h6 class="fw-bold mb-3"><i class="fas fa-file-alt me-2"></i>Tentang Konten</h6>
-                            <p class="small">Pilih konten yang ingin dipromosikan dari daftar artikel, wisata, atau oleh-oleh yang tersedia.</p>
-                            
-                            <h6 class="fw-bold mb-3 mt-4"><i class="fas fa-tags me-2"></i>Tentang Paket</h6>
-                            <p class="small">Setiap paket memiliki durasi dan harga berbeda. Total biaya akan otomatis terhitung berdasarkan durasi yang dipilih.</p>
-                            
-                            <h6 class="fw-bold mb-3 mt-4"><i class="fas fa-clock me-2"></i>Proses Verifikasi</h6>
-                            <p class="small">Pengajuan akan diproses dalam 1-2 hari kerja setelah dikirim.</p>
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3 text-primary">Proses Pembuatan Iklan</h6>
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">1</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <small class="fw-semibold d-block">Pilih Konten</small>
+                                    <small class="text-muted">Pilih konten yang ingin dipromosikan</small>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">2</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <small class="fw-semibold d-block">Pilih Paket</small>
+                                    <small class="text-muted">Tentukan durasi dan lihat biaya</small>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">3</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <small class="fw-semibold d-block">Upload Gambar</small>
+                                    <small class="text-muted">Gambar menarik meningkatkan klik</small>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">4</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <small class="fw-semibold d-block">Konfirmasi</small>
+                                    <small class="text-muted">Periksa kembali sebelum mengajukan</small>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="alert alert-warning border mt-4">
-                            <h6 class="fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Perhatian</h6>
+
+                        <div class="alert alert-warning border">
+                            <h6 class="fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Penting!</h6>
                             <ul class="small mt-2 ps-3 mb-0">
-                                <li>Pastikan semua data benar sebelum mengajukan</li>
-                                <li>Durasi minimal 1 bulan</li>
+                                <li class="mb-1">Pastikan data sudah benar sebelum submit</li>
+                                <li class="mb-1">Gambar harus sesuai ketentuan</li>
+                                <li class="mb-1">Durasi minimal 1 bulan</li>
+                                <li>Iklan akan aktif setelah diverifikasi</li>
                             </ul>
                         </div>
                     </div>
@@ -157,12 +251,13 @@
 </div>
 
 <script>
+    // Tetap menggunakan script yang sama seperti sebelumnya
     const semuaArtikel = <?= json_encode($artikel) ?>;
     const semuaWisata = <?= json_encode($wisata) ?>;
     const semuaOlehOleh = <?= json_encode($oleholeh) ?>;
 
     function resetKonten() {
-        document.getElementById('id_konten').innerHTML = '<option value="">-- Pilih konten terlebih dahulu --</option>';
+        document.getElementById('id_konten').innerHTML = '<option value="" selected disabled>-- Pilih konten --</option>';
         document.getElementById('id_konten').disabled = true;
     }
 
@@ -170,7 +265,7 @@
         const tipeContent = document.getElementById('tipe_content').value;
         const kontenDropdown = document.getElementById('id_konten');
 
-        kontenDropdown.innerHTML = '<option value="">-- Pilih konten terlebih dahulu --</option>';
+        kontenDropdown.innerHTML = '<option value="" selected disabled>-- Pilih konten --</option>';
         kontenDropdown.disabled = true;
 
         if (!tipeContent) return;
@@ -216,6 +311,39 @@
         const totalHargaInput = document.getElementById('total_harga');
         totalHargaInput.value = totalHarga ? totalHarga.toLocaleString('id-ID') : "";
     }
+
+    // Preview thumbnail image before upload
+    document.getElementById('thumbnail_iklan').addEventListener('change', function(e) {
+        const preview = document.getElementById('thumbnail_preview');
+        const file = e.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.maxHeight = "200px";
+            }
+            
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Form validation
+    (function() {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+    })();
 </script>
 
 <?= $this->endSection('content'); ?>
