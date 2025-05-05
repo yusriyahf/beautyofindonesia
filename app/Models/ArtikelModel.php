@@ -261,5 +261,11 @@ class ArtikelModel extends Model
                ->get()
                ->getResultArray(); // Return as an array of results
      }
+
+     //enih ngitung artikel yg ditulis sama penulis tertentu
+     public function getTotalArtikelByPenulis($id_penulis)
+     {
+     return $this->where('id_penulis', $id_penulis)->countAllResults();
+     }
 }
 //doneeeeeee

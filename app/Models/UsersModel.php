@@ -10,4 +10,12 @@ class UsersModel extends Model
     protected $primaryKey = 'id_user';
     protected $returnType = 'array';
     protected $allowedFields = ['id_user', 'username', 'email', 'password', 'full_name', 'role', 'bank_account_number'];
+
+    public function getUsernameById($id_user)
+    {
+        return $this->select('username')
+                    ->where('id_user', $id_user)
+                    ->first();
+    }
+
 }

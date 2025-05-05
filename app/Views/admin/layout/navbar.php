@@ -20,7 +20,31 @@
                                 <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z" />
                             </svg>
                         </span>
-                        <span class="nav-link-text">Dashboard</span>
+                        <span class="nav-link-text">Dashboard Admin</span>
+                    </a><!--//nav-link-->
+                </li><!--//nav-item-->
+                <li class="nav-item">
+                    <!-- //Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                    <a class="nav-link" href="<?= base_url('penulis/dashboard') ?>">
+                        <span class="nav-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-speedometer2" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z" />
+                                <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-text">Dashboard Penulis</span>
+                    </a><!--//nav-link-->
+                </li><!--//nav-item-->
+                <li class="nav-item">
+                    <!-- //Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                    <a class="nav-link" href="<?= base_url('marketing/dashboard') ?>">
+                        <span class="nav-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-speedometer2" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z" />
+                                <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-text">Dashboard Marketing</span>
                     </a><!--//nav-link-->
                 </li><!--//nav-item-->
 
@@ -173,28 +197,53 @@
                 </li><!--//nav-item-->
 
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/provinsi/index"); ?>">
-                        <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-text">Provinsi</span>
+                    <a class="nav-link d-flex justify-content-between align-items-center" id="wilayahMenuLink" data-bs-toggle="collapse" href="#wilayahMenu" role="button" aria-expanded="false" aria-controls="wilayahMenu">
+                        <div class="d-flex align-items-center">
+                            <span class="nav-icon me-2">
+                                <!-- Ikon Peta -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                    <path d="M12.166 8.94C11.418 10.256 10.338 11.401 9 12.292c-1.338-.89-2.418-2.036-3.166-3.352C5.295 8.209 5 7.335 5 6.5 5 3.738 7.239 1.5 10 1.5s5 2.238 5 5c0 .835-.295 1.709-.834 2.44zM10 0a6.5 6.5 0 0 0-6.5 6.5c0 1.18.39 2.27 1.03 3.214a13.19 13.19 0 0 0 2.366 2.508c.725.514 1.5.984 2.104 1.402.604-.418 1.379-.888 2.104-1.402a13.19 13.19 0 0 0 2.366-2.508A6.462 6.462 0 0 0 16.5 6.5 6.5 6.5 0 0 0 10 0zM8 6.5a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                </svg>
+                            </span>
+                            <span class="nav-link-text">Wilayah</span>
+                        </div>
+                        <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                        </svg>
                     </a>
+
+                    <!-- Submenu Wilayah -->
+                    <div class="collapse" id="wilayahMenu">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/provinsi/index"); ?>">
+                                    <span class="nav-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                            <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-text">Provinsi</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/kabupaten/index"); ?>">
+                                    <span class="nav-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                            <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                        </svg>
+                                    </span>
+                                    <span class="nav-link-text">Kabupaten</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </div>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2" href="<?= base_url("admin/kabupaten/index"); ?>">
-                        <span class="nav-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                            </svg>
-                        </span>
-                        <span class="nav-link-text">Kabupaten</span>
-                    </a>
-                </li>
+                
 
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url("admin/kategori_wisata/index"); ?>">
@@ -241,9 +290,6 @@
                         <span class="nav-link-text">Oleh - Oleh</span>
                     </a>
                 </li>
-
-
-
             </ul><!--//app-menu-->
         </nav><!--//app-nav-->
 
@@ -266,6 +312,8 @@
     // Ambil elemen collapse
     const artikelMenu = document.getElementById('artikelMenu');
     const artikelToggle = artikelMenu.previousElementSibling;
+    const wilayahMenu = document.getElementById('wilayahMenu');
+    const wilayahToggle = wilayahMenu.previousElementSibling;
     const arrowIcon = artikelToggle.querySelector('.arrow-icon');
 
     // Saat menu terbuka
@@ -276,5 +324,6 @@
     // Saat menu tertutup
     artikelMenu.addEventListener('hidden.bs.collapse', function() {
         arrowIcon.classList.remove('rotate');
-    });
+    });
+
 </script>

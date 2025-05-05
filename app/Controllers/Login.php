@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\TentangModel;
+use App\Models\UserModel;
 
 class Login extends BaseController
 {
@@ -19,19 +20,21 @@ class Login extends BaseController
 
     public function process()
     {
-        $users = new TentangModel();
+        $users = new UserModel();
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
-        $dataUser = $users->where([
-            'username' => $username,
-        ])->first();
+
+        $dataUser = $users->where('username', $username)->first();
+
         if ($dataUser) {
-            if ($password === $dataUser->password) {
+            // Jika password belum di-hash
+            if ($password === $dataUser['password']) {
                 session()->set([
-                    'username' => $dataUser->username,
-                    'nama_tentang' => $dataUser->nama_tentang,
-                    'deskripsi_tentang' => $dataUser->deskripsi_tentang,
-                    'foto_tentang' => $dataUser->foto_tentang,
+                    'id_user'   => $dataUser['id_user'],
+                    'username'  => $dataUser['username'],
+                    'nama_user' => $dataUser['nama_user'] ?? 'Tidak Ada Nama',
+                    'email'     => $dataUser['email'] ?? '-',
+                    'role'      => $dataUser['role'],
                     'logged_in' => TRUE
                 ]);
                 return redirect()->to(base_url('admin/dashboard'));

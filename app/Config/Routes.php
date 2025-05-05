@@ -207,7 +207,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
 
 $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
     // Dashboard
-    $routes->get('dashboard', 'admin\Dashboardctrl::index');
+    $routes->get('dashboard', 'penulis\Dashboard::index');
 
     // Artikel Penulis
     $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
@@ -228,6 +228,9 @@ $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
 
 
 $routes->group('marketing', ['filter' => 'auth'], function ($routes) {
+    // Dashboard
+    $routes->get('dashboard', 'marketing\Dashboard::index');
+
     // Artikel Iklan
     $routes->get('artikeliklan/index', 'marketing\ArtikelIklan::index');
 

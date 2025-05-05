@@ -1,0 +1,56 @@
+<?php 
+
+namespace App\Controllers\penulis;
+
+use App\Controllers\BaseController;
+use App\Models\ArtikelModel;
+use App\Models\OlehOlehModel;
+use App\Models\PemasukanUserModel;
+use App\Models\PenulisModel;
+use App\Models\TempatWisataModel;
+use App\Models\UsersModel;
+
+class Dashboard extends BaseController
+{
+    public function index()
+    {
+        // Ambil id_user dari session
+        $id_user = session()->get('id_user');
+
+        $artikelModel = new ArtikelModel();
+        $wisataModel = new TempatWisataModel();
+        $olehModel = new OlehOlehModel();
+        $pemasukanModel = new PemasukanUserModel();
+        $penulisModel = new PenulisModel();
+        $usersModel = new UsersModel();
+
+        $userData = $usersModel->getUsernameById($id_user);
+
+        $total_artikel = $artikelModel->getTotalArtikelByPenulis($id_user);
+        $total_wisata = $wisataModel->getTotalWisataByPenulis($id_user);
+        $total_oleh = $olehModel-> getTotalOlehByPenulis($id_user);
+        $total_komisi = $pemasukanModel-> getTotalKomisiPenulis($id_user);
+        $namaPenulis = $penulisModel->getNamaPenulisByUserId($id_user);
+        $username = $userData['username'] ?? 'Guest';
+
+        // Ambil nilai 'jumlah' dari array yang pertama
+        $total_komisi = $total_komisi[0]['jumlah'] ?? 0;
+
+         // Debug untuk mengecek hasil
+        // var_dump($total_komisi);  // Cek apakah hasilnya ada dan sesuai
+
+
+
+
+        $data = [
+            'total_artikel' => $total_artikel,
+            'total_wisata' => $total_wisata,
+            'total_oleh' => $total_oleh,
+            'total_komisi' => $total_komisi,
+            'namaPenulis' => $namaPenulis,
+            'username' => $username,
+        ];
+
+        return view('penulis/dashboard/index', $data);
+    }
+}

@@ -292,4 +292,12 @@ class TempatWisataModel extends Model
             ->where('tb_tempatwisata.id_kategori_wisata', $categoryId)
             ->findAll();
     }
+
+
+    public function getTotalWisataByPenulis($id_penulis)
+     {
+     return $this->where('id_penulis', $id_penulis)->countAllResults();
+     }
+
+
 }
