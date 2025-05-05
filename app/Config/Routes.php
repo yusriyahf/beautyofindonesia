@@ -220,7 +220,15 @@ $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
 });
 
 
-$routes->group('marketing', ['filter' => 'auth'], function ($routes) {
+$routes->group('marketing', ['filter' => 'auth|rolecheck:penulis'], function ($routes) {
+    // Artikel Iklan
+    $routes->get('artikeliklan/index', 'marketing\ArtikelIklan::index');
+
+    // Artikel Terpublikasi
+    $routes->get('artikel/index', 'marketing\Artikel::index');
+});
+
+$routes->group('penulis', ['filter' => 'auth|rolecheck:penulis'], function ($routes) {
     // Artikel Iklan
     $routes->get('artikeliklan/index', 'marketing\ArtikelIklan::index');
 

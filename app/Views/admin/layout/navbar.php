@@ -41,7 +41,8 @@
                 </li><!--//nav-item-->
 
                 <!-- Menu Artikel (Expandable) -->
-                <li class="nav-item">
+
+                <li class="nav-item ">
                     <a class="nav-link d-flex justify-content-between align-items-center" id="artikelMenuLink" data-bs-toggle="collapse" href="#artikelMenu" role="button" aria-expanded="false" aria-controls="artikelMenu">
                         <div class="d-flex align-items-center">
                             <span class="nav-icon me-2">

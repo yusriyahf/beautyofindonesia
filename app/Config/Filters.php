@@ -17,6 +17,8 @@ class Filters extends BaseConfig
 		'auth' => \App\Filters\UsersAuthFilter::class,
 		'languagefilter' => \App\Filters\LanguageFilter::class,
 		'redirectOleholeh' => \App\Filters\RedirectOleholeh::class,
+
+		'rolecheck' => \App\Filters\RoleCheck::class,
 	];
 
 	// Always applied before every request
