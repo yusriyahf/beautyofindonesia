@@ -85,7 +85,6 @@
                             <table class="table app-table-hover mb-0 text-left">
                                 <thead>
                                     <tr>
-                                        <th class="cell">Username</th>
                                         <th class="cell">Total</th>
                                         <th class="cell">Tipe</th>
                                         <th class="cell">Status</th>
@@ -96,7 +95,6 @@
                                     <?php $i = 1; ?>
                                     <?php foreach ($semua_transaksi as $transaksi) : ?>
                                         <tr>
-                                            <td class="cell"><?= esc($transaksi['user_id']) ?></td>
                                             <td class="cell">Rp <?= esc(number_format($transaksi['jumlah'], 2, ',', '.')) ?></td>
                                             <td class="cell"><span class="badge bg-success"><?= esc($transaksi['tipe']) ?></span></td>
 

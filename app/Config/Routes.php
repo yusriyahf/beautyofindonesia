@@ -55,6 +55,12 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     // Dashboard
     $routes->get('dashboard', 'admin\Dashboardctrl::index');
 
+    // IKLAN UTAMA
+    $routes->get('iklanutama', 'admin\IklanUtamaController::index');
+    $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
+    $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
+    $routes->post('iklanutama/ubahstatus', 'admin\IklanUtamaController::ubahstatus');
+
     $routes->get('saldo', 'admin\Komisi::saldo/$1');
     $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
     $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');

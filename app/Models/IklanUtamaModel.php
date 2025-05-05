@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class IklanUtamaModel extends Model
+{
+    protected $table = 'tb_iklan_utama';
+    protected $primaryKey = 'id_iklan_utama';
+    protected $returnType = 'array';
+    protected $allowedFields = ['id_iklan_utama', 'id_jenis_iklan_utama', 'id_marketing', 'url_iklan', 'rentang_bulan', 'tanggal_mulai', 'tanggal_selesai', 'id_iklan_utama', 'thumbnail_iklan', 'tanggal_pengajuan', 'status', 'harga'];
+}

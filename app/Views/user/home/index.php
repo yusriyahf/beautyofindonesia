@@ -17,6 +17,10 @@
         </div>
 
         <!-- START ARTIKEL -->
+        <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+
+
+
         <div class="row mt-4">
             <div class="col-lg-12">
                 <div class="section-title">
@@ -106,6 +110,7 @@
         </div>
         <!-- END ARTIKEL -->
 
+        <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
         <!-- START OLEH OLEH -->
         <div class="row mt-5">
             <div class="col-lg-12">
@@ -198,7 +203,7 @@
         </div>
         <!-- END OLEH OLEH -->
 
-
+        <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
         <!-- START ARTIKEL -->
         <div class="row mt-5">
             <div class="col-lg-12">
