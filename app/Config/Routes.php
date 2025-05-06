@@ -65,6 +65,10 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->post('users/proses_edit/(:num)', 'admin\Users::proses_edit/$1');
     $routes->get('users/delete/(:any)', 'admin\Users::delete/$1');
 
+    // Acc User Req
+    // Users
+    $routes->get('userRequest', 'admin\AccUserController::index');
+
     $routes->get('komisi', 'admin\Komisi::index');
     $routes->get('komisi/tambah', 'admin\Komisi::tambah');
     $routes->post('komisi/proses_tambah', 'admin\Komisi::proses_tambah');
@@ -173,7 +177,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
 
 $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
     // Dashboard
-    $routes->get('dashboard', 'admin\Dashboardctrl::index');
+    $routes->get('dashboard', 'penulis\Dashboard::index');
 
     // Artikel Penulis
     $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
@@ -194,6 +198,11 @@ $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
 
 
 $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($routes) {
+    // Dashboard
+    $routes->get('dashboard', 'marketing\Dashboard::index');
+
+    // Artikel Iklan
+    $routes->get('artikeliklan/index', 'marketing\ArtikelIklan::index');
 
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');

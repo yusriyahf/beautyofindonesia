@@ -32,4 +32,12 @@ class PenulisModel extends Model
             ->limit($limit)
             ->get()->getResultArray();
     }
+
+    public function getNamaPenulisByUserId($user_id)
+    {
+        return $this->select('nama_penulis')
+                    ->where('id_penulis', $user_id)
+                    ->first();
+    }
+
 }

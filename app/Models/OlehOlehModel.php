@@ -285,4 +285,9 @@ class OlehOlehModel extends Model
             ->limit(4) // Limit to 4 items
             ->findAll();
     }
+
+    public function getTotalOlehByPenulis($id_penulis)
+    {
+     return $this->where('id_penulis', $id_penulis)->countAllResults();
+    }
 }
