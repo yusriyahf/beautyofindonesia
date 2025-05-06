@@ -174,6 +174,15 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
 
     $routes->get('iklanutama', 'admin\IklanUtamaController::index2');
     $routes->post('iklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
+
+
+     //Jenis Iklan Utama
+     $routes->get('jenisiklanutama', 'admin\JenisIklanUtama::index');
+     $routes->get('jenisiklanutama/tambah', 'admin\JenisIklanUtama::tambah');
+     $routes->post('jenisiklanutama/proses_tambah', 'admin\JenisIklanUtama::proses_tambah');
+     $routes->get('jenisiklanutama/edit/(:num)', 'admin\JenisIklanUtama::edit/$1');
+     $routes->post('jenisiklanutama/proses_edit/(:num)', 'admin\JenisIklanUtama::update/$1');
+     $routes->get('jenisiklanutama/delete/(:num)', 'admin\JenisIklanUtama::delete/$1');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
