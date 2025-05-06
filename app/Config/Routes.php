@@ -69,6 +69,10 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->post('users/proses_edit/(:num)', 'admin\Users::proses_edit/$1');
     $routes->get('users/delete/(:any)', 'admin\Users::delete/$1');
 
+    // Acc User Req
+    // Users
+    $routes->get('userRequest', 'admin\AccUserController::index');
+
     $routes->get('komisi', 'admin\Komisi::index');
     $routes->get('komisi/tambah', 'admin\Komisi::tambah');
     $routes->post('komisi/proses_tambah', 'admin\Komisi::proses_tambah');
