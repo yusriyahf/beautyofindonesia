@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\TentangModel;
 use App\Models\UserModel;
-use App\Models\UsersModel;
 
 class Login extends BaseController
 {

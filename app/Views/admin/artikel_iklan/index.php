@@ -149,14 +149,27 @@
                                                 $status = 'Belum diproses';
                                             }
 
-                                            $badgeClass = match (strtolower($status)) {
-                                                'diajukan' => 'bg-warning',
-                                                'ditolak' => 'bg-danger',
-                                                'diterima' => 'bg-primary',
-                                                'berjalan' => 'bg-success',
-                                                'selesai' => 'bg-secondary',
-                                                default => 'bg-dark',
-                                            };
+                                            switch (strtolower($status)) {
+                                                case 'diajukan':
+                                                    $badgeClass = 'bg-warning';
+                                                    break;
+                                                case 'ditolak':
+                                                    $badgeClass = 'bg-danger';
+                                                    break;
+                                                case 'diterima':
+                                                    $badgeClass = 'bg-primary';
+                                                    break;
+                                                case 'berjalan':
+                                                    $badgeClass = 'bg-success';
+                                                    break;
+                                                case 'selesai':
+                                                    $badgeClass = 'bg-secondary';
+                                                    break;
+                                                default:
+                                                    $badgeClass = 'bg-dark';
+                                                    break;
+                                            }
+                                            
                                             ?>
 
                                             <td class="cell">

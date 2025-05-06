@@ -5,7 +5,7 @@
 <div class="dashboard-wrapper" style="padding: 20px; background: #f5f7fa;">
 
   <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-    <h1 style="font-size: 24px; font-weight: 600;">Dashboard - Beauty Of Indonesia</h1>
+    <h1 style="font-size: 24px; font-weight: 600;">Dashboard Penulis - Beauty Of ndonesia</h1>
     <p>Selamat datang, <?= esc($username) ?>!</p>
   </div>
 
@@ -15,19 +15,16 @@
       <p>Total Artikel</p>
     </div>
     <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-      <h2><?= $total_wisata ?></h2>
+      <h2><?=$total_wisata?></h2>
       <p>Total Tempat Wisata</p>
     </div>
+    
     <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-      <h2><?= $total_oleh ?></h2>
+      <h2><?=$total_oleh?></h2>
       <p>Total Oleh-Oleh</p>
     </div>
     <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-      <h2><?= $total_iklan ?></h2>
-      <p>Total Iklan Aktif</p>
-    </div>
-    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-      <h2>Rp 3.500.000</h2>
+      <h2>Rp<?= number_format($total_komisi, 0, ',', '.') ?></h2>
       <p>Total Komisi Bulan Ini</p>
     </div>
   </div>

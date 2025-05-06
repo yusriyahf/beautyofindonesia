@@ -84,4 +84,30 @@ class ArtikelIklanModel extends Model
             ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_marketing')
             ->findAll();
     }
+
+    //ngitung iklan diterima/disetujui(?)
+    public function countIklanDiterimaByMarketing($id_user)
+    {
+        return $this->where('status_iklan', 'diterima')
+                    ->where('id_marketing', $id_user)
+                    ->countAllResults();
+    }
+
+    public function countIklanDitolakByMarketing($id_user)
+    {
+        return $this->where('status_iklan', 'ditolak')
+                    ->where('id_marketing', $id_user)
+                    ->countAllResults();
+    }
+
+    public function countIklanDiajukan($id_user)
+    {
+        return $this->where('status_iklan', 'diajukan')
+                    ->where('id_marketing', $id_user)
+                    ->countAllResults();
+    }
+
+
+
+
 }

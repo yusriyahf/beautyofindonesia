@@ -9,6 +9,7 @@ use App\Models\TempatWisataModel;
 use App\Models\OlehOlehModel;
 use App\Models\HargaIklanModel;
 use App\Models\UserModel;
+use App\Models\UsersModel;
 use Config\Services;
 
 class IklanController extends BaseController
