@@ -42,24 +42,14 @@ $routes->get('logout', 'Login::logout');
 
 // Daftarkan rute-rute admin di sini
 $routes->get('sitemap.xml', 'Sitemap::index');
-// $routes->get('sitemap.xml', function () {
-//     return response()
-//         ->setHeader('Content-Type', 'application/xml; charset=UTF-8')
-//         ->setBody(trim(file_get_contents(FCPATH . 'sitemap.xml')));
-// });
-
-// $routes->addRedirect('oleholeh', 'id/oleh-oleh');
 
 
-$routes->group('admin', ['filter' => 'auth'], function ($routes) {
+$routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     // Dashboard
     $routes->get('dashboard', 'admin\Dashboardctrl::index');
 
     // IKLAN UTAMA
-    $routes->get('iklanutama', 'admin\IklanUtamaController::index');
-    $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
-    $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
-    $routes->post('iklanutama/ubahstatus', 'admin\IklanUtamaController::ubahstatus');
+
 
     $routes->get('saldo', 'admin\Komisi::saldo/$1');
     $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
@@ -83,14 +73,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('komisi/delete/(:any)', 'admin\Komisi::delete/$1');
 
 
-    // Artikel Iklan
-    $routes->get('artikeliklan', 'admin\ArtikelIklan::index');
-    $routes->get('artikeliklan/tambah', 'admin\ArtikelIklan::tambah');
-    $routes->post('artikeliklan/proses_tambah', 'admin\ArtikelIklan::proses_tambah');
-    $routes->get('artikeliklan/edit/(:num)', 'admin\ArtikelIklan::edit/$1');
-    $routes->post('artikeliklan/proses_edit/(:num)', 'admin\ArtikelIklan::proses_edit/$1');
-    $routes->get('artikeliklan/delete/(:any)', 'admin\ArtikelIklan::delete/$1');
-    $routes->post('artikeliklan/ubahStatus', 'admin\ArtikelIklan::ubahStatus');
+
 
     // Popup
     $routes->get('popup', 'admin\Popup::index');
@@ -118,13 +101,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
 
     // Artikel
 
-    $routes->get('artikel/index', 'admin\Artikel::index');
-    $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
-    $routes->get('artikel/tambah', 'admin\Artikel::tambah');
-    $routes->post('artikel/proses_tambah', 'admin\Artikel::proses_tambah');
-    $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
-    $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
-    $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
+
 
     // Daftar Penulis
     $routes->get('penulis/index', 'admin\Penulis::index');
@@ -191,11 +168,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
     $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
 
-    // artikel beriklan
-    $routes->get('artikel/artikel_beriklan', 'admin\IklanController::index');
-    $routes->get('artikel/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('artikel/proses_tambah2', 'admin\IklanController::proses_tambah');
-    $routes->get('artikel/edit_artikel_iklan/(:num)', 'admin\IklanController::edit/$1');
+    $routes->get('iklanutama', 'admin\IklanUtamaController::index2');
 });
 
 $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
@@ -220,20 +193,39 @@ $routes->group('penulis', ['filter' => 'auth'], function ($routes) {
 });
 
 
-$routes->group('marketing', ['filter' => 'auth|rolecheck:penulis'], function ($routes) {
-    // Artikel Iklan
-    $routes->get('artikeliklan/index', 'marketing\ArtikelIklan::index');
+$routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($routes) {
 
-    // Artikel Terpublikasi
-    $routes->get('artikel/index', 'marketing\Artikel::index');
+    $routes->get('iklanutama', 'admin\IklanUtamaController::index');
+    $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
+    $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
+    $routes->post('iklanutama/ubahstatus', 'admin\IklanUtamaController::ubahstatus');
+
+
+    // Artikel Iklan
+    $routes->get('artikeliklan', 'admin\ArtikelIklan::index');
+    $routes->get('artikeliklan/tambah', 'admin\ArtikelIklan::tambah');
+    $routes->post('artikeliklan/proses_tambah', 'admin\ArtikelIklan::proses_tambah');
+    $routes->get('artikeliklan/edit/(:num)', 'admin\ArtikelIklan::edit/$1');
+    $routes->post('artikeliklan/proses_edit/(:num)', 'admin\ArtikelIklan::proses_edit/$1');
+    $routes->get('artikeliklan/delete/(:any)', 'admin\ArtikelIklan::delete/$1');
+    $routes->post('artikeliklan/ubahStatus', 'admin\ArtikelIklan::ubahStatus');
 });
 
-$routes->group('penulis', ['filter' => 'auth|rolecheck:penulis'], function ($routes) {
-    // Artikel Iklan
-    $routes->get('artikeliklan/index', 'marketing\ArtikelIklan::index');
+$routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
 
-    // Artikel Terpublikasi
-    $routes->get('artikel/index', 'marketing\Artikel::index');
+    $routes->get('artikel/index', 'admin\Artikel::index');
+    $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
+    $routes->get('artikel/tambah', 'admin\Artikel::tambah');
+    $routes->post('artikel/proses_tambah', 'admin\Artikel::proses_tambah');
+    $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
+    $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
+    $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
+
+    // artikel beriklan
+    $routes->get('artikelberiklan', 'admin\IklanController::index');
+    $routes->get('artikelberiklan/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
+    $routes->post('artikelberiklan/proses_tambah2', 'admin\IklanController::proses_tambah');
+    $routes->get('artikelberiklan/edit_artikel_iklan/(:num)', 'admin\IklanController::edit/$1');
 });
 
 

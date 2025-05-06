@@ -14,7 +14,7 @@ class Filters extends BaseConfig
 		'csrf'     => \CodeIgniter\Filters\CSRF::class,
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
-		'auth' => \App\Filters\UsersAuthFilter::class,
+		// 'auth' => \App\Filters\UsersAuthFilter::class,
 		'languagefilter' => \App\Filters\LanguageFilter::class,
 		'redirectOleholeh' => \App\Filters\RedirectOleholeh::class,
 

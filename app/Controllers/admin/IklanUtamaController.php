@@ -4,17 +4,18 @@ namespace App\Controllers\Admin;
 
 use App\Models\IklanUtamaModel;
 use App\Models\JenisIklanUtama;
+use App\Models\TipeIklanUtama;
 
 class IklanUtamaController extends BaseController
 {
 
     private $iklanUtamaModel;
-    private $jenisIklanUtamaModel;
+    private $tipeIklanUtamaModel;
 
     public function __construct()
     {
         $this->iklanUtamaModel = new IklanUtamaModel();
-        $this->jenisIklanUtamaModel = new JenisIklanUtama();
+        $this->tipeIklanUtamaModel = new TipeIklanUtama();
     }
 
     public function index()
@@ -27,9 +28,19 @@ class IklanUtamaController extends BaseController
         ]);
     }
 
+    public function index2()
+    {
+        $all_data_iklan_utama = $this->iklanUtamaModel->findAll();
+        $validation = \Config\Services::validation();
+        return view('admin/iklan_utama/index', [
+            'all_data_iklan_utama' => $all_data_iklan_utama,
+            'validation' => $validation
+        ]);
+    }
+
     public function tambah()
     {
-        $listJenisIklanUtama = $this->jenisIklanUtamaModel->findAll();
+        $listJenisIklanUtama = $this->tipeIklanUtamaModel->findAll();
 
 
         return view('marketing/iklan_utama/create', [
@@ -44,9 +55,11 @@ class IklanUtamaController extends BaseController
             return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
         }
 
-        $idJenisIklanUtama = $this->request->getPost('id_jenis_iklan_utama');
+        $idTipeIklanUtama = $this->request->getPost('id_tipe_iklan_utama');
+
+
         $idMarketing = $this->request->getPost('id_marketing');
-        $urlIklan = $this->request->getPost('url_iklan');
+        $jenis = $this->request->getPost('jenis');
         $rentangBulan = $this->request->getPost('rentang_bulan');
 
 
@@ -55,9 +68,9 @@ class IklanUtamaController extends BaseController
 
         // Susun data yang akan disimpan
         $data = [
-            'id_jenis_iklan_utama'      => $idJenisIklanUtama,
+            'id_tipe_iklan_utama'      => $idTipeIklanUtama,
             'id_marketing'    => $idMarketing,
-            'url_iklan'        => $urlIklan,
+            'jenis'        => $jenis,
             'rentang_bulan'        => $rentangBulan,
             'status'        => 'diajukan',
             'total_harga'        => $cleanTotalHarga,
@@ -66,10 +79,10 @@ class IklanUtamaController extends BaseController
 
         // Simpan ke database
         $this->iklanUtamaModel->insert($data);
-        $this->jenisIklanUtamaModel->update($idJenisIklanUtama, [
+        $this->tipeIklanUtamaModel->update($idTipeIklanUtama, [
             'status' => 'tidak'
         ]);
 
-        return redirect()->to(base_url('admin/iklanutama'))->with('success', 'Pengajuan iklan berhasil disimpan.');
+        return redirect()->to(base_url('marketing/iklanutama'))->with('success', 'Pengajuan iklan berhasil disimpan.');
     }
 }

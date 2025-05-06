@@ -10,7 +10,7 @@
                 <p class="text-muted mb-0">Kelola semua Iklan Utama di sini</p>
             </div>
             <div class="col-auto">
-                <a href="<?= base_url('admin/iklanutama/tambah') ?>" class="btn app-btn-primary">
+                <a href="<?= base_url('marketing/iklanutama/tambah') ?>" class="btn app-btn-primary">
                     <i class="fas fa-plus me-2"></i>Tambah Iklan Utama
                 </a>
             </div>
@@ -38,7 +38,7 @@
                             <tr>
                                 <th class="cell text-center">No</th>
                                 <th class="cell">Marketing</th>
-                                <th class="cell">Url Iklan</th>
+                                <th class="cell">Jenis</th>
                                 <th class="cell">Jenis Iklan</th>
                                 <th class="cell">Rentang Bulan</th>
                                 <th class="cell">Tanggal Pengajuan</th>
@@ -56,13 +56,13 @@
                                     <tr class="text-center">
                                         <td class="cell text-center">1</td>
                                         <td class="cell"><?= esc($item['id_marketing'] ?? 'N/A') ?></td>
-                                        <td class="cell"><?= esc($item['url_iklan']) ?></td>
-                                        <td class="cell"><?= esc($item['id_jenis_iklan_utama']) ?></td>
+                                        <td class="cell"><?= esc($item['jenis']) ?></td>
+                                        <td class="cell"><?= esc($item['id_tipe_iklan_utama']) ?></td>
                                         <td class="cell text-center">
                                             <?= esc($item['rentang_bulan']) ?> Bulan
                                         </td>
                                         <td class="cell text-center">
-                                            <?= esc($item['tanggal_pengajuan']) ?> Bulan
+                                            <?= esc($item['tanggal_pengajuan']) ?>
                                         </td>
 
                                         <td class="cell text-center">
@@ -95,7 +95,7 @@
                                         <div class="text-muted">
                                             <i class="fas fa-info-circle fa-2x mb-3"></i>
                                             <p>Tidak ada data yang ditemukan</p>
-                                            <a href="<?= base_url('admin/iklanutama/tambah') ?>" class="btn app-btn-primary">
+                                            <a href="<?= base_url('marketing/iklanutama/tambah') ?>" class="btn app-btn-primary">
                                                 <i class="fas fa-plus me-2"></i>Tambah Iklan Utama
                                             </a>
                                         </div>

@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="app-card-body">
-                        <form method="post" action="<?= base_url('/admin/iklanutama/proses_tambah') ?>">
+                        <form method="post" action="<?= base_url('/marketing/iklanutama/proses_tambah') ?>">
                             <?= csrf_field() ?>
 
                             <!-- Paket Iklan Section -->
@@ -30,20 +30,30 @@
                                 <h5 class="mb-3 border-bottom pb-2">
                                     <i class="fas fa-tags me-2"></i>Paket Iklan
                                 </h5>
-                                <img src="<?= base_url('assets/images/layout iklan.png'); ?>" style="width: 100%; display: block; margin: 0 auto;" alt="">
+                                <img src="<?= base_url('assets\images\iklan\wireframe_beranda.png'); ?>" style="width: 100%; display: block; margin: 0 auto;" alt="" class="mb-3">
 
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Url</label>
-                                    <input type="text" class="form-control form-control-lg" id="url_iklan" name="url_iklan" value="<?= old('url_iklan') ?>">
+                                    <label class="form-label fw-bold">Jenis</label>
+                                    <select class="form-control form-control-lg" id="jenis" name="jenis" onchange="filterPaketIklan();">
+                                        <option value="Beranda" <?= old('jenis') == 'Beranda' ? 'selected' : '' ?>>Beranda</option>
+                                        <option value="Wisata" <?= old('jenis') == 'Wisata' ? 'selected' : '' ?>>Wisata</option>
+                                        <option value="Oleh-Oleh" <?= old('jenis') == 'Oleh-Oleh' ? 'selected' : '' ?>>Oleh-Oleh</option>
+                                        <option value="Artikel" <?= old('jenis') == 'Artikel' ? 'selected' : '' ?>>Artikel</option>
+                                    </select>
                                 </div>
 
+
                                 <div class="mb-3">
-                                    <label for="id_jenis_iklan_utama" class="form-label fw-bold">Pilih Paket</label>
-                                    <select name="id_jenis_iklan_utama" id="id_jenis_iklan_utama" class="form-select" required onchange="hitungTotalHarga(); loadKonten();">
+                                    <label for="id_tipe_iklan_utama" class="form-label fw-bold">Pilih Paket</label>
+                                    <select name="id_tipe_iklan_utama" id="id_tipe_iklan_utama" class="form-select" required onchange="hitungTotalHarga(); loadKonten();">
                                         <option value="">-- Pilih Jenis iklan --</option>
                                         <?php foreach ($listJenisIklanUtama as $item): ?>
-                                            <option value="<?= $item['id_jenis_iklan_utama'] ?>" data-harga="<?= $item['harga'] ?>">
-                                                <?= esc($item['nama']) ?> - Rp<?= number_format($item['harga'], 0, ',', '.') ?>
+                                            <option
+                                                value="<?= $item['id_tipe_iklan_utama'] ?>"
+                                                data-jenis="<?= explode(' - ', $item['nama'])[0] ?>"
+                                                data-harga="<?= $item['harga'] ?>"
+                                                style="display: none;">
+                                                <?= esc($item['nama']) ?> - Rp<?= number_format($item['harga'], 0, ',', '.') ?> - <?= $item['id_tipe_iklan_utama'] ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -138,7 +148,7 @@
 
 <script>
     function hitungTotalHarga() {
-        const selectElement = document.getElementById('id_jenis_iklan_utama');
+        const selectElement = document.getElementById('id_tipe_iklan_utama');
         const selectedOption = selectElement.options[selectElement.selectedIndex];
         const harga = parseInt(selectedOption.getAttribute('data-harga')) || 0;
 
@@ -146,6 +156,35 @@
         const totalHarga = harga * rentangBulan;
 
         document.getElementById('total_harga').value = totalHarga.toLocaleString('id-ID');
+    }
+
+    function filterPaketIklan() {
+        const jenisTerpilih = document.getElementById('jenis').value;
+        const paketSelect = document.getElementById('id_tipe_iklan_utama');
+        const options = paketSelect.querySelectorAll('option');
+        const img = document.getElementById('previewImage');
+
+        if (jenisTerpilih) {
+            // Tampilkan dropdown
+            paketSelect.disabled = false;
+
+            // Tampilkan option yang sesuai jenis
+            options.forEach(option => {
+                const jenis = option.getAttribute('data-jenis');
+                option.style.display = (!jenis || jenis === jenisTerpilih) ? '' : 'none';
+            });
+
+            // Ubah gambar sesuai jenis
+            const fileName = `wireframe_${jenisTerpilih.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z\-]/g, '')}.png`;
+            img.src = `<?= base_url('assets/images/iklan/'); ?>${fileName}`;
+        } else {
+            paketSelect.disabled = true;
+            paketSelect.value = '';
+            options.forEach(option => option.style.display = 'none');
+
+            // Reset gambar (jika ingin default)
+            img.src = '<?= base_url('assets/images/iklan/wireframe_beranda.png'); ?>';
+        }
     }
 </script>
 

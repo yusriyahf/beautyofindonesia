@@ -25,11 +25,14 @@ class RoleCheck implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
         $role = session()->get('role');
 
-        // Misalnya: hanya admin dan superadmin yang boleh lewat
-        if (!session()->get('logged_in') || !in_array($role, $arguments)) {
-            return redirect()->to('/login')->with('error', 'Akses ditolak.');
+        if (!$arguments || !in_array($role, $arguments)) {
+            return redirect()->to('/unauthorized')->with('error', 'Akses ditolak.');
         }
     }
 
