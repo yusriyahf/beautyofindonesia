@@ -29,7 +29,7 @@ class Users extends BaseController
 
         $validation = \Config\Services::validation();
 
-        return view('admin/popup/tambah', [
+        return view('admin/users/tambah', [
             'listUsers' => $listUsers,
             'validation' => $validation
         ]);
