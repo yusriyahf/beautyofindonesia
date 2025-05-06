@@ -16,13 +16,13 @@
             <?php foreach ($artikel as $row) : ?>
 
                 <div class="col-lg-4 mb-4">
-                    <a href="<?= base_url($lang . '/' . ($lang === 'en' ? 'article' : 'artikel') . '/' . ($lang === 'en' ? $row->slug_kategori_en : $row->slug_kategori) . '/' . ($lang === 'en' ? $row->slug_en : $row->slug)) ?>" class="text-decoration-none artikel-link">
+                    <a href="<?= base_url($lang . '/' . ($lang === 'en' ? 'article' : 'artikel') . '/' . ($lang === 'en' ? $row['slug_kategori_en'] : $row['slug_kategori']) . '/' . ($lang === 'en' ? $row['slug_en'] : $row['slug'])) ?>" class="text-decoration-none artikel-link">
                         <div class="position-relative d-flex flex-column h-100 mb-3 artikel-card">
                             <?php
                             $defaultImage = base_url('assets-baru/img/error_logo.webp');
 
-                            $imagePath = 'assets-baru/img/foto_artikel/' . $row->foto_artikel;
-                            $imageToDisplay = file_exists(FCPATH . $imagePath) && !empty($row->foto_artikel) ? base_url($imagePath) : $defaultImage;
+                            $imagePath = 'assets-baru/img/foto_artikel/' . $row['foto_artikel'];
+                            $imageToDisplay = file_exists(FCPATH . $imagePath) && !empty($row['foto_artikel']) ? base_url($imagePath) : $defaultImage;
                             ?>
 
                             <img class="img-fluid w-100 lazyload" style="height: 250px; object-fit: cover; border-radius: 15px 15px 0 0;" src="<?= $imageToDisplay ?>" loading="lazy">
@@ -31,21 +31,21 @@
                                 <div class="mb-2">
                                     <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2 
                                         <?= current_url() === base_url($lang . ($lang === 'en' ? '/article/' : '/artikel/') .
-                                            ($lang === 'en' ? ($row->slug_kategori_en ?? '') : ($row->slug_kategori ?? ''))) ? 'active' : '' ?>"
+                                            ($lang === 'en' ? ($row['slug_kategori_en'] ?? '') : ($row['slug_kategori'] ?? ''))) ? 'active' : '' ?>"
                                         href="">
-                                        <?= esc($lang === 'en' ? ($row->nama_kategori_en ?? 'Unknown Category') : ($row->nama_kategori ?? 'Unknown Category')) ?>
+                                        <?= esc($lang === 'en' ? ($row['nama_kategori_en'] ?? 'Unknown Category') : ($row['nama_kategori'] ?? 'Unknown Category')) ?>
                                     </a>
                                 </div>
 
 
-                                <p class="text-body"><small><?= date('d F Y', strtotime($row->tgl_publish)); ?></small></p>
+                                <p class="text-body"><small><?= date('d F Y', strtotime($row['tgl_publish'])); ?></small></p>
 
-                                <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url($lang . '/' . ($lang === 'en' ? 'article' : 'artikel') . '/' . ($lang === 'en' ? $row->slug_kategori_en : $row->slug_kategori) . '/' . ($lang === 'en' ? $row->slug_en : $row->slug)) ?>">
-                                    <?= esc($lang === 'en' ? $row->judul_artikel_en : $row->judul_artikel) ?>
+                                <a class="h4 d-block mb-3 text-secondary font-weight-bold" href="<?= base_url($lang . '/' . ($lang === 'en' ? 'article' : 'artikel') . '/' . ($lang === 'en' ? $row['slug_kategori_en'] : $row['slug_kategori']) . '/' . ($lang === 'en' ? $row['slug_en'] : $row['slug'])) ?>">
+                                    <?= esc($lang === 'en' ? $row['judul_artikel_en'] : $row['judul_artikel']) ?>
                                 </a>
 
                                 <p style="margin-bottom: -4rem;">
-                                    <?= esc(substr(strip_tags($lang === 'en' ? $row->deskripsi_artikel_en : $row->deskripsi_artikel), 0, 200)); ?>...
+                                    <?= esc(substr(strip_tags($lang === 'en' ? $row['deskripsi_artikel_en'] : $row['deskripsi_artikel']), 0, 200)); ?>...
                                 </p>
                             </div>
 
