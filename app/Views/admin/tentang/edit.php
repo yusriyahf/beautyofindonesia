@@ -18,75 +18,80 @@
 
 						<form action="<?= base_url('admin/tentang/edit'); ?>" method="post" enctype="multipart/form-data">
 							<?= csrf_field() ?>
+
 							<div class="mb-3">
 								<label for="nama_tentang" class="form-label mt-4">Nama Tentang</label>
-								<input type="text" class="form-control" id="nama_tentang" name="nama_tentang" value="<?= $tentang_pengguna[0]['nama_tentang']; ?>">
+								<input type="text" class="form-control" id="nama_tentang" name="nama_tentang" value="<?= esc($tentang->nama_tentang) ?>">
 							</div>
+
 							<div class="mb-3">
 								<label for="slogan" class="form-label mt-4">Slogan</label>
-								<input type="text" class="form-control" id="slogan" name="slogan" value="<?= $tentang_pengguna[0]['slogan']; ?>">
+								<input type="text" class="form-control" id="slogan" name="slogan" value="<?= esc($tentang->slogan) ?>">
 							</div>
+
 							<div class="mb-3">
 								<label for="deskripsi_tentang" class="form-label">Deskripsi Tentang</label>
-								<textarea type="text" class="form-control tiny" id="deskripsi_tentang" name="deskripsi_tentang" rows="5"><?= $tentang_pengguna[0]['deskripsi_tentang']; ?></textarea>
+								<textarea class="form-control tiny" id="deskripsi_tentang" name="deskripsi_tentang" rows="5"><?= esc($tentang->deskripsi_tentang) ?></textarea>
 							</div>
+
 							<div class="mb-3">
-								<label for="deskripsi_tentang" class="form-label">Deskripsi Tentang (English)</label>
-								<textarea type="text" class="form-control tiny" id="deskripsi_tentang_en" name="deskripsi_tentang_en" rows="5"><?= $tentang_pengguna[0]['deskripsi_tentang_en']; ?></textarea>
+								<label for="deskripsi_tentang_en" class="form-label">Deskripsi Tentang (English)</label>
+								<textarea class="form-control tiny" id="deskripsi_tentang_en" name="deskripsi_tentang_en" rows="5"><?= esc($tentang->deskripsi_tentang_en) ?></textarea>
 							</div>
+
 							<div class="mb-3">
-								<label for="password" class="form-label mt-4">Alamat</label>
-								<input type="text" class="form-control" id="alamat" name="alamat" value="<?= $tentang_pengguna[0]['alamat']; ?>">
+								<label for="alamat" class="form-label mt-4">Alamat</label>
+								<input type="text" class="form-control" id="alamat" name="alamat" value="<?= esc($tentang->alamat) ?>">
 							</div>
+
 							<div class="mb-3">
-								<label for="password" class="form-label mt-4">No Telp / Hp</label>
-								<input type="text" class="form-control" id="no_telp" name="no_telp" value="<?= $tentang_pengguna[0]['no_telp']; ?>">
+								<label for="no_telp" class="form-label mt-4">No Telp / Hp</label>
+								<input type="text" class="form-control" id="no_telp" name="no_telp" value="<?= esc($tentang->no_telp) ?>">
 							</div>
+
 							<div class="mb-3">
-								<label for="password" class="form-label mt-4">Email</label>
-								<input type="text" class="form-control" id="email" name="email" value="<?= $tentang_pengguna[0]['email']; ?>">
+								<label for="email" class="form-label mt-4">Email</label>
+								<input type="text" class="form-control" id="email" name="email" value="<?= esc($tentang->email) ?>">
 							</div>
+
 							<div class="mb-3">
-								<label for="password" class="form-label mt-4">Instagram</label>
-								<input type="text" class="form-control" id="instagram" name="instagram" value="<?= $tentang_pengguna[0]['instagram']; ?>">
+								<label for="instagram" class="form-label mt-4">Instagram</label>
+								<input type="text" class="form-control" id="instagram" name="instagram" value="<?= esc($tentang->instagram) ?>">
 								<small class="text-muted">* Masukkan link URL.</small>
 							</div>
+
 							<div class="mb-3">
-								<label for="password" class="form-label mt-4">Tiktok</label>
-								<input type="text" class="form-control" id="tiktok" name="tiktok" value="<?= $tentang_pengguna[0]['tiktok']; ?>">
+								<label for="tiktok" class="form-label mt-4">Tiktok</label>
+								<input type="text" class="form-control" id="tiktok" name="tiktok" value="<?= esc($tentang->tiktok) ?>">
 								<small class="text-muted">* Masukkan link URL.</small>
 							</div>
+
 							<div class="mb-3">
-								<label for="password" class="form-label mt-4">Youtube</label>
-								<input type="text" class="form-control" id="youtube" name="youtube" value="<?= $tentang_pengguna[0]['youtube']; ?>">
+								<label for="youtube" class="form-label mt-4">Youtube</label>
+								<input type="text" class="form-control" id="youtube" name="youtube" value="<?= esc($tentang->youtube) ?>">
 								<small class="text-muted">* Masukkan link URL.</small>
 							</div>
+
 							<div class="mb-3">
-								<label for="nama_tentang" class="form-label mt-4">Footer</label>
-								<input type="text" class="form-control" id="footer" name="footer" value="<?= $tentang_pengguna[0]['footer']; ?>">
-								<small>*Template ini gratis selama Anda tetap menyimpan credit link/attribution link/backlink penulis footernya. Jika Anda ingin menggunakan templat tanpa tautan kredit/tautan atribusi/tautan balik penulis footer, Anda dapat membeli Lisensi Penghapusan Kredit dari <a href="https://htmlcodex.com/credit-removal">"https://htmlcodex.com/credit-removal"</a>. Terima kasih atas dukungan Anda.</small>
+								<label for="footer" class="form-label mt-4">Footer</label>
+								<input type="text" class="form-control" id="footer" name="footer" value="<?= esc($tentang->footer) ?>">
+								<small>*Template ini gratis selama Anda tetap menyimpan credit link/attribution link/backlink penulis footernya...</small>
 							</div>
-							<div class="mb-3">
-								<label for="username" class="form-label mt-4">User Name</label>
-								<input type="text" class="form-control" id="username" name="username" value="<?= $tentang_pengguna[0]['username']; ?>">
-								<small class="text-muted">* Jika Anda merubah username, silakan login kembali.</small>
-							</div>
-							<div class="mb-3">
-								<label for="password" class="form-label mt-4">Password</label>
-								<input type="text" class="form-control" id="password" name="password" value="<?= $tentang_pengguna[0]['password']; ?>">
-							</div>
+
 							<div class="mb-3">
 								<label for="foto_tentang" class="form-label">Foto Tentang</label>
-								<input type="hidden" name="old_foto_tentang" value="<?= $tentang_pengguna[0]['foto_tentang']; ?>">
+								<input type="hidden" name="old_foto_tentang" value="<?= esc($tentang->foto_tentang) ?>">
 								<input type="file" class="form-control" id="foto_tentang" name="foto_tentang">
-								<img width="150px" class="img-thumbnail" src="<?= base_url('assets-baru/img/' . $tentang_pengguna[0]['foto_tentang']); ?>">
+								<?php if (!empty($tentang_pengguna[0]['foto_tentang'])): ?>
+									<img width="150px" class="img-thumbnail" src="<?= base_url('assets-baru/img/' . $tentang->foto_tentang); ?>">
+								<?php endif; ?>
 							</div>
-							<!-- Tambahkan kolom lain yang perlu diubah sesuai dengan struktur tabel tb_profil -->
+
 							<div class="mt-4">
 								<button type="submit" class="btn btn-primary">Simpan</button>
-								<!-- <a href="<?= base_url('admin/dashboard'); ?>" class="btn btn-secondary">Kembali</a> -->
 							</div>
 						</form>
+
 					</div><!--//app-card-body-->
 				</div><!--//app-card-->
 			</div><!--//col-->
