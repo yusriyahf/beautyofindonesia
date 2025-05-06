@@ -173,9 +173,10 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
 
     $routes->get('iklanutama', 'admin\IklanUtamaController::index2');
+    $routes->post('iklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
 });
 
-$routes->group('penulis', ['filter' => 'auth'], function ($routes) {
+$routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
     // Dashboard
     $routes->get('dashboard', 'penulis\Dashboard::index');
 
@@ -207,7 +208,6 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
     $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
-    $routes->post('iklanutama/ubahstatus', 'admin\IklanUtamaController::ubahstatus');
 
 
     // Artikel Iklan
@@ -222,6 +222,7 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
 
+    $routes->get('dashboard', 'penulis\Dashboard::index');
     $routes->get('artikel/index', 'admin\Artikel::index');
     $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
     $routes->get('artikel/tambah', 'admin\Artikel::tambah');

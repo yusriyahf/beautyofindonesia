@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\IklanUtamaModel;
 use App\Models\JenisIklanUtama;
+use App\Models\PemasukanUserModel;
 use App\Models\TipeIklanUtama;
 
 class IklanUtamaController extends BaseController
@@ -11,11 +12,13 @@ class IklanUtamaController extends BaseController
 
     private $iklanUtamaModel;
     private $tipeIklanUtamaModel;
+    private $PemasukanUserModel;
 
     public function __construct()
     {
         $this->iklanUtamaModel = new IklanUtamaModel();
         $this->tipeIklanUtamaModel = new TipeIklanUtama();
+        $this->PemasukanUserModel = new PemasukanUserModel();
     }
 
     public function index()
@@ -84,5 +87,72 @@ class IklanUtamaController extends BaseController
         ]);
 
         return redirect()->to(base_url('marketing/iklanutama'))->with('success', 'Pengajuan iklan berhasil disimpan.');
+    }
+
+
+    public function ubahStatus()
+    {
+        $id_iklan_utama = $this->request->getPost('id_iklan_utama');
+        $id_tipe_iklan_utama = $this->request->getPost('id_tipe_iklan_utama');
+        $status = $this->request->getPost('status');
+        $tanggal_mulai = $this->request->getPost('tanggal_mulai');
+        $durasi_bulan = (int) $this->request->getPost('durasi_bulan');
+
+
+        // Validasi status
+        if (!in_array($status, ['diterima', 'ditolak'])) {
+            return redirect()->back()->with('error', 'Status tidak valid.');
+        }
+
+        // Data yang mau diupdate di tb_artikel_iklan
+        $dataIklan = [
+            'status' => $status
+        ];
+
+        if ($status == 'diterima') {
+            if (!$tanggal_mulai || !$durasi_bulan) {
+                return redirect()->back()->with('error', 'Tanggal mulai dan durasi bulan wajib diisi.');
+            }
+
+            // Hitung tanggal selesai otomatis
+            $tanggal_mulai_obj = new \DateTime($tanggal_mulai);
+            $tanggal_selesai_obj = clone $tanggal_mulai_obj;
+            $tanggal_selesai_obj->modify("+{$durasi_bulan} months");
+
+            $dataIklan['tanggal_mulai'] = $tanggal_mulai_obj->format('Y-m-d');
+            $dataIklan['tanggal_selesai'] = $tanggal_selesai_obj->format('Y-m-d');
+
+            // Insert Komisi Pemasukan
+            $user_id = $this->request->getPost('user_id');
+            $total_harga = (float) $this->request->getPost('total_harga');
+
+            $dataPemasukan = [
+                'user_id'    => $user_id,
+                'jumlah'    => $total_harga,
+                'status'    => 'disetujui',
+                'tanggal'    => date('Y-m-d'),
+            ];
+
+            $this->tipeIklanUtamaModel->update($id_tipe_iklan_utama, [
+                'status' => 'tidak'
+            ]);
+            $this->iklanUtamaModel->update($id_iklan_utama, [
+                'status' => 'diterima',
+                'tanggal_mulai' =>  $dataIklan['tanggal_mulai'],
+                'tanggal_selesai' =>  $dataIklan['tanggal_selesai'],
+            ]);
+
+            $this->PemasukanUserModel->insert($dataPemasukan);
+        } else {
+            // Kalau ditolak, kosongkan tanggal_mulai dan tanggal_selesai
+            $dataIklan['tanggal_mulai'] = null;
+            $dataIklan['tanggal_selesai'] = null;
+        }
+
+        // Update status iklan di tb_artikel_iklan
+
+
+
+        return redirect()->back()->with('success', 'Status berhasil diubah.');
     }
 }

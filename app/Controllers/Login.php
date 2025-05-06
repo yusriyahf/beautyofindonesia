@@ -37,7 +37,20 @@ class Login extends BaseController
                     'role'      => $dataUser['role'],
                     'logged_in' => TRUE
                 ]);
-                return redirect()->to(base_url('admin/dashboard'));
+
+                // Redirect sesuai role
+                switch ($dataUser['role']) {
+                    case 'admin':
+                        return redirect()->to(base_url('admin/dashboard'));
+                    case 'marketing':
+                        return redirect()->to(base_url('marketing/dashboard'));
+                    case 'penulis':
+                        return redirect()->to(base_url('penulis/dashboard'));
+                    default:
+                        session()->destroy();
+                        session()->setFlashdata('error', 'Role tidak dikenali.');
+                        return redirect()->back();
+                }
             } else {
                 session()->setFlashdata('error', 'Username & Password Salah');
                 return redirect()->back();

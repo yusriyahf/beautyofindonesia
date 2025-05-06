@@ -12,6 +12,7 @@ use App\Models\ProvinsiModel;
 use App\Models\KabupatenModel;
 use App\Models\MetaModel;
 use App\Models\OlehOlehModel; // Add this line
+use App\Models\TipeIklanUtama;
 
 class Wisata extends BaseController
 {
@@ -24,6 +25,7 @@ class Wisata extends BaseController
     private $KabupatenModel;
     private $OlehOlehModel; // Add this line
     private $MetaModel; // Add this line
+    private $tipeIklanModel; // Add this line
 
     public function __construct()
     {
@@ -34,8 +36,9 @@ class Wisata extends BaseController
         $this->TempatWisataModel = new TempatWisataModel();
         $this->ProvinsiModel = new ProvinsiModel();
         $this->KabupatenModel = new KabupatenModel();
-        $this->OlehOlehModel = new OlehOlehModel(); // Initialize the OlehOlehModel
-        $this->MetaModel = new MetaModel(); // Initialize the OlehOlehModel
+        $this->OlehOlehModel = new OlehOlehModel();
+        $this->MetaModel = new MetaModel();
+        $this->tipeIklanModel = new TipeIklanUtama();
     }
 
     public function index()
@@ -82,7 +85,15 @@ class Wisata extends BaseController
             'type'        => 'article',
         ];
 
+
+
         $data = [
+            'iklanHeader' => $this->tipeIklanModel
+                ->where('nama', 'Wisata - Header')
+                ->first(),
+            'iklanFooter' => $this->tipeIklanModel
+                ->where('nama', 'Wisata - Footer')
+                ->first(),
             'tempatwisata' => $wisataBos,
             'pager' => $wisataQuery->pager,
             'provinsiYus' => $this->ProvinsiModel->getAllProvinsi(),

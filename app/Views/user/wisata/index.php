@@ -3,13 +3,21 @@
 
 <div class="container">
     <div class="row mt-3">
-        <div class="col-12 mt-5">
+        <?php if ($iklanHeader): ?>
+            <?php if ($iklanHeader['status'] === 'ada'): ?>
+                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
+            <?php else: ?>
+                <img src="<?= base_url('assets-baru/img/banner_utama2.png'); ?>" alt="" width="100%" class="mt-2">
+            <?php endif; ?>
+        <?php endif; ?>
+        <div class="col-12 mt-3">
             <div class="section-title">
                 <h1 id="sectionTitle" class="m-0 text-uppercase font-weight-bold h4">
                     <?= esc($title); ?>
                 </h1>
             </div>
         </div>
+
 
         <!-- Filter form -->
         <div class="col-12 mb-4">
@@ -248,9 +256,18 @@
             <p>No wisata data available.</p>
         <?php endif; ?>
     </div>
+    <?php if ($iklanFooter): ?>
+        <?php if ($iklanFooter['status'] === 'ada'): ?>
+            <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
+        <?php else: ?>
+            <img src="<?= base_url('assets-baru/img/banner_utama2.png'); ?>" alt="" width="100%" class="mt-2">
+        <?php endif; ?>
+    <?php endif; ?>
+
     <div class="pagination-container mb-4">
         <?= $pager->links('tempatwisata', 'default_pagination') ?>
     </div>
+
 </div>
 
 <style>

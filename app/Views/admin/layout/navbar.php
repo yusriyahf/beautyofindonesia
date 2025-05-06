@@ -21,8 +21,8 @@
                 <img src="<?= base_url('assets-baru/img/user/default_profil.jpg') ?>" alt="Admin Profile">
             </div>
             <div class="user-info">
-                <h5 class="user-name">Icha</h5>
-                <span class="user-role">Administrator</span>
+                <h5 class="user-name"><?= session()->get('username'); ?></h5>
+                <span class="user-role"><?= session()->get('role'); ?></span>
             </div>
         </div>
 
@@ -31,7 +31,7 @@
             <ul class="app-menu list-unstyled accordion" id="menu-accordion">
 
                 <!-- Dashboard -->
-                <li class="nav-item">
+                <li class="nav-item <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                     <a class="nav-link" href="<?= base_url('admin/dashboard') ?>">
                         <span class="nav-icon">
                             <i class="bi bi-speedometer2"></i>
@@ -39,7 +39,7 @@
                         <span class="nav-link-text">Dashboard Admin</span>
                     </a><!--//nav-link-->
                 </li><!--//nav-item-->
-                <li class="nav-item">
+                <li class="nav-item <?= (session()->get('role') === 'penulis') ? '' : 'd-none' ?>">
                     <!-- //Bootstrap Icons: https://icons.getbootstrap.com/ -->
                     <a class="nav-link" href="<?= base_url('penulis/dashboard') ?>">
                         <span class="nav-icon">
@@ -51,7 +51,7 @@
                         <span class="nav-link-text">Dashboard Penulis</span>
                     </a><!--//nav-link-->
                 </li><!--//nav-item-->
-                <li class="nav-item">
+                <li class="nav-item <?= (session()->get('role') === 'marketing') ? '' : 'd-none' ?>">
                     <!-- //Bootstrap Icons: https://icons.getbootstrap.com/ -->
                     <a class="nav-link" href="<?= base_url('marketing/dashboard') ?>">
                         <span class="nav-icon">
@@ -65,7 +65,7 @@
                 </li>
 
                 <!-- Content Management -->
-                <li class="nav-item has-submenu">
+                <li class="nav-item has-submenu ">
                     <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#contentMenu">
                         <span class="nav-icon">
                             <i class="bi bi-collection"></i>
@@ -175,7 +175,7 @@
                 </li>
 
                 <!-- Location Management -->
-                <li class="nav-item has-submenu">
+                <li class="nav-item has-submenu <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                     <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#locationMenu">
                         <span class="nav-icon">
                             <i class="bi bi-geo-alt"></i>
@@ -220,15 +220,39 @@
                     </a>
                     <div id="adsMenu" class="collapse submenu">
                         <ul class="nav flex-column">
-                            <li class="nav-item">
+                            <li class="nav-item  <?= (session()->get('role') === 'marketing') ? '' : 'd-none' ?>">
+                                <a class="nav-link" href="<?= base_url('marketing/iklanutama') ?>">
+                                    <span class="nav-icon">
+                                        <i class="bi bi-aspect-ratio"></i>
+                                    </span>
+                                    <span class="nav-link-text">Iklan Utama</span>
+                                </a>
+                            </li>
+                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                                 <a class="nav-link" href="<?= base_url('admin/artikeliklan') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-aspect-ratio"></i>
                                     </span>
-                                    <span class="nav-link-text">Permintaan Iklan</span>
+                                    <span class="nav-link-text">Iklan Konten</span>
                                 </a>
                             </li>
-                            <li class="nav-item has-submenu">
+                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
+                                <a class="nav-link" href="<?= base_url('admin/artikeliklan') ?>">
+                                    <span class="nav-icon">
+                                        <i class="bi bi-aspect-ratio"></i>
+                                    </span>
+                                    <span class="nav-link-text">Iklan Filter Konten</span>
+                                </a>
+                            </li>
+                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
+                                <a class="nav-link" href="<?= base_url('admin/iklanutama') ?>">
+                                    <span class="nav-icon">
+                                        <i class="bi bi-aspect-ratio"></i>
+                                    </span>
+                                    <span class="nav-link-text">Iklan Utama</span>
+                                </a>
+                            </li>
+                            <li class="nav-item has-submenu  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                                 <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#popupMenu">
                                     <span class="nav-icon">
                                         <i class="bi bi-window-stack"></i>
@@ -284,7 +308,7 @@
                                     <span class="nav-link-text">Saldo</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                                 <a class="nav-link" href="<?= base_url('admin/saldo/permintaan') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-arrow-repeat"></i>
@@ -297,7 +321,7 @@
                 </li>
 
                 <!-- System Management -->
-                <li class="nav-item has-submenu">
+                <li class="nav-item has-submenu  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                     <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#systemMenu">
                         <span class="nav-icon">
                             <i class="bi bi-gear"></i>

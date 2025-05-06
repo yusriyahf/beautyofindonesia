@@ -188,7 +188,7 @@
                                         <div class="modal fade" id="accModal<?= $iklan['id_iklan_utama'] ?>" tabindex="-1" aria-labelledby="accModalLabel<?= $iklan['id_iklan_utama'] ?>" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <form action="<?= base_url('admin/artikeliklan/ubahStatus') ?>" method="post">
+                                                    <form action="<?= base_url('admin/iklanutama/ubahStatus') ?>" method="post">
                                                         <?= csrf_field() ?>
                                                         <?php $durasiBulan = isset($iklan['rentang_bulan']) ? (int)$iklan['rentang_bulan'] : 0; ?>
 
@@ -196,8 +196,9 @@
                                                         <input type="hidden" name="user_id" value="<?= $iklan['id_marketing'] ?>">
                                                         <input type="hidden" name="total_harga" value="<?= $iklan['total_harga'] ?>">
 
-                                                        <input type="hidden" name="id" value="<?= $iklan['id_iklan_utama'] ?>">
-                                                        <input type="hidden" name="status_iklan" value="diterima">
+                                                        <input type="hidden" name="id_iklan_utama" value="<?= $iklan['id_iklan_utama'] ?>">
+                                                        <input type="hidden" name="id_tipe_iklan_utama" value="<?= $iklan['id_tipe_iklan_utama'] ?>">
+                                                        <input type="hidden" name="status" value="diterima">
                                                         <input type="hidden" name="durasi_bulan" value="<?= $durasiBulan ?>">
 
                                                         <div class="modal-header bg-success text-white">
