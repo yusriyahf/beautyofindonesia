@@ -177,12 +177,12 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
 
 
      //Jenis Iklan Utama
-     $routes->get('jenisiklanutama', 'admin\JenisIklanUtama::index');
-     $routes->get('jenisiklanutama/tambah', 'admin\JenisIklanUtama::tambah');
-     $routes->post('jenisiklanutama/proses_tambah', 'admin\JenisIklanUtama::proses_tambah');
-     $routes->get('jenisiklanutama/edit/(:num)', 'admin\JenisIklanUtama::edit/$1');
-     $routes->post('jenisiklanutama/proses_edit/(:num)', 'admin\JenisIklanUtama::update/$1');
-     $routes->get('jenisiklanutama/delete/(:num)', 'admin\JenisIklanUtama::delete/$1');
+     $routes->get('tipeiklanutama', 'admin\TipeIklanUtama::index');
+     $routes->get('tipeiklanutama/tambah', 'admin\TipeIklanUtama::tambah');
+     $routes->post('tipeiklanutama/proses_tambah', 'admin\TipeIklanUtama::proses_tambah');
+     $routes->get('tipeiklanutama/edit/(:num)', 'admin\TipeIklanUtama::edit/$1');
+     $routes->post('tipeiklanutama/proses_edit/(:num)', 'admin\TipeIklanUtama::update/$1');
+     $routes->get('tipeiklanutama/delete/(:num)', 'admin\TipeIklanUtama::delete/$1');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {

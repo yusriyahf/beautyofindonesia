@@ -2,28 +2,28 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\JenisIklanUtamaModel;
+use App\Models\TipeIklanUtamaModel;
 
-class JenisIklanUtama extends BaseController
+class TipeIklanUtama extends BaseController
 {
     protected $model;
 
     public function __construct()
     {
-        $this->model = new JenisIklanUtamaModel();
+        $this->model = new TipeIklanUtamaModel();
     }
 
     public function index()
     {
-        $data['jenisiklanutama'] = $this->model->findAll();
-        return view('admin/jenis_iklan_utama/index', $data);
+        $data['tipeiklanutama'] = $this->model->findAll();
+        return view('admin/tipe_iklan_utama/index', $data);
     }
 
     public function tambah()
     {
         $validation = \Config\Services::validation();
     
-        return view('admin/jenis_iklan_utama/tambah', [
+        return view('admin/tipe_iklan_utama/tambah', [
             'validation' => $validation
         ]);
     }   
@@ -37,7 +37,7 @@ class JenisIklanUtama extends BaseController
             'created_at' => date('Y-m-d H:i:s'),
         ]);
     
-        return redirect()->to('/admin/jenisiklanutama'); // <- sudah bener
+        return redirect()->to('/admin/tipeiklanutama'); // <- sudah bener
     }
 
     public function edit($id)
@@ -46,10 +46,10 @@ class JenisIklanUtama extends BaseController
 
         // Jika data iklan tidak ditemukan
         if (!$iklan) {
-            return redirect()->to('/admin/jenisiklanutama')->with('error', 'Data tidak ditemukan.');
+            return redirect()->to('/admin/tipeiklanutama')->with('error', 'Data tidak ditemukan.');
         }
 
-        return view('admin/jenis_iklan_utama/edit', [
+        return view('admin/tipe_iklan_utama/edit', [
             'iklan' => $iklan,  // Mengirim data iklan ke view
             'validation' => \Config\Services::validation()
         ]);
@@ -64,22 +64,22 @@ class JenisIklanUtama extends BaseController
             'created_at' => $this->request->getPost('created_at'),
         ]);
     
-        return redirect()->to('/admin/jenisiklanutama'); // <- sudah bener
+        return redirect()->to('/admin/tipeiklanutama'); // <- sudah bener
     }
     
     public function delete($id)
 {
     if ($id === null) {
         // Misalnya kalo id kosong/null, biar aman lempar balik
-        return redirect()->to('/admin/jenisiklanutama')->with('error', 'ID tidak ditemukan.');
+        return redirect()->to('/admin/tipeiklanutama')->with('error', 'ID tidak ditemukan.');
     }
 
     $deleted = $this->model->delete($id);
 
     if ($deleted) {
-        return redirect()->to('/admin/jenisiklanutama')->with('success', 'Data berhasil dihapus.');
+        return redirect()->to('/admin/tipeiklanutama')->with('success', 'Data berhasil dihapus.');
     } else {
-        return redirect()->to('/admin/jenisiklanutama')->with('error', 'Gagal menghapus data.');
+        return redirect()->to('/admin/tipeiklanutama')->with('error', 'Gagal menghapus data.');
     }
 }
 
