@@ -28,6 +28,7 @@ class OlehOleh extends BaseController
 
         return view('admin/oleh_oleh/index', [
             'data_oleh_oleh' => $data_oleh_oleh,
+            'pager' => $this->olehOlehModel->pager
         ]);
     }
 

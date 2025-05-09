@@ -24,7 +24,13 @@ class TempatWisata extends BaseController
     public function index()
     {
         $data['wisata'] = $this->tempatWisataModel->getAllWisataAdmin();
-        return view('admin/wisata/index', $data);
+        return view(
+            'admin/wisata/index',
+            [
+                'wisata' => $this->tempatWisataModel->getAllWisataAdmin(),
+                'pager' => $this->tempatWisataModel->pager
+            ]
+        );
     }
 
     // Show the form to add new wisata

@@ -200,7 +200,7 @@ class OlehOlehModel extends Model
             ->findAll(); // Gunakan findAll() untuk menghindari paginasi
     }
 
-    public function getAllOlehOleh($limit = 9, $offset = 0)
+    public function getAllOlehOleh($limit = 10, $offset = 0)
     {
         return $this->select('tb_oleholeh.*, 
                           tb_kategori_oleholeh.nama_kategori_oleholeh, 
@@ -288,6 +288,6 @@ class OlehOlehModel extends Model
 
     public function getTotalOlehByPenulis($id_penulis)
     {
-     return $this->where('id_penulis', $id_penulis)->countAllResults();
+        return $this->where('id_penulis', $id_penulis)->countAllResults();
     }
 }
