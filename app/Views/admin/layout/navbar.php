@@ -99,8 +99,9 @@
                                             </a>
                                         </li>
 
+                                        
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/kategori/index') ?>">
+                                            <a class="nav-link" href="<?= base_url('admin/kategori_artikel/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-tags"></i>
                                                 </span>
@@ -112,50 +113,67 @@
                             </li>
 
                             <!-- Wisata Section -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url('admin/tempat_wisata/index') ?>">
+                            <li class="nav-item has-submenu">
+                                <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#wisataMenu">
                                     <span class="nav-icon">
-                                        <i class="bi bi-map"></i>
+                                        <i class="bi bi-journals"></i>
                                     </span>
                                     <span class="nav-link-text">Tempat Wisata</span>
-                                </a>
-                            </li>
-
-                            <!-- Oleh-Oleh Section -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url('admin/oleh_oleh/index') ?>">
-                                    <span class="nav-icon">
-                                        <i class="bi bi-gift"></i>
-                                    </span>
-                                    <span class="nav-link-text">Oleh-Oleh</span>
-                                </a>
-                            </li>
-
-                            <!-- Kategori Section -->
-                            <li class="nav-item has-submenu">
-                                <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#kategoriMenu">
-                                    <span class="nav-icon">
-                                        <i class="bi bi-bookmarks"></i>
-                                    </span>
-                                    <span class="nav-link-text">Kategori</span>
                                     <span class="submenu-arrow">
                                         <i class="bi bi-chevron-down"></i>
                                     </span>
                                 </a>
-                                <div id="kategoriMenu" class="collapse submenu">
+                                <div id="wisataMenu" class="collapse submenu">
                                     <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('admin/tempat_wisata/index') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-file-earmark-text"></i>
+                                                </span>
+                                                <span class="nav-link-text">Semua Tempat Wisata</span>
+                                            </a>
+                                        </li>
+
+                                        
                                         <li class="nav-item">
                                             <a class="nav-link" href="<?= base_url('admin/kategori_wisata/index') ?>">
                                                 <span class="nav-icon">
-                                                    <i class="bi bi-signpost-split"></i>
+                                                    <i class="bi bi-tags"></i>
                                                 </span>
-                                                <span class="nav-link-text">Kategori Wisata</span>
+                                                <span class="nav-link-text">Kategori Tempat Wisata</span>
                                             </a>
                                         </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <!-- Oleh-Oleh Section -->
+                            <li class="nav-item has-submenu">
+                                <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#olehMenu">
+                                    <span class="nav-icon">
+                                        <i class="bi bi-journals"></i>
+                                    </span>
+                                    <span class="nav-link-text">Tempat Wisata</span>
+                                    <span class="submenu-arrow">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </span>
+                                </a>
+                                <div id="olehMenu" class="collapse submenu">
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/kategori_oleholeh/index') ?>">
+                                            <a class="nav-link" href="<?= base_url('admin/oleh_oleh/index') ?>">
                                                 <span class="nav-icon">
-                                                    <i class="bi bi-basket"></i>
+                                                    <i class="bi bi-file-earmark-text"></i>
+                                                </span>
+                                                <span class="nav-link-text">Semua Oleh-Oleh</span>
+                                            </a>
+                                        </li>
+
+                                        
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('admin/kategori_oleh_oleh/index') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-tags"></i>
                                                 </span>
                                                 <span class="nav-link-text">Kategori Oleh-Oleh</span>
                                             </a>
@@ -163,6 +181,7 @@
                                     </ul>
                                 </div>
                             </li>
+                           
                         </ul>
                     </div>
                 </li>
@@ -213,40 +232,86 @@
                     </a>
                     <div id="adsMenu" class="collapse submenu">
                         <ul class="nav flex-column">
-                            <li class="nav-item  <?= (session()->get('role') === 'marketing') ? '' : 'd-none' ?>">
-                                <a class="nav-link" href="<?= base_url('marketing/iklanutama') ?>">
+                            <li class="nav-item has-submenu  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
+                                <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#iklanKontenMenu">
                                     <span class="nav-icon">
-                                        <i class="bi bi-aspect-ratio"></i>
-                                    </span>
-                                    <span class="nav-link-text">Iklan Utama</span>
-                                </a>
-                            </li>
-                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
-                                <a class="nav-link" href="<?= base_url('admin/acciklan') ?>">
-                                    <span class="nav-icon">
-                                        <i class="bi bi-aspect-ratio"></i>
+                                        <i class="bi bi-window-stack"></i>
                                     </span>
                                     <span class="nav-link-text">Iklan Konten</span>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
-                                <a class="nav-link" href="<?= base_url('admin/artikeliklan') ?>">
-                                    <span class="nav-icon">
-                                        <i class="bi bi-aspect-ratio"></i>
+                                    <span class="submenu-arrow">
+                                        <i class="bi bi-chevron-down"></i>
                                     </span>
-                                    <span class="nav-link-text">Iklan Filter Konten</span>
                                 </a>
+                                <div id="iklanKontenMenu" class="collapse submenu">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('admin/') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-window-plus"></i>
+                                                </span>
+                                                <span class="nav-link-text">Daftar Iklan Konten</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('admin/') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-window-plus"></i>
+                                                </span>
+                                                <span class="nav-link-text">Acc Iklan Konten</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('admin/') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-window"></i>
+                                                </span>
+                                                <span class="nav-link-text">Tipe Iklan Konten</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
-                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
-                                <a class="nav-link" href="<?= base_url('admin/iklanutama') ?>">
+                            
+                            <li class="nav-item has-submenu  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
+                                <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#iklanUtamaMenu">
                                     <span class="nav-icon">
-                                        <i class="bi bi-aspect-ratio"></i>
+                                        <i class="bi bi-window-stack"></i>
                                     </span>
                                     <span class="nav-link-text">Iklan Utama</span>
+                                    <span class="submenu-arrow">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </span>
                                 </a>
+                                <div id="iklanUtamaMenu" class="collapse submenu">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('marketing/') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-window-plus"></i>
+                                                </span>
+                                                <span class="nav-link-text">Daftar Iklan Utama</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('marketing/') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-window-plus"></i>
+                                                </span>
+                                                <span class="nav-link-text">Acc Iklan Utama</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?= base_url('marketing/') ?>">
+                                                <span class="nav-icon">
+                                                    <i class="bi bi-window"></i>
+                                                </span>
+                                                <span class="nav-link-text">Tipe Iklan Utama</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
+                            
                             <li class="nav-item has-submenu  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                                 <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#popupMenu">
                                     <span class="nav-icon">
