@@ -59,9 +59,14 @@
                         </thead>
                         <tbody>
                             <?php if (!empty($data_oleh_oleh) && is_array($data_oleh_oleh)): ?>
-                                <?php foreach ($data_oleh_oleh as $index => $item): ?>
+                                <?php
+                                $page = $pager->getCurrentPage('oleholeh');
+                                $offset = ($page - 1) * 10;
+
+                                $i = $offset + 1;
+                                foreach ($data_oleh_oleh as $index => $item): ?>
                                     <tr>
-                                        <td class="text-center"><?= $index + 1 ?></td>
+                                        <td class="text-center"><?= $i++ ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-2">
@@ -122,20 +127,9 @@
 
             <?php if (!empty($data_oleh_oleh) && is_array($data_oleh_oleh)): ?>
                 <div class="app-card-footer px-4 py-3">
-                    <nav aria-label="Navigasi halaman">
-                        <ul class="pagination justify-content-end mb-0">
-                            <!-- Tautan pagination akan ditempatkan di sini -->
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Sebelumnya</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Selanjutnya</a>
-                            </li>
-                        </ul>
-                    </nav>
+                    <div class="mt-3">
+                        <?= $pager->links('oleholeh', 'bootstrap_full') ?>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>

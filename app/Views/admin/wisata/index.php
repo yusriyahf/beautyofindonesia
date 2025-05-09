@@ -47,9 +47,14 @@
                         </thead>
                         <tbody>
                             <?php if (count($wisata) > 0): ?>
-                                <?php foreach ($wisata as $index => $w): ?>
+                                <?php
+                                $page = $pager->getCurrentPage('tempatwisata');
+                                $offset = ($page - 1) * 10;
+
+                                $i = $offset + 1;
+                                foreach ($wisata as $index => $w): ?>
                                     <tr>
-                                        <td class="text-center"><?= $index + 1 ?></td>
+                                        <td class="text-center"><?= $i++ ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-2">
@@ -115,20 +120,9 @@
 
             <?php if (count($wisata) > 0): ?>
                 <div class="app-card-footer px-4 py-3">
-                    <nav aria-label="Table navigation">
-                        <ul class="pagination justify-content-end mb-0">
-                            <!-- Pagination links would go here -->
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
+                    <div class="mt-3">
+                        <?= $pager->links('tempatwisata', 'bootstrap_full') ?>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>

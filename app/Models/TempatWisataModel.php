@@ -218,9 +218,9 @@ class TempatWisataModel extends Model
             ->paginate(9, 'tempatwisata'); // Pagination dengan alias 'tempatwisata'
     }
 
-    public function getAllWisataAdmin()
+    public function getAllWisataAdmin($perPage = 10)
     {
-        return $this->select('tb_tempatwisata.*, 
+        $builder = $this->select('tb_tempatwisata.*, 
                               tb_kategori_wisata.nama_kategori_wisata, 
                               tb_kategori_wisata.nama_kategori_wisata_en, 
                               tb_kotakabupaten.nama_kotakabupaten, 
@@ -231,9 +231,12 @@ class TempatWisataModel extends Model
             ->join('tb_kategori_wisata', 'tb_tempatwisata.id_kategori_wisata = tb_kategori_wisata.id_kategori_wisata')
             ->join('tb_kotakabupaten', 'tb_tempatwisata.id_kotakabupaten = tb_kotakabupaten.id_kotakabupaten')
             ->join('tb_provinsi', 'tb_kotakabupaten.id_provinsi = tb_provinsi.id_provinsi')
-            ->join('tb_penulis', 'tb_tempatwisata.id_penulis = tb_penulis.id_penulis', 'left') // Join the penulis table
-            ->findAll();
+            ->join('tb_penulis', 'tb_tempatwisata.id_penulis = tb_penulis.id_penulis', 'left')
+            ->orderBy('tb_tempatwisata.id_wisata', 'DESC'); // Tambahkan order jika diperlukan
+
+        return $builder->paginate($perPage, 'tempatwisata');
     }
+
 
 
     // public function getWisataDetail($id_wisata)
@@ -295,9 +298,7 @@ class TempatWisataModel extends Model
 
 
     public function getTotalWisataByPenulis($id_penulis)
-     {
-     return $this->where('id_penulis', $id_penulis)->countAllResults();
-     }
-
-
+    {
+        return $this->where('id_penulis', $id_penulis)->countAllResults();
+    }
 }
