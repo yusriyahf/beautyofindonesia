@@ -6,6 +6,7 @@ use App\Models\IklanUtamaModel;
 use App\Models\JenisIklanUtama;
 use App\Models\PemasukanUserModel;
 use App\Models\TipeIklanUtama;
+use App\Models\TipeIklanUtamaModel;
 
 class IklanUtamaController extends BaseController
 {
@@ -17,7 +18,7 @@ class IklanUtamaController extends BaseController
     public function __construct()
     {
         $this->iklanUtamaModel = new IklanUtamaModel();
-        $this->tipeIklanUtamaModel = new TipeIklanUtama();
+        $this->tipeIklanUtamaModel = new TipeIklanUtamaModel();
         $this->PemasukanUserModel = new PemasukanUserModel();
     }
 
