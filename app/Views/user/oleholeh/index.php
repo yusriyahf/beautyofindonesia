@@ -6,6 +6,19 @@
 
     <!-- Oleh-Oleh Listing -->
     <div class="row mt-3">
+        <div class="col-md-12 text-center">
+            <?php if ($iklanHeaderCek): ?>
+                <?php if ($iklanHeaderCek['status'] === 'ada'): ?>
+
+                    <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+
+                <?php else: ?>
+                    <a href="<?= esc($iklanHeader['link_iklan']) ?>" target="_blank">
+                        <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanHeader['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2">
+                    </a>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
         <div class="col-12 mt-5">
             <div class="section-title">
                 <h4 id="sectionTitle" class="m-0 text-uppercase font-weight-bold"><?= esc($title); ?></h4>
@@ -223,6 +236,21 @@
         <?php endif; ?>
     </div>
 
+    <div class="col-md-12 text-center">
+
+        <?php if ($iklanFooterCek): ?>
+            <?php if ($iklanFooterCek['status'] === 'ada'): ?>
+
+                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+
+            <?php else: ?>
+                <a href="<?= esc($iklanFooter['link_iklan']) ?>" target="_blank">
+                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanFooter['thumbnail_iklan'])) ?>" alt="" width="80%" class="mt-2">
+                </a>
+            <?php endif; ?>
+        <?php endif; ?>
+
+    </div>
     <div class="pagination-container mb-4">
         <?= $pager->links('oleholeh', 'default_pagination') ?>
     </div>

@@ -10,4 +10,9 @@ class TipeIklanUtama extends Model
     protected $primaryKey = 'id_tipe_iklan_utama';
     protected $returnType = 'array';
     protected $allowedFields = ['id_tipe_iklan_utama', 'nama', 'harga', 'status', 'created_at'];
+
+    public function cekTipeIklan($nama)
+    {
+        return $this->where('nama', $nama)->first();
+    }
 }

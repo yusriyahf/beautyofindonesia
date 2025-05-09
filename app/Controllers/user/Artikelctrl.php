@@ -4,11 +4,13 @@ namespace App\Controllers\user;
 
 use App\Controllers\user\BaseController;
 use App\Models\ArtikelModel;
+use App\Models\IklanUtamaModel;
 use App\Models\KategoriModel;
 use App\Models\TentangModel;
 use App\Models\KategoriWisataModel;
 use App\Models\KategoriOlehOlehModel;
 use App\Models\MetaModel;
+use App\Models\TipeIklanUtama;
 
 class Artikelctrl extends BaseController
 {
@@ -19,6 +21,8 @@ class Artikelctrl extends BaseController
     private $KategoriOlehOlehModel;
     private $MetaModel;
     protected $lang;
+    private $tipeIklanModel; // Add this line
+    private $iklanUtamaModel; // Add this line
 
     public function __construct()
     {
@@ -29,6 +33,8 @@ class Artikelctrl extends BaseController
         $this->KategoriOlehOlehModel = new KategoriOlehOlehModel();
         $this->MetaModel = new MetaModel();
         $this->lang = session()->get('lang') ?? 'id';
+        $this->tipeIklanModel = new TipeIklanUtama();
+        $this->iklanUtamaModel = new IklanUtamaModel();
     }
 
     public function index($slug_kategori)
@@ -100,7 +106,22 @@ class Artikelctrl extends BaseController
             'type'        => 'article',
         ];
 
+
+        $namaIklanHeader = formatNamaIklan('Artikel', $slug_kategori, 'Header');
+        $namaIklanFooter = formatNamaIklan('Artikel', $slug_kategori, 'Footer');
+
+
+        $iklanHeaderCek = $this->tipeIklanModel->cekTipeIklan($namaIklanHeader);
+        $iklanHeader = $iklanHeaderCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanHeaderCek['id_tipe_iklan_utama']) : null;
+
+        $iklanFooterCek = $this->tipeIklanModel->cekTipeIklan($namaIklanFooter);
+        $iklanFooter = $iklanFooterCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanFooterCek['id_tipe_iklan_utama']) : null;
+
         $data = [
+            'iklanHeaderCek' => $iklanHeaderCek,
+            'iklanFooterCek' => $iklanFooterCek,
+            'iklanHeader' => $iklanHeader,
+            'iklanFooter' => $iklanFooter,
             'canonical' => $canonical,
             'artikel' => $articles,
             'pager' => $pager,
@@ -156,8 +177,17 @@ class Artikelctrl extends BaseController
             'type'        => 'article',
         ];
 
+        $iklanHeaderCek = $this->tipeIklanModel->cekTipeIklan('Artikel - Header');
+        $iklanHeader = $iklanHeaderCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanHeaderCek['id_tipe_iklan_utama']) : null;
+
+        $iklanFooterCek = $this->tipeIklanModel->cekTipeIklan('Artikel - Footer');
+        $iklanFooter = $iklanFooterCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanFooterCek['id_tipe_iklan_utama']) : null;
         // Ambil semua artikel sebagai array
         $data = [
+            'iklanHeaderCek' => $iklanHeaderCek,
+            'iklanFooterCek' => $iklanFooterCek,
+            'iklanHeader' => $iklanHeader,
+            'iklanFooter' => $iklanFooter,
             'artikel' => $artikelQuery->getAllArtikelWithKategori($limit),
             'pager' => $artikelQuery->pager, // Pass pager object
             'kategori' => $this->KategoriModel->getKategori(),

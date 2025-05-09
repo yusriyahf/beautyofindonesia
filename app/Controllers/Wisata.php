@@ -88,42 +88,16 @@ class Wisata extends BaseController
             'type'        => 'article',
         ];
 
+        $iklanHeaderCek = $this->tipeIklanModel->cekTipeIklan('Wisata - Header');
+        $iklanHeader = $iklanHeaderCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanHeaderCek['id_tipe_iklan_utama']) : null;
 
-        $tipeIklan = $this->tipeIklanModel
-            ->where('nama', 'Wisata - Header')
-            ->first();
+        $iklanFooterCek = $this->tipeIklanModel->cekTipeIklan('Wisata - Footer');
+        $iklanFooter = $iklanFooterCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanFooterCek['id_tipe_iklan_utama']) : null;
 
-        $iklanHeader = null;
-
-        if ($tipeIklan) {
-            $today = date('Y-m-d');
-            $iklanHeader = $this->iklanUtamaModel
-                ->where('id_tipe_iklan_utama', $tipeIklan['id_tipe_iklan_utama'])
-                ->where('tanggal_mulai <=', $today)
-                ->where('tanggal_selesai >=', $today)
-                ->first();
-        }
-
-        $tipeFooter = $this->tipeIklanModel
-            ->where('nama', 'Wisata - Footer')
-            ->first();
-
-        $iklanFooter = null;
-        if ($tipeFooter) {
-            $iklanFooter = $this->iklanUtamaModel
-                ->where('id_tipe_iklan_utama', $tipeFooter['id_tipe_iklan_utama'])
-                ->where('tanggal_mulai <=', $today)
-                ->where('tanggal_selesai >=', $today)
-                ->first();
-        }
 
         $data = [
-            'iklanHeaderCek' => $this->tipeIklanModel
-                ->where('nama', 'Wisata - Header')
-                ->first(),
-            'iklanFooterCek' => $this->tipeIklanModel
-                ->where('nama', 'Wisata - Footer')
-                ->first(),
+            'iklanHeaderCek' => $iklanHeaderCek,
+            'iklanFooterCek' => $iklanFooterCek,
             'iklanHeader' => $iklanHeader,
             'iklanFooter' => $iklanFooter,
             'tempatwisata' => $wisataBos,
@@ -349,8 +323,22 @@ class Wisata extends BaseController
             'type'        => 'article',
         ];
 
+        $namaIklanHeader = formatNamaIklan('Wisata', $slug_kategori_wisata, 'Header');
+        $namaIklanFooter = formatNamaIklan('Wisata', $slug_kategori_wisata, 'Footer');
+
+
+        $iklanHeaderCek = $this->tipeIklanModel->cekTipeIklan($namaIklanHeader);
+        $iklanHeader = $iklanHeaderCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanHeaderCek['id_tipe_iklan_utama']) : null;
+
+        $iklanFooterCek = $this->tipeIklanModel->cekTipeIklan($namaIklanFooter);
+        $iklanFooter = $iklanFooterCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanFooterCek['id_tipe_iklan_utama']) : null;
+
         // Data untuk view
         $data = [
+            'iklanHeaderCek' => $iklanHeaderCek,
+            'iklanFooterCek' => $iklanFooterCek,
+            'iklanHeader' => $iklanHeader,
+            'iklanFooter' => $iklanFooter,
             'tempatwisata' => $kategoriWisata,
             'kategori' => $this->KategoriModel->getKategori(),
             'wisataList' => $wisataBos,

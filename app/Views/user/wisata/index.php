@@ -8,7 +8,7 @@
             <?php if ($iklanHeaderCek): ?>
                 <?php if ($iklanHeaderCek['status'] === 'ada'): ?>
 
-                    <img src="<?= base_url('assets/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
+                    <img src="<?= base_url('assets_baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
 
                 <?php else: ?>
                     <a href="<?= esc($iklanHeader['link_iklan']) ?>" target="_blank">
@@ -276,7 +276,7 @@
         <?php if ($iklanFooterCek): ?>
             <?php if ($iklanFooterCek['status'] === 'ada'): ?>
 
-                <img src="<?= base_url('assets/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
+                <img src="<?= base_url('assets_baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
 
             <?php else: ?>
                 <a href="<?= esc($iklanFooter['link_iklan']) ?>" target="_blank">

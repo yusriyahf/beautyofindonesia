@@ -4,6 +4,7 @@ namespace App\Controllers\user;
 
 use App\Controllers\user\BaseController;
 use App\Models\ArtikelModel;
+use App\Models\IklanUtamaModel;
 use App\Models\KategoriModel;
 use App\Models\PenulisModel;
 use App\Models\TentangModel;
@@ -14,6 +15,8 @@ use App\Models\KategoriOlehOlehModel;
 use App\Models\MetaModel;
 use App\Models\ProvinsiModel;
 use App\Models\KabupatenModel;
+use App\Models\TipeIklanUtama;
+use App\Models\TipeIklanUtamaModel;
 
 class Homectrl extends BaseController
 {
@@ -28,6 +31,8 @@ class Homectrl extends BaseController
     private $ProvinsiModel;
     private $KabupatenModel;
     private $MetaModel;
+    private $tipeIklanModel; // Add this line
+    private $iklanUtamaModel; // Add this line
 
     public function __construct()
     {
@@ -42,6 +47,8 @@ class Homectrl extends BaseController
         $this->KategoriWisataModel = new KategoriWisataModel();
         $this->KategoriOlehOlehModel = new KategoriOlehOlehModel();
         $this->MetaModel = new MetaModel();
+        $this->tipeIklanModel = new TipeIklanUtama();
+        $this->iklanUtamaModel = new IklanUtamaModel();
     }
 
     public function index()
@@ -95,7 +102,23 @@ class Homectrl extends BaseController
             'type'        => 'article',
         ];
 
+        $tipeBeranda1 = $this->tipeIklanModel->cekTipeIklan('Beranda - 1');
+        $iklanBeranda1 = $tipeBeranda1 ? $this->iklanUtamaModel->getIklanAktifByTipe($tipeBeranda1['id_tipe_iklan_utama']) : null;
+
+        $tipeBeranda2 = $this->tipeIklanModel->cekTipeIklan('Beranda - 2');
+        $iklanBeranda2 = $tipeBeranda2 ? $this->iklanUtamaModel->getIklanAktifByTipe($tipeBeranda2['id_tipe_iklan_utama']) : null;
+
+        $tipeBeranda3 = $this->tipeIklanModel->cekTipeIklan('Beranda - 3');
+        $iklanBeranda3 = $tipeBeranda3 ? $this->iklanUtamaModel->getIklanAktifByTipe($tipeBeranda3['id_tipe_iklan_utama']) : null;
+
+
         $data = [
+            'tipeBeranda1' => $tipeBeranda1,
+            'tipeBeranda2' => $tipeBeranda2,
+            'tipeBeranda3' => $tipeBeranda3,
+            'iklanBeranda1' => $iklanBeranda1,
+            'iklanBeranda2' => $iklanBeranda2,
+            'iklanBeranda3' => $iklanBeranda3,
             'artikel' => $this->ArtikelModel->getArtikelRandom(),
             'provinsi' => $this->ProvinsiModel->getProvinsi($lang),
             'kabupaten' => $this->KabupatenModel->getKabupaten($lang),

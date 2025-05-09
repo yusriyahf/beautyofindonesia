@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\user\BaseController;
+use App\Models\IklanUtamaModel;
 use App\Models\OlehOlehModel;
 use App\Models\KategoriOlehOlehModel;
 use App\Models\TentangModel;
@@ -12,6 +13,8 @@ use App\Models\KategoriModel;
 use App\Models\ProvinsiModel; // Add this line
 use App\Models\KabupatenModel; // Add this
 use App\Models\MetaModel;
+use App\Models\TipeIklanUtama;
+use App\Models\TipeIklanUtamaModel;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\Cookie\Cookie;
 
@@ -26,6 +29,8 @@ class OlehOleh extends BaseController
     private $ProvinsiModel; // Add this line
     private $KabupatenModel; // Add this
     private $MetaModel; // Add this
+    private $tipeIklanModel; // Add this line
+    private $iklanUtamaModel; // Add this line
 
     public function __construct()
     {
@@ -38,6 +43,8 @@ class OlehOleh extends BaseController
         $this->ProvinsiModel = new ProvinsiModel(); // Initialize the ProvinsiModel
         $this->KabupatenModel = new KabupatenModel(); // Initialize KabupatenModel
         $this->MetaModel = new MetaModel(); // Initialize KabupatenModel
+        $this->tipeIklanModel = new TipeIklanUtama();
+        $this->iklanUtamaModel = new IklanUtamaModel();
     }
 
     public function index()
@@ -79,8 +86,18 @@ class OlehOleh extends BaseController
             'type'        => 'article',
         ];
 
+        $iklanHeaderCek = $this->tipeIklanModel->cekTipeIklan('Oleh-Oleh - Header');
+        $iklanHeader = $iklanHeaderCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanHeaderCek['id_tipe_iklan_utama']) : null;
+
+        $iklanFooterCek = $this->tipeIklanModel->cekTipeIklan('Oleh-Oleh - Footer');
+        $iklanFooter = $iklanFooterCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanFooterCek['id_tipe_iklan_utama']) : null;
+
         // Fetch filtered results with pagination
         $data = [
+            'iklanHeaderCek' => $iklanHeaderCek,
+            'iklanFooterCek' => $iklanFooterCek,
+            'iklanHeader' => $iklanHeader,
+            'iklanFooter' => $iklanFooter,
             'olehData' => $olehData,  // Make sure to use the query with filters applied
             'pager' => $olehOlehQuery->pager,  // Instance pager for pagination
             'provinsiYus' => $this->ProvinsiModel->getAllProvinsi(),
@@ -273,7 +290,21 @@ class OlehOleh extends BaseController
             'type'        => 'article',
         ];
 
+        $namaIklanHeader = formatNamaIklan('Oleh-Oleh', $slug_kategori_oleholeh, 'Header');
+        $namaIklanFooter = formatNamaIklan('Oleh-Oleh', $slug_kategori_oleholeh, 'Footer');
+
+
+        $iklanHeaderCek = $this->tipeIklanModel->cekTipeIklan($namaIklanHeader);
+        $iklanHeader = $iklanHeaderCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanHeaderCek['id_tipe_iklan_utama']) : null;
+
+        $iklanFooterCek = $this->tipeIklanModel->cekTipeIklan($namaIklanFooter);
+        $iklanFooter = $iklanFooterCek ? $this->iklanUtamaModel->getIklanAktifByTipe($iklanFooterCek['id_tipe_iklan_utama']) : null;
+
         $data = [
+            'iklanHeaderCek' => $iklanHeaderCek,
+            'iklanFooterCek' => $iklanFooterCek,
+            'iklanHeader' => $iklanHeader,
+            'iklanFooter' => $iklanFooter,
             'kategoriFix' => $kategori,
             'slug' => $slug_kategori_oleholeh,
             'olehData' => $olehData,
