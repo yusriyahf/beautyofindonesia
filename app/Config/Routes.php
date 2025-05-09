@@ -159,6 +159,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->post('tempat_wisata/proses_tambah', 'admin\TempatWisata::proses_tambah');
     $routes->get('tempat_wisata/edit/(:num)', 'admin\TempatWisata::edit/$1');
     $routes->post('tempat_wisata/proses_edit/(:num)', 'admin\TempatWisata::proses_edit/$1');
+    $routes->get('tempat_wisata/detail/(:num)', 'admin\TempatWisata::detail/$1');
     $routes->get('tempat_wisata/delete/(:num)', 'admin\TempatWisata::delete/$1');
 
     // Oleh Oleh

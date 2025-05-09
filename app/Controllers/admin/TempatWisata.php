@@ -186,6 +186,27 @@ class TempatWisata extends BaseController
         return redirect()->to(base_url('admin/tempat_wisata/index'));
     }
 
+    // View detail wisata
+    public function detail($id_wisata)
+    {
+        $wisata = $this->tempatWisataModel->find($id_wisata);
+
+        if (!$wisata) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Data tempat wisata dengan ID $id_wisata tidak ditemukan.");
+        }
+
+        $kategori = $this->kategoriWisataModel->find($wisata['id_kategori_wisata']);
+        $kotakab = $this->kabupatenModel->find($wisata['id_kotakabupaten']);
+
+        return view('admin/wisata/detail', [
+            'wisata' => $wisata,
+            'kategori' => $kategori,
+            'kotakabupaten' => $kotakab
+        ]);
+    }
+
+
+
     // Delete wisata
     public function delete($id_wisata)
     {
