@@ -10,7 +10,7 @@
                 <p class="text-muted mb-0">Kelola semua artikel beriklan di sini</p>
             </div>
             <div class="col-auto">
-                <a href="<?= base_url('admin/artikel/tambah_artikel_iklan') ?>" class="btn app-btn-primary">
+                <a href="<?= base_url('admin/daftariklankonten/tambah') ?>" class="btn app-btn-primary">
                     <i class="fas fa-plus me-2"></i>Tambah Data
                 </a>
             </div>
@@ -19,7 +19,7 @@
         <!-- Filter Section -->
         <div class="app-card app-card-settings shadow-sm p-4 mb-4">
             <div class="app-card-body">
-                <form method="get" action="<?= base_url('admin/artikel_iklan') ?>">
+                <form method="get" action="<?= base_url('admin/daftariklankonten') ?>">
                     <div class="row align-items-end">
                         <div class="col-md-3 mb-3">
                             <label for="start_date" class="form-label">Tanggal Mulai</label>
@@ -46,7 +46,7 @@
                             <button type="submit" class="btn app-btn-primary me-md-2">
                                 <i class="fas fa-filter me-1"></i> Filter
                             </button>
-                            <a href="<?= base_url('admin/artikel_iklan') ?>" class="btn btn-secondary">
+                            <a href="<?= base_url('admin/daftariklankonten') ?>" class="btn btn-secondary">
                                 <i class="fas fa-sync-alt me-1"></i> Reset
                             </a>
                         </div>
@@ -153,17 +153,17 @@
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="actionDropdown<?= $item['id_iklan'] ?>">
                                                     <li>
-                                                        <a class="dropdown-item" href="<?= base_url('admin/artikel/artikel_beriklan/detail/' . $item['id_iklan']) ?>">
+                                                        <a class="dropdown-item" href="<?= base_url('admin/daftariklankonten/detail/' . $item['id_iklan']) ?>">
                                                             <i class="fas fa-eye me-2"></i>View Detail
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item" href="<?= base_url('admin/artikel/edit_artikel_iklan/' . $item['id_iklan']) ?>">
+                                                        <a class="dropdown-item" href="<?= base_url('admin/daftariklankonten/edit/' . $item['id_iklan']) ?>">
                                                             <i class="fas fa-edit me-2"></i>Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a class="dropdown-item text-danger" href="<?= base_url('admin/artikel/delete/' . $item['id_iklan']) ?>"
+                                                        <a class="dropdown-item text-danger" href="<?= base_url('admin/daftariklankonten/delete/' . $item['id_iklan']) ?>"
                                                             onclick="return confirm('Yakin ingin menghapus data ini?')">
                                                             <i class="fas fa-trash me-2"></i>Hapus
                                                         </a>
