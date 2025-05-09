@@ -175,10 +175,25 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
     $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
 
-    $routes->get('iklanutama', 'admin\IklanUtamaController::index2');
-    $routes->post('iklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
 
-    $routes->get('acciklan', 'admin\ArtikelIklan::index');
+    // IKLAN UTAMA
+    $routes->get('acciklanutama', 'admin\IklanUtamaController::index2');
+    $routes->post('iklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
+    // tipe iklan utama
+    $routes->get('tipeiklanutama', 'admin\TipeIklanUtama::index');
+    $routes->get('tipeiklanutama/tambah', 'admin\TipeIklanUtama::tambah');
+    $routes->post('tipeiklanutama/proses_tambah', 'admin\TipeIklanUtama::proses_tambah');
+    $routes->get('tipeiklanutama/edit/(:num)', 'admin\TipeIklanUtama::edit/$1');
+    $routes->post('tipeiklanutama/proses_edit/(:num)', 'admin\TipeIklanUtama::update/$1');
+    $routes->get('tipeiklanutama/delete/(:num)', 'admin\TipeIklanUtama::delete/$1');
+
+    // IKLAN KONTEN
+    $routes->get('daftariklankonten', 'admin\IklanController::index');
+    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
+    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
+    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
+    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
+    $routes->get('acciklankonten', 'admin\ArtikelIklan::index');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
