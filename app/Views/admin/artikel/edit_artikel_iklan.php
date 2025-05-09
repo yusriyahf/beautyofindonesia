@@ -5,7 +5,7 @@
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="app-page-title mb-0">Edit Artikel Beriklan</h1>
-            <a href="<?= base_url('admin/artikel/artikel_beriklan') ?>" class="btn btn-outline-secondary">
+            <a href="<?= base_url('admin/daftariklankonten') ?>" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i> Kembali
             </a>
         </div>
@@ -95,6 +95,53 @@
                                     </select>
                                     <input type="hidden" name="id_content" value="<?= $iklan['id_content'] ?>">
                                 </div>
+
+                                <!-- New Image Upload Section -->
+                                <div class="mb-3">
+                                    <!-- Current Image Preview -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Gambar Saat Ini</label>
+                                        <div class="card border-0 bg-light p-3">
+                                            <?php if (!empty($iklan['gambar_iklan'])): ?>
+                                                <img src="<?= base_url('uploads/iklan/' . $iklan['gambar_iklan']) ?>"
+                                                    class="img-fluid rounded mb-2"
+                                                    style="max-height: 200px; object-fit: contain;"
+                                                    alt="Gambar Iklan Saat Ini">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="hapus_gambar" id="hapusGambar" value="1">
+                                                    <label class="form-check-label text-danger" for="hapusGambar">
+                                                        Hapus gambar saat ini
+                                                    </label>
+                                                </div>
+                                            <?php else: ?>
+                                                <div class="text-center py-4 text-muted">
+                                                    <i class="fas fa-image fa-3x mb-2"></i>
+                                                    <p class="mb-0">Tidak ada gambar</p>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+
+                                    <!-- New Image Upload -->
+                                    <div class="mb-3">
+                                        <label for="gambar_iklan" class="form-label">Unggah Gambar Baru</label>
+                                        <input type="file" class="form-control" id="gambar_iklan" name="gambar_iklan" accept="image/*">
+                                        <div class="form-text">
+                                            Format: JPG, PNG (Maksimal 2MB). Ukuran disarankan: 1200x630 piksel.
+                                        </div>
+                                    </div>
+
+                                    <!-- Image Preview -->
+                                    <div id="imagePreview" class="mt-3 d-none">
+                                        <label class="form-label">Pratinjau Gambar Baru</label>
+                                        <div class="card border-0 bg-light p-3">
+                                            <img id="previewImg" src="#"
+                                                class="img-fluid rounded"
+                                                style="max-height: 200px; object-fit: contain;"
+                                                alt="Pratinjau Gambar Baru">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Status Iklan -->
@@ -165,7 +212,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-                                <a href="<?= base_url('admin/artikel/artikel_beriklan') ?>" class="btn btn-outline-secondary px-4">
+                                <a href="<?= base_url('admin/daftariklankonten') ?>" class="btn btn-outline-secondary px-4">
                                     <i class="fas fa-times me-2"></i> Batal
                                 </a>
                                 <button type="submit" class="btn btn-primary px-4">
@@ -210,6 +257,34 @@
 </div>
 
 <script>
+    // Image Preview Functionality
+    document.getElementById('gambar_iklan').addEventListener('change', function(e) {
+        const preview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const file = e.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.classList.remove('d-none');
+            }
+            
+            reader.readAsDataURL(file);
+        } else {
+            preview.classList.add('d-none');
+        }
+    });
+
+    // Disable delete checkbox if no file selected
+    document.getElementById('gambar_iklan').addEventListener('change', function() {
+        const deleteCheckbox = document.getElementById('hapusGambar');
+        if (this.files.length > 0 && deleteCheckbox) {
+            deleteCheckbox.checked = false;
+        }
+    });
+
     function hitungTotalHarga() {
         const idIklanSelect = document.getElementById('id_iklan');
         const selectedOption = idIklanSelect.options[idIklanSelect.selectedIndex];
