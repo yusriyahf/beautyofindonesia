@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="app-card-body">
-                        <form method="post" action="<?= base_url('/marketing/iklanutama/proses_tambah') ?>">
+                        <form method="post" action="<?= base_url('/marketing/iklanutama/proses_tambah') ?>" enctype="multipart/form-data">
                             <?= csrf_field() ?>
 
                             <!-- Paket Iklan Section -->
@@ -72,6 +72,16 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Link Iklan</label>
+                                <input type="text" class="form-control" id="link_iklan" name="link_iklan" value="<?= old('link_iklan') ?>" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Upload Thumbnail Iklan</label>
+                                <input type="file" class="form-control" name="thumbnail_iklan" accept="image/*" required>
                             </div>
 
                             <!-- Informasi Tambahan -->

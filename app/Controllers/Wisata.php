@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\user\BaseController;
+use App\Models\IklanUtamaModel;
 use App\Models\TempatWisataModel;
 use App\Models\KategoriModel;
 use App\Models\TentangModel;
@@ -26,6 +27,7 @@ class Wisata extends BaseController
     private $OlehOlehModel; // Add this line
     private $MetaModel; // Add this line
     private $tipeIklanModel; // Add this line
+    private $iklanUtamaModel; // Add this line
 
     public function __construct()
     {
@@ -39,6 +41,7 @@ class Wisata extends BaseController
         $this->OlehOlehModel = new OlehOlehModel();
         $this->MetaModel = new MetaModel();
         $this->tipeIklanModel = new TipeIklanUtama();
+        $this->iklanUtamaModel = new IklanUtamaModel();
     }
 
     public function index()
@@ -86,14 +89,43 @@ class Wisata extends BaseController
         ];
 
 
+        $tipeIklan = $this->tipeIklanModel
+            ->where('nama', 'Wisata - Header')
+            ->first();
+
+        $iklanHeader = null;
+
+        if ($tipeIklan) {
+            $today = date('Y-m-d');
+            $iklanHeader = $this->iklanUtamaModel
+                ->where('id_tipe_iklan_utama', $tipeIklan['id_tipe_iklan_utama'])
+                ->where('tanggal_mulai <=', $today)
+                ->where('tanggal_selesai >=', $today)
+                ->first();
+        }
+
+        $tipeFooter = $this->tipeIklanModel
+            ->where('nama', 'Wisata - Footer')
+            ->first();
+
+        $iklanFooter = null;
+        if ($tipeFooter) {
+            $iklanFooter = $this->iklanUtamaModel
+                ->where('id_tipe_iklan_utama', $tipeFooter['id_tipe_iklan_utama'])
+                ->where('tanggal_mulai <=', $today)
+                ->where('tanggal_selesai >=', $today)
+                ->first();
+        }
 
         $data = [
-            'iklanHeader' => $this->tipeIklanModel
+            'iklanHeaderCek' => $this->tipeIklanModel
                 ->where('nama', 'Wisata - Header')
                 ->first(),
-            'iklanFooter' => $this->tipeIklanModel
+            'iklanFooterCek' => $this->tipeIklanModel
                 ->where('nama', 'Wisata - Footer')
                 ->first(),
+            'iklanHeader' => $iklanHeader,
+            'iklanFooter' => $iklanFooter,
             'tempatwisata' => $wisataBos,
             'pager' => $wisataQuery->pager,
             'provinsiYus' => $this->ProvinsiModel->getAllProvinsi(),

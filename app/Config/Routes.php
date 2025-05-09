@@ -43,6 +43,8 @@ $routes->get('logout', 'Login::logout');
 // Daftarkan rute-rute admin di sini
 $routes->get('sitemap.xml', 'Sitemap::index');
 
+$routes->get('iklan-klik/(:num)', 'IklanUtamaController::klik/$1');
+
 
 $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     // Dashboard
@@ -174,6 +176,8 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
 
     $routes->get('iklanutama', 'admin\IklanUtamaController::index2');
     $routes->post('iklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
+
+    $routes->get('acciklan', 'admin\ArtikelIklan::index');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
@@ -210,14 +214,13 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
     $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
 
 
-    // Artikel Iklan
-    $routes->get('artikeliklan', 'admin\ArtikelIklan::index');
-    $routes->get('artikeliklan/tambah', 'admin\ArtikelIklan::tambah');
-    $routes->post('artikeliklan/proses_tambah', 'admin\ArtikelIklan::proses_tambah');
-    $routes->get('artikeliklan/edit/(:num)', 'admin\ArtikelIklan::edit/$1');
-    $routes->post('artikeliklan/proses_edit/(:num)', 'admin\ArtikelIklan::proses_edit/$1');
-    $routes->get('artikeliklan/delete/(:any)', 'admin\ArtikelIklan::delete/$1');
-    $routes->post('artikeliklan/ubahStatus', 'admin\ArtikelIklan::ubahStatus');
+    // Artikel Ikla
+
+
+    $routes->get('daftarIklan', 'admin\IklanController::index');
+    $routes->get('daftarIklan/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
+    $routes->post('daftarIklan/proses_tambah2', 'admin\IklanController::proses_tambah');
+    $routes->get('daftarIklan/edit_artikel_iklan/(:num)', 'admin\IklanController::edit/$1');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
@@ -230,12 +233,6 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
     $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
     $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
     $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
-
-    // artikel beriklan
-    $routes->get('artikelberiklan', 'admin\IklanController::index');
-    $routes->get('artikelberiklan/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('artikelberiklan/proses_tambah2', 'admin\IklanController::proses_tambah');
-    $routes->get('artikelberiklan/edit_artikel_iklan/(:num)', 'admin\IklanController::edit/$1');
 });
 
 

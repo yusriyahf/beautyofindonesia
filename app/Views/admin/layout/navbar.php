@@ -98,14 +98,7 @@
                                                 <span class="nav-link-text">Semua Artikel</span>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/artikel/artikel_beriklan') ?>">
-                                                <span class="nav-icon">
-                                                    <i class="bi bi-megaphone"></i>
-                                                </span>
-                                                <span class="nav-link-text">Artikel Beriklan</span>
-                                            </a>
-                                        </li>
+
                                         <li class="nav-item">
                                             <a class="nav-link" href="<?= base_url('admin/kategori/index') ?>">
                                                 <span class="nav-icon">
@@ -229,13 +222,15 @@
                                 </a>
                             </li>
                             <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
-                                <a class="nav-link" href="<?= base_url('admin/artikeliklan') ?>">
+                                <a class="nav-link" href="<?= base_url('admin/acciklan') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-aspect-ratio"></i>
                                     </span>
                                     <span class="nav-link-text">Iklan Konten</span>
                                 </a>
                             </li>
+
+
                             <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
                                 <a class="nav-link" href="<?= base_url('admin/artikeliklan') ?>">
                                     <span class="nav-icon">
