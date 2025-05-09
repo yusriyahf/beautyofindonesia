@@ -30,6 +30,7 @@ class TipeIklanUtama extends BaseController
 
     public function proses_tambah()
     {
+        $validation = \Config\Services::validation();
         $this->model->save([
             'nama' => $this->request->getPost('nama'),
             'harga' => $this->request->getPost('harga'),
