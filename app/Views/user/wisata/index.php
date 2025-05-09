@@ -3,13 +3,22 @@
 
 <div class="container">
     <div class="row mt-3">
-        <?php if ($iklanHeader): ?>
-            <?php if ($iklanHeader['status'] === 'ada'): ?>
-                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
-            <?php else: ?>
-                <img src="<?= base_url('assets-baru/img/banner_utama2.png'); ?>" alt="" width="100%" class="mt-2">
+        <div class="col-md-12 text-center">
+
+            <?php if ($iklanHeaderCek): ?>
+                <?php if ($iklanHeaderCek['status'] === 'ada'): ?>
+
+                    <img src="<?= base_url('assets/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
+
+                <?php else: ?>
+                    <a href="<?= esc($iklanHeader['link_iklan']) ?>" target="_blank">
+                        <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanHeader['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2">
+                    </a>
+                <?php endif; ?>
             <?php endif; ?>
-        <?php endif; ?>
+
+        </div>
+
         <div class="col-12 mt-3">
             <div class="section-title">
                 <h1 id="sectionTitle" class="m-0 text-uppercase font-weight-bold h4">
@@ -256,14 +265,27 @@
             <p>No wisata data available.</p>
         <?php endif; ?>
     </div>
-    <?php if ($iklanFooter): ?>
-        <?php if ($iklanFooter['status'] === 'ada'): ?>
-            <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
-        <?php else: ?>
-            <img src="<?= base_url('assets-baru/img/banner_utama2.png'); ?>" alt="" width="100%" class="mt-2">
-        <?php endif; ?>
-    <?php endif; ?>
 
+
+
+
+
+
+    <div class="col-md-12 text-center">
+
+        <?php if ($iklanFooterCek): ?>
+            <?php if ($iklanFooterCek['status'] === 'ada'): ?>
+
+                <img src="<?= base_url('assets/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2">
+
+            <?php else: ?>
+                <a href="<?= esc($iklanFooter['link_iklan']) ?>" target="_blank">
+                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanFooter['thumbnail_iklan'])) ?>" alt="" width="80%" class="mt-2">
+                </a>
+            <?php endif; ?>
+        <?php endif; ?>
+
+    </div>
     <div class="pagination-container mb-4">
         <?= $pager->links('tempatwisata', 'default_pagination') ?>
     </div>

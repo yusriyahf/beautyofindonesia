@@ -46,6 +46,7 @@
                                 <th class="cell text-end">Tanggal Selesai</th>
                                 <th class="cell text-center">Status</th>
                                 <th class="cell text-center">Harga</th>
+                                <th class="cell text-center">Link</th>
                                 <!-- <th class="cell text-center">Aksi</th> -->
                             </tr>
                         </thead>
@@ -84,6 +85,9 @@
                                         </td>
                                         <td class="cell">
                                             <span class="badge bg-light text-dark"><?= esc($item['total_harga']) ?></span>
+                                        </td>
+                                        <td class="cell">
+                                            <span class="badge bg-light text-dark"><?= esc($item['link_iklan']) ?></span>
                                         </td>
 
 
