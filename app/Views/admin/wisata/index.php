@@ -5,90 +5,175 @@
     <div class="container-xl">
         <div class="row g-3 mb-4 align-items-center justify-content-between">
             <div class="col-auto">
-                <h1 class="app-page-title mb-0">List of Tempat Wisata</h1>
+                <h1 class="app-page-title mb-0">Kelola Tempat Wisata</h1>
+                <p class="text-muted mb-0">Kelola semua tujuan wisata di website Anda</p>
             </div>
-            </br>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-primary me-md-2">+ Add New Wisata</a>
+            <div class="col-auto">
+                <div class="page-utilities">
+                    <div class="d-flex justify-content-end">
+                        <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add New Destination
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="tab-content" id="orders-table-tab-content">
-            <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
-                <div class="app-card app-card-orders-table shadow-sm mb-5">
-                    <div class="app-card-body">
-                        <div class="table-responsive">
-                            <table class="table app-table-hover table-bordered mb-0 text-left">
-                                <thead>
+        <div class="app-card app-card-orders-table shadow-sm mb-5">
+            <div class="app-card-header p-3">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-auto">
+                        <h4 class="app-card-title">List Tempat Wisata</h4>
+                    </div>
+                    <div class="col-auto">
+                        <div class="card-header-actions">
+                            <span class="badge bg-success me-2">Total: <?= count($wisata) ?></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-card-body px-4">
+                <div class="table-responsive">
+                    <table class="table app-table-hover table-striped table-borderless align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center" width="5%">No</th>
+                                <th width="20%">Destination Name</th>
+                                <th width="15%">Category</th>
+                                <th width="15%">Location</th>
+                                <th class="text-center" width="15%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (count($wisata) > 0): ?>
+                                <?php foreach ($wisata as $index => $w): ?>
                                     <tr>
-                                        <th class="text-center" valign="middle">No</th>
-                                        <th class="text-center" valign="middle">Nama Wisata (in)</th>
-                                        <th class="text-center" valign="middle">Nama Wisata (en)</th>
-                                        <th class="text-center" valign="middle">Kategori Wisata (in)</th>
-                                        <th class="text-center" valign="middle">Kategori Wisata (en)</th>
-                                        <th class="text-center" valign="middle">Kabupaten</th>
-                                        <th class="text-center" valign="middle">Deskripsi Wisata (in)</th>
-                                        <th class="text-center" valign="middle">Deskripsi Wisata (en)</th>
-                                        <th class="text-center" valign="middle">Foto Wisata</th>
-                                        <th class="text-center" valign="middle">Sumber Foto</th>
-                                        <th class="text-center" valign="middle">Wisata Latitude</th>
-                                        <th class="text-center" valign="middle">Wisata Longitude</th>
-                                        <th class="text-center" valign="middle">Meta Title (in)</th>
-                                        <th class="text-center" valign="middle">Meta Title (en)</th>
-                                        <th class="text-center" valign="middle">Meta Deskripsi (in)</th>
-                                        <th class="text-center" valign="middle">Meta Deskripsi (en)</th>
-                                        <th class="text-center" valign="middle">Actions</th>
+                                        <td class="text-center"><?= $index + 1 ?></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-2">
+                                                    <img src="<?= base_url('asset-user/uploads/foto_wisata/' . ($w['foto_wisata'] ?? 'default.jpg')) ?>"
+                                                        class="img-fluid rounded"
+                                                        width="60"
+                                                        alt="<?= $w['nama_wisata_ind'] ?>">
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-1"><?= $w['nama_wisata_ind'] ?></h6>
+                                                    <small class="text-muted"><?= $w['nama_wisata_eng'] ?></small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary me-1"><?= $w['nama_kategori_wisata'] ?></span>
+                                            <span class="badge bg-secondary"><?= $w['nama_kategori_wisata_en'] ?></span>
+                                        </td>
+                                        <td>
+                                            <span class="d-block"><?= $w['nama_kotakabupaten'] ?></span>
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                <?= $w['wisata_latitude'] ?>, <?= $w['wisata_longitude'] ?>
+                                            </small>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <a href="<?= base_url('admin/tempat_wisata/detail/' . $w['id_wisata']) ?>"
+                                                    class="btn btn-outline-primary btn-sm rounded-pill me-2">
+                                                    <i class="fas fa-eye me-1"></i>View
+                                                </a>
+                                                <a href="<?= base_url('admin/tempat_wisata/edit/' . $w['id_wisata']) ?>"
+                                                    class="btn btn-outline-success btn-sm rounded-pill me-2">
+                                                    <i class="fas fa-edit me-1"></i>Edit
+                                                </a>
+                                                <a href="<?= base_url('admin/tempat_wisata/delete/' . $w['id_wisata']) ?>"
+                                                    class="btn btn-outline-danger btn-sm rounded-pill"
+                                                    onclick="return confirm('Delete this item?')">
+                                                    <i class="fas fa-trash me-1"></i>Delete
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (count($wisata) > 0): ?>
-                                        <?php foreach ($wisata as $index => $w): ?>
-                                            <tr>
-                                                <td class="text-center" valign="middle"><?= $index + 1 ?></td>
-                                                <td class="text-center" valign="middle"><?= $w['nama_wisata_ind'] ?></td>
-                                                <td class="text-center" valign="middle"><?= $w['nama_wisata_eng'] ?></td>
-                                                <td class="text-center" valign="middle"><?= $w['nama_kategori_wisata'] ?></td>
-                                                <td class="text-center" valign="middle"><?= $w['nama_kategori_wisata_en'] ?></td>
-                                                <td class="text-center" valign="middle"><?= $w['nama_kotakabupaten'] ?></td>
-                                                <td class="text-center col-4" valign="middle">
-                                                    <?= isset($w['deskripsi_wisata_ind']) ? substr(strip_tags($w['deskripsi_wisata_ind']), 0, 60) . '...' : 'Deskripsi Tidak Tersedia' ?>
-                                                </td>
-                                                <td class="text-center col-4" valign="middle">
-                                                    <?= isset($w['deskripsi_wisata_eng']) ? substr(strip_tags($w['deskripsi_wisata_eng']), 0, 60) . '...' : 'Deskripsi Tidak Tersedia' ?>
-                                                </td>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <div class="empty-state">
+                                            <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                                            <h5>No Tourism Places Found</h5>
+                                            <p class="text-muted">Add your first tourism destination to get started</p>
+                                            <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-primary">
+                                                <i class="fas fa-plus me-2"></i>Add New Destination
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                                                <td class="text-center col-2" valign="middle">
-                                                    <img src="<?= base_url() . 'asset-user/uploads/foto_wisata/' . (isset($w['foto_wisata']) ? $w['foto_wisata'] : 'default.jpg') ?>" class="img-fluid" alt="Foto Wisata">
-                                                </td>
-                                                <td class="text-center" valign="middle"><?= $w['sumber_foto'] ?></td>
-                                                <td class="text-center" valign="middle"><?= $w['wisata_latitude'] ?></td>
-                                                <td class="text-center" valign="middle"><?= $w['wisata_longitude'] ?></td>
-                                                <td class="text-center" valign="middle"><?= isset($w['meta_title_id']) ? $w['meta_title_id'] : 'Meta Title Tidak Tersedia' ?></td>
-                                                <td class="text-center" valign="middle"><?= isset($w['meta_title_en']) ? $w['meta_title_en'] : 'Meta Title Tidak Tersedia' ?></td>
-                                                <td class="text-center" valign="middle"><?= isset($w['meta_deskription_id']) ? $w['meta_deskription_id'] : 'Meta Deskripsi Tidak Tersedia' ?></td>
-                                                <td class="text-center" valign="middle"><?= isset($w['meta_description_en']) ? $w['meta_description_en'] : 'Meta Deskripsi Tidak Tersedia' ?></td>
-
-                                                <td valign="middle">
-                                                    <div class="d-grid gap-2">
-                                                        <a href="<?= base_url('admin/tempat_wisata/edit') . '/' . $w['id_wisata'] ?>" class="btn btn-primary">Ubah</a>
-                                                        <a href="<?= base_url('admin/tempat_wisata/delete') . '/' . $w['id_wisata'] ?>" class="btn btn-danger">Hapus</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="5" class="text-center">No data available</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div><!--//table-responsive-->
-                    </div><!--//app-card-body-->
-                </div><!--//app-card-->
-            </div><!--//tab-pane-->
-        </div><!--//container-fluid-->
-    </div><!--//app-content-->
-</div><!--//app-wrapper-->
+            <?php if (count($wisata) > 0): ?>
+                <div class="app-card-footer px-4 py-3">
+                    <nav aria-label="Table navigation">
+                        <ul class="pagination justify-content-end mb-0">
+                            <!-- Pagination links would go here -->
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
 
 <?= $this->endSection('content'); ?>
+
+<style>
+    .app-card {
+        border-radius: 10px;
+        overflow: hidden;
+        border: none;
+    }
+
+    .app-card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0, 0, 0, .05);
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+
+    .empty-state {
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .img-fluid.rounded {
+        object-fit: cover;
+        height: 60px;
+        width: 60px;
+    }
+</style>
+
+<script>
+    // Enable tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>
