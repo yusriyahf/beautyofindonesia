@@ -167,6 +167,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('oleh_oleh/tambah', 'admin\OlehOleh::tambah');
     $routes->post('oleh_oleh/proses_tambah', 'admin\OlehOleh::proses_tambah');
     $routes->get('oleh_oleh/edit/(:num)', 'admin\OlehOleh::edit/$1');
+    $routes->get('oleh_oleh/detail/(:segment)', 'admin\OlehOleh::detail/$1');
     $routes->post('oleh_oleh/proses_edit/(:num)', 'admin\OlehOleh::proses_edit/$1');
     $routes->get('oleh_oleh/delete/(:num)', 'admin\OlehOleh::delete/$1');
 
