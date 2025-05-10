@@ -93,8 +93,12 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="btn-group" role="group">
-                                                <a href="<?= base_url('admin/oleh_oleh/edit/' . $item['id_oleholeh']) ?>"
+                                            <a href="<?= base_url('admin/oleh_oleh/detail/' . $item['slug_oleholeh']) ?>"
                                                     class="btn btn-outline-success btn-sm rounded-pill me-2">
+                                                    <i class="fas fa-eye me-1"></i>Detail
+                                                </a>
+                                                <a href="<?= base_url('admin/oleh_oleh/edit/' . $item['id_oleholeh']) ?>"
+                                                    class="btn btn-outline-warning btn-sm rounded-pill me-2">
                                                     <i class="fas fa-edit me-1"></i>Edit
                                                 </a>
                                                 <a href="<?= base_url('admin/oleh_oleh/delete/' . $item['id_oleholeh']) ?>"
