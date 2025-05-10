@@ -213,4 +213,42 @@ class OlehOleh extends BaseController
         $this->olehOlehModel->delete($id_oleholeh);
         return redirect()->to('admin/oleh_oleh/index');
     }
+
+    public function detail($slug)
+    {
+        // Get the oleh-oleh detail by slug
+        $oleholeh = $this->olehOlehModel->getOlehOlehDetailBySlug($slug);
+
+        // Check if data exists
+        if (!$oleholeh) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Oleh-oleh tidak ditemukan');
+        }
+
+        // Increment view count
+        $this->olehOlehModel->increaseViews($oleholeh['id_oleholeh']);
+
+        // Get related oleh-oleh from same category
+        $relatedOlehOleh = $this->olehOlehModel->getRandomOlehOlehByKategori($oleholeh['id_kategori_oleholeh']);
+
+        // Get related oleh-oleh from same kabupaten
+        $relatedByKabupaten = $this->olehOlehModel->getRandomOlehOlehByKabupaten($oleholeh['id_kotakabupaten']);
+
+        $data = [
+            'title' => $oleholeh['nama_oleholeh'] . ' | Detail Oleh-Oleh',
+            'oleholeh' => $oleholeh,
+            'relatedOlehOleh' => $relatedOlehOleh,
+            'relatedByKabupaten' => $relatedByKabupaten,
+        ];
+
+        return view('admin/oleh_oleh/detail', $data);
+    }
+
+    public function incrementWhatsapp($id)
+    {
+        // Increment whatsapp click count
+        $this->olehOlehModel->incrementWhatsappClicks($id);
+
+        // Return JSON response
+        return $this->response->setJSON(['success' => true]);
+    }
 }
