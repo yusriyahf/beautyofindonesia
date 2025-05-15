@@ -24,36 +24,54 @@ class Komisi extends BaseController
         // ini view
         $model = new SaldoModel();
 
-        $saldo = $model->where('user_id', session('id_user'))->first();
+        // Ambil ID user yang sedang login
+        $user_id = session('id_user');
+
+
+        $saldo = $model->where('user_id', $user_id)->first();
 
 
 
-        $all_data_pemasukan_saldo = $this->pemasukanSaldo->findAll();
+        // Ambil pemasukan sesuai user login
+        $all_data_pemasukan_saldo = $this->pemasukanSaldo->where('user_id', $user_id)->findAll();
         foreach ($all_data_pemasukan_saldo as &$pemasukan) {
             $pemasukan['tipe'] = 'pemasukan';
             $pemasukan['tanggal'] = $pemasukan['tanggal_pemasukan'];
         }
 
-        // Ambil data penarikan dan tambahkan field tipe
-        $all_data_penarikan_saldo = $this->penarikanSaldo->findAll();
+        // Ambil pengeluaran (penarikan) sesuai user login
+        $all_data_penarikan_saldo = $this->penarikanSaldo->where('user_id', $user_id)->findAll();
         foreach ($all_data_penarikan_saldo as &$penarikan) {
             $penarikan['tipe'] = 'penarikan';
             $penarikan['tanggal'] = $penarikan['tanggal_pengajuan'];
         }
 
-        // Gabungkan kedua array
+        // Gabungkan dan urutkan transaksi
         $semua_transaksi = array_merge($all_data_pemasukan_saldo, $all_data_penarikan_saldo);
-
-        // Urutkan berdasarkan tanggal terbaru
         usort($semua_transaksi, function ($a, $b) {
             return strtotime($b['tanggal']) - strtotime($a['tanggal']);
         });
 
+        // Hitung total pemasukan
+        $total_pemasukan = 0;
+        foreach ($all_data_pemasukan_saldo as $pemasukan) {
+            $total_pemasukan += $pemasukan['jumlah'];
+        }
 
-        // Kirim data ke view dalam bentuk array terpisah
+        // Hitung total pengeluaran
+        $total_pengeluaran = 0;
+        foreach ($all_data_penarikan_saldo as $penarikan) {
+            $total_pengeluaran += $penarikan['jumlah'];
+        }
+
+        // Kirim ke view
         return view('saldo/index', [
             'saldo' => $saldo,
             'semua_transaksi' => $semua_transaksi,
+            'total_pemasukan' => $total_pemasukan,
+            'total_pengeluaran' => $total_pengeluaran,
+            'pemasukan' => $all_data_pemasukan_saldo,
+            'pengeluaran' => $all_data_penarikan_saldo,
         ]);
     }
 
@@ -114,14 +132,26 @@ class Komisi extends BaseController
 
     public function ubahstatus()
     {
+        $id = $this->request->getPost('id_penarikan_komisi');
+        // dd($id);
+        $catatan = $this->request->getPost('catatan');
+        $bukti = $this->request->getFile('bukti_transfer');
 
-        $id_penarikan_komisi = $this->request->getPost('id_penarikan_komisi');
+        if (!$id || !$bukti->isValid()) {
+            return redirect()->back()->with('error', 'Data tidak valid.');
+        }
 
-        $this->penarikanSaldo->update($id_penarikan_komisi, [
-            'status' => 'disetujui'
+        // Simpan file
+        $namaFile = $bukti->getRandomName();
+        $bukti->move('uploads/bukti_transfer/', $namaFile);
+
+        // Update ke database
+        $this->penarikanSaldo->update($id, [
+            'status' => 'disetujui',
+            'bukti_transfer' => $namaFile,
+            'catatan' => $catatan,
         ]);
 
-        // Opsional: Redirect atau set flashdata
-        return redirect()->back()->with('success', 'Status penarikan berhasil diubah menjadi disetujui.');
+        return redirect()->back()->with('success', 'Status berhasil diubah.');
     }
 }
