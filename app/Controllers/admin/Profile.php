@@ -152,7 +152,7 @@ class Profile extends BaseController
             'username' => $this->request->getPost('username'),
             'full_name' => $this->request->getPost('full_name'),
             'email' => $this->request->getPost('email'),
-            'contact' => $this->request->getPost('kontak'),
+            'kontak' => $this->request->getPost('kontak'),
             'bank_account_number' => $this->request->getPost('rekening'),
             'photo_user' => $profilePictureName
         ];
