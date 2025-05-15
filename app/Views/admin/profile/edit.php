@@ -139,7 +139,7 @@
                             <div class="row mb-3 py-2 align-items-center bg-light rounded">
                                 <label class="col-sm-4 col-form-label fw-bold text-muted">Kontak</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="kontak" class="form-control" value="<?= esc($user[0]['contact']); ?>" placeholder="<?= esc($user[0]['contact']); ?>" required>
+                                    <input type="text" name="kontak" class="form-control" value="<?= esc($user[0]['kontak']); ?>" placeholder="<?= esc($user[0]['kontak']); ?>" required>
                                 </div>
                             </div>
 
