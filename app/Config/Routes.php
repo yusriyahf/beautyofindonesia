@@ -180,6 +180,10 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     // IKLAN UTAMA
     $routes->get('acciklanutama', 'admin\IklanUtamaController::index2');
     $routes->post('iklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
+    // Daftar Iklan Utama
+    $routes->get('iklanutama', 'admin\IklanUtamaController::index');
+    $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
+    $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
     // tipe iklan utama
     $routes->get('tipeiklanutama', 'admin\TipeIklanUtama::index');
     $routes->get('tipeiklanutama/tambah', 'admin\TipeIklanUtama::tambah');
