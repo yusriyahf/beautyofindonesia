@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use App\Models\UsersModel;
 
 class Profile extends BaseController
 {
@@ -22,9 +23,17 @@ class Profile extends BaseController
         $userModel = new UserModel();
         $userId = session()->get('user_id'); // Pastikan nama key-nya sesuai
         $user = $userModel->find($userId);
+        
+        $id_user = session()->get('id_user');
+        $usersModel = new UsersModel();
+        $userData = $usersModel->getUsernameById($id_user);
+        $photo_user = $userData['photo_user'] ?? null;
+        $profileImage = $photo_user ? base_url('assets-baru/img/user/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
+
 
         return view('admin/profile/index', [
             'user' => $user,
+            'profileImage' => $profileImage
         ]);
     }
 
@@ -40,9 +49,17 @@ class Profile extends BaseController
         $userModel = new UserModel();
         $userId = session()->get('user_id'); // Contoh mengambil user_id dari session
         $user = $userModel->find($userId);
+         
+
+        $id_user = session()->get('id_user');
+        $usersModel = new UsersModel();
+        
+        $userData = $usersModel->getUsernameById($id_user);
+        $photo_user = $userData['photo_user'] ?? null;
+        $profileImage = $photo_user ? base_url('assets-baru/img/user/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
 
         // Tampilkan halaman edit profil dengan data user
-        return view('admin/profile/edit', ['user' => $user]);
+        return view('admin/profile/edit', ['user' => $user, 'profileImage' => $profileImage]);
     }
 
     public function update()

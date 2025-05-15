@@ -149,12 +149,11 @@
                                         <td class="cell align-middle"><?= $i++ ?></td>
                                         <td class="cell text-center align-middle">
                                             <div class="avatar avatar-md mx-auto">
-                                                <img src="<?= !empty($user['foto'])
-                                                                ? base_url('uploads/user/' . $user['foto'])
-                                                                : base_url('assets-baru/img/user/default_profil.jpg') ?>"
+                                                <img src="<?= esc($profileImage) ?>" 
                                                     class="avatar-img rounded-circle border border-light shadow-sm"
                                                     style="width: 40px; height: 40px; object-fit: cover;"
-                                                    alt="User Photo">
+                                                    alt="User Photo"
+                                                    onerror="this.onerror=null; this.src='<?= base_url('assets-baru/img/user/default_profil.jpg') ?>';">
                                             </div>
                                         </td>
                                         <td class="cell align-middle">

@@ -29,6 +29,9 @@ class Dashboard extends BaseController
         $iklanDitolak = $artikelIklanModel->countIklanDitolakByMarketing($id_user);
         $iklanDiajukan = $artikelIklanModel->countIklanDiajukan($id_user);
         $username = $userData['username'] ?? 'Guest';
+        
+        $photo_user = $userData['photo_user'] ?? null;
+        $profileImage = $photo_user ? base_url('uploads/user_photos/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
 
 
 
@@ -41,6 +44,7 @@ class Dashboard extends BaseController
             'iklanDitolak' => $iklanDitolak,
             'iklanDiajukan' => $iklanDiajukan,
             'username' => $username,
+            'profileImage' => $profileImage
         ];
         return view('marketing/dashboard/index', $data);
     }

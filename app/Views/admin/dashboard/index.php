@@ -72,7 +72,7 @@
             <td style="padding: 10px;">11:20 AM</td>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-            
+          </tr>
             <script>
                 const ctx = document.getElementById('komisiChart').getContext('2d');
 

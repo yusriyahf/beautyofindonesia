@@ -18,7 +18,13 @@
         <hr>
         <div class="user-profile-sidebar">
             <div class="user-avatar">
-                <img src="<?= base_url('assets-baru/img/user/default_profil.jpg') ?>" alt="Admin Profile">
+                <?php
+                            $profileImage = session()->get('photo_user');
+                            $photoPath = !empty($profileImage)
+                                ? $profileImage
+                                : base_url('assets-baru/img/user/default_profil.jpg');
+                            ?>
+                <img src="<?= esc($profileImage) ?>" alt="Admin Profile">
             </div>
             <div class="user-info">
                 <h5 class="user-name"><?= session()->get('username'); ?></h5>

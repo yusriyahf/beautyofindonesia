@@ -32,6 +32,9 @@ class Dashboard extends BaseController
         $total_komisi = $pemasukanModel-> getTotalKomisiPenulis($id_user);
         $namaPenulis = $penulisModel->getNamaPenulisByUserId($id_user);
         $username = $userData['username'] ?? 'Guest';
+        
+        $photo_user = $userData['photo_user'] ?? null;
+        $profileImage = $photo_user ? base_url('uploads/user_photos/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
 
         // Ambil nilai 'jumlah' dari array yang pertama
         $total_komisi = $total_komisi[0]['jumlah'] ?? 0;
@@ -49,6 +52,7 @@ class Dashboard extends BaseController
             'total_komisi' => $total_komisi,
             'namaPenulis' => $namaPenulis,
             'username' => $username,
+            'profileImage' => $profileImage,
         ];
 
         return view('penulis/dashboard/index', $data);
