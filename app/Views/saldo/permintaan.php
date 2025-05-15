@@ -258,7 +258,9 @@
                                 <h5 class="modal-title" id="accModalLabel">Konfirmasi Approve Penarikan</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <form action="<?= base_url('admin/penarikan/approve/' . $saldo['id_penarikan_komisi']) ?>" method="POST" enctype="multipart/form-data">
+                            <form action="<?= base_url('admin/saldo/ubahstatus') ?>" method="POST" enctype="multipart/form-data">
+                                <?= csrf_field(); ?>
+                                <input type="hidden" name="id_penarikan_komisi" value="<?= $saldo['id_penarikan_komisi'] ?>">
                                 <div class="modal-body">
                                     <div class="mb-4 text-center">
                                         <i class="bi bi-check-circle-fill text-success fs-1"></i>
