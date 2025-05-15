@@ -177,7 +177,7 @@
 
                                         
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/kategori_oleh_oleh/index') ?>">
+                                            <a class="nav-link" href="<?= base_url('admin/kategori_oleholeh/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-tags"></i>
                                                 </span>
@@ -291,7 +291,7 @@
                                 <div id="iklanUtamaMenu" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/') ?>">
+                                            <a class="nav-link" href="<?= base_url('admin/iklanutama') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-window-plus"></i>
                                                 </span>
