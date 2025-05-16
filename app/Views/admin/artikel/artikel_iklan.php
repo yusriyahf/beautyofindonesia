@@ -9,8 +9,11 @@
                 <h1 class="app-page-title mb-0">Daftar Artikel Beriklan</h1>
                 <p class="text-muted mb-0">Kelola semua artikel beriklan di sini</p>
             </div>
+            <?php
+            $role = session()->get('role');
+            ?>
             <div class="col-auto">
-                <a href="<?= base_url('admin/daftariklankonten/tambah') ?>" class="btn app-btn-primary">
+                <a href="<?= base_url($role . '/daftariklankonten/tambah') ?>" class="btn app-btn-primary">
                     <i class="fas fa-plus me-2"></i>Tambah Data
                 </a>
             </div>
