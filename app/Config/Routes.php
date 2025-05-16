@@ -234,14 +234,19 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
     $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
 
+    // IKLAN KONTEN
+    $routes->get('daftariklankonten', 'admin\IklanController::index');
+    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
+    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
+    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
+    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
 
-    // Artikel Ikla
-
-
-    $routes->get('daftarIklan', 'admin\IklanController::index');
-    $routes->get('daftarIklan/tambah_artikel_iklan', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('daftarIklan/proses_tambah2', 'admin\IklanController::proses_tambah');
-    $routes->get('daftarIklan/edit_artikel_iklan/(:num)', 'admin\IklanController::edit/$1');
+    // Saldo
+    $routes->get('saldo', 'admin\Komisi::saldo/$1');
+    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
+    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
+    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
+    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
@@ -254,6 +259,19 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
     $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
     $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
     $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
+
+    $routes->get('saldo', 'admin\Komisi::saldo/$1');
+    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
+    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
+    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
+    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
+
+    // IKLAN KONTEN
+    $routes->get('daftariklankonten', 'admin\IklanController::index');
+    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
+    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
+    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
+    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
 });
 
 
