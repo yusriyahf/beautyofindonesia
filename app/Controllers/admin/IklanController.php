@@ -142,7 +142,8 @@ class IklanController extends BaseController
 
         // Simpan ke database pakai model
         if ($this->artikelIklanModel->insert($data)) {
-            return redirect()->to(base_url('admin/artikel/artikel_beriklan'))->with('success', 'Pengajuan iklan berhasil disimpan.');
+            $role = session()->get('role');
+            return redirect()->to(base_url($role . '/daftariklankonten'))->with('success', 'Pengajuan iklan berhasil disimpan.');
         } else {
             // Ambil error jika insert gagal
             $errors = $this->artikelIklanModel->errors();
@@ -197,53 +198,53 @@ class IklanController extends BaseController
     }
 
     public function detail($id)
-{
-    // Cek login
-    if (!session()->get('logged_in')) {
-        return redirect()->to(base_url('login'));
+    {
+        // Cek login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        // Ambil data iklan berdasarkan ID
+        $iklan = $this->artikelIklanModel->find($id);
+        if (!$iklan) {
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
+
+        // Ambil nama konten berdasarkan tipe_content
+        $judul = 'Tidak ditemukan';
+        switch ($iklan['tipe_content']) {
+            case 'artikel':
+                $data = $this->artikelModel->find($iklan['id_content']);
+                $judul = $data['judul_artikel'] ?? $judul;
+                break;
+            case 'tempatwisata':
+                $data = $this->wisataModel->find($iklan['id_content']);
+                $judul = $data['nama_wisata_ind'] ?? $judul;
+                break;
+            case 'oleholeh':
+                $data = $this->olehOlehModel->find($iklan['id_content']);
+                $judul = $data['nama_oleholeh'] ?? $judul;
+                break;
+        }
+
+        $iklan['judul_konten'] = $judul;
+
+        // Ambil nama iklan dari tb_harga_iklan
+        $harga = $this->hargaIklanModel->find($iklan['id_harga_iklan']);
+        $iklan['nama'] = $harga['nama'] ?? 'Tidak ditemukan';
+
+        // Ambil data user marketing
+        $marketing = $this->UsersModel->find($iklan['id_marketing']);
+        $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
+
+        // Kirim data ke view
+        return view('admin/artikel/detail_artikel_iklan', [
+            'iklan' => $iklan,
+            'judul_konten' => $judul,
+            'harga' => $harga,
+            'marketing' => $marketing,
+        ]);
     }
-
-    // Ambil data iklan berdasarkan ID
-    $iklan = $this->artikelIklanModel->find($id);
-    if (!$iklan) {
-        return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
-    }
-
-    // Ambil nama konten berdasarkan tipe_content
-    $judul = 'Tidak ditemukan';
-    switch ($iklan['tipe_content']) {
-        case 'artikel':
-            $data = $this->artikelModel->find($iklan['id_content']);
-            $judul = $data['judul_artikel'] ?? $judul;
-            break;
-        case 'tempatwisata':
-            $data = $this->wisataModel->find($iklan['id_content']);
-            $judul = $data['nama_wisata_ind'] ?? $judul;
-            break;
-        case 'oleholeh':
-            $data = $this->olehOlehModel->find($iklan['id_content']);
-            $judul = $data['nama_oleholeh'] ?? $judul;
-            break;
-    }
-
-    $iklan['judul_konten'] = $judul;
-
-    // Ambil nama iklan dari tb_harga_iklan
-    $harga = $this->hargaIklanModel->find($iklan['id_harga_iklan']);
-    $iklan['nama'] = $harga['nama'] ?? 'Tidak ditemukan';
-
-    // Ambil data user marketing
-    $marketing = $this->UsersModel->find($iklan['id_marketing']);
-    $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
-
-    // Kirim data ke view
-    return view('admin/artikel/detail_artikel_iklan', [
-        'iklan' => $iklan,
-        'judul_konten' => $judul,
-        'harga' => $harga,
-        'marketing' => $marketing,
-    ]);
-}
 
 
 
