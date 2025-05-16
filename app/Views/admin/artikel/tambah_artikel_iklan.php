@@ -5,7 +5,8 @@
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="app-page-title mb-0">Buat Iklan Baru</h1>
-            <a href="<?= base_url('admin/artikel/artikel_beriklan') ?>" class="btn btn-outline-secondary">
+            <?= $role = session()->get('role'); ?>
+            <a href="<?= base_url($role . '/daftariklankonten') ?>" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i> Kembali
             </a>
         </div>
@@ -20,7 +21,9 @@
                     </div>
 
                     <div class="app-card-body">
-                        <form method="post" action="<?= base_url('/admin/artikel/proses_tambah2') ?>" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+                    <?= $role = session()->get('role'); ?>
+                        <form method="post" action="<?= base_url($role . '/daftariklankonten/proses_tambah') ?>" enctype="multipart/form-data" class="needs-validation" novalidate>
                             <?= csrf_field() ?>
 
                             <!-- Step 1: Paket Iklan -->
@@ -29,7 +32,7 @@
                                     <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">1</div>
                                     <h5 class="mb-0">Paket Iklan</h5>
                                 </div>
-                                
+
                                 <div class="ps-5">
                                     <div class="alert alert-info mb-4">
                                         <div class="d-flex align-items-center">
@@ -39,9 +42,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <img src="<?= base_url('assets/images/layout-iklan.png'); ?>" class="img-fluid rounded border mb-4" alt="Layout Iklan">
-                                    
+
                                     <div class="mb-3">
                                         <label for="id_iklan" class="form-label fw-semibold">Pilih Paket <span class="text-danger">*</span></label>
                                         <select name="id_harga_iklan" id="id_iklan" class="form-select" required onchange="hitungTotalHarga()">
@@ -78,7 +81,7 @@
                                     <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">2</div>
                                     <h5 class="mb-0">Pilih Konten</h5>
                                 </div>
-                                
+
                                 <div class="ps-5">
                                     <div class="mb-3">
                                         <label for="tipe_content" class="form-label fw-semibold">Jenis Konten <span class="text-danger">*</span></label>
@@ -101,7 +104,7 @@
                                 </div>
                             </div>
 
-                            
+
 
                             <!-- Step 3: Upload Gambar -->
                             <div class="mb-5">
@@ -109,7 +112,7 @@
                                     <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">3</div>
                                     <h5 class="mb-0">Gambar Iklan</h5>
                                 </div>
-                                
+
                                 <div class="ps-5">
                                     <div class="alert alert-light border mb-4">
                                         <small class="d-block text-muted mb-2"><strong>Rekomendasi:</strong></small>
@@ -117,20 +120,20 @@
                                         <small class="d-block mb-1"><i class="fas fa-check-circle text-success me-2"></i>Format: JPG, PNG (maks. 2MB)</small>
                                         <small class="d-block"><i class="fas fa-check-circle text-success me-2"></i>Gambar jelas dan relevan dengan konten</small>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label for="thumbnail_iklan" class="form-label fw-semibold">Upload Gambar <span class="text-danger">*</span></label>
                                         <input type="file" class="form-control" id="thumbnail_iklan" name="thumbnail_iklan" accept="image/*" required>
                                         <div class="invalid-feedback">Silakan upload gambar iklan</div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Preview Gambar</label>
                                         <div class="border rounded p-3 text-center bg-light" style="min-height: 150px;">
                                             <img id="thumbnail_preview" src="<?= base_url('assets/images/default-image-icon.jpg') ?>" alt="Preview Gambar" class="img-fluid" style="max-height: 200px;">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label for="alt_text" class="form-label fw-semibold">Deskripsi Gambar (Alt Text) <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="alt_text" name="alt_text" placeholder="Contoh: Pantai Sanur saat matahari terbenam" required>
@@ -145,7 +148,7 @@
                                     <div class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">4</div>
                                     <h5 class="mb-0">Informasi Tambahan</h5>
                                 </div>
-                                
+
                                 <div class="ps-5">
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Pemohon</label>
@@ -316,15 +319,15 @@
     document.getElementById('thumbnail_iklan').addEventListener('change', function(e) {
         const preview = document.getElementById('thumbnail_preview');
         const file = e.target.files[0];
-        
+
         if (file) {
             const reader = new FileReader();
-            
+
             reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.style.maxHeight = "200px";
             }
-            
+
             reader.readAsDataURL(file);
         }
     });
