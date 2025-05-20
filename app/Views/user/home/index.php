@@ -20,11 +20,11 @@
         <?php if ($tipeBeranda1): ?>
             <?php if ($tipeBeranda1['status'] === 'ada'): ?>
 
-                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
 
             <?php else: ?>
                 <a href="<?= esc($iklanBeranda1['link_iklan']) ?>" target="_blank">
-                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanBeranda1['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2">
+                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanBeranda1['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2" loading="lazy">
                 </a>
             <?php endif; ?>
         <?php endif; ?>
@@ -123,11 +123,11 @@
         <?php if ($tipeBeranda2): ?>
             <?php if ($tipeBeranda2['status'] === 'ada'): ?>
 
-                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
 
             <?php else: ?>
                 <a href="<?= esc($iklanBeranda2['link_iklan']) ?>" target="_blank">
-                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanBeranda2['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2">
+                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanBeranda2['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2" loading="lazy">
                 </a>
             <?php endif; ?>
         <?php endif; ?>
@@ -226,11 +226,11 @@
         <?php if ($tipeBeranda3): ?>
             <?php if ($tipeBeranda3['status'] === 'ada'): ?>
 
-                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
 
             <?php else: ?>
                 <a href="<?= esc($iklanBeranda3['link_iklan']) ?>" target="_blank">
-                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanBeranda3['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2">
+                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanBeranda3['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2" loading="lazy">
                 </a>
             <?php endif; ?>
         <?php endif; ?>
