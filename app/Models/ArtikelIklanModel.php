@@ -89,25 +89,21 @@ class ArtikelIklanModel extends Model
     public function countIklanDiterimaByMarketing($id_user)
     {
         return $this->where('status_iklan', 'diterima')
-                    ->where('id_marketing', $id_user)
-                    ->countAllResults();
+            ->where('id_marketing', $id_user)
+            ->countAllResults();
     }
 
     public function countIklanDitolakByMarketing($id_user)
     {
         return $this->where('status_iklan', 'ditolak')
-                    ->where('id_marketing', $id_user)
-                    ->countAllResults();
+            ->where('id_marketing', $id_user)
+            ->countAllResults();
     }
 
     public function countIklanDiajukan($id_user)
     {
         return $this->where('status_iklan', 'diajukan')
-                    ->where('id_marketing', $id_user)
-                    ->countAllResults();
+            ->where('id_marketing', $id_user)
+            ->countAllResults();
     }
-
-
-
-
 }
