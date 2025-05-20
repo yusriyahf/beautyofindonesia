@@ -24,24 +24,33 @@
                             <form action="<?= base_url('admin/artikel/proses_tambah') ?>" method="POST" enctype="multipart/form-data">
                                 <?= csrf_field(); ?>
 
-                                <!-- Tab Navigation -->
-                                <ul class="nav nav-tabs mb-4" id="artikelTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab">
-                                            <i class="fas fa-info-circle me-1"></i> Informasi Dasar
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="content-tab" data-bs-toggle="tab" data-bs-target="#content" type="button" role="tab">
-                                            <i class="fas fa-align-left me-1"></i> Konten
-                                        </button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button" role="tab">
-                                            <i class="fas fa-tags me-1"></i> SEO & Media
-                                        </button>
-                                    </li>
-                                </ul>
+                                <div class="tab-navigation-wrapper mb-4">
+                                    <!-- Tab Navigation -->
+                                    <ul class="nav nav-tabs" id="artikelTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                <span class="tab-text">Informasi Dasar</span>
+                                                <div class="tab-indicator"></div>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="content-tab" data-bs-toggle="tab" data-bs-target="#content" type="button" role="tab">
+                                                <i class="fas fa-align-left me-2"></i>
+                                                <span class="tab-text">Konten</span>
+                                                <div class="tab-indicator"></div>
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button" role="tab">
+                                                <i class="fas fa-chart-line me-2"></i>
+                                                <span class="tab-text">SEO & Media</span>
+                                                <div class="tab-indicator"></div>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-highlight-bar"></div>
+                                </div>
 
                                 <!-- Tab Content -->
                                 <div class="tab-content" id="artikelTabContent">
@@ -211,5 +220,99 @@
             </div>
         </div>
     </div>
+
+    <style>
+        /* Tab Navigation Styles */
+        .tab-navigation-wrapper {
+            position: relative;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nav-tabs {
+            border: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #5a5c69;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            margin-right: 0.5rem;
+            background: transparent;
+            position: relative;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #4e73df;
+            background-color: rgba(78, 115, 223, 0.05);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #4e73df;
+            background-color: transparent;
+            font-weight: 600;
+        }
+
+        .nav-tabs .nav-link.active .tab-indicator {
+            width: 100%;
+            background-color: #4e73df;
+        }
+
+        .nav-tabs .nav-link .tab-indicator {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: transparent;
+            transition: width 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover .tab-indicator {
+            width: 100%;
+            background-color: rgba(78, 115, 223, 0.3);
+        }
+
+        .tab-highlight-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+
+        .tab-text {
+            position: relative;
+            top: 1px;
+        }
+
+        /* Icon styling */
+        .nav-tabs .nav-link i {
+            font-size: 1.1rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .nav-tabs .nav-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-tabs .nav-link i {
+                font-size: 1rem;
+                margin-right: 0.3rem;
+            }
+        }
+    </style>
+
+
 
     <?= $this->endSection('content'); ?>
