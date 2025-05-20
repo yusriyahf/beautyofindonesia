@@ -221,10 +221,46 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
     $routes->post('kategori/proses_edit/(:num)', 'penulis\Kategori::proses_edit/$1');
     $routes->get('kategori/delete/(:any)', 'penulis\Kategori::delete/$1');
 
+    // TEMPAT WISATA
+    $routes->get('tempat_wisata/index', 'admin\TempatWisata::index');
+    $routes->get('tempat_wisata/tambah', 'admin\TempatWisata::tambah');
+    $routes->post('tempat_wisata/proses_tambah', 'admin\TempatWisata::proses_tambah');
+    $routes->get('tempat_wisata/edit/(:num)', 'admin\TempatWisata::edit/$1');
+    $routes->post('tempat_wisata/proses_edit/(:num)', 'admin\TempatWisata::proses_edit/$1');
+    $routes->get('tempat_wisata/detail/(:num)', 'admin\TempatWisata::detail/$1');
+    $routes->get('tempat_wisata/delete/(:num)', 'admin\TempatWisata::delete/$1');
+
+    // KATEGORI WISATA
+    $routes->get('kategori_wisata/index', 'admin\KategoriWisata::index');
+    $routes->get('kategori_wisata/tambah', 'admin\KategoriWisata::tambah');
+    $routes->post('kategori_wisata/proses_tambah', 'admin\KategoriWisata::proses_tambah');
+    $routes->get('kategori_wisata/edit/(:num)', 'admin\KategoriWisata::edit/$1');
+    $routes->post('kategori_wisata/proses_edit/(:num)', 'admin\KategoriWisata::proses_edit/$1');
+    $routes->get('kategori_wisata/delete/(:any)', 'admin\KategoriWisata::delete/$1');
+
+    // OLEH OLEJ
+    $routes->get('oleh_oleh/index', 'admin\OlehOleh::index');
+    $routes->get('oleh_oleh/tambah', 'admin\OlehOleh::tambah');
+    $routes->post('oleh_oleh/proses_tambah', 'admin\OlehOleh::proses_tambah');
+    $routes->get('oleh_oleh/edit/(:num)', 'admin\OlehOleh::edit/$1');
+    $routes->get('oleh_oleh/detail/(:segment)', 'admin\OlehOleh::detail/$1');
+    $routes->post('oleh_oleh/proses_edit/(:num)', 'admin\OlehOleh::proses_edit/$1');
+    $routes->get('oleh_oleh/delete/(:num)', 'admin\OlehOleh::delete/$1');
+
+    // KATEGORI OLEH OLEH
+    $routes->get('kategori_oleholeh/index', 'admin\KategoriOlehOleh::index');
+    $routes->get('kategori_oleholeh/tambah', 'admin\KategoriOlehOleh::tambah');
+    $routes->post('kategori_oleholeh/proses_tambah', 'admin\KategoriOlehOleh::proses_tambah');
+    $routes->get('kategori_oleholeh/edit/(:num)', 'admin\KategoriOlehOleh::edit/$1');
+    $routes->post('kategori_oleholeh/proses_edit/(:num)', 'admin\KategoriOlehOleh::proses_edit/$1');
+    $routes->get('kategori_oleholeh/delete/(:num)', 'admin\KategoriOlehOleh::delete/$1');
+
     // Daftar Iklan Utama
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
     $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
+
+
 });
 
 
