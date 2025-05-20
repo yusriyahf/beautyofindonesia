@@ -104,7 +104,7 @@ if ($id_user) {
                                 <div id="artikelMenu" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/artikel/index') ?>">
+                                            <a class="nav-link" href="<?= base_url($role .'/artikel/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-file-earmark-text"></i>
                                                 </span>
@@ -114,7 +114,7 @@ if ($id_user) {
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/kategori_artikel/index') ?>">
+                                            <a class="nav-link" href="<?= base_url($role .'/kategori/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-tags"></i>
                                                 </span>
@@ -139,7 +139,7 @@ if ($id_user) {
                                 <div id="wisataMenu" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/tempat_wisata/index') ?>">
+                                            <a class="nav-link" href="<?= base_url($role . '/tempat_wisata/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-file-earmark-text"></i>
                                                 </span>
@@ -149,7 +149,7 @@ if ($id_user) {
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/kategori_wisata/index') ?>">
+                                            <a class="nav-link" href="<?= base_url($role . '/kategori_wisata/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-tags"></i>
                                                 </span>
@@ -174,7 +174,7 @@ if ($id_user) {
                                 <div id="olehMenu" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/oleh_oleh/index') ?>">
+                                            <a class="nav-link" href="<?= base_url($role . '/oleh_oleh/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-file-earmark-text"></i>
                                                 </span>
@@ -184,7 +184,7 @@ if ($id_user) {
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?= base_url('admin/kategori_oleholeh/index') ?>">
+                                            <a class="nav-link" href="<?= base_url($role . '/kategori_oleholeh/index') ?>">
                                                 <span class="nav-icon">
                                                     <i class="bi bi-tags"></i>
                                                 </span>
