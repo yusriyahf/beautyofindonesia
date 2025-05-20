@@ -9,12 +9,12 @@
             <?php if ($iklanHeaderCek): ?>
                 <?php if ($iklanHeaderCek['status'] === 'ada'): ?>
 
-                    <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+                    <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
 
 
                 <?php else: ?>
                     <a href="<?= esc($iklanHeader['link_iklan']) ?>" target="_blank">
-                        <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanHeader['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2">
+                        <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanHeader['thumbnail_iklan'])) ?>" alt="" width="100%" class="mt-2" loading="lazy">
                     </a>
                 <?php endif; ?>
             <?php endif; ?>
@@ -243,11 +243,11 @@
         <?php if ($iklanFooterCek): ?>
             <?php if ($iklanFooterCek['status'] === 'ada'): ?>
 
-                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3">
+                <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
 
             <?php else: ?>
                 <a href="<?= esc($iklanFooter['link_iklan']) ?>" target="_blank">
-                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanFooter['thumbnail_iklan'])) ?>" alt="" width="80%" class="mt-2">
+                    <img src="<?= base_url('assets/images/iklan_utama/' . esc($iklanFooter['thumbnail_iklan'])) ?>" alt="" width="80%" class="mt-2" loading="lazy">
                 </a>
             <?php endif; ?>
         <?php endif; ?>
