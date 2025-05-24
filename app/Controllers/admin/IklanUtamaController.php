@@ -7,6 +7,7 @@ use App\Models\JenisIklanUtama;
 use App\Models\PemasukanUserModel;
 use App\Models\TipeIklanUtama;
 use App\Models\TipeIklanUtamaModel;
+use App\Models\UserModel;
 
 class IklanUtamaController extends BaseController
 {
@@ -14,17 +15,22 @@ class IklanUtamaController extends BaseController
     private $iklanUtamaModel;
     private $tipeIklanUtamaModel;
     private $PemasukanUserModel;
+    private $usermodel;
 
     public function __construct()
     {
         $this->iklanUtamaModel = new IklanUtamaModel();
         $this->tipeIklanUtamaModel = new TipeIklanUtamaModel();
         $this->PemasukanUserModel = new PemasukanUserModel();
+        $this->usermodel = new UserModel();
     }
 
     public function index()
     {
-        $all_data_iklan_utama = $this->iklanUtamaModel->findAll();
+        // $all_data_iklan_utama = $this->iklanUtamaModel->findAll();
+        $all_data_iklan_utama = $this->iklanUtamaModel->getAllWithUserAndTipe();
+
+
         $validation = \Config\Services::validation();
         return view('marketing/iklan_utama/index', [
             'all_data_iklan_utama' => $all_data_iklan_utama,
