@@ -3,124 +3,188 @@
 
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
-        <div class="row g-3 mb-4 align-items-center justify-content-between">
-            <div class="col-auto">
-                <h1 class="app-page-title mb-0">Kelola Tempat Wisata</h1>
-                <p class="text-muted mb-0">Kelola semua tujuan wisata di website Anda</p>
+        <!-- Header dengan Gradient -->
+        <div class="dashboard-header bg-gradient-primary rounded-4 p-4 mb-4 text-white shadow">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2 text-white"><i class="fas fa-map-marked-alt me-2 text-white"></i> Kelola Tempat Wisata</h1>
+                    <p class="mb-0 opacity-75">Kelola semua tujuan wisata di website Anda</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                        <i class="fas fa-plus me-1"></i>Tambah Wisata
+                    </a>
+                </div>
             </div>
-            <div class="col-auto">
-                <div class="page-utilities">
-                    <div class="d-flex justify-content-end">
-                        <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Add New Destination
-                        </a>
+        </div>
+
+        <!-- Modern Filter Section -->
+        <div class="card border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="row g-3 align-items-end">
+                    <!-- Location Filter -->
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted mb-1">LOKASI</label>
+                        <select id="locationFilter" class="form-select">
+                            <option value="">Semua Lokasi</option>
+                            <?php
+                            $uniqueLocations = [];
+                            foreach ($wisata as $item) {
+                                if (!in_array($item['nama_kotakabupaten'], $uniqueLocations)) {
+                                    $uniqueLocations[] = $item['nama_kotakabupaten'];
+                                    echo '<option value="' . esc($item['nama_kotakabupaten']) . '">' . esc($item['nama_kotakabupaten']) . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted mb-1">KATEGORI</label>
+                        <select id="kategoriFilter" class="form-select">
+                            <option value="">Semua Kategori</option>
+                            <?php
+                            $uniqueCategories = [];
+                            foreach ($wisata as $item) {
+                                if (!in_array($item['nama_kategori_wisata'], $uniqueCategories)) {
+                                    $uniqueCategories[] = $item['nama_kategori_wisata'];
+                                    echo '<option value="' . esc($item['nama_kategori_wisata']) . '">' . esc($item['nama_kategori_wisata']) . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Search Field -->
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted mb-1">CARI TEMPAT WISATA</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Nama, lokasi...">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="col-md-2 d-flex">
+                        <button type="button" id="resetFilter" class="btn btn-outline-secondary me-2 flex-grow-1">
+                            <i class="fas fa-undo me-1"></i> Reset
+                        </button>
+                        <button type="button" id="applyFilter" class="btn btn-info flex-grow-1 text-white">
+                            <i class="fas fa-filter me-1"></i> Filter
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="app-card app-card-orders-table shadow-sm mb-5">
-            <div class="app-card-header p-3">
-                <div class="row justify-content-between align-items-center">
-                    <div class="col-auto">
-                        <h4 class="app-card-title">List Tempat Wisata</h4>
-                    </div>
-                    <div class="col-auto">
-                        <div class="card-header-actions">
-                            <span class="badge bg-success me-2">Total: <?= count($wisata) ?></span>
+        <!-- Tourism Places Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <?php if (empty($wisata)): ?>
+                    <div class="text-center py-5">
+                        <div class="mb-3">
+                            <i class="fas fa-map-marked-alt fa-3x text-muted opacity-50"></i>
                         </div>
+                        <h5 class="text-muted mb-2">Belum ada tempat wisata</h5>
+                        <p class="text-muted mb-3">Mulai dengan menambahkan tempat wisata baru</p>
+                        <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i>Tambah Wisata
+                        </a>
                     </div>
-                </div>
-            </div>
-
-            <div class="app-card-body px-4">
-                <div class="table-responsive">
-                    <table class="table app-table-hover table-striped table-borderless align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="text-center" width="5%">No</th>
-                                <th width="20%">Destination Name</th>
-                                <th width="15%">Category</th>
-                                <th width="15%">Location</th>
-                                <th class="text-center" width="15%">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (count($wisata) > 0): ?>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table id="wisataTable" class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th width="40" class="text-center">No</th>
+                                    <th>Nama Tempat Wisata</th>
+                                    <th width="150">Kategori</th>
+                                    <th width="150">Lokasi</th>
+                                    <th width="120" class="text-center">Status</th>
+                                    <th width="140" class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <?php
                                 $page = $pager->getCurrentPage('tempatwisata');
                                 $offset = ($page - 1) * 10;
-
                                 $i = $offset + 1;
-                                foreach ($wisata as $index => $w): ?>
-                                    <tr>
-                                        <td class="text-center"><?= $i++ ?></td>
+                                foreach ($wisata as $w): ?>
+                                    <tr class="table-row"
+                                        data-location="<?= esc($w['nama_kotakabupaten']) ?>"
+                                        data-category="<?= esc($w['nama_kategori_wisata']) ?>"
+                                        data-search="<?= strtolower(esc($w['nama_wisata_ind'] . ' ' . $w['nama_wisata_eng'])) ?>">
+                                        <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-2">
                                                     <img src="<?= base_url('asset-user/uploads/foto_wisata/' . ($w['foto_wisata'] ?? 'default.jpg')) ?>"
-                                                        class="img-fluid rounded"
-                                                        width="60"
-                                                        alt="<?= $w['nama_wisata_ind'] ?>">
+                                                        class="rounded" width="40" height="40"
+                                                        alt="<?= $w['nama_wisata_ind'] ?>"
+                                                        onerror="this.src='<?= base_url('asset-user/uploads/foto_wisata/default.jpg') ?>'">
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="mb-1"><?= $w['nama_wisata_ind'] ?></h6>
-                                                    <small class="text-muted"><?= $w['nama_wisata_eng'] ?></small>
+                                                    <div class="fw-medium text-truncate" style="max-width: 300px;"><?= esc($w['nama_wisata_ind']) ?></div>
+                                                    <small class="text-muted text-truncate d-block" style="max-width: 300px;"><?= esc($w['nama_wisata_eng']) ?></small>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge bg-primary me-1"><?= $w['nama_kategori_wisata'] ?></span>
-                                            <span class="badge bg-secondary"><?= $w['nama_kategori_wisata_en'] ?></span>
+                                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-10">
+                                                <?= esc($w['nama_kategori_wisata']) ?>
+                                            </span>
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10 mt-1 d-block">
+                                                <?= esc($w['nama_kategori_wisata_en']) ?>
+                                            </span>
                                         </td>
                                         <td>
-                                            <span class="d-block"><?= $w['nama_kotakabupaten'] ?></span>
+                                            <div class="fw-medium"><?= esc($w['nama_kotakabupaten']) ?></div>
                                             <small class="text-muted">
                                                 <i class="fas fa-map-marker-alt me-1"></i>
                                                 <?= $w['wisata_latitude'] ?>, <?= $w['wisata_longitude'] ?>
                                             </small>
                                         </td>
                                         <td class="text-center">
-                                            <div class="btn-group" role="group">
+                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
+                                                <i class="fas fa-circle me-1" style="font-size: 6px; vertical-align: middle;"></i>
+                                                Aktif
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="<?= base_url('admin/tempat_wisata/detail/' . $w['id_wisata']) ?>"
-                                                    class="btn btn-outline-primary btn-sm rounded-pill me-2">
-                                                    <i class="fas fa-eye me-1"></i>View
+                                                    class="btn btn-sm btn-outline-primary" title="Detail">
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
                                                 <a href="<?= base_url('admin/tempat_wisata/edit/' . $w['id_wisata']) ?>"
-                                                    class="btn btn-outline-success btn-sm rounded-pill me-2">
-                                                    <i class="fas fa-edit me-1"></i>Edit
+                                                    class="btn btn-sm btn-outline-secondary" title="Edit">
+                                                    <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="<?= base_url('admin/tempat_wisata/delete/' . $w['id_wisata']) ?>"
-                                                    class="btn btn-outline-danger btn-sm rounded-pill"
-                                                    onclick="return confirm('Delete this item?')">
-                                                    <i class="fas fa-trash me-1"></i>Delete
-                                                </a>
+                                                <button class="btn btn-sm btn-outline-danger delete-btn"
+                                                    title="Hapus" data-id="<?= $w['id_wisata'] ?>">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="5" class="text-center py-4">
-                                        <div class="empty-state">
-                                            <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
-                                            <h5>No Tourism Places Found</h5>
-                                            <p class="text-muted">Add your first tourism destination to get started</p>
-                                            <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-primary">
-                                                <i class="fas fa-plus me-2"></i>Add New Destination
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </div>
 
-            <?php if (count($wisata) > 0): ?>
-                <div class="app-card-footer px-4 py-3">
-                    <div class="mt-3">
+            <!-- Pagination -->
+            <?php if (!empty($wisata)): ?>
+                <div class="card-footer bg-white border-top">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-muted small">
+                            Menampilkan <?= $offset + 1 ?>-<?= min($offset + 10, count($wisata)) ?> dari <?= count($wisata) ?> data
+                        </div>
+
                         <?= $pager->links('tempatwisata', 'bootstrap_full') ?>
                     </div>
                 </div>
@@ -129,45 +193,214 @@
     </div>
 </div>
 
-<?= $this->endSection('content'); ?>
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Apakah Anda yakin ingin menghapus tempat wisata ini?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <a href="#" id="confirmDelete" class="btn btn-sm btn-danger">Hapus</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
-    .app-card {
+    /* Custom styling for the filter section */
+    .card {
         border-radius: 10px;
-        overflow: hidden;
-        border: none;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
     }
 
-    .app-card-header {
+    .form-control,
+    .form-select {
+        border: 1px solid #e0e0e0;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #4d90fe;
+        box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
+    }
+
+    .input-group-text {
         background-color: #f8f9fa;
-        border-bottom: 1px solid rgba(0, 0, 0, .05);
+        border-color: #e0e0e0;
+    }
+
+    .btn {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+    }
+
+    label {
+        font-weight: 500;
+    }
+
+    .btn-sm {
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, rgb(100, 181, 201) 100%);
+    }
+
+    .table {
+        font-size: 14px;
     }
 
     .table th {
         font-weight: 600;
         text-transform: uppercase;
-        font-size: 0.75rem;
+        font-size: 12px;
         letter-spacing: 0.5px;
+        color: #6c757d;
+        background-color: #f8f9fa;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e9ecef;
     }
 
-    .empty-state {
-        padding: 2rem;
-        text-align: center;
+    .table td {
+        padding: 12px 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f2f5;
     }
 
-    .img-fluid.rounded {
-        object-fit: cover;
-        height: 60px;
-        width: 60px;
+    .table-hover tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .badge {
+        font-weight: 500;
+        padding: 4px 8px;
+    }
+
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .pagination {
+        margin: 0;
+    }
+
+    .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .page-link {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    @media (max-width: 768px) {
+        .card-footer {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .table td,
+        .table th {
+            padding: 8px 12px;
+        }
     }
 </style>
 
 <script>
-    // Enable tooltips
-    document.addEventListener('DOMContentLoaded', function() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+    $(document).ready(function() {
+        // Initialize DataTable (without paging to keep CI pagination)
+        $('#wisataTable').DataTable({
+            responsive: true,
+            searching: false, // Disable DataTables search since we have custom search
+            ordering: true,
+            paging: false,
+            info: false,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
+            },
+            columnDefs: [{
+                    orderable: false,
+                       targets: [5]
+                } // Disable sorting for action column
+            ],
+            initComplete: function() {
+                $('[title]').tooltip({
+                    trigger: 'hover',
+                    placement: 'top'
+                });
+            }
+        });
+
+        // Delete button handler
+        $('.delete-btn').on('click', function() {
+            var id = $(this).data('id');
+            var url = '<?= base_url("admin/tempat_wisata/delete/") ?>' + id;
+            $('#confirmDelete').attr('href', url);
+            $('#deleteModal').modal('show');
+        });
+
+        // Initialize tooltips
+        $('[title]').tooltip({
+            trigger: 'hover',
+            placement: 'top'
+        });
+
+         // Filter functionality
+        function applyFilters() {
+            const location = $('#locationFilter').val();
+            const category = $('#kategoriFilter').val();
+            const searchTerm = $('#searchInput').val().toLowerCase();
+
+            $('.table-row').each(function () {
+                const rowLocation = $(this).data('location');
+                const rowCategory = $(this).data('category');
+                const rowName = $(this).data('name'); // nama tempat wisata
+
+                // Location filter
+                const locationPass = !location || rowLocation === location;
+
+                // Category filter
+                const categoryPass = !category || rowCategory === category;
+
+                // Search filter (hanya berdasarkan nama wisata, bukan lokasi)
+                const searchPass = !searchTerm || rowName.toLowerCase().includes(searchTerm);
+
+                // Show/hide based on filters
+                if (locationPass && categoryPass && searchPass) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        // Apply filter button
+        $('#applyFilter').on('click', applyFilters);
+
+        // Reset filter button
+        $('#resetFilter').on('click', function () {
+            $('#locationFilter').val('');
+            $('#kategoriFilter').val('');
+            $('#searchInput').val('');
+            applyFilters();
+        });
+
+        // Auto-apply filter when inputs change
+        $('#locationFilter, #kategoriFilter').on('change', applyFilters);
+        $('#searchInput').on('keyup', applyFilters);
     });
 </script>
+
+<?= $this->endSection('content'); ?>

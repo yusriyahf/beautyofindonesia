@@ -77,6 +77,14 @@
             </div>
         </div>
 
+        <!-- Notifications -->
+        <?php if (!empty(session()->getFlashdata('success'))) : ?>
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                <?= session()->getFlashdata('success') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
         <!-- Statistik Cards -->
         <div class="row g-4 mb-4">
             <!-- Pemasukan -->
@@ -126,15 +134,15 @@
                 <div class="stat-card bg-white rounded-4 shadow-sm h-100 hover-lift">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-success-light text-success rounded-3 p-3 me-3">
+                            <div class="stat-icon bg-primary-light text-primary rounded-3 p-3 me-3">
                                 <i class="fas fa-piggy-bank fa-2x"></i>
                             </div>
                             <div>
                                 <h6 class="text-muted mb-1">Saldo Saat Ini</h6>
-                                <h3 class="text-success mb-0">
+                                <h3 class="text-primary mb-0">
                                     Rp <?= number_format(max(0, $saldo['saldo']), 0, ',', '.') ?>
                                 </h3>
-                                <small class="text-success">
+                                <small class="text-primary">
                                     <i class="fas fa-check-circle me-1"></i>
                                     Saldo Tersedia
                                 </small>
@@ -146,7 +154,7 @@
         </div>
 
         <!-- Tabel Transaksi -->
-        <div class="transaction-card card border-0 rounded-4 shadow-sm overflow-hidden mb-4">
+        <div class="card border-0 rounded-4 shadow-sm overflow-hidden mb-4">
             <div class="card-header bg-white p-4">
                 <div class="row align-items-center">
                     <div class="col-md-6">
@@ -177,32 +185,32 @@
             </div>
             
             <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover table-borderless mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="ps-4">Transaksi</th>
-                                <th class="text-end pe-4">Jumlah</th>
-                                <th>Status</th>
-                                <th>Tanggal</th>
-                                <th class="text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if(empty($semua_transaksi)): ?>
+                <?php if(empty($semua_transaksi)): ?>
+                    <div class="text-center py-5">
+                        <div class="mb-3">
+                            <i class="fas fa-exchange-alt fa-3x text-muted opacity-50"></i>
+                        </div>
+                        <h5 class="text-muted mb-2">Belum ada transaksi</h5>
+                        <p class="text-muted mb-3">Mulai dengan melakukan penarikan saldo</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table id="transactionTable" class="table table-hover mb-0">
+                            <thead class="bg-light">
                                 <tr>
-                                    <td colspan="5" class="text-center py-5">
-                                        <div class="empty-state">
-                                            <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
-                                            <h5 class="text-muted">Belum ada transaksi</h5>
-                                            <p class="text-muted">Mulai dengan melakukan penarikan saldo</p>
-                                        </div>
-                                    </td>
+                                    <th width="40">No</th>
+                                    <th>Transaksi</th>
+                                    <th class="text-end">Jumlah</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th width="140" class="text-center">Aksi</th>
                                 </tr>
-                            <?php else: ?>
+                            </thead>
+                            <tbody>
                                 <?php foreach ($semua_transaksi as $i => $transaksi): ?>
-                                    <tr class="border-bottom">
-                                        <td class="ps-4">
+                                    <tr>
+                                        <td class="text-muted"><?= $i+1 ?></td>
+                                        <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="transaction-icon <?= $transaksi['tipe'] === 'pemasukan' ? 'bg-success-light text-success' : 'bg-primary-light text-primary' ?> rounded-3 p-2 me-3">
                                                     <i class="fas <?= $transaksi['tipe'] === 'pemasukan' ? 'fa-arrow-down' : 'fa-arrow-up' ?>"></i>
@@ -213,7 +221,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-end pe-4">
+                                        <td class="text-end">
                                             <h6 class="mb-0 <?= $transaksi['tipe'] === 'pemasukan' ? 'text-success' : 'text-danger' ?>">
                                                 <?= $transaksi['tipe'] === 'pemasukan' ? '+' : '-' ?> Rp <?= number_format($transaksi['jumlah'], 0, ',', '.') ?>
                                             </h6>
@@ -250,118 +258,99 @@
                                             </button>
                                         </td>
                                     </tr>
-                                    
-                                    <!-- Modal Detail -->
-                                    <div class="modal fade" id="detailModal<?= $i ?>" tabindex="-1" aria-labelledby="detailModalLabel<?= $i ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header <?= $transaksi['tipe'] === 'pemasukan' ? 'bg-success text-white' : 'bg-primary text-white' ?>">
-                                                    <h5 class="modal-title" id="detailModalLabel<?= $i ?>">
-                                                        <i class="fas <?= $transaksi['tipe'] === 'pemasukan' ? 'fa-arrow-down' : 'fa-arrow-up' ?> me-2"></i>
-                                                        Detail Transaksi #TRX<?= str_pad($i+1, 4, '0', STR_PAD_LEFT) ?>
-                                                    </h5>
-                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="transaction-detail">
-                                                        <div class="detail-item bg-light p-3 rounded mb-3">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    <h6 class="mb-0 <?= $transaksi['tipe'] === 'pemasukan' ? 'text-success' : 'text-danger' ?>">
-                                                                        <?= $transaksi['tipe'] === 'pemasukan' ? 'Pemasukan' : 'Pengeluaran' ?>
-                                                                    </h6>
-                                                                    <small class="text-muted"><?= date('l, d F Y H:i', strtotime($transaksi['tanggal'])) ?></small>
-                                                                </div>
-                                                                <h4 class="<?= $transaksi['tipe'] === 'pemasukan' ? 'text-success' : 'text-danger' ?> mb-0">
-                                                                    <?= $transaksi['tipe'] === 'pemasukan' ? '+' : '-' ?> Rp <?= number_format($transaksi['jumlah'], 0, ',', '.') ?>
-                                                                </h4>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="detail-item">
-                                                                    <span class="detail-label">Tipe Transaksi</span>
-                                                                    <span class="detail-value">
-                                                                        <span class="badge <?= $transaksi['tipe'] === 'pemasukan' ? 'bg-success' : 'bg-primary' ?> rounded-pill px-3">
-                                                                            <?= esc(ucfirst($transaksi['tipe'])) ?>
-                                                                        </span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="detail-item">
-                                                                    <span class="detail-label">Status</span>
-                                                                    <span class="detail-value">
-                                                                        <span class="badge <?= $badgeClass ?> rounded-pill px-3">
-                                                                            <i class="fas <?= $icon ?> me-1"></i>
-                                                                            <?= esc(ucfirst($transaksi['status'])) ?>
-                                                                        </span>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="detail-item">
-                                                            <span class="detail-label">Tanggal/Waktu</span>
-                                                            <span class="detail-value">
-                                                                <?= date('l, d F Y', strtotime($transaksi['tanggal'])) ?>
-                                                                <br>
-                                                                <?= date('H:i:s', strtotime($transaksi['tanggal'])) ?>
-                                                            </span>
-                                                        </div>
-                                                        
-                                                        <?php if(!empty($transaksi['keterangan'])): ?>
-                                                        <div class="detail-item">
-                                                            <div class="alert alert-light">
-                                                                <h6 class="alert-heading">Keterangan</h6>
-                                                                <p class="mb-0"><?= esc($transaksi['keterangan']) ?></p>
-                                                            </div>
-                                                        </div>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Tutup</button>
-                                                    <?php if($transaksi['tipe'] === 'pengeluaran' && $transaksi['status'] === 'diproses'): ?>
-                                                    <button type="button" class="btn btn-danger rounded-pill">
-                                                        <i class="fas fa-times me-1"></i> Batalkan
-                                                    </button>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Pagination -->
-            <div class="card-footer bg-white px-4 py-3">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center mb-0">
-                        <li class="page-item disabled">
-                            <a class="page-link rounded-pill me-1" href="#" tabindex="-1" aria-disabled="true">
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link rounded-pill ms-1" href="#">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Detail Modals -->
+<?php foreach ($semua_transaksi as $i => $transaksi): ?>
+<div class="modal fade" id="detailModal<?= $i ?>" tabindex="-1" aria-labelledby="detailModalLabel<?= $i ?>" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header <?= $transaksi['tipe'] === 'pemasukan' ? 'bg-success text-white' : 'bg-primary text-white' ?>">
+                <h5 class="modal-title" id="detailModalLabel<?= $i ?>">
+                    <i class="fas <?= $transaksi['tipe'] === 'pemasukan' ? 'fa-arrow-down' : 'fa-arrow-up' ?> me-2"></i>
+                    Detail Transaksi #TRX<?= str_pad($i+1, 4, '0', STR_PAD_LEFT) ?>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="transaction-detail">
+                    <div class="detail-item bg-light p-3 rounded mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0 <?= $transaksi['tipe'] === 'pemasukan' ? 'text-success' : 'text-danger' ?>">
+                                    <?= $transaksi['tipe'] === 'pemasukan' ? 'Pemasukan' : 'Pengeluaran' ?>
+                                </h6>
+                                <small class="text-muted"><?= date('l, d F Y H:i', strtotime($transaksi['tanggal'])) ?></small>
+                            </div>
+                            <h4 class="<?= $transaksi['tipe'] === 'pemasukan' ? 'text-success' : 'text-danger' ?> mb-0">
+                                <?= $transaksi['tipe'] === 'pemasukan' ? '+' : '-' ?> Rp <?= number_format($transaksi['jumlah'], 0, ',', '.') ?>
+                            </h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <span class="detail-label">Tipe Transaksi</span>
+                                <span class="detail-value">
+                                    <span class="badge <?= $transaksi['tipe'] === 'pemasukan' ? 'bg-success' : 'bg-primary' ?> rounded-pill px-3">
+                                        <?= esc(ucfirst($transaksi['tipe'])) ?>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <span class="detail-label">Status</span>
+                                <span class="detail-value">
+                                    <span class="badge <?= $badgeClass ?> rounded-pill px-3">
+                                        <i class="fas <?= $icon ?> me-1"></i>
+                                        <?= esc(ucfirst($transaksi['status'])) ?>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Tanggal/Waktu</span>
+                        <span class="detail-value">
+                            <?= date('l, d F Y', strtotime($transaksi['tanggal'])) ?>
+                            <br>
+                            <?= date('H:i:s', strtotime($transaksi['tanggal'])) ?>
+                        </span>
+                    </div>
+                    
+                    <?php if(!empty($transaksi['keterangan'])): ?>
+                    <div class="detail-item">
+                        <div class="alert alert-light">
+                            <h6 class="alert-heading">Keterangan</h6>
+                            <p class="mb-0"><?= esc($transaksi['keterangan']) ?></p>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Tutup</button>
+                <?php if($transaksi['tipe'] === 'pengeluaran' && $transaksi['status'] === 'diproses'): ?>
+                <button type="button" class="btn btn-danger rounded-pill">
+                    <i class="fas fa-times me-1"></i> Batalkan
+                </button>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
 
 <style>
     /* Gradient Header */
@@ -432,33 +421,121 @@
     .balance-summary {
         border-left: 4px solid #0d6efd;
     }
+    
+    /* Enhanced Table Styling */
+    .table {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+    
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        color: #6c757d;
+        background-color: #f8f9fa;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .table td {
+        padding: 12px 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f2f5;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    
+    /* Enhanced DataTables Styling */
+    .dataTables_wrapper {
+        padding: 1.5rem;
+    }
+    
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .dataTables_wrapper .dataTables_length select {
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 6px;
+        margin: 0 2px;
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-header {
+            text-align: center;
+        }
+        
+        .dashboard-header .text-md-end {
+            text-align: center !important;
+            margin-top: 1rem;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    }
 </style>
 
 <script>
 $(document).ready(function() {
+    // Initialize DataTable
+    $('#transactionTable').DataTable({
+        responsive: true,
+        searching: true,
+        ordering: true,
+        paging: true,
+        info: true,
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
+        },
+        columnDefs: [{
+            orderable: false,
+            targets: [5] // Disable sorting for action column
+        }],
+        initComplete: function() {
+            $('[title]').tooltip({
+                trigger: 'hover',
+                placement: 'top'
+            });
+        }
+    });
+
+    // Initialize tooltips
+    $('[title]').tooltip({
+        trigger: 'hover',
+        placement: 'top'
+    });
+
     // Filter functionality
     $('#filter-type, #filter-status').change(function() {
+        const table = $('#transactionTable').DataTable();
         const type = $('#filter-type').val();
         const status = $('#filter-status').val();
         
-        // Hide all rows first
-        $('tbody tr').hide();
-        
         if (type === 'all' && status === 'all') {
-            $('tbody tr').show();
+            table.search('').columns().search('').draw();
         } else {
-            // Filter logic
-            $('tbody tr').each(function() {
-                const rowType = $(this).find('td:first h6').text().toLowerCase();
-                const rowStatus = $(this).find('td:nth-child(3) span').text().toLowerCase();
-                
-                const typeMatch = (type === 'all') || (rowType.includes(type));
-                const statusMatch = (status === 'all') || (rowStatus.includes(status.toLowerCase()));
-                
-                if (typeMatch && statusMatch) {
-                    $(this).show();
-                }
-            });
+            // Combine both filters
+            table.columns(1).search(type === 'all' ? '' : type)
+                .columns(3).search(status === 'all' ? '' : status)
+                .draw();
         }
     });
     
@@ -466,7 +543,6 @@ $(document).ready(function() {
     function validateWithdrawal(input) {
         const amount = parseFloat(input.value);
         const balance = parseFloat(<?= max(0, $total_pemasukan - $total_pengeluaran) ?>);
-        const minAmount = $total_pemasukan;
         const errorElement = document.getElementById('withdrawalError');
         const submitBtn = document.getElementById('submitWithdrawal');
         
@@ -492,12 +568,11 @@ $(document).ready(function() {
     $('#withdrawalForm').submit(function(e) {
         const amount = parseFloat($('#jumlah').val());
         const balance = parseFloat(<?= max(0, $total_pemasukan - $total_pengeluaran) ?>);
-        const minAmount = $total_pemasukan;
         
-        if (amount > minAmount) {
+        if (amount > balance) {
             e.preventDefault();
             $('#jumlah').addClass('is-invalid');
-            $('#withdrawalError').text('Maximal penarikan adalah' . $total_pemasukan);
+            $('#withdrawalError').text('Jumlah penarikan melebihi saldo tersedia!');
             return;
         }
     });

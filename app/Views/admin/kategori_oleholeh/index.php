@@ -3,69 +3,369 @@
 
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
-        <div class="row g-3 mb-4 align-items-center justify-content-between">
-            <div class="col-auto">
-                <h1 class="app-page-title mb-0">Daftar Kategori Oleh-Oleh</h1>
-            </div>
-            <br>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a href="<?= base_url('admin/kategori_oleholeh/tambah') ?>" class="btn btn-primary me-md-2">+ Tambah Kategori Oleh-Oleh</a>
+        <!-- Header with Gradient -->
+        <div class="dashboard-header bg-gradient-primary rounded-4 p-4 mb-4 text-white shadow">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2 text-white"><i class="fas fa-gift me-2 text-white"></i> Daftar Kategori Oleh-Oleh</h1>
+                    <p class="mb-0 opacity-75">Kelola kategori untuk mengorganisir oleh-oleh Anda</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <button class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
+                        <i class="fas fa-plus me-1"></i>Tambah Kategori
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="tab-content" id="orders-table-tab-content">
-            <div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
-                <div class="app-card app-card-orders-table shadow-sm mb-5">
-                    <div class="app-card-body">
-                        <!-- Tampilkan pesan sukses -->
-                        <?php if (session()->getFlashdata('success')): ?>
-                            <div class="alert alert-success">
-                                <?= session()->getFlashdata('success') ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Tampilkan tabel data -->
-                        <div class="table-responsive">
-                            <table class="table app-table-hover table-bordered mb-0 text-left">
-                                <thead>
+        <!-- Category Table Card -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <?php if (empty($all_data_kategori_oleholeh)): ?>
+                    <div class="text-center py-5">
+                        <div class="mb-3">
+                            <i class="fas fa-gift fa-3x text-muted opacity-50"></i>
+                        </div>
+                        <h5 class="text-muted mb-2">Belum ada kategori oleh-oleh</h5>
+                        <p class="text-muted mb-3">Mulai dengan membuat kategori baru</p>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
+                            <i class="fas fa-plus me-1"></i>Tambah Kategori
+                        </button>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table id="kategoriTable" class="table table-hover w-100">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th width="60" class="text-center">No</th>
+                                    <th>Kategori Oleh-Oleh (Indonesia)</th>
+                                    <th>Kategori Oleh-Oleh (English)</th>
+                                    <th width="120" class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $i = 1; ?>
+                                <?php foreach ($all_data_kategori_oleholeh as $kategori): ?>
                                     <tr>
-                                        <th class="text-center" valign="middle">No</th> <!-- Added column for row number -->
-                                        
-                                        <th class="text-center" valign="middle">Nama Kategori Oleh-Oleh (in)</th>
-                                        <th class="text-center" valign="middle">Nama Kategori Oleh-Oleh (en)</th>
-                                        <th class="text-center" valign="middle">Aksi</th>
+                                        <td class="text-center text-muted"><?= $i++; ?></td>
+                                        <td>
+                                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 px-3 py-2">
+                                                <?= esc($kategori->nama_kategori_oleholeh) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-10 px-3 py-2">
+                                                <?= esc($kategori->nama_kategori_oleholeh_en) ?>
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
+                                                <button class="btn btn-sm btn-outline-primary edit-btn"
+                                                    data-id="<?= $kategori->id_kategori_oleholeh ?>"
+                                                    data-nama="<?= esc($kategori->nama_kategori_oleholeh) ?>"
+                                                    data-nama-en="<?= esc($kategori->nama_kategori_oleholeh_en) ?>"
+                                                    title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger delete-btn"
+                                                    data-id="<?= $kategori->id_kategori_oleholeh ?>"
+                                                    title="Hapus">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (count($all_data_kategori_oleholeh) > 0): ?>
-                                        <?php $no = 1; ?> <!-- Initialize row number counter -->
-                                        <?php foreach ($all_data_kategori_oleholeh as $kategori): ?>
-                                            <tr>
-                                                <td class="text-center" valign="middle"><?= esc($no++) ?></td> <!-- Display row number -->
-                                                
-                                                <td class="text-center" valign="middle"><?= esc($kategori->nama_kategori_oleholeh) ?></td>
-                                                <td class="text-center" valign="middle"><?= esc($kategori->nama_kategori_oleholeh_en) ?></td>
-                                                <td valign="middle">
-                                                    <div class="text-center">
-                                                        <a href="<?= base_url('admin/kategori_oleholeh/edit/' . $kategori->id_kategori_oleholeh) ?>" class="btn btn-warning">Edit</a>
-                                                        <a href="<?= base_url('admin/kategori_oleholeh/delete/' . $kategori->id_kategori_oleholeh) ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus?')">Hapus</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="4" class="text-center">Tidak ada data kategori oleh-oleh</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div><!--//table-responsive-->
-                    </div><!--//app-card-body-->
-                </div><!--//app-card-->
-            </div><!--//tab-pane-->
-        </div><!--//container-fluid-->
-    </div><!--//app-content-->
-</div><!--//app-wrapper-->
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
 
-<?= $this->endSection('content'); ?>
+<!-- Add Category Modal -->
+<div class="modal fade" id="tambahKategoriModal" tabindex="-1" aria-labelledby="tambahKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title" id="tambahKategoriModalLabel">
+                    <i class="fas fa-plus-circle me-2"></i>Tambah Kategori Oleh-Oleh Baru
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="<?= base_url('admin/kategori_oleholeh/tambah') ?>" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nama_kategori_oleholeh" class="form-label small text-muted mb-1">NAMA KATEGORI OLEH-OLEH (INDONESIA)</label>
+                        <input type="text" class="form-control py-2" id="nama_kategori_oleholeh" name="nama_kategori_oleholeh" required placeholder="Contoh: Makanan">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama_kategori_oleholeh_en" class="form-label small text-muted mb-1">NAMA KATEGORI OLEH-OLEH (ENGLISH)</label>
+                        <input type="text" class="form-control py-2" id="nama_kategori_oleholeh_en" name="nama_kategori_oleholeh_en" required placeholder="Contoh: Food">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        <i class="fas fa-save me-1"></i>Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editKategoriModal" tabindex="-1" aria-labelledby="editKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title" id="editKategoriModalLabel">
+                    <i class="fas fa-edit me-2"></i>Edit Kategori Oleh-Oleh
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editForm" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_nama_kategori_oleholeh" class="form-label small text-muted mb-1">NAMA KATEGORI OLEH-OLEH (INDONESIA)</label>
+                        <input type="text" class="form-control py-2" id="edit_nama_kategori_oleholeh" name="nama_kategori_oleholeh" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_nama_kategori_oleholeh_en" class="form-label small text-muted mb-1">NAMA KATEGORI OLEH-OLEH (ENGLISH)</label>
+                        <input type="text" class="form-control py-2" id="edit_nama_kategori_oleholeh_en" name="nama_kategori_oleholeh_en" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        <i class="fas fa-save me-1"></i>Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-exclamation-circle fa-3x text-danger"></i>
+                </div>
+                <h5 class="mb-3">Konfirmasi Hapus</h5>
+                <p class="text-muted mb-0">Apakah Anda yakin ingin menghapus kategori oleh-oleh ini?</p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                <a href="#" id="confirmDelete" class="btn btn-danger rounded-pill px-4">Ya, Hapus</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styling */
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, rgb(100, 181, 201) 100%);
+    }
+
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: none;
+    }
+
+    .table {
+        font-size: 14px;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        color: #6c757d;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .table td {
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f2f5;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .badge {
+        font-weight: 500;
+        border-radius: 8px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        border: 1px solid #e0e0e0;
+    }
+
+    .form-control:focus {
+        border-color: #4d90fe;
+        box-shadow: 0 0 0 2px rgba(77, 144, 254, 0.2);
+    }
+
+    .btn {
+        border-radius: 8px;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 12px;
+    }
+
+    .btn-outline-primary,
+    .btn-outline-danger {
+        border-width: 1px;
+    }
+
+    .modal-content {
+        border-radius: 12px;
+    }
+
+    .modal-header {
+        border-radius: 12px 12px 0 0;
+    }
+
+    /* DataTables custom styling */
+    .dataTables_wrapper .dataTables_length select {
+        border-radius: 6px;
+        padding: 4px 8px;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 6px;
+        padding: 4px 8px;
+        border: 1px solid #dee2e6;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 6px !important;
+        margin: 0 2px;
+        padding: 4px 10px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #0d6efd !important;
+        color: white !important;
+        border: none !important;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            text-align: center;
+        }
+
+        .dashboard-header .text-md-end {
+            text-align: center !important;
+            margin-top: 1rem;
+        }
+
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter {
+            text-align: left !important;
+            margin-bottom: 1rem;
+        }
+    }
+
+    /* Mencegah scroll horizontal */
+    #kategoriTable {
+        width: 100% !important;
+        table-layout: auto;
+    }
+
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: hidden;
+    }
+
+    /* Optional: pastikan container tidak menyumbang scroll */
+    .table-responsive {
+        overflow-x: hidden;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        // Initialize DataTable
+        var table = $('#kategoriTable').DataTable({
+            responsive: true,
+            dom: '<"top"<"row"<"col-md-6"l><"col-md-6"f>>>rt<"bottom"<"row"<"col-md-6"i><"col-md-6"p>><"clear">>',
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
+            },
+            columnDefs: [{
+                    orderable: false,
+                    targets: [3]
+                }, // Disable sorting for action column
+                {
+                    className: "text-center",
+                    targets: [0, 3]
+                }, // Center align these columns
+                {
+                    width: "60px",
+                    targets: 0
+                }, // Set width for No column
+                {
+                    width: "120px",
+                    targets: 3
+                } // Set width for Action column
+            ],
+            initComplete: function() {
+                // Add custom styling after initialization
+                $('.dataTables_length select').addClass('form-select-sm');
+                $('.dataTables_filter input').addClass('form-control-sm');
+
+                // Initialize tooltips
+                $('[title]').tooltip({
+                    trigger: 'hover',
+                    placement: 'top'
+                });
+            }
+        });
+
+        // Handle edit button click (using event delegation for dynamic content)
+        $('#kategoriTable').on('click', '.edit-btn', function() {
+            var id = $(this).data('id');
+            var nama = $(this).data('nama');
+            var nama_en = $(this).data('nama-en');
+
+            $('#edit_nama_kategori_oleholeh').val(nama);
+            $('#edit_nama_kategori_oleholeh_en').val(nama_en);
+            $('#editForm').attr('action', '<?= base_url("admin/kategori_oleholeh/edit") ?>/' + id);
+
+            $('#editKategoriModal').modal('show');
+        });
+
+        // Handle delete button click (using event delegation for dynamic content)
+        $('#kategoriTable').on('click', '.delete-btn', function() {
+            var id = $(this).data('id');
+            var url = '<?= base_url("admin/kategori_oleholeh/delete") ?>/' + id;
+            $('#confirmDelete').attr('href', url);
+            $('#deleteModal').modal('show');
+        });
+
+        // Reinitialize tooltips when DataTable redraws
+        table.on('draw', function() {
+            $('[title]').tooltip({
+                trigger: 'hover',
+                placement: 'top'
+            });
+        });
+    });
+</script>
+
+<?= $this->endSection('content') ?>
