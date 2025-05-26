@@ -11,6 +11,8 @@
             : ($wisata['meta_title_en'] ?? $oleh['meta_title_en'] ?? $artikel['meta_title_en'] ?? $meta->meta_title_en ?? 'Default English Title');
         ?>
     </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
     <!-- Meta Tags -->
 
@@ -106,6 +108,71 @@
     <!-- Template Javascript -->
 
     <script src="<?= base_url('assets-baru') ?>/js/main.js"></script>
+    <style>
+        .floating-writer-container {
+            position: fixed;
+            bottom: 60px;
+            right: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .writer-image {
+            width: 100px;
+            height: auto;
+        }
+
+        .floating-writer-button {
+            background-color: #FFCC00;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50px;
+            text-decoration: none !important;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .floating-writer-button:hover {
+            background-color: #e6b800;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Media Query: berlaku untuk layar max-width 768px (tablet & mobile) */
+        @media screen and (max-width: 768px) {
+            .writer-image {
+                display: none;
+            }
+
+            .floating-writer-button {
+                font-size: 14px;
+                /* ukuran teks lebih kecil di mobile */
+                padding: 10px 14px;
+            }
+
+            .floating-writer-container {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+    <div class="floating-writer-container">
+        <img src="<?= base_url('assets-baru/img/tesyus.png') ?>" alt="Penulis" class="writer-image">
+        <a href="<?= base_url('registrasi') ?>" class="floating-writer-button">
+            <i class="fas fa-pencil-alt"></i>
+            <?= $lang === 'en' ? ' Be a Writer' : ' Daftar Jadi Penulis' ?>
+        </a>
+    </div>
+
+
 
 
 

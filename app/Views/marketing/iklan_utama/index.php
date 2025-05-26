@@ -182,7 +182,7 @@
                                                 <div class="text-muted small"><?= date('M Y', strtotime($item['tanggal_pengajuan'])) ?></div>
                                             </div>
                                         </td>
-                                         <td class="text-center">
+                                        <td class="text-center">
                                             <span class="badge <?= $badgeClass ?>">
                                                 <i class="fas fa-circle me-1" style="font-size: 6px; vertical-align: middle;"></i>
                                                 <?= $status ?>
@@ -202,7 +202,8 @@
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                    title="Hapus" data-id="<?= $item['id_iklan_utama'] ?>">
+                                                    title="Hapus"
+                                                    data-id="<?= $item['id_iklan_utama'] ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
@@ -227,7 +228,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-0">Apakah Anda yakin ingin menghapus iklan ini?</p>
+                <p class="mb-0">Apakah Anda yakin ingin menghapus iklan ini?<strong id="id"></strong></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -587,9 +588,22 @@
             }
         });
 
+        // Edit button handler
+        $('.edit-btn').on('click', function() {
+            var id = $(this).data('id');
+            var nama = $(this).data('nama');
+            var nama_eng = $(this).data('nama-eng');
+
+            $('#edit_nama_provinsi').val(nama);
+            $('#edit_nama_provinsi_eng').val(nama_eng);
+            $('#editForm').attr('action', '<?= base_url("marketing/iklanutama/edit/") ?>' + id);
+
+            $('#editModal').modal('show');
+        });
+
         // Delete button handler
         $('.delete-btn').on('click', function() {
-            var id = $(this).data('id_iklan_utama');
+            var id = $(this).data('id');
             var url = '<?= base_url("marketing/iklanutama/delete/") ?>' + id;
             $('#confirmDelete').attr('href', url);
             $('#deleteModal').modal('show');
