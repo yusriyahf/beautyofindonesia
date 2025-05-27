@@ -198,6 +198,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
     $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
     $routes->get('acciklankonten', 'admin\ArtikelIklan::index');
+    $routes->post('acciklankonten/ubahstatus', 'admin\ArtikelIklan::ubahStatus');
     
 });
 
