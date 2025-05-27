@@ -9,7 +9,7 @@ class IklanUtamaModel extends Model
     protected $table = 'tb_iklan_utama';
     protected $primaryKey = 'id_iklan_utama';
     protected $returnType = 'array';
-    protected $allowedFields = ['id_iklan_utama', 'id_tipe_iklan_utama', 'id_marketing', 'jenis', 'rentang_bulan', 'tanggal_mulai', 'tanggal_selesai', 'id_iklan_utama', 'thumbnail_iklan', 'tanggal_pengajuan', 'status', 'harga', 'link_iklan', 'jumlah_klik'];
+    protected $allowedFields = ['id_iklan_utama', 'id_tipe_iklan_utama', 'id_marketing', 'jenis', 'rentang_bulan', 'tanggal_mulai', 'tanggal_selesai', 'id_iklan_utama', 'thumbnail_iklan', 'tanggal_pengajuan', 'status', 'total_harga', 'link_iklan', 'jumlah_klik', 'dibuat_pada', 'diupdate_pada','diperbarui_pada'];
 
     public function getIklanAktifByTipe($idTipe)
     {
