@@ -144,11 +144,11 @@
                                                 <div class="flex-shrink-0 me-2">
                                                     <span class="avatar-initials bg-light text-dark rounded-circle d-flex align-items-center justify-content-center"
                                                         style="width: 24px; height: 24px; font-size: 10px;">
-                                                        <?= strtoupper(substr($item['username'] ?? 'U', 0, 1)) ?>
+                                                        <?= strtoupper(substr($item['id_marketing'] ?? 'U', 0, 1)) ?>
                                                     </span>
                                                 </div>
                                                 <div class="flex-grow-1 text-truncate" style="max-width: 100px;">
-                                                    <?= esc($item['username']) ?>
+                                                    <?= esc($item['id_marketing']) ?>
                                                 </div>
                                             </div>
                                         </td>
