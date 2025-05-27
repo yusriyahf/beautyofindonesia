@@ -165,7 +165,20 @@
         const rentangBulan = parseInt(document.getElementById('rentang_bulan').value) || 0;
         const totalHarga = harga * rentangBulan;
 
+        // Format angka dengan titik sebagai pemisah ribuan
         document.getElementById('total_harga').value = totalHarga.toLocaleString('id-ID');
+
+        // Tambahkan hidden input untuk nilai numerik
+        if (!document.getElementById('total_harga_numeric')) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'total_harga_numeric';
+            input.id = 'total_harga_numeric';
+            input.value = totalHarga;
+            document.querySelector('form').appendChild(input);
+        } else {
+            document.getElementById('total_harga_numeric').value = totalHarga;
+        }
     }
 
     function filterPaketIklan() {
