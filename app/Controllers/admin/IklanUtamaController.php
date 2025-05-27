@@ -363,4 +363,21 @@ class IklanUtamaController extends BaseController
             return redirect()->to('/');
         }
     }
+
+    public function delete($id = false)
+    {
+        // Cari data artikel berdasarkan ID
+        $data = $this->iklanUtamaModel->find($id);
+
+        if (!$data) {
+            session()->setFlashdata('error', 'Data Popup tidak ditemukan');
+            return redirect()->to(base_url('marketing/iklanutama'));
+        }
+
+        // Hapus data artikel dari database
+        $this->iklanUtamaModel->delete($id);
+
+        session()->setFlashdata('success', 'Data berhasil dihapus');
+        return redirect()->to(base_url('marketing/iklanutama'));
+    }
 }

@@ -36,10 +36,14 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 //ADMIN
+$routes->get('registrasi', 'RegistrasiController::index');
 $routes->get('login', 'Login::index');
+
 $routes->post('login/process', 'Login::process');
 $routes->get('logout', 'Login::logout');
 
+$routes->get('admin/acc/(:num)', 'AdminController::accPengajuan/$1');
+$routes->get('admin/tolak/(:num)', 'AdminController::tolakPengajuan/$1');
 // Daftarkan rute-rute admin di sini
 $routes->get('sitemap.xml', 'Sitemap::index');
 
@@ -260,8 +264,6 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
     $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
-
-
 });
 
 
@@ -275,6 +277,9 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
     $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
+    $routes->get('iklanutama/edit/(:num)', 'admin\IklanUtamaController::edit/$1');
+    $routes->post('iklanutama/proses_edit/(:num)', 'admin\IklanUtamaController::proses_edit/$1');
+    $routes->get('iklanutama/delete/(:any)', 'admin\IklanUtamaController::delete/$1');
 
     // IKLAN KONTEN
     $routes->get('daftariklankonten', 'admin\IklanController::index');
