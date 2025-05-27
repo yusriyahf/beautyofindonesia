@@ -94,10 +94,10 @@ class IklanController extends BaseController
     {
 
 
-        // $idPenulis = session()->get('id_user');
-        // if (!$idPenulis) {
-        //     return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
-        // }
+        $idMarketing = session()->get('id_user');
+        if (!$idMarketing) {
+            return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
+        }
 
         $idHargaIklan = $this->request->getPost('id_harga_iklan');
         $hargaData = $this->hargaIklanModel->find($idHargaIklan);
@@ -129,8 +129,8 @@ class IklanController extends BaseController
             'id_content'        => $idContent,
             'tipe_content'      => $tipeContent,
             'id_harga_iklan'    => $idHargaIklan,
-            'id_marketing'      => 1,
-            // 'id_marketing'      => $idPenulis,
+            // 'id_marketing'      => 1,
+            'id_marketing'      => $idMarketing,
             'rentang_bulan'     => $rentangBulan,
             'total_harga'       => $totalHargaFix,
             'tanggal_pengajuan' => date('Y-m-d'),
@@ -271,4 +271,27 @@ class IklanController extends BaseController
     //     session()->setFlashdata('success', 'Data iklan berhasil dihapus');
     //     return redirect()->to(base_url('admin/artikel/artikel_beriklan'));
     // }
+    public function delete($id = false)
+    {
+        // Cek apakah user sudah login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        // Cari data iklan berdasarkan ID
+        $iklanData = $this->artikelIklanModel->find($id);
+
+        if (!$iklanData) {
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
+
+        // Hapus data dari database
+        if ($this->artikelIklanModel->delete($id)) {
+            return redirect()->to(base_url('admin/artikel/artikel_iklan'))->with('success', 'Data iklan berhasil dihapus.');
+        } else {
+            // Ambil error jika delete gagal
+            $errors = $this->artikelIklanModel->errors();
+            return redirect()->back()->with('error', 'Gagal menghapus data: ' . implode(', ', $errors));
+        }
+    }
 }
