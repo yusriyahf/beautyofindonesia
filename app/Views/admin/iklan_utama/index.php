@@ -368,6 +368,15 @@
                                                                                 Rp <span id="previewAdmin_<?= $iklan['id_iklan_utama'] ?>"><?= number_format($iklan['total_harga'] * ($komisiAdmin ?? 0) / 100, 0, ',', '.') ?></span> (<span id="percentAdmin_<?= $iklan['id_iklan_utama'] ?>"><?= $komisiAdmin ?? 0 ?></span>%)
                                                                             </span>
                                                                         </div>
+                                                                        <hr class="my-2">
+                                                                        <div class="preview-item">
+                                                                            <span class="preview-label fw-bold">
+                                                                                <i class="fas fa-calculator me-2"></i>Total Komisi
+                                                                            </span>
+                                                                            <span class="preview-amount text-primary">
+                                                                                Rp <span id="totalCommission_<?= $iklan['id_iklan_utama'] ?>"><?= number_format($iklan['total_harga'], 0, ',', '.') ?></span> (<span id="totalPercent_<?= $iklan['id_iklan_utama'] ?>">100</span>%)
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
