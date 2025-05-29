@@ -409,6 +409,14 @@ if ($id_user) {
                                     <span class="nav-link-text">Permintaan Saldo</span>
                                 </a>
                             </li>
+                            <li class="nav-item  <?= (session()->get('role') === 'admin') ? '' : 'd-none' ?>">
+                                <a class="nav-link" href="<?= base_url('admin/riwayatkomisi') ?>">
+                                    <span class="nav-icon">
+                                        <i class="bi bi-percent"></i>
+                                    </span>
+                                    <span class="nav-link-text">Riwayat Komisi</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
