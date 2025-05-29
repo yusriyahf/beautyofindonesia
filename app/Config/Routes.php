@@ -46,16 +46,13 @@ $routes->get('admin/acc/(:num)', 'AdminController::accPengajuan/$1');
 $routes->get('admin/tolak/(:num)', 'AdminController::tolakPengajuan/$1');
 // Daftarkan rute-rute admin di sini
 $routes->get('sitemap.xml', 'Sitemap::index');
-
 $routes->get('iklan-klik/(:num)', 'IklanUtamaController::klik/$1');
+$routes->get('oleholeh/whatsapp-click/(:num)', 'OlehOleh::countWhatsappClick/$1');
 
 
 $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     // Dashboard
     $routes->get('dashboard', 'admin\Dashboardctrl::index');
-
-    // IKLAN UTAMA
-
 
     $routes->get('saldo', 'admin\Komisi::saldo/$1');
     $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
@@ -81,9 +78,6 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('komisi/edit/(:num)', 'admin\Komisi::edit/$1');
     $routes->post('komisi/proses_edit/(:num)', 'admin\Komisi::proses_edit/$1');
     $routes->get('komisi/delete/(:any)', 'admin\Komisi::delete/$1');
-
-
-
 
     // Popup
     $routes->get('popup', 'admin\Popup::index');
@@ -203,7 +197,15 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
     $routes->get('acciklankonten', 'admin\ArtikelIklan::index');
     $routes->post('acciklankonten/ubahstatus', 'admin\ArtikelIklan::ubahStatus');
-    
+
+    // komisi dan riwayat komisi
+    $routes->get('riwayatkomisi', 'admin\PersenKomisiController::index');
+    $routes->post('riwayatkomisi/tambah_default', 'admin\PersenKomisiController::tambah_default');
+    $routes->post('riwayatkomisi/update_default/(:num)', 'admin\PersenKomisiController::update_default/$1');
+    $routes->post('riwayatkomisi/delete_default/(:num)', 'admin\PersenKomisiController::delete_default/$1');
+    $routes->post('riwayatkomisi/tambah_custom', 'admin\PersenKomisiController::tambah_custom');
+    $routes->post('riwayatkomisi/delete_custom/(:num)', 'admin\PersenKomisiController::delete_custom/$1');
+    $routes->get('riwayatkomisi/get_detail_custom/(:num)', 'admin\PersenKomisiController::get_detail_custom/$1');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
@@ -213,6 +215,7 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
     // Artikel Penulis
     $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
     $routes->get('artikel/tambah', 'penulis\Artikel::tambah');
+    $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
     $routes->post('artikel/proses_tambah', 'penulis\Artikel::proses_tambah');
     $routes->get('artikel/edit/(:num)', 'penulis\Artikel::edit/$1');
     $routes->post('artikel/proses_edit/(:num)', 'penulis\Artikel::proses_edit/$1');
@@ -264,6 +267,20 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
     $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
+
+    // Iklan Konten
+    $routes->get('daftariklankonten', 'admin\IklanController::index');
+    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
+    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
+    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
+    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
+
+    // saldo
+    $routes->get('saldo', 'admin\Komisi::saldo/$1');
+    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
+    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
+    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
+    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
 });
 
 
@@ -346,34 +363,7 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
     $routes->get('kategori_oleholeh/delete/(:num)', 'admin\KategoriOlehOleh::delete/$1');
 });
 
-$routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
 
-    $routes->get('dashboard', 'penulis\Dashboard::index');
-    $routes->get('artikel/index', 'admin\Artikel::index');
-    $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
-    $routes->get('artikel/tambah', 'admin\Artikel::tambah');
-    $routes->post('artikel/proses_tambah', 'admin\Artikel::proses_tambah');
-    $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
-    $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
-    $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
-
-    $routes->get('saldo', 'admin\Komisi::saldo/$1');
-    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
-    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
-    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
-    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
-
-    // IKLAN KONTEN
-    $routes->get('daftariklankonten', 'admin\IklanController::index');
-    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
-    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
-    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
-});
-
-
-
-$routes->get('oleholeh/whatsapp-click/(:num)', 'OlehOleh::countWhatsappClick/$1');
 
 
 // Define routes for Indonesian language
