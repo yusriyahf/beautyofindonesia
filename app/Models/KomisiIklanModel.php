@@ -4,6 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
+
 class KomisiIklanModel extends Model
 {
     protected $table = 'tb_komisi_iklan';
@@ -14,6 +15,7 @@ class KomisiIklanModel extends Model
     protected $protectFields = true;
     protected $allowedFields = [
         'id_iklan',
+        'tipe_iklan',
         'id_user',
         'peran',
         'persen',
@@ -31,6 +33,7 @@ class KomisiIklanModel extends Model
     // Validation
     protected $validationRules = [
         'id_iklan' => 'required|integer',
+        'tipe_iklan' => 'required|in_list[konten,utama]',
         'id_user' => 'required|integer',
         'peran' => 'required|in_list[penulis,marketing,admin]',
         'persen' => 'required|integer|greater_than[0]|less_than_equal_to[100]',
@@ -41,6 +44,10 @@ class KomisiIklanModel extends Model
         'id_iklan' => [
             'required' => 'ID Iklan harus diisi',
             'integer' => 'ID Iklan harus berupa angka'
+        ],
+        'tipe_iklan' => [
+            'required' => 'Tipe Iklan harus diisi',
+            'in_list' => 'Tipe Iklan tidak valid'
         ],
         'id_user' => [
             'required' => 'ID User harus diisi',
@@ -76,6 +83,7 @@ class KomisiIklanModel extends Model
     protected $afterFind = [];
     protected $beforeDelete = [];
     protected $afterDelete = [];
+
 
     /**
      * Set created_at field before insert
@@ -235,4 +243,68 @@ class KomisiIklanModel extends Model
             ->groupBy('peran')
             ->findAll();
     }
+
+
+    // Tambahkan di bagian atas class
+
+
+    // Method untuk memformat jumlah komisi setelah query
+    protected function formatAmount(array $data)
+    {
+        if (!empty($data['data'])) {
+            if (isset($data['data'][0])) {
+                foreach ($data['data'] as &$row) {
+                    if (isset($row['jumlah_komisi'])) {
+                        $row['jumlah_komisi_formatted'] = 'Rp ' . number_format($row['jumlah_komisi'], 0, ',', '.');
+                    }
+                }
+            } else {
+                if (isset($data['data']['jumlah_komisi'])) {
+                    $data['data']['jumlah_komisi_formatted'] = 'Rp ' . number_format($data['data']['jumlah_komisi'], 0, ',', '.');
+                }
+            }
+        }
+        return $data;
+    }
+
+    // Perbaikan getKomisiWithDetails
+public function getKomisiWithDetails()
+{
+    return $this->select('tb_komisi_iklan.*, tb_users.username, tb_users.email')
+        ->join('tb_users', 'tb_users.id_user = tb_komisi_iklan.id_user', 'left')
+        ->orderBy('tb_komisi_iklan.created_at', 'DESC')
+        ->findAll();
+}
+
+// Perbaikan getWithIklanDetails
+public function getWithIklanDetails($id)
+{
+    return $this->select('tb_komisi_iklan.*, tb_artikel_iklan.judul as judul_iklan, tb_users.username')
+        ->join('tb_artikel_iklan', 'tb_artikel_iklan.id = tb_komisi_iklan.id_iklan', 'left')
+        ->join('tb_users', 'tb_users.id_user = tb_komisi_iklan.id_user', 'left')
+        ->where('tb_komisi_iklan.id', $id)
+        ->first();
+}
+
+// Tambahkan method baru untuk dashboard
+public function getRecentKomisi($limit = 5)
+{
+    return $this->select('tb_komisi_iklan.*, tb_users.username, tb_artikel_iklan.judul as judul_iklan')
+        ->join('tb_users', 'tb_users.id_user = tb_komisi_iklan.id_user', 'left')
+        ->join('tb_artikel_iklan', 'tb_artikel_iklan.id = tb_komisi_iklan.id_iklan', 'left')
+        ->orderBy('tb_komisi_iklan.created_at', 'DESC')
+        ->limit($limit)
+        ->findAll();
+}
+
+// Method untuk laporan bulanan
+public function getMonthlyReport($year, $month)
+{
+    return $this->select("DATE_FORMAT(created_at, '%Y-%m-%d') as tanggal, peran, SUM(jumlah_komisi) as total")
+        ->where('YEAR(created_at)', $year)
+        ->where('MONTH(created_at)', $month)
+        ->groupBy('tanggal, peran')
+        ->orderBy('tanggal')
+        ->findAll();
+}
 }
