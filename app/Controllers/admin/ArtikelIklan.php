@@ -385,13 +385,13 @@ class ArtikelIklan extends BaseController
             $komisiMap = [];
 
             foreach ($komisiDefault as $komisi) {
-                $komisiMap[$komisi['nama']] = $komisi['komisi'];
+                $komisiMap[$komisi['id']] = $komisi['komisi'];
             }
 
             // Hitung komisi berdasarkan nilai default
-            $komisiMarketing = isset($komisiMap['marketing']) ? $komisiMap['marketing'] : 0;
-            $komisiPenulis = isset($komisiMap['penulis']) ? $komisiMap['penulis'] : 0;
-            $komisiAdmin = isset($komisiMap['admin']) ? $komisiMap['admin'] : 0;
+            $komisiMarketing = isset($komisiMap['3']) ? $komisiMap['1'] : 0;
+            $komisiPenulis = isset($komisiMap['2']) ? $komisiMap['2'] : 0;
+            $komisiAdmin = isset($komisiMap['1']) ? $komisiMap['3'] : 0;
 
             $komisiData = [
                 'marketing' => [
@@ -413,6 +413,7 @@ class ArtikelIklan extends BaseController
 
             foreach ($komisiData as $peran => $data) {
                 if ($data['id_user']) {
+                    date_default_timezone_set('Asia/Jakarta');
                     $pemasukanData = [
                         'user_id' => $data['id_user'],
                         'jumlah' => $data['jumlah'],
@@ -420,7 +421,7 @@ class ArtikelIklan extends BaseController
                         'tanggal_pemasukan' => date('Y-m-d H:i:s'),
                         'keterangan' => "Komisi {$peran} untuk iklan ID: {$idIklan} ({$data['persen']}%)",
                         'id_iklan' => (int)$idIklan,
-                        'jenis_komisi' => $peran
+                        'tipe_iklan' => 'konten',
                     ];
 
                     if (!$this->PemasukanKomisiModel->insert($pemasukanData)) {
