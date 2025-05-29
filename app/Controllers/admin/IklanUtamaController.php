@@ -19,6 +19,7 @@ class IklanUtamaController extends BaseController
     private $UserModel;
     private $komisiIklanModel;
     private $pemasukanKomisiModel;
+    private $komisiModel;
 
     public function __construct()
     {
@@ -27,6 +28,7 @@ class IklanUtamaController extends BaseController
         $this->TipeIklanUtama = new \App\Models\TipeIklanUtama();
         $this->UserModel = new UserModel();
         $this->komisiIklanModel = new \App\Models\KomisiIklanModel();
+        $this->komisiModel = new KomisiModel();
         $this->pemasukanKomisiModel = new \App\Models\PemasukanUserModel();
     }
 
@@ -157,7 +159,7 @@ class IklanUtamaController extends BaseController
 
         try {
             $idIklan = $this->request->getPost('id_iklan_utama');
-        $status = $this->request->getPost('status');
+            $status = $this->request->getPost('status');
             $tanggalMulai = $this->request->getPost('tanggal_mulai');
             $tanggalSelesai = $this->request->getPost('tanggal_selesai');
             $durasiBulan = (int)$this->request->getPost('durasi_bulan');
@@ -172,9 +174,9 @@ class IklanUtamaController extends BaseController
                 'tanggal_mulai' => $tanggalMulai,
                 'tanggal_selesai' => $tanggalSelesai,
                 // 'diperbarui_pada' => date('Y-m-d H:i:s')
-        ];
+            ];
 
-        if ($status == 'diterima') {
+            if ($status == 'diterima') {
                 // Hitung tanggal selesai
                 $tanggalMulaiObj = new \DateTime($tanggalMulai);
                 $tanggalSelesaiObj = clone $tanggalMulaiObj;
@@ -281,7 +283,9 @@ class IklanUtamaController extends BaseController
                     'tanggal_pemasukan' => date('Y-m-d H:i:s'),
                     'keterangan' => "Komisi {$komisi['peran']} untuk iklan utama ID: {$idIklan} ({$komisi['persen']}%)",
                     'id_iklan' => (int)$idIklan,
-                    'jenis_komisi' => $komisi['peran']
+                    'jenis_komisi' => $komisi['peran'],
+                    'tipe_iklan' => 'utama',
+
                 ];
 
                 if (!$this->pemasukanKomisiModel->insert($pemasukanData)) {
@@ -290,8 +294,17 @@ class IklanUtamaController extends BaseController
             }
         } else {
             // Gunakan komisi default (marketing 30%, penulis 0%, admin 70%)
-            $komisiMarketing = 0;
-            $komisiAdmin = 70;
+            // Ambil semua data komisi dari database
+            $komisiDefault = $this->komisiModel->findAll();
+
+            $komisiMap = [];
+            foreach ($komisiDefault as $komisi) {
+                $komisiMap[$komisi['id']] = $komisi['komisi'];
+            }
+
+            // Ambil persen komisi marketing dan admin, jika tidak ada set 0
+            $komisiMarketing = isset($komisiMap['5']) ? $komisiMap['5'] : 0;
+            $komisiAdmin = isset($komisiMap['4']) ? $komisiMap['4'] : 0;
 
             $komisiData = [
                 'marketing' => [
@@ -315,12 +328,12 @@ class IklanUtamaController extends BaseController
                         'tanggal_pemasukan' => date('Y-m-d H:i:s'),
                         'keterangan' => "Komisi {$peran} untuk iklan utama ID: {$idIklan} ({$data['persen']}%)",
                         'id_iklan' => (int)$idIklan,
-                        'jenis_komisi' => $peran
+                        'tipe_iklan' => 'utama',
                     ];
 
                     if (!$this->pemasukanKomisiModel->insert($pemasukanData)) {
                         throw new \Exception("Gagal menyimpan komisi {$peran}");
-        }
+                    }
                 }
             }
         }
