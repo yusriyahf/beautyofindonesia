@@ -408,6 +408,7 @@
                                                 <form action="<?= base_url('admin/artikeliklan/ubahStatus') ?>" method="post">
                                                     <?= csrf_field() ?>
                                                     <input type="hidden" name="id" value="<?= $iklan['id_iklan_utama'] ?>">
+                                                    <input type="hidden" name="status" value="ditolak">
 
                                                     <div class="modal-header bg-danger text-white">
                                                         <h5 class="modal-title" id="tolakModalLabel<?= $iklan['id_iklan_utama'] ?>">Konfirmasi Penolakan</h5>
@@ -421,6 +422,12 @@
                                                             <li>Durasi: <strong><?= esc($iklan['rentang_bulan'] ?? 'N/A') ?> Bulan</strong></li>
                                                             <li>Harga: <strong>Rp <?= number_format($iklan['total_harga'] ?? 0, 0, ',', '.') ?></strong></li>
                                                         </ul>
+
+                                                        <div class="mb-3">
+                                                            <label for="alasan_penolakan<?= $iklan['id_iklan_utama'] ?>" class="form-label">Alasan Penolakan</label>
+                                                            <textarea class="form-control" id="alasan_penolakan<?= $iklan['id_iklan_utama'] ?>" name="alasan_penolakan" rows="3" required placeholder="Masukkan alasan penolakan..."></textarea>
+                                                            <div class="invalid-feedback">Harap isi alasan penolakan.</div>
+                                                        </div>
                                                     </div>
 
                                                     <div class="modal-footer">
