@@ -195,6 +195,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
     $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
     $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
+    $routes->post('daftariklankonten/delete/(:num)', 'Admin\IklanController::delete/$1');
     $routes->get('acciklankonten', 'admin\ArtikelIklan::index');
     $routes->post('acciklankonten/ubahstatus', 'admin\ArtikelIklan::ubahStatus');
 
