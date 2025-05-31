@@ -206,7 +206,7 @@
                                     <div class="modal fade" id="accModal<?= $iklan['id_iklan_utama'] ?>" tabindex="-1" aria-labelledby="accModalLabel<?= $iklan['id_iklan_utama'] ?>" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
-                                                <form action="<?= base_url('admin/iklanutama/ubahStatus') ?>" method="post">
+                                                <form action="<?= base_url('admin/acciklanutama/ubahStatus') ?>" method="post">
                                                     <?= csrf_field() ?>
                                                     <?php $durasiBulan = isset($iklan['rentang_bulan']) ? (int)$iklan['rentang_bulan'] : 0; ?>
 
@@ -405,9 +405,9 @@
                                     <div class="modal fade" id="tolakModal<?= $iklan['id_iklan_utama'] ?>" tabindex="-1" aria-labelledby="tolakModalLabel<?= $iklan['id_iklan_utama'] ?>" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
-                                                <form action="<?= base_url('admin/artikeliklan/ubahStatus') ?>" method="post">
+                                                <form action="<?= base_url('admin/acciklanutama/tolakiklan') ?>" method="post">
                                                     <?= csrf_field() ?>
-                                                    <input type="hidden" name="id" value="<?= $iklan['id_iklan_utama'] ?>">
+                                                    <input type="hidden" name="id_iklan_utama" value="<?= $iklan['id_iklan_utama'] ?>">
                                                     <input type="hidden" name="status" value="ditolak">
 
                                                     <div class="modal-header bg-danger text-white">

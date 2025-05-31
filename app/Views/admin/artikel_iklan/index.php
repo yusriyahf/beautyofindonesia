@@ -440,7 +440,7 @@
                                     <div class="modal fade" id="tolakModal<?= $artikelIklan['id_iklan'] ?>" tabindex="-1" aria-labelledby="tolakModalLabel<?= $artikelIklan['id_iklan'] ?>" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
-                                                <form action="<?= base_url('admin/artikeliklan/reject') ?>" method="post">
+                                                <form action="<?= base_url('admin/acciklankonten/tolakiklan') ?>" method="post">
                                                     <?= csrf_field() ?>
                                                     <input type="hidden" name="id_iklan" value="<?= $artikelIklan['id_iklan'] ?>">
                                                     <input type="hidden" name="status_iklan" value="ditolak">

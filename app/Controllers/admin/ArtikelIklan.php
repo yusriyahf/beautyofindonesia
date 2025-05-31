@@ -576,4 +576,49 @@ class ArtikelIklan extends BaseController
             ]);
         }
     }
+
+    public function tolakIklan()
+    {
+        // Validasi CSRF dan hanya membutuhkan id_iklan dan status_iklan
+        if (!$this->validate([
+            'id_iklan' => 'required|integer',
+            'status_iklan' => 'required|in_list[ditolak]'
+        ])) {
+            return redirect()->back()->with('error', 'Data tidak valid: ' . implode(', ', $this->validator->getErrors()));
+        }
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        try {
+            $idIklan = $this->request->getPost('id_iklan');
+            $alasanPenolakan = $this->request->getPost('alasan_penolakan') ?? 'Tidak disebutkan';
+
+            // 1. Update status iklan menjadi ditolak
+            $updateData = [
+                'status_iklan' => 'ditolak',
+                'alasan_penolakan' => $alasanPenolakan,
+                'diperbarui_pada' => date('Y-m-d H:i:s')
+            ];
+
+            if (!$this->artikelIklanModel->update($idIklan, $updateData)) {
+                throw new \Exception('Gagal mengupdate status iklan');
+            }
+
+            // 2. Hapus komisi yang mungkin sudah dibuat sebelumnya (jika ada)
+            $this->komisiIklanModel->where('id_iklan', $idIklan)->delete();
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                throw new \Exception('Transaksi database gagal');
+            }
+
+            return redirect()->back()->with('success', 'Iklan berhasil ditolak');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            log_message('error', 'Error in tolakIklan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 }

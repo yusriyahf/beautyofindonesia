@@ -262,6 +262,7 @@ class IklanUtamaController extends BaseController
         }
     }
 
+
     private function prosesKomisiPemasukan($idIklan, $totalHarga, $idMarketing)
     {
         // Cek apakah ada komisi custom untuk iklan ini
@@ -338,6 +339,60 @@ class IklanUtamaController extends BaseController
             }
         }
     }
+
+    public function tolakIklan()
+{
+    // Validasi input
+    if (!$this->validate([
+        'id_iklan_utama' => 'required|integer',
+        'status' => 'required|in_list[ditolak]',
+        'alasan_penolakan' => 'required|min_length[10]|max_length[500]'
+    ])) {
+        return redirect()->back()->with('error', 'Data tidak valid: ' . implode(', ', $this->validator->getErrors()));
+    }
+
+    $db = \Config\Database::connect();
+    $db->transStart();
+
+    try {
+        $idIklan = $this->request->getPost('id_iklan_utama');
+        $alasanPenolakan = $this->request->getPost('alasan_penolakan');
+        
+        // 1. Update status iklan menjadi ditolak
+        $updateData = [
+            'status' => 'ditolak',
+            'tanggal_mulai' => null,
+            'tanggal_selesai' => null,
+            'alasan_penolakan' => $alasanPenolakan,
+            'diperbarui_pada' => date('Y-m-d H:i:s')
+        ];
+
+        if (!$this->iklanUtamaModel->update($idIklan, $updateData)) {
+            throw new \Exception('Gagal mengupdate status iklan');
+        }
+
+        // 2. Hapus komisi yang terkait dengan iklan ini
+        $this->komisiIklanModel->where('id_iklan', $idIklan)
+                              ->where('tipe_iklan', 'utama')
+                              ->delete();
+                              
+        $this->pemasukanKomisiModel->where('id_iklan', $idIklan)
+                                   ->where('tipe_iklan', 'utama')
+                                   ->delete();
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            throw new \Exception('Transaksi database gagal');
+        }
+
+        return redirect()->back()->with('success', 'Iklan berhasil ditolak');
+    } catch (\Exception $e) {
+        $db->transRollback();
+        log_message('error', 'Error in tolakIklan: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    }
+}
 
     private function getAdminId()
     {

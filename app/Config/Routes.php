@@ -176,7 +176,8 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
 
     // IKLAN UTAMA
     $routes->get('acciklanutama', 'admin\IklanUtamaController::index2');
-    $routes->post('iklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
+    $routes->post('acciklanutama/tolakiklan', 'admin\IklanUtamaController::tolakIklan');
+    $routes->post('acciklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
     // Daftar Iklan Utama
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
     $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
@@ -198,6 +199,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->post('daftariklankonten/delete/(:num)', 'Admin\IklanController::delete/$1');
     $routes->get('acciklankonten', 'admin\ArtikelIklan::index');
     $routes->post('acciklankonten/ubahstatus', 'admin\ArtikelIklan::ubahStatus');
+    $routes->post('acciklankonten/tolakiklan', 'admin\ArtikelIklan::tolakIklan');
 
     // komisi dan riwayat komisi
     $routes->get('riwayatkomisi', 'admin\PersenKomisiController::index');
