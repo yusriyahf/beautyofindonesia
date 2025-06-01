@@ -43,7 +43,8 @@ class KategoriOlehOleh extends BaseController
             'nama_kategori_oleholeh' => 'required|min_length[3]',
             'nama_kategori_oleholeh_en' => 'required|min_length[3]',
         ])) {
-            return redirect()->to(base_url('admin/kategori_oleholeh/tambah'))->withInput()->with('validation', \Config\Services::validation());
+            $role = session()->get('role');
+            return redirect()->to(base_url($role. '/kategori_oleholeh/tambah'))->withInput()->with('validation', \Config\Services::validation());
         }
 
         // Ambil inputan dari form
@@ -65,7 +66,8 @@ class KategoriOlehOleh extends BaseController
         $kategoriOlehOlehModel->save($data);
 
         session()->setFlashdata('success', 'Data berhasil disimpan');
-        return redirect()->to(base_url('admin/kategori_oleholeh/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori_oleholeh/index'));
     }
 
     public function edit($id_kategori_oleholeh)
@@ -96,7 +98,8 @@ class KategoriOlehOleh extends BaseController
             'nama_kategori_oleholeh' => 'required|min_length[3]',
             'nama_kategori_oleholeh_en' => 'required|min_length[3]',
         ])) {
-            return redirect()->to(base_url('admin/kategori_oleholeh/edit/' . $id_kategori_oleholeh))
+            $role = session()->get('role');
+            return redirect()->to(base_url($role . '/kategori_oleholeh/edit/' . $id_kategori_oleholeh))
                 ->withInput()
                 ->with('validation', \Config\Services::validation());
         }
@@ -131,7 +134,8 @@ class KategoriOlehOleh extends BaseController
 
         // Set flashdata and redirect
         session()->setFlashdata('success', 'Kategori oleh-oleh berhasil diperbarui');
-        return redirect()->to(base_url('admin/kategori_oleholeh/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori_oleholeh/index'));
     }
 
     public function delete($id = false)
@@ -141,6 +145,7 @@ class KategoriOlehOleh extends BaseController
         $kategoriOlehOlehModel->delete($id);
 
         session()->setFlashdata('success', 'Data berhasil dihapus');
-        return redirect()->to(base_url('admin/kategori_oleholeh/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori_oleholeh/index'));
     }
 }
