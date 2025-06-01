@@ -65,13 +65,14 @@
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
+                                            <?php
+                                            $idPenulisLogin = session()->get('id_user');
+                                            $namaPenulis = session()->get('username');
+                                            ?>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-bold">Penulis</label>
-                                                <select class="form-select" name="id_penulis" id="id_penulis">
-                                                    <?php foreach ($all_data_penulis as $penulis) : ?>
-                                                        <option value="<?= $penulis->id_penulis; ?>"><?= $penulis->nama_penulis; ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
+                                                <input type="text" class="form-control" value="<?= esc($namaPenulis) ?>" readonly>
+                                                <input type="hidden" name="id_penulis" value="<?= esc($idPenulisLogin) ?>">
                                             </div>
                                         </div>
 

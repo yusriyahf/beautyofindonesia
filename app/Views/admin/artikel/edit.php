@@ -6,7 +6,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="app-page-title mb-0">Edit Artikel</h1>
             <div>
-                <a href="<?= base_url('admin/artikel') ?>" class="btn btn-outline-secondary">
+                <?php $role = session()->get('role'); ?>
+                <a href="<?= base_url($role . '/artikel') ?>" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-2"></i>Kembali
                 </a>
             </div>
@@ -22,7 +23,8 @@
                     </div>
 
                     <div class="app-card-body">
-                        <form action="<?= base_url('admin/artikel/proses_edit/' . $artikelData['id_artikel']) ?>" method="POST" enctype="multipart/form-data">
+                        <?php $role = session()->get('role');?>
+                        <form action="<?= base_url($role . '/artikel/proses_edit/' . $artikelData['id_artikel']) ?>" method="POST" enctype="multipart/form-data">
                             <?= csrf_field(); ?>
 
                             <!-- Tab Navigation -->

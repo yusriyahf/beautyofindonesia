@@ -153,13 +153,26 @@ class ArtikelModel extends Model
                ->get()->getResultArray();
      }
 
-     public function getSemuaArtikelPenulis($id_penulis)
+     // Di ArtikelModel
+     public function getArtikelByPenulis($idPenulis, $perPage = null, $startDate = null, $endDate = null)
      {
-          return $this->db->table('tb_artikel')
-               ->join('tb_kategori', 'tb_kategori.id_kategori=tb_artikel.id_kategori')
-               ->join('tb_penulis', 'tb_penulis.id_penulis=tb_artikel.id_penulis')
-               ->where('tb_artikel.id_penulis', $id_penulis)
-               ->get()->getResultArray();
+          $builder = $this->select('tb_artikel.*, tb_kategori.nama_kategori, tb_users.username as nama_penulis')
+               ->join('tb_kategori', 'tb_kategori.id_kategori = tb_artikel.id_kategori')
+               ->join('tb_users', 'tb_users.id_user = tb_artikel.id_penulis')
+               ->where('tb_artikel.id_penulis', $idPenulis)
+               ->orderBy('tb_artikel.tgl_publish', 'DESC');
+
+          // Filter tanggal jika ada
+          if ($startDate && $endDate) {
+               $builder->where('artikel.tgl_publish >=', $startDate)
+                    ->where('artikel.tgl_publish <=', $endDate);
+          }
+
+          if ($perPage) {
+               return $builder->paginate($perPage, 'artikel');
+          }
+
+          return $builder->findAll();
      }
 
      public function getArtikelTerbaru()
@@ -279,7 +292,7 @@ class ArtikelModel extends Model
      //enih ngitung artikel yg ditulis sama penulis tertentu
      public function getTotalArtikelByPenulis($id_penulis)
      {
-     return $this->where('id_penulis', $id_penulis)->countAllResults();
+          return $this->where('id_penulis', $id_penulis)->countAllResults();
      }
 }
 //doneeeeeee
