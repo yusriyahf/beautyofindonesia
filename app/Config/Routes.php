@@ -37,6 +37,7 @@ $routes->setAutoRoute(true);
 
 //ADMIN
 $routes->get('registrasi', 'RegistrasiController::index');
+$routes->post('registrasi/process', 'RegistrasiController::process');
 $routes->get('login', 'Login::index');
 
 $routes->post('login/process', 'Login::process');
@@ -217,12 +218,12 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
 
     // Artikel Penulis
     $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
-    $routes->get('artikel/tambah', 'penulis\Artikel::tambah');
+    $routes->get('artikel/tambah', 'admin\Artikel::tambah');
     $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
-    $routes->post('artikel/proses_tambah', 'penulis\Artikel::proses_tambah');
-    $routes->get('artikel/edit/(:num)', 'penulis\Artikel::edit/$1');
-    $routes->post('artikel/proses_edit/(:num)', 'penulis\Artikel::proses_edit/$1');
-    $routes->get('artikel/delete/(:any)', 'penulis\Artikel::delete/$1');
+    $routes->post('artikel/proses_tambah', 'admin\Artikel::proses_tambah');
+    $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
+    $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
+    $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
 
     // Kategori Artikel
     $routes->get('kategori/index', 'penulis\Kategori::index');
@@ -268,22 +269,14 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
 
     // Daftar Iklan Utama
     $routes->get('iklanutama', 'admin\IklanUtamaController::index');
-    $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
-    $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
 
     // Iklan Konten
     $routes->get('daftariklankonten', 'admin\IklanController::index');
-    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
-    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
-    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
 
     // saldo
     $routes->get('saldo', 'admin\Komisi::saldo/$1');
     $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
     $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
-    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
-    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
 });
 
 
@@ -312,58 +305,27 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
     $routes->get('saldo', 'admin\Komisi::saldo/$1');
     $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
     $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
-    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
-    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
 
     // Artikel
     $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
-    $routes->get('artikel/tambah', 'penulis\Artikel::tambah');
-    $routes->post('artikel/proses_tambah', 'penulis\Artikel::proses_tambah');
-    $routes->get('artikel/edit/(:num)', 'penulis\Artikel::edit/$1');
-    $routes->post('artikel/proses_edit/(:num)', 'penulis\Artikel::proses_edit/$1');
-    $routes->get('artikel/delete/(:any)', 'penulis\Artikel::delete/$1');
+    $routes->get('artikel/detail/(:num)/(:any)', 'Admin\Artikel::viewArtikel/$1/$2');
 
     // Kategori Artikel
     $routes->get('kategori/index', 'admin\Kategori::index');
-    $routes->get('kategori/tambah', 'admin\Kategori::tambah');
-    $routes->post('kategori/proses_tambah', 'admin\Kategori::proses_tambah');
-    $routes->get('kategori/edit/(:num)', 'admin\Kategori::edit/$1');
-    $routes->post('kategori/proses_edit/(:num)', 'admin\Kategori::proses_edit/$1');
-    $routes->get('kategori/delete/(:any)', 'admin\Kategori::delete/$1');
 
     // TEMPAT WISATA
     $routes->get('tempat_wisata/index', 'admin\TempatWisata::index');
-    $routes->get('tempat_wisata/tambah', 'admin\TempatWisata::tambah');
-    $routes->post('tempat_wisata/proses_tambah', 'admin\TempatWisata::proses_tambah');
-    $routes->get('tempat_wisata/edit/(:num)', 'admin\TempatWisata::edit/$1');
-    $routes->post('tempat_wisata/proses_edit/(:num)', 'admin\TempatWisata::proses_edit/$1');
     $routes->get('tempat_wisata/detail/(:num)', 'admin\TempatWisata::detail/$1');
-    $routes->get('tempat_wisata/delete/(:num)', 'admin\TempatWisata::delete/$1');
 
     // KATEGORI WISATA
     $routes->get('kategori_wisata/index', 'admin\KategoriWisata::index');
-    $routes->get('kategori_wisata/tambah', 'admin\KategoriWisata::tambah');
-    $routes->post('kategori_wisata/proses_tambah', 'admin\KategoriWisata::proses_tambah');
-    $routes->get('kategori_wisata/edit/(:num)', 'admin\KategoriWisata::edit/$1');
-    $routes->post('kategori_wisata/proses_edit/(:num)', 'admin\KategoriWisata::proses_edit/$1');
-    $routes->get('kategori_wisata/delete/(:any)', 'admin\KategoriWisata::delete/$1');
 
     // OLEH OLEJ
     $routes->get('oleh_oleh/index', 'admin\OlehOleh::index');
-    $routes->get('oleh_oleh/tambah', 'admin\OlehOleh::tambah');
-    $routes->post('oleh_oleh/proses_tambah', 'admin\OlehOleh::proses_tambah');
-    $routes->get('oleh_oleh/edit/(:num)', 'admin\OlehOleh::edit/$1');
     $routes->get('oleh_oleh/detail/(:segment)', 'admin\OlehOleh::detail/$1');
-    $routes->post('oleh_oleh/proses_edit/(:num)', 'admin\OlehOleh::proses_edit/$1');
-    $routes->get('oleh_oleh/delete/(:num)', 'admin\OlehOleh::delete/$1');
 
     // KATEGORI OLEH OLEH
     $routes->get('kategori_oleholeh/index', 'admin\KategoriOlehOleh::index');
-    $routes->get('kategori_oleholeh/tambah', 'admin\KategoriOlehOleh::tambah');
-    $routes->post('kategori_oleholeh/proses_tambah', 'admin\KategoriOlehOleh::proses_tambah');
-    $routes->get('kategori_oleholeh/edit/(:num)', 'admin\KategoriOlehOleh::edit/$1');
-    $routes->post('kategori_oleholeh/proses_edit/(:num)', 'admin\KategoriOlehOleh::proses_edit/$1');
-    $routes->get('kategori_oleholeh/delete/(:num)', 'admin\KategoriOlehOleh::delete/$1');
 });
 
 
