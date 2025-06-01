@@ -39,7 +39,8 @@ class KategoriWisata extends BaseController
             'nama_kategori_wisata' => 'required|min_length[3]',
             'nama_kategori_wisata_en' => 'required|min_length[3]',
         ])) {
-            return redirect()->to(base_url('admin/kategori_wisata/tambah'))->withInput()->with('validation', \Config\Services::validation());
+            $role = session()->get('role');
+            return redirect()->to(base_url($role . '/kategori_wisata/tambah'))->withInput()->with('validation', \Config\Services::validation());
         }
 
         // Data input
@@ -62,7 +63,8 @@ class KategoriWisata extends BaseController
         $kategoriWisataModel->save($data);
 
         session()->setFlashdata('success', 'Data berhasil disimpan');
-        return redirect()->to(base_url('admin/kategori_wisata/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori_wisata/index'));
     }
 
 
@@ -103,7 +105,8 @@ class KategoriWisata extends BaseController
             'nama_kategori_wisata' => 'required|min_length[3]',
             'nama_kategori_wisata_en' => 'required|min_length[3]',
         ])) {
-            return redirect()->to(base_url('admin/kategori_wisata/edit/' . $id_kategori_wisata))->withInput()->with('validation', \Config\Services::validation());
+            $role = session()->get('role');
+            return redirect()->to(base_url($role . '/kategori_wisata/edit/' . $id_kategori_wisata))->withInput()->with('validation', \Config\Services::validation());
         }
 
         // Data input
@@ -126,7 +129,8 @@ class KategoriWisata extends BaseController
         $kategoriWisataModel->update($id_kategori_wisata, $data);
 
         session()->setFlashdata('success', 'Kategori wisata berhasil diperbarui');
-        return redirect()->to(base_url('admin/kategori_wisata/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori_wisata/index'));
     }
 
 
@@ -138,6 +142,7 @@ class KategoriWisata extends BaseController
         $kategoriWisataModel->delete($id);
 
         session()->setFlashdata('success', 'Data berhasil dihapus');
-        return redirect()->to(base_url('admin/kategori_wisata/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori_wisata/index'));
     }
 }
