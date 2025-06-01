@@ -84,10 +84,12 @@
                             <i class="fas fa-ad fa-3x text-muted opacity-50"></i>
                         </div>
                         <h5 class="text-muted mb-2">Belum ada artikel beriklan</h5>
+                        <?php if (session()->get('role') === 'marketing'): ?>
                         <p class="text-muted mb-3">Mulai dengan membuat iklan baru</p>
                         <a href="<?= base_url($role . '/daftariklankonten/tambah') ?>" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus me-1"></i>Tambah Iklan
                         </a>
+                        <?php endif; ?>
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">

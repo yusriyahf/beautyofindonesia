@@ -37,10 +37,19 @@ class IklanController extends BaseController
             return redirect()->to(base_url('login'));
         }
 
+        $role = session()->get('role');
+        $userId = session()->get('id_user');
         $startDate = $this->request->getGet('created_at');
         $endDate = $this->request->getGet('updated_at');
 
-        $all_data = $this->artikelIklanModel->getArtikelIklanByDateFilter($startDate, $endDate) ?? [];
+        // Ambil data berdasarkan role
+        if ($role == 'marketing') {
+            $all_data = $this->artikelIklanModel->getArtikelIklanByMarketing($userId, $startDate, $endDate) ?? [];
+        } elseif ($role == 'penulis') {
+            $all_data = $this->artikelIklanModel->getArtikelIklanByPenulis($userId, $startDate, $endDate) ?? [];
+        } else {
+            $all_data = $this->artikelIklanModel->getArtikelIklanByDateFilter($startDate, $endDate) ?? [];
+        }
 
         foreach ($all_data as &$iklan) {
             $judul = 'Tidak ditemukan';
@@ -246,24 +255,23 @@ class IklanController extends BaseController
         ]);
     }
     public function delete($id)
-{
-    // Cek login
-    if (!session()->get('logged_in')) {
-        return redirect()->to(base_url('login'));
-    }
+    {
+        // Cek login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
 
-    // Cek apakah data iklan ada
-    $iklan = $this->artikelIklanModel->find($id);
-    if (!$iklan) {
-        return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
-    }
+        // Cek apakah data iklan ada
+        $iklan = $this->artikelIklanModel->find($id);
+        if (!$iklan) {
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
 
-    // Lakukan penghapusan
-    if ($this->artikelIklanModel->delete($id)) {
-        return redirect()->to(base_url('admin/daftariklankonten'))->with('success', 'Data iklan berhasil dihapus.');
-    } else {
-        return redirect()->back()->with('error', 'Gagal menghapus data iklan.');
+        // Lakukan penghapusan
+        if ($this->artikelIklanModel->delete($id)) {
+            return redirect()->to(base_url('admin/daftariklankonten'))->with('success', 'Data iklan berhasil dihapus.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menghapus data iklan.');
+        }
     }
-}
-
 }
