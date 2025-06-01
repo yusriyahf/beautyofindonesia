@@ -56,7 +56,8 @@ class Kategori extends BaseController
 
         // Set flashdata dan redirect
         session()->setFlashdata('success', 'Data berhasil disimpan');
-        return redirect()->to(base_url('admin/kategori/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori/index'));
     }
 
 
@@ -83,7 +84,8 @@ class Kategori extends BaseController
 
         if (!$kategoriData) {
             session()->setFlashdata('error', 'Data kategori tidak ditemukan');
-            return redirect()->to(base_url('admin/kategori/index'));
+            $role = session()->get('role');
+            return redirect()->to(base_url($role . '/kategori/index'));
         }
 
         // Ambil input dari pengguna
@@ -103,7 +105,8 @@ class Kategori extends BaseController
         ]);
 
         session()->setFlashdata('success', 'Data kategori berhasil diperbarui');
-        return redirect()->to(base_url('admin/kategori/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori/index'));
     }
     
 
@@ -115,6 +118,7 @@ class Kategori extends BaseController
 
         $kategoriModel->delete($id);
 
-        return redirect()->to(base_url('admin/kategori/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/kategori/index'));
     }
 }
