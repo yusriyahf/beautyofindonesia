@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
                                         <div class="info-item">
@@ -69,7 +69,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
                                         <div class="info-item">
@@ -88,7 +88,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-12 mb-4">
                                         <div class="info-item">
@@ -102,7 +102,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Description Accordion -->
                         <div class="card mb-4 border-0 shadow-sm">
                             <div class="card-header bg-white py-3 border-bottom">
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- SEO Information Card -->
                         <div class="card border-0 shadow-sm">
                             <div class="card-header bg-white py-3 border-bottom">
@@ -166,7 +166,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
                                         <div class="info-item">
@@ -188,7 +188,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Image and Actions Column -->
                     <div class="col-lg-4">
                         <!-- Photo Card -->
@@ -198,9 +198,9 @@
                             </div>
                             <div class="card-body text-center p-4">
                                 <div class="image-container rounded overflow-hidden shadow-sm bg-light mb-3" style="height: 250px;">
-                                    <img src="<?= base_url('asset-user/uploads/foto_wisata/' . $wisata['foto_wisata']) ?>" 
-                                         class="img-fluid h-100 w-100 object-fit-cover" 
-                                         alt="<?= $wisata['nama_wisata_ind'] ?>">
+                                    <img src="<?= base_url('asset-user/uploads/foto_wisata/' . $wisata['foto_wisata']) ?>"
+                                        class="img-fluid h-100 w-100 object-fit-cover"
+                                        alt="<?= $wisata['nama_wisata_ind'] ?>">
                                 </div>
                                 <div class="photo-source">
                                     <h6 class="info-title mb-2">Sumber Foto</h6>
@@ -210,30 +210,31 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Actions Card -->
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-white py-3 border-bottom">
-                                <h5 class="mb-0 fw-semibold text-primary"><i class="fas fa-tools me-2"></i>Actions</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="d-grid gap-3 mb-4">
-                                    <a href="<?= base_url('admin/tempat_wisata/edit/' . $wisata['id_wisata']) ?>" 
-                                       class="btn btn-primary btn-lg py-3 rounded-pill">
-                                       <i class="fas fa-edit me-2"></i>Edit Wisata
-                                    </a>
-                                    <a href="<?= base_url('admin/tempat_wisata/delete/' . $wisata['id_wisata']) ?>" 
-                                       class="btn btn-outline-danger btn-lg py-3 rounded-pill"
-                                       onclick="return confirm('Apakah Anda yakin ingin menghapus tempat wisata ini?')">
-                                       <i class="fas fa-trash-alt me-2"></i>Delete Wisata
-                                    </a>
+                        <?php $role = session()->get('role'); ?>
+                        <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h5 class="mb-0 fw-semibold text-primary"><i class="fas fa-tools me-2"></i>Actions</h5>
                                 </div>
-                                
-                                <hr class="my-4">
-                                
-                                <!--  -->
+                                <div class="card-body">
+
+                                    <div class="d-grid gap-3 mb-4">
+                                        <a href="<?= base_url('admin/tempat_wisata/edit/' . $wisata['id_wisata']) ?>"
+                                            class="btn btn-primary btn-lg py-3 rounded-pill">
+                                            <i class="fas fa-edit me-2"></i>Edit Wisata
+                                        </a>
+                                        <a href="<?= base_url('admin/tempat_wisata/delete/' . $wisata['id_wisata']) ?>"
+                                            class="btn btn-outline-danger btn-lg py-3 rounded-pill"
+                                            onclick="return confirm('Apakah Anda yakin ingin menghapus tempat wisata ini?')">
+                                            <i class="fas fa-trash-alt me-2"></i>Delete Wisata
+                                        </a>
+                                    </div>
+                                    <hr class="my-4">
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -247,14 +248,17 @@
     .card {
         border-radius: 12px;
         overflow: hidden;
-        border: 1px solid rgba(0,0,0,0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
+
     .card-header {
         background-color: #f8f9fa;
     }
+
     .info-item {
         margin-bottom: 1.5rem;
     }
+
     .info-title {
         font-size: 0.85rem;
         color: #6c757d;
@@ -263,56 +267,70 @@
         margin-bottom: 0.5rem;
         font-weight: 600;
     }
+
     .info-subtitle {
         font-size: 0.8rem;
         color: #6c757d;
         margin-bottom: 0.25rem;
         font-weight: 500;
     }
+
     .info-content {
         font-size: 1rem;
         font-weight: 500;
         color: #212529;
         word-break: break-word;
     }
+
     .accordion-button {
         font-weight: 500;
         padding: 1rem 1.25rem;
     }
+
     .accordion-body {
         padding: 0;
     }
+
     .description-content {
         font-size: 0.95rem;
         line-height: 1.6;
     }
+
     .image-container {
         position: relative;
         border: 1px solid #eee;
     }
+
     .object-fit-cover {
         object-fit: cover;
     }
+
     .btn-lg {
         font-weight: 500;
     }
+
     .status-info {
         background-color: #f8f9fa;
         padding: 1rem;
         border-radius: 8px;
     }
+
     .rounded-pill {
         border-radius: 50px !important;
     }
+
     .text-primary {
         color: #0d6efd !important;
     }
+
     .fw-semibold {
         font-weight: 600;
     }
+
     .border-bottom {
-        border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
     }
+
     .bg-light {
         background-color: #f8f9fa !important;
     }
