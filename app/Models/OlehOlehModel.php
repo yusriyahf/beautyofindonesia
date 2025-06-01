@@ -290,4 +290,13 @@ class OlehOlehModel extends Model
     {
         return $this->where('id_penulis', $id_penulis)->countAllResults();
     }
+
+    public function getOlehOlehByPenulis($idPenulis)
+    {
+        return $this->select('tb_oleholeh.*, tb_kategori_oleholeh.nama_kategori_oleholeh, tb_kotakabupaten.nama_kotakabupaten')
+            ->join('tb_kategori_oleholeh', 'tb_kategori_oleholeh.id_kategori_oleholeh = tb_oleholeh.id_kategori_oleholeh')
+            ->join('tb_kotakabupaten', 'tb_kotakabupaten.id_kotakabupaten = tb_oleholeh.id_kotakabupaten')
+            ->where('tb_oleholeh.id_penulis', $idPenulis)
+            ->paginate(10, 'tb_oleholeh');
+    }
 }

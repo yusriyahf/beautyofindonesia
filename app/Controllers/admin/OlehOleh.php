@@ -14,17 +14,28 @@ class OlehOleh extends BaseController
     protected $olehOlehModel;
     protected $kategoriOlehOlehModel;
     protected $kabupatenModel;
+    protected $db;
 
     public function __construct()
     {
         $this->olehOlehModel = new OlehOlehModel();
         $this->kategoriOlehOlehModel = new KategoriOlehOlehModel();
         $this->kabupatenModel = new KabupatenModel();
+        $this->db = \Config\Database::connect();
     }
 
     public function index()
     {
-        $data_oleh_oleh = $this->olehOlehModel->getAllOlehOleh();
+        $role = session()->get('role');
+        $userId = session()->get('id_user'); // Asumsikan id user disimpan di session
+
+        if ($role == 'penulis') {
+            // Jika penulis, hanya ambil oleh-oleh yang dibuatnya
+            $data_oleh_oleh = $this->olehOlehModel->getOlehOlehByPenulis($userId);
+        } else {
+            // Jika admin, ambil semua oleh-oleh
+            $data_oleh_oleh = $this->olehOlehModel->getAllOlehOleh();
+        }
 
         return view('admin/oleh_oleh/index', [
             'data_oleh_oleh' => $data_oleh_oleh,
@@ -103,13 +114,14 @@ class OlehOleh extends BaseController
                     'meta_title_en' => $this->request->getPost('meta_title_en'),
                     'meta_description_id' => $this->request->getPost('meta_description_id'),
                     'meta_description_en' => $this->request->getPost('meta_description_en'),
-                    'id_penulis' => 1,
+                    'id_penulis' => session()->get('id_user'), // Ambil id penulis dari session
                 ];
 
                 $this->olehOlehModel->insert($data);
 
                 session()->setFlashdata('success', 'Data berhasil disimpan');
-                return redirect()->to(base_url('admin/oleh_oleh/index'));
+                 $role = session()->get('role');
+                return redirect()->to(base_url($role . '/oleh_oleh/index'));
             } else {
                 session()->setFlashdata('error', 'File gagal diunggah');
                 return redirect()->back()->withInput();
@@ -204,14 +216,16 @@ class OlehOleh extends BaseController
         $this->olehOlehModel->update($id_oleholeh, $data);
 
         session()->setFlashdata('success', 'Data berhasil diperbarui');
-        return redirect()->to(base_url('admin/oleh_oleh/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/oleh_oleh/index'));
     }
 
 
     public function delete($id_oleholeh)
     {
         $this->olehOlehModel->delete($id_oleholeh);
-        return redirect()->to('admin/oleh_oleh/index');
+        $role = session()->get('role');
+        return redirect()->to($role . '/oleh_oleh/index');
     }
 
     public function detail($slug)

@@ -11,7 +11,8 @@
                 <p class="text-muted">Informasi lengkap tentang oleh-oleh</p>
             </div>
             <div>
-                <a href="<?= base_url('admin/oleh_oleh/index') ?>" class="btn btn-outline-secondary">
+                <?php $role = session()->get('role'); ?>
+                <a href="<?= base_url($role . '/oleh_oleh/index') ?>" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar
                 </a>
             </div>
@@ -26,9 +27,9 @@
                             <div class="row g-0">
                                 <div class="col-md-4">
                                     <div class="p-3 text-center bg-light rounded-start">
-                                        <img src="<?= base_url('uploads/oleh_oleh/' . $oleholeh['foto_oleholeh']) ?>" 
-                                             class="img-fluid rounded" style="max-height: 250px; width: auto;" 
-                                             alt="<?= $oleholeh['nama_oleholeh'] ?>">
+                                        <img src="<?= base_url('uploads/oleh_oleh/' . $oleholeh['foto_oleholeh']) ?>"
+                                            class="img-fluid rounded" style="max-height: 250px; width: auto;"
+                                            alt="<?= $oleholeh['nama_oleholeh'] ?>">
                                         <div class="mt-3">
                                             <button class="btn btn-sm btn-outline-primary me-2">
                                                 <i class="fas fa-eye me-1"></i> <?= $oleholeh['views'] ?> Views
@@ -50,37 +51,39 @@
                                                 <?= $oleholeh['nama_kategori_oleholeh'] ?>
                                             </span>
                                         </div>
-                                        
+
                                         <div class="mb-3">
                                             <i class="fas fa-map-marker-alt text-danger me-2"></i>
                                             <span class="text-muted">Lokasi: </span>
                                             <?= $oleholeh['nama_kotakabupaten'] ?>, <?= $oleholeh['nama_provinsi'] ?>
                                         </div>
-                                        
+
                                         <div class="mb-3">
                                             <i class="fas fa-phone-alt text-success me-2"></i>
                                             <span class="text-muted">Telepon: </span>
                                             <?= $oleholeh['nomor_tlp'] ?>
                                         </div>
-                                        
+
                                         <?php if ($oleholeh['link_website']): ?>
-                                        <div class="mb-3">
-                                            <i class="fas fa-globe text-info me-2"></i>
-                                            <span class="text-muted">Website: </span>
-                                            <a href="<?= $oleholeh['link_website'] ?>" target="_blank" class="text-decoration-none">
-                                                <?= $oleholeh['link_website'] ?>
-                                            </a>
-                                        </div>
+                                            <div class="mb-3">
+                                                <i class="fas fa-globe text-info me-2"></i>
+                                                <span class="text-muted">Website: </span>
+                                                <a href="<?= $oleholeh['link_website'] ?>" target="_blank" class="text-decoration-none">
+                                                    <?= $oleholeh['link_website'] ?>
+                                                </a>
+                                            </div>
                                         <?php endif; ?>
-                                        
-                                        <div class="d-flex mt-4">
-                                            <a href="<?= base_url('admin/oleh_oleh/edit/' . $oleholeh['id_oleholeh']) ?>" class="btn btn-warning me-2">
-                                                <i class="fas fa-edit me-1"></i> Edit
-                                            </a>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                                <i class="fas fa-trash me-1"></i> Hapus
-                                            </button>
-                                        </div>
+
+                                        <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                            <div class="d-flex mt-4">
+                                                <a href="<?= base_url($role . '/oleh_oleh/edit/' . $oleholeh['id_oleholeh']) ?>" class="btn btn-warning me-2">
+                                                    <i class="fas fa-edit me-1"></i> Edit
+                                                </a>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                    <i class="fas fa-trash me-1"></i> Hapus
+                                                </button>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -184,7 +187,7 @@
                                             <div class="card-body">
                                                 <h6 class="text-muted">Bahasa Indonesia</h6>
                                                 <p class="mb-3"><?= $oleholeh['meta_title_id'] ?></p>
-                                                
+
                                                 <h6 class="text-muted">English</h6>
                                                 <p><?= $oleholeh['meta_title_en'] ?></p>
                                             </div>
@@ -198,7 +201,7 @@
                                             <div class="card-body">
                                                 <h6 class="text-muted">Bahasa Indonesia</h6>
                                                 <p class="mb-3"><?= $oleholeh['meta_description_id'] ?></p>
-                                                
+
                                                 <h6 class="text-muted">English</h6>
                                                 <p><?= $oleholeh['meta_description_en'] ?></p>
                                             </div>
@@ -228,7 +231,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <form action="<?= base_url('admin/oleh_oleh/delete/' . $oleholeh['id_oleholeh']) ?>" method="POST">
+                <form action="<?= base_url($role . '/oleh_oleh/delete/' . $oleholeh['id_oleholeh']) ?>" method="POST">
                     <?= csrf_field() ?>
                     <input type="hidden" name="_method" value="DELETE">
                     <button type="submit" class="btn btn-danger">Ya, Hapus</button>
@@ -246,12 +249,12 @@
     $(document).ready(function() {
         // Initialize map
         const map = L.map('map').setView([<?= $oleholeh['oleholeh_latitude'] ?>, <?= $oleholeh['oleholeh_longitude'] ?>], 13);
-        
+
         // Add tile layer (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-        
+
         // Add custom icon
         const customIcon = L.icon({
             iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -259,9 +262,11 @@
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
         });
-        
+
         // Add marker with custom icon
-        L.marker([<?= $oleholeh['oleholeh_latitude'] ?>, <?= $oleholeh['oleholeh_longitude'] ?>], {icon: customIcon})
+        L.marker([<?= $oleholeh['oleholeh_latitude'] ?>, <?= $oleholeh['oleholeh_longitude'] ?>], {
+                icon: customIcon
+            })
             .addTo(map)
             .bindPopup(`
                 <div class="map-popup">
@@ -278,20 +283,20 @@
     .app-card {
         border-radius: 10px;
     }
-    
+
     .app-card-settings {
         border: none;
     }
-    
+
     .card {
         border-radius: 8px;
         transition: transform 0.2s;
     }
-    
+
     .card:hover {
         transform: translateY(-2px);
     }
-    
+
     .nav-tabs .nav-link {
         border: none;
         color: #495057;
@@ -299,28 +304,28 @@
         padding: 12px 20px;
         border-radius: 8px 8px 0 0;
     }
-    
+
     .nav-tabs .nav-link.active {
         color: #0d6efd;
         background-color: rgba(13, 110, 253, 0.1);
         border-bottom: 3px solid #0d6efd;
     }
-    
+
     .nav-tabs .nav-link:hover:not(.active) {
         background-color: rgba(13, 110, 253, 0.05);
     }
-    
+
     .map-popup h6 {
         font-weight: 600;
         color: #0d6efd;
     }
-    
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .card-body {
             padding: 1rem;
         }
-        
+
         #map {
             height: 250px;
         }

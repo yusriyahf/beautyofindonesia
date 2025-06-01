@@ -11,9 +11,12 @@
                     <p class="mb-0 opacity-75">Kelola semua produk oleh-oleh di website Anda</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <a href="<?= base_url('admin/oleh_oleh/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                    <?php $role = session()->get('role'); ?>
+                                <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                    <a href="<?= base_url($role . '/oleh_oleh/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
                         <i class="fas fa-plus me-1"></i>Tambah Oleh-Oleh
                     </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -95,7 +98,7 @@
                         </div>
                         <h5 class="text-muted mb-2">Belum ada oleh-oleh</h5>
                         <p class="text-muted mb-3">Mulai dengan menambahkan oleh-oleh baru</p>
-                        <a href="<?= base_url('admin/oleh_oleh/tambah') ?>" class="btn btn-primary btn-sm">
+                        <a href="<?= base_url($role . '/oleh_oleh/tambah') ?>" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus me-1"></i>Tambah Oleh-Oleh
                         </a>
                     </div>
@@ -157,11 +160,12 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                <a href="<?= base_url('admin/oleh_oleh/detail/' . $item['slug_oleholeh']) ?>"
+                                                <a href="<?= base_url($role . '/oleh_oleh/detail/' . $item['slug_oleholeh']) ?>"
                                                     class="btn btn-sm btn-outline-primary" title="Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?= base_url('admin/oleh_oleh/edit/' . $item['id_oleholeh']) ?>"
+                                                <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                                <a href="<?= base_url($role . '/oleh_oleh/edit/' . $item['id_oleholeh']) ?>"
                                                     class="btn btn-sm btn-outline-secondary" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
@@ -171,6 +175,7 @@
                                                     data-name="<?= esc($item['nama_oleholeh']) ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>
@@ -346,7 +351,7 @@
         $('.delete-btn').on('click', function() {
             var id = $(this).data('id');
             var name = $(this).data('name');
-            var url = '<?= base_url("admin/oleh_oleh/delete/") ?>' + id;
+            var url = '<?= base_url($role . "/oleh_oleh/delete/") ?>' + id;
             $('#oleholehName').text(name);
             $('#confirmDelete').attr('href', url);
             $('#deleteModal').modal('show');
