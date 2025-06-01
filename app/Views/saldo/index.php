@@ -121,7 +121,7 @@
                                 <h3 class="text-danger mb-0">Rp <?= number_format($total_pengeluaran, 0, ',', '.') ?></h3>
                                 <small class="text-danger">
                                     <i class="fas fa-calendar-alt me-1"></i>
-                                    <?= count($pengeluaran) ?> transaksi
+                                    <?= count($pengeluaran_acc) ?> transaksi
                                 </small>
                             </div>
                         </div>
@@ -269,56 +269,69 @@
 </div>
 
 <!-- Detail Modals -->
-<?php foreach ($semua_transaksi as $i => $transaksi): 
+<?php foreach ($semua_transaksi as $i => $transaksi):
     $isPemasukan = $transaksi['tipe'] === 'pemasukan';
     $colorClass = $isPemasukan ? 'success' : 'primary';
-    $iconClass = $isPemasukan ? 'fa-arrow-circle-down' : 'fa-arrow-circle-up';
-    $isPenarikan = $transaksi['tipe'] === 'penarikan' && isset($transaksi['bukti_transfer']);
+    $iconClass = $isPemasukan ? 'fa-arrow-down' : 'fa-arrow-up';
+    $isPenarikanDisetujui = $transaksi['tipe'] === 'penarikan' &&
+        $transaksi['status'] === 'disetujui' &&
+        !empty($transaksi['bukti_transfer']);
 ?>
     <div class="modal fade" id="detailModal<?= $i ?>" tabindex="-1" aria-labelledby="detailModalLabel<?= $i ?>" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg">
-                <!-- Modal Header -->
-                <div class="modal-header bg-<?= $colorClass ?> text-white rounded-top-4">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0 bg-white bg-opacity-20 p-3 rounded-circle me-3">
-                            <i class="fas <?= $iconClass ?> fa-lg"></i>
+            <div class="modal-content border-0">
+                <!-- Modal Header with Gradient Background -->
+                <div class="modal-header bg-gradient-<?= $colorClass ?> text-white rounded-top-4">
+                    <div class="d-flex align-items-center w-100">
+                        <div class="flex-shrink-0 bg-white bg-opacity-20 p-3 rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas <?= $iconClass ?> text-primary"></i>
                         </div>
-                        <div>
+                        <div class="flex-grow-1">
                             <h5 class="modal-title mb-1" id="detailModalLabel<?= $i ?>">
-                                Detail Transaksi #TRX<?= str_pad($i + 1, 4, '0', STR_PAD_LEFT) ?>
                             </h5>
-                            <p class="small mb-0 opacity-75">
-                                <i class="far fa-calendar-alt me-1"></i>
-                                <?= date('l, d F Y H:i', strtotime($transaksi['tanggal'])) ?>
-                                <?php if ($transaksi['status'] === 'disetujui' && !empty($transaksi['tanggal_persetujuan'])): ?>
-                                    | <i class="fas fa-check-circle me-1"></i> Disetujui: <?= date('d/m/Y H:i', strtotime($transaksi['tanggal_persetujuan'])) ?>
-                                <?php endif; ?>
-                            </p>
+                            <div class="d-flex flex-wrap align-items-center">
+                                <span class="badge bg-white text-<?= $colorClass ?> rounded-pill me-2 mb-1">
+                                    <i class="fas <?= $iconClass ?> me-1"></i>
+                                    <?= esc(ucfirst($transaksi['tipe'])) ?>
+                                </span>
+                                <span class="badge bg-white text-<?=
+                                                                    $transaksi['status'] === 'disetujui' ? 'success' : ($transaksi['status'] === 'ditolak' ? 'danger' : 'warning')
+                                                                    ?> rounded-pill me-2 mb-1">
+                                    <i class="fas <?=
+                                                    $transaksi['status'] === 'disetujui' ? 'fa-check-circle' : ($transaksi['status'] === 'ditolak' ? 'fa-times-circle' : 'fa-clock')
+                                                    ?> me-1"></i>
+                                    <?= esc(ucfirst($transaksi['status'])) ?>
+                                </span>
+                                <span class="text-white opacity-75 small mb-1">
+                                    <i class="far fa-calendar-alt me-1"></i>
+                                    <?= date('d M Y, H:i', strtotime($transaksi['tanggal'])) ?>
+                                </span>
+                            </div>
                         </div>
+                        <button type="button" class="btn-close btn-close-white opacity-100" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <!-- Modal Body -->
                 <div class="modal-body p-0">
-                    <!-- Amount Summary -->
-                    <div class="p-4 bg-<?= $colorClass ?>-subtle">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1 text-<?= $colorClass ?> fw-semibold">
-                                    <i class="fas <?= $isPemasukan ? 'fa-coins' : 'fa-money-bill-transfer' ?> me-2"></i>
-                                    <?= $isPemasukan ? 'Pemasukan Komisi' : 'Penarikan Saldo' ?>
-                                </h6>
-                                <span class="badge bg-white text-<?= $colorClass ?> rounded-pill px-3 py-1">
-                                    <i class="fas <?= $transaksi['status'] === 'disetujui' ? 'fa-check-circle' : 
-                                                   ($transaksi['status'] === 'ditolak' ? 'fa-times-circle' : 'fa-clock') ?> me-1"></i>
-                                    <?= esc(ucfirst($transaksi['status'])) ?>
-                                </span>
+                    <!-- Amount Summary Card -->
+                    <div class="card border-0 shadow-none rounded-0">
+                        <div class="card-body py-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-2">Total Transaksi</h6>
+                                    <h2 class="text-<?= $colorClass ?> mb-0 fw-bold">
+                                        <?= $isPemasukan ? '+' : '-' ?> Rp<?= number_format($transaksi['jumlah'], 0, ',', '.') ?>
+                                    </h2>
+                                </div>
+                                <div class="text-end">
+                                    <h6 class="text-muted mb-2">Saldo <?= $isPemasukan ? 'Bertambah' : 'Berkurang' ?></h6>
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <i class="fas <?= $iconClass ?> fa-2x text-<?= $colorClass ?> me-2"></i>
+                                        <span class="h4 mb-0 fw-bold"><?= $isPemasukan ? 'Pemasukan' : 'Penarikan' ?></span>
+                                    </div>
+                                </div>
                             </div>
-                            <h2 class="text-<?= $colorClass ?> mb-0 fw-bold">
-                                <?= $isPemasukan ? '+' : '-' ?> Rp <?= number_format($transaksi['jumlah'], 0, ',', '.') ?>
-                            </h2>
                         </div>
                     </div>
 
@@ -326,38 +339,48 @@
                     <div class="p-4">
                         <div class="row">
                             <!-- Left Column - Transaction Details -->
-                            <div class="col-lg-<?= $isPenarikan ? '6' : '12' ?>">
+                            <div class="col-lg-<?= $isPenarikanDisetujui ? '6' : '12' ?>">
                                 <!-- Transaction Details Card -->
-                                <div class="card mb-4 border-0 shadow-sm">
-                                    <div class="card-header bg-white border-bottom-0">
+                                <div class="card mb-4 border">
+                                    <div class="card-header bg-light">
                                         <h6 class="mb-0 fw-semibold">
-                                            <i class="fas fa-info-circle text-<?= $colorClass ?> me-2"></i>
-                                            Informasi Transaksi
+                                            <i class="fas fa-receipt text-<?= $colorClass ?> me-2"></i>
+                                            Rincian Transaksi
                                         </h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
+                                            <!-- Transaction Type -->
                                             <div class="col-md-6 mb-3">
                                                 <div class="d-flex align-items-start">
-                                                    <div class="flex-shrink-0 text-<?= $colorClass ?> mt-1">
-                                                        <i class="fas <?= $isPemasukan ? 'fa-hand-holding-usd' : 'fa-money-bill-wave' ?>"></i>
+                                                    <div class="flex-shrink-0 text-muted mt-1">
+                                                        <i class="fas fa-exchange-alt"></i>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
-                                                        <small class="text-muted d-block">Tipe Transaksi</small>
-                                                        <p class="mb-0 fw-medium"><?= esc(ucfirst($transaksi['tipe'])) ?></p>
+                                                        <small class="text-muted d-block">Jenis Transaksi</small>
+                                                        <p class="mb-0 fw-medium">
+                                                            <span class="badge bg-<?= $colorClass ?>-subtle text-<?= $colorClass ?>">
+                                                                <?= esc(ucfirst($transaksi['tipe'])) ?>
+                                                            </span>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            <!-- Transaction Status -->
                                             <div class="col-md-6 mb-3">
                                                 <div class="d-flex align-items-start">
-                                                    <div class="flex-shrink-0 text-<?= $colorClass ?> mt-1">
-                                                        <i class="fas fa-tag"></i>
+                                                    <div class="flex-shrink-0 text-muted mt-1">
+                                                        <i class="fas fa-info-circle"></i>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
                                                         <small class="text-muted d-block">Status</small>
                                                         <p class="mb-0 fw-medium">
-                                                            <span class="badge bg-<?= $colorClass ?>-subtle text-<?= $colorClass ?> rounded-pill px-3 py-1">
+                                                            <span class="badge bg-<?=
+                                                                                    $transaksi['status'] === 'disetujui' ? 'success' : ($transaksi['status'] === 'ditolak' ? 'danger' : 'warning')
+                                                                                    ?>-subtle text-<?=
+                                                                                                    $transaksi['status'] === 'disetujui' ? 'success' : ($transaksi['status'] === 'ditolak' ? 'danger' : 'warning')
+                                                                                                    ?>">
                                                                 <?= esc(ucfirst($transaksi['status'])) ?>
                                                             </span>
                                                         </p>
@@ -365,58 +388,63 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Transaction Date -->
                                             <div class="col-md-6 mb-3">
                                                 <div class="d-flex align-items-start">
-                                                    <div class="flex-shrink-0 text-<?= $colorClass ?> mt-1">
-                                                        <i class="far fa-calendar-alt"></i>
+                                                    <div class="flex-shrink-0 text-muted mt-1">
+                                                        <i class="far fa-calendar"></i>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
-                                                        <small class="text-muted d-block">Tanggal Pengajuan</small>
+                                                        <small class="text-muted d-block">Tanggal Transaksi</small>
                                                         <p class="mb-0 fw-medium"><?= date('d F Y', strtotime($transaksi['tanggal'])) ?></p>
+                                                        <small class="text-muted"><?= date('H:i:s', strtotime($transaksi['tanggal'])) ?></small>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3">
-                                                <div class="d-flex align-items-start">
-                                                    <div class="flex-shrink-0 text-<?= $colorClass ?> mt-1">
-                                                        <i class="far fa-clock"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <small class="text-muted d-block">Waktu Pengajuan</small>
-                                                        <p class="mb-0 fw-medium"><?= date('H:i:s', strtotime($transaksi['tanggal'])) ?></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                            <!-- Approval Date (if approved) -->
                                             <?php if ($transaksi['status'] === 'disetujui' && !empty($transaksi['tanggal_persetujuan'])): ?>
                                                 <div class="col-md-6 mb-3">
                                                     <div class="d-flex align-items-start">
-                                                        <div class="flex-shrink-0 text-<?= $colorClass ?> mt-1">
-                                                            <i class="fas fa-check-circle"></i>
+                                                        <div class="flex-shrink-0 text-muted mt-1">
+                                                            <i class="fas fa-check-double"></i>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <small class="text-muted d-block">Tanggal Persetujuan</small>
+                                                            <small class="text-muted d-block">Disetujui Pada</small>
                                                             <p class="mb-0 fw-medium"><?= date('d F Y H:i', strtotime($transaksi['tanggal_persetujuan'])) ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             <?php endif; ?>
+
+                                            <!-- User Information -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="flex-shrink-0 text-muted mt-1">
+                                                        <i class="fas fa-user"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <small class="text-muted d-block">Pemilik Transaksi</small>
+                                                        <p class="mb-0 fw-medium"><?= esc($transaksi['username']) ?></p>
+                                                        <small class="text-muted">ID: <?= $transaksi['user_id'] ?></small>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Additional Notes -->
+                                <!-- Admin Notes -->
                                 <?php if (!empty($transaksi['catatan'])): ?>
-                                    <div class="card border-0 shadow-sm mb-4">
-                                        <div class="card-header bg-white border-bottom-0">
+                                    <div class="card mb-4 border">
+                                        <div class="card-header bg-light">
                                             <h6 class="mb-0 fw-semibold">
-                                                <i class="far fa-sticky-note text-<?= $colorClass ?> me-2"></i>
+                                                <i class="fas fa-clipboard-check text-<?= $colorClass ?> me-2"></i>
                                                 Catatan Admin
                                             </h6>
                                         </div>
                                         <div class="card-body">
-                                            <div class="bg-light rounded p-3">
+                                            <div class="alert alert-light border">
                                                 <p class="mb-0"><?= esc($transaksi['catatan']) ?></p>
                                             </div>
                                         </div>
@@ -425,24 +453,79 @@
                             </div>
 
                             <!-- Right Column - Withdrawal Proof (if applicable) -->
-                            <?php if ($isPenarikan): ?>
+                            <?php if ($isPenarikanDisetujui): ?>
                                 <div class="col-lg-6">
-                                    <div class="card border-0 shadow-sm h-100">
-                                        <div class="card-header bg-white border-bottom-0">
+                                    <div class="card border h-100">
+                                        <div class="card-header bg-light">
                                             <h6 class="mb-0 fw-semibold">
-                                                <i class="fas fa-receipt text-<?= $colorClass ?> me-2"></i>
+                                                <i class="fas fa-file-invoice-dollar text-<?= $colorClass ?> me-2"></i>
                                                 Bukti Transfer
                                             </h6>
                                         </div>
-                                        <div class="card-body d-flex flex-column">
+                                        <div class="card-body">
                                             <div class="text-center mb-3">
-                                                <img src="<?= base_url('uploads/bukti_transfer/' . $transaksi['bukti_transfer']) ?>" 
-                                                     class="img-fluid rounded-3 border" 
-                                                     alt="Bukti Transfer"
-                                                     style="max-height: 300px;">
+                                                <?php if (file_exists(FCPATH . 'uploads/bukti_transfer/' . $transaksi['bukti_transfer'])): ?>
+                                                    <!-- Thumbnail with preview trigger -->
+                                                    <img src="<?= base_url('uploads/bukti_transfer/' . $transaksi['bukti_transfer']) ?>"
+                                                        class="img-fluid rounded border shadow-sm cursor-pointer hover-zoom mb-2"
+                                                        alt="Bukti Transfer"
+                                                        style="max-height: 250px;"
+                                                        onclick="showImagePreview('<?= base_url('uploads/bukti_transfer/' . $transaksi['bukti_transfer']) ?>', '<?= $transaksi['bukti_transfer'] ?>')">
+
+                                                    <!-- Download Button -->
+                                                    <div class="d-flex justify-content-center gap-2">
+                                                        <button class="btn btn-sm btn-outline-primary"
+                                                            onclick="downloadImage('<?= base_url('uploads/bukti_transfer/' . $transaksi['bukti_transfer']) ?>', '<?= $transaksi['bukti_transfer'] ?>')">
+                                                            <i class="fas fa-download me-1"></i> Unduh
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-secondary"
+                                                            onclick="showImagePreview('<?= base_url('uploads/bukti_transfer/' . $transaksi['bukti_transfer']) ?>', '<?= $transaksi['bukti_transfer'] ?>')">
+                                                            <i class="fas fa-expand me-1"></i> Preview
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Preview Modal (Taruh di bagian bawah file sebelum penutup section) -->
+                                                    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                                                            <div class="modal-content bg-transparent border-0">
+                                                                <div class="modal-header bg-dark bg-opacity-75 text-white">
+                                                                    <h6 class="modal-title" id="previewImageTitle">Preview Bukti Transfer</h6>
+                                                                    <div>
+                                                                        <button class="btn btn-sm btn-outline-light me-2" id="downloadPreviewBtn">
+                                                                            <i class="fas fa-download me-1"></i> Unduh
+                                                                        </button>
+                                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-body p-0 text-center">
+                                                                    <img id="previewImage" src="" class="img-fluid" style="max-height: 80vh;">
+                                                                </div>
+                                                                <div class="modal-footer bg-dark bg-opacity-75 justify-content-between">
+                                                                    <small class="text-white-50" id="previewImageName"></small>
+                                                                    <button type="button" class="btn btn-sm btn-outline-light" data-bs-dismiss="modal">
+                                                                        <i class="fas fa-times me-1"></i> Tutup
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div class="bg-light rounded border d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                        <div class="text-center p-3">
+                                                            <i class="fas fa-file-image fa-3x text-muted mb-2"></i>
+                                                            <p class="mb-0 small text-muted">File bukti tidak ditemukan</p>
+                                                        </div>
+                                                    </div>
+                                                <?php endif; ?>
                                             </div>
-                                            <div class="mt-auto">
-                                                <small class="text-muted">File: <?= $transaksi['bukti_transfer'] ?></small>
+                                            <div class="text-center">
+                                                <small class="text-muted">Nama File: <?= $transaksi['bukti_transfer'] ?></small>
+                                                <?php if (!empty($transaksi['tanggal_persetujuan'])): ?>
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">Diverifikasi pada:</small>
+                                                        <p class="mb-0 small"><?= date('d F Y H:i', strtotime($transaksi['tanggal_persetujuan'])) ?></p>
+                                                    </div>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -450,12 +533,12 @@
                             <?php endif; ?>
                         </div>
 
-                        <!-- Commission Details (if applicable) -->
+                        <!-- Commission Details (for income transactions) -->
                         <?php if ($isPemasukan && isset($transaksi['id_iklan'])): ?>
-                            <div class="card border-0 shadow-sm mb-4">
-                                <div class="card-header bg-white border-bottom-0">
+                            <div class="card border mt-4">
+                                <div class="card-header bg-light">
                                     <h6 class="mb-0 fw-semibold">
-                                        <i class="fas fa-percentage text-<?= $colorClass ?> me-2"></i>
+                                        <i class="fas fa-percent text-<?= $colorClass ?> me-2"></i>
                                         Detail Komisi
                                     </h6>
                                 </div>
@@ -463,13 +546,13 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <div class="d-flex align-items-start">
-                                                <div class="flex-shrink-0 text-<?= $colorClass ?> mt-1">
+                                                <div class="flex-shrink-0 text-muted mt-1">
                                                     <i class="fas fa-ad"></i>
                                                 </div>
                                                 <div class="flex-grow-1 ms-3">
                                                     <small class="text-muted d-block">Sumber Komisi</small>
                                                     <p class="mb-1 fw-medium">Iklan #<?= $transaksi['id_iklan'] ?></p>
-                                                    
+
                                                     <?php if (isset($iklan_info[$transaksi['id_iklan']])): ?>
                                                         <?php
                                                         $iklan = $iklan_info[$transaksi['id_iklan']];
@@ -479,18 +562,31 @@
                                                         <span class="badge bg-info bg-opacity-10 text-info small mt-1">
                                                             <?= esc($tipe) ?>
                                                         </span>
-                                                        
+
                                                         <?php if (!empty($detail)): ?>
                                                             <div class="mt-2">
                                                                 <small class="text-muted d-block">
-                                                                    <?= $tipe === 'artikel' ? 'Judul Artikel' : 
-                                                                       ($tipe === 'tempatwisata' ? 'Nama Tempat Wisata' : 
-                                                                       ($tipe === 'oleholeh' ? 'Nama Oleh-Oleh' : 'Detail')) ?>
+                                                                    <?= $tipe === 'artikel' ? 'Judul Artikel' : ($tipe === 'tempatwisata' ? 'Nama Wisata' : ($tipe === 'oleholeh' ? 'Nama Produk' : 'Detail')) ?>
                                                                 </small>
-                                                                <p class="mb-0 fst-italic small">
-                                                                    <?= esc($tipe === 'artikel' ? ($detail['judul_artikel'] ?? '-') : 
-                                                                        ($tipe === 'tempatwisata' ? ($detail['nama_wisata_ind'] ?? '-') : 
-                                                                        ($tipe === 'oleholeh' ? ($detail['nama_oleholeh'] ?? '-') : '-'))) ?>
+                                                                <p class="mb-0 fw-medium small">
+                                                                    <?php
+                                                                    switch ($tipe) {
+                                                                        case 'artikel':
+                                                                            $judul = $detail['judul_artikel'] ?? '-';
+                                                                            break;
+                                                                        case 'tempatwisata':
+                                                                            $judul = $detail['nama_wisata_ind'] ?? '-';
+                                                                            break;
+                                                                        case 'oleholeh':
+                                                                            $judul = $detail['nama_oleholeh'] ?? '-';
+                                                                            break;
+                                                                        default:
+                                                                            $judul = '-';
+                                                                    }
+                                                                    ?>
+
+                                                                    <?= esc($judul) ?>
+
                                                                 </p>
                                                             </div>
                                                         <?php endif; ?>
@@ -501,13 +597,12 @@
 
                                         <div class="col-md-6 mb-3">
                                             <div class="d-flex align-items-start">
-                                                <div class="flex-shrink-0 text-<?= $colorClass ?> mt-1">
-                                                    <i class="fas fa-user-tag"></i>
+                                                <div class="flex-shrink-0 text-muted mt-1">
+                                                    <i class="fas fa-hand-holding-usd"></i>
                                                 </div>
                                                 <div class="flex-grow-1 ms-3">
-                                                    <small class="text-muted d-block">Penerima</small>
-                                                    <p class="mb-0 fw-medium"><?= ucfirst($transaksi['username']) ?></p>
-                                                    <small class="text-muted">ID: <?= $transaksi['user_id'] ?></small>
+                                                    <small class="text-muted d-block">Nilai Komisi</small>
+                                                    <p class="mb-0 fw-medium">Rp<?= number_format($transaksi['jumlah'], 0, ',', '.') ?></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -520,23 +615,107 @@
 
                 <!-- Modal Footer -->
                 <div class="modal-footer bg-light rounded-bottom-4">
-                    <?php if ($transaksi['tipe'] === 'pengeluaran' && $transaksi['status'] === 'diproses'): ?>
-                        <button type="button" class="btn btn-outline-danger rounded-pill px-4 me-2">
-                            <i class="fas fa-ban me-1"></i> Tolak
-                        </button>
-                        <button type="button" class="btn btn-success rounded-pill px-4 me-2">
-                            <i class="fas fa-check-circle me-1"></i> Setujui
-                        </button>
-                    <?php endif; ?>
-                    <button type="button" class="btn btn-<?= $colorClass ?> rounded-pill px-4" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i> Tutup
                     </button>
+                    <?php if ($transaksi['tipe'] === 'penarikan' && $transaksi['status'] === 'pending'): ?>
+                        <button type="button" class="btn btn-<?= $colorClass ?>">
+                            <i class="fas fa-edit me-1"></i> Edit Permintaan
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 <?php endforeach; ?>
 <style>
+    /* Gradient Backgrounds */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    /* Card Styling */
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Modal Styling */
+    .modal-content {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        padding: 1.5rem;
+    }
+
+    .modal-body {
+        padding: 0;
+    }
+
+    /* Badge Styling */
+    .badge {
+        padding: 5px 10px;
+        font-weight: 500;
+    }
+
+    /* Transaction Amount */
+    .transaction-amount {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .modal-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+        }
+    }
+
+    /* Hover Effects */
+    .hover-scale {
+        transition: transform 0.3s ease;
+    }
+
+    .hover-scale:hover {
+        transform: scale(1.02);
+    }
+
+    /* Custom Border Radius */
+    .rounded-4 {
+        border-radius: 15px !important;
+    }
+
+    .rounded-top-4 {
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+    }
+
+    .rounded-bottom-4 {
+        border-bottom-left-radius: 15px !important;
+        border-bottom-right-radius: 15px !important;
+    }
+
+
     /* Gradient Header */
     .dashboard-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -682,6 +861,99 @@
             -webkit-overflow-scrolling: touch;
         }
     }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .hover-zoom {
+        transition: transform 0.3s ease;
+    }
+
+    .hover-zoom:hover {
+        transform: scale(1.03);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+   /* Image Preview Modal Styles */
+#imagePreviewModal .modal-dialog {
+    max-width: 95%;
+    margin: auto;
+}
+
+#imagePreviewModal .modal-content {
+    background: rgba(0, 0, 0, 0.95);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+#imagePreviewModal .modal-header,
+#imagePreviewModal .modal-footer {
+    background-color: transparent;
+    border: none;
+    padding: 1rem 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#imagePreviewModal .modal-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+#imagePreviewModal .btn-close {
+    filter: invert(1);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+#imagePreviewModal .btn-close:hover {
+    opacity: 1;
+}
+
+#imagePreviewModal .modal-body {
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+#previewImage {
+    max-height: 85vh;
+    max-width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+#previewImage:hover {
+    transform: scale(1.01);
+}
+
+#previewImageName {
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #imagePreviewModal .modal-dialog {
+        max-width: 100%;
+        margin: 1rem;
+    }
+
+    #previewImage {
+        max-height: 70vh;
+    }
+
+    #imagePreviewModal .modal-title {
+        font-size: 0.9rem;
+    }
+}
+
 </style>
 
 <script>
@@ -771,6 +1043,64 @@
         // Format currency input
         $('#jumlah').on('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Fungsi untuk menampilkan preview gambar
+        function showImagePreview(imageSrc, fileName) {
+            const previewModal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+            const previewImage = document.getElementById('previewImage');
+            const previewImageTitle = document.getElementById('previewImageTitle');
+            const previewImageName = document.getElementById('previewImageName');
+
+            previewImage.src = imageSrc;
+            previewImageTitle.textContent = 'Preview: ' + fileName;
+            previewImageName.textContent = fileName;
+            previewModal.show();
+        }
+
+        // Download image
+        function downloadImage(imageSrc, fileName) {
+            // Buat elemen anchor sementara
+            const link = document.createElement('a');
+            link.href = imageSrc;
+            link.download = fileName || 'bukti-transfer-' + new Date().getTime();
+
+            // Tambahkan ke dokumen dan klik
+            document.body.appendChild(link);
+            link.click();
+
+            // Bersihkan
+            document.body.removeChild(link);
+
+            // Tutup modal jika terbuka
+            const previewModal = bootstrap.Modal.getInstance(document.getElementById('imagePreviewModal'));
+            if (previewModal) {
+                previewModal.hide();
+            }
+        }
+
+        // Event delegation untuk tombol preview dan download
+        $(document).on('click', '[onclick^="showImagePreview"]', function() {
+            const onclickContent = $(this).attr('onclick');
+            const matches = onclickContent.match(/showImagePreview\('([^']+)',\s*'([^']+)'/);
+            if (matches && matches.length === 3) {
+                showImagePreview(matches[1], matches[2]);
+            }
+        });
+
+        $(document).on('click', '[onclick^="downloadImage"]', function() {
+            const onclickContent = $(this).attr('onclick');
+            const matches = onclickContent.match(/downloadImage\('([^']+)',\s*'([^']+)'/);
+            if (matches && matches.length === 3) {
+                downloadImage(matches[1], matches[2]);
+            }
+        });
+
+        // Handler untuk tombol download di modal preview
+        $('#downloadPreviewBtn').click(function() {
+            const imageSrc = $('#previewImage').attr('src');
+            const fileName = $('#previewImageName').text();
+            downloadImage(imageSrc, fileName);
         });
     });
 </script>

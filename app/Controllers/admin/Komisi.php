@@ -41,6 +41,11 @@ class Komisi extends BaseController
         // Ambil pengeluaran (penarikan) sesuai user login
         $all_data_penarikan_saldo = $this->penarikanSaldo->where('user_id', $user_id)->findAll();
 
+        // ambil pengeluaran yg sudah login dan sudah di acc
+        $all_data_penarikan_saldo_acc = array_filter($all_data_penarikan_saldo, function ($item) {
+            return $item['status'] === 'disetujui';
+        });
+
         // Buat map username agar bisa tampil di transaksi
         $userModel = new \App\Models\UserModel();
         $users = $userModel->findAll();
@@ -73,7 +78,13 @@ class Komisi extends BaseController
 
         // Hitung total pemasukan dan pengeluaran
         $total_pemasukan = array_sum(array_column($all_data_pemasukan_saldo, 'jumlah'));
-        $total_pengeluaran = array_sum(array_column($all_data_penarikan_saldo, 'jumlah'));
+        $total_pengeluaran = array_sum(array_column(
+            array_filter($all_data_penarikan_saldo, function ($item) {
+                return $item['status'] === 'disetujui';
+            }),
+            'jumlah'
+        ));
+
 
         // Ambil data komisi dengan join ke role untuk mendapatkan peran dan persentase
         $komisiModel = new \App\Models\PemasukanUserModel();
@@ -129,6 +140,7 @@ class Komisi extends BaseController
             'total_pengeluaran' => $total_pengeluaran,
             'pemasukan' => $all_data_pemasukan_saldo,
             'pengeluaran' => $all_data_penarikan_saldo,
+            'pengeluaran_acc' => $all_data_penarikan_saldo_acc,
             'komisiList' => $komisiList,
             'iklan_info' => $iklan_info, // data iklan lengkap untuk ditampilkan di view
         ]);
