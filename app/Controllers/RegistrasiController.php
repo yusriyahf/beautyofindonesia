@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\AccUserModel;
 use App\Models\PengajuanModel;
 
 class RegistrasiController extends BaseController
@@ -13,7 +14,7 @@ class RegistrasiController extends BaseController
 
     public function process()
     {
-        $model = new PengajuanModel();
+        $model = new AccUserModel();
 
         // Ambil data dari form
         $username = $this->request->getVar('username');
