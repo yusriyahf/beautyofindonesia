@@ -44,6 +44,7 @@ $routes->get('logout', 'Login::logout');
 
 $routes->get('admin/acc/(:num)', 'AdminController::accPengajuan/$1');
 $routes->get('admin/tolak/(:num)', 'AdminController::tolakPengajuan/$1');
+$routes->get('admin/prosesuser', 'AdminController::index');
 // Daftarkan rute-rute admin di sini
 $routes->get('sitemap.xml', 'Sitemap::index');
 

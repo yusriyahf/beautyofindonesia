@@ -7,6 +7,24 @@ use App\Models\UserModel;
 
 class AdminController extends BaseController
 {
+    private $pengajuanModel;
+    public function __construct()
+    {
+        $this->pengajuanModel = new PengajuanModel();
+    }
+
+    public function index()
+    {
+        $all_data_pengajuan = $this->pengajuanModel->findAll();
+
+
+        $validation = \Config\Services::validation();
+        return view('admin/users/index_acc', [
+            'all_data_pengajuan' => $all_data_pengajuan,
+            'validation' => $validation
+        ]);
+    }
+
     public function accPengajuan($id)
     {
         $pengajuanModel = new PengajuanModel();
@@ -88,5 +106,4 @@ class AdminController extends BaseController
             'message' => 'Pengajuan telah ditolak.'
         ]);
     }
-
 }

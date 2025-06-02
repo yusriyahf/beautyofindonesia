@@ -149,7 +149,7 @@
                                         <td class="cell align-middle"><?= $i++ ?></td>
                                         <td class="cell text-center align-middle">
                                             <div class="avatar avatar-md mx-auto">
-                                                <img src="<?= esc($profileImage) ?>" 
+                                                <img src="<?= esc($profileImage) ?>"
                                                     class="avatar-img rounded-circle border border-light shadow-sm"
                                                     style="width: 40px; height: 40px; object-fit: cover;"
                                                     alt="User Photo"
@@ -266,7 +266,7 @@
                                                                     <td class="fw-medium">
                                                                         <span class="badge <?=
                                                                                             ($user['role'] == 'penulis') ? 'bg-info' : (($user['role'] == 'marketing') ? 'bg-primary' :
-                                                                                                    'bg-secondary') ?>">
+                                                                                                'bg-secondary') ?>">
                                                                             <?= ucfirst($user['role']) ?>
                                                                         </span>
                                                                     </td>
@@ -503,25 +503,28 @@
 
     /* Custom Tab Styling */
     .nav-tabs .nav-link {
-        color: #6c757d; /* Gray color for inactive tabs */
+        color: #6c757d;
+        /* Gray color for inactive tabs */
         border: none;
         padding: 0.5rem 1rem;
         margin-right: 0.5rem;
         background: transparent;
     }
-    
+
     .nav-tabs .nav-link.active {
-        color: #198754; /* Green color for active tab */
+        color: #198754;
+        /* Green color for active tab */
         font-weight: 500;
         background: transparent;
         border-bottom: 3px solid #198754 !important;
     }
-    
+
     .nav-tabs .nav-link:hover:not(.active) {
-        color: #495057; /* Darker gray on hover */
+        color: #495057;
+        /* Darker gray on hover */
         border-bottom: 3px solid #dee2e6 !important;
     }
-    
+
     .nav-tabs {
         border-bottom: 1px solid #dee2e6;
     }
