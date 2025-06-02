@@ -178,9 +178,13 @@
                                             </div>
                                         </td>
                                     </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
+                    </div>
 
+                    <!-- Modals for each user -->
+                    <?php foreach ($pending_users as $user) : ?>
                         <!-- Approve Modal -->
                         <div class="modal fade" id="approveModal<?= $user['id_pengajuan'] ?>" tabindex="-1" aria-labelledby="approveModalLabel<?= $user['id_pengajuan'] ?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 900px;">
@@ -196,13 +200,13 @@
                                         <!-- Nav Tabs -->
                                         <ul class="nav nav-tabs px-3 pt-2" id="userTab<?= $user['id_pengajuan'] ?>" role="tablist">
                                             <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile<?= $user['id_pengajuan'] ?>" type="button" role="tab">
+                                                <button class="nav-link active" id="profile-tab<?= $user['id_pengajuan'] ?>" data-bs-toggle="tab" data-bs-target="#profile<?= $user['id_pengajuan'] ?>" type="button" role="tab">
                                                     <i class="bi bi-person me-1"></i> Detail Profile
                                                 </button>
                                             </li>
                                             <?php if ($user['role'] == 'penulis' && !empty($user['contoh_karya_artikel'])) : ?>
                                                 <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles<?= $user['id_pengajuan'] ?>" type="button" role="tab">
+                                                    <button class="nav-link" id="articles-tab<?= $user['id_pengajuan'] ?>" data-bs-toggle="tab" data-bs-target="#articles<?= $user['id_pengajuan'] ?>" type="button" role="tab">
                                                         <i class="bi bi-file-text me-1"></i> Contoh Karya Artikel
                                                     </button>
                                                 </li>
@@ -223,8 +227,8 @@
                                                                 style="width: 120px; height: 120px; object-fit: cover;"
                                                                 alt="User Photo">
                                                         </div>
-                                                        <h5 class="fw-semibold mb-1"><?= $user['full_name'] ?? 'N/A' ?></h5>
-                                                        <span class="text-muted small">@<?= $user['username'] ?></span>
+                                                        <h5 class="fw-semibold mb-1"><?= esc($user['full_name'] ?? 'N/A') ?></h5>
+                                                        <span class="text-muted small">@<?= esc($user['username']) ?></span>
                                                     </div>
 
                                                     <div class="col-md-8">
@@ -233,7 +237,7 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <th width="30%" class="text-muted small">Email</th>
-                                                                        <td class="fw-medium"><?= $user['email'] ?></td>
+                                                                        <td class="fw-medium"><?= esc($user['email']) ?></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th class="text-muted small">Role</th>
@@ -251,12 +255,12 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th class="text-muted small">Phone</th>
-                                                                        <td class="fw-medium"><?= $user['kontak'] ?? '-' ?></td>
+                                                                        <td class="fw-medium"><?= esc($user['kontak'] ?? '-') ?></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th class="text-muted small">Bank Account</th>
                                                                         <td class="fw-medium">
-                                                                            <?= $user['bank_account_number'] ?? '-' ?>
+                                                                            <?= esc($user['bank_account_number'] ?? '-') ?>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -273,7 +277,7 @@
                                                         <div class="card-body">
                                                             <h6 class="fw-semibold mb-3">Sample Article</h6>
                                                             <div class="border rounded p-3 bg-light">
-                                                                <?= nl2br(htmlspecialchars($user['contoh_karya_artikel'])) ?>
+                                                                <?= nl2br(esc($user['contoh_karya_artikel'])) ?>
                                                             </div>
                                                             <div class="mt-3 text-muted small">
                                                                 <i class="bi bi-info-circle me-1"></i> This article was submitted as a sample by the writer
@@ -287,7 +291,7 @@
 
                                     <div class="modal-footer border-0">
                                         <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                                        <form action="<?= base_url('admin/users/approve/' . $user['id_pengajuan']) ?>" method="post">
+                                        <form action="<?= base_url('admin/userRequest/approve/' . $user['id_pengajuan']) ?>" method="post" style="display: inline;">
                                             <?= csrf_field() ?>
                                             <button type="submit" class="btn btn-success rounded-pill px-4">
                                                 <i class="bi bi-check-lg me-1"></i> Confirm
@@ -308,13 +312,8 @@
                                         </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form action="<?= base_url('admin/users/reject/' . $user['id_pengajuan']) ?>" method="post">
+                                    <form action="<?= base_url('admin/userRequest/reject/' . $user['id_pengajuan']) ?>" method="post">
                                         <div class="modal-body pt-0">
-                                            <div class="alert alert-warning border-0 bg-warning-light rounded-3 mb-4">
-                                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                                You are about to reject this user's access request. Please provide a clear reason.
-                                            </div>
-
                                             <div class="mb-4 text-center">
                                                 <div class="avatar avatar-lg mb-2">
                                                     <img src="<?= !empty($user['foto'])
@@ -324,19 +323,8 @@
                                                         style="width: 60px; height: 60px; object-fit: cover;"
                                                         alt="User Photo">
                                                 </div>
-                                                <h6 class="fw-semibold mb-1"><?= $user['full_name'] ?? 'N/A' ?></h6>
-                                                <span class="text-muted small">@<?= $user['username'] ?></span>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="rejectReason<?= $user['id_pengajuan'] ?>" class="form-label fw-semibold small">Reason for Rejection <span class="text-danger">*</span></label>
-                                                <textarea class="form-control rounded-3"
-                                                    id="rejectReason<?= $user['id_pengajuan'] ?>"
-                                                    name="reject_reason"
-                                                    rows="4"
-                                                    style="resize: none;"
-                                                    required
-                                                    placeholder="Example: Incomplete identity data, sample article doesn't meet quality standards, etc."></textarea>
+                                                <h6 class="fw-semibold mb-1"><?= esc($user['full_name'] ?? 'N/A') ?></h6>
+                                                <span class="text-muted small">@<?= esc($user['username']) ?></span>
                                             </div>
                                         </div>
                                         <div class="modal-footer border-0">
@@ -351,7 +339,6 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
-                    </div>
                 <?php endif; ?>
             </div>
         </div>
