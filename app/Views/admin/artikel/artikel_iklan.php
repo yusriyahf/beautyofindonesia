@@ -184,11 +184,11 @@
                                         <?php if ($role === 'marketing'): ?>
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center gap-1">
-                                                    <a href="<?= base_url('admin/daftariklankonten/detail/' . $item['id_iklan']) ?>"
+                                                    <a href="<?= base_url('marketing/daftariklankonten/detail/' . $item['id_iklan']) ?>"
                                                         class="btn btn-sm btn-outline-primary" title="Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a href="<?= base_url('admin/daftariklankonten/edit/' . $item['id_iklan']) ?>"
+                                                    <a href="<?= base_url('marketing/daftariklankonten/edit/' . $item['id_iklan']) ?>"
                                                         class="btn btn-sm btn-outline-secondary" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
@@ -204,7 +204,7 @@
                                         <div class="modal fade" id="hapusModal<?= $item['id_iklan'] ?>" tabindex="-1" aria-labelledby="hapusModalLabel<?= $item['id_iklan'] ?>" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content border-0 shadow-sm rounded-3">
-                                                    <form action="<?= base_url('admin/daftariklankonten/delete/' . $item['id_iklan']) ?>" method="post">
+                                                    <form action="<?= base_url('marketing/daftariklankonten/delete/' . $item['id_iklan']) ?>" method="post">
                                                         <?= csrf_field() ?>
                                                         <div class="modal-header bg-danger bg-opacity-10 text-danger border-0">
                                                             <h5 class="modal-title fw-semibold" id="hapusModalLabel<?= $item['id_iklan'] ?>">
