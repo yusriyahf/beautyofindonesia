@@ -135,9 +135,6 @@ class IklanUtamaController extends BaseController
 
         // Simpan ke database
         $this->iklanUtamaModel->insert($data);
-        // $this->tipeIklanUtamaModel->update($idTipeIklanUtama, [
-        //     'status' => 'tidak'
-        // ]);
 
         return redirect()->to(base_url('marketing/iklanutama'))->with('success', 'Pengajuan iklan berhasil disimpan.');
     }
@@ -341,58 +338,58 @@ class IklanUtamaController extends BaseController
     }
 
     public function tolakIklan()
-{
-    // Validasi input
-    if (!$this->validate([
-        'id_iklan_utama' => 'required|integer',
-        'status' => 'required|in_list[ditolak]',
-        'alasan_penolakan' => 'required|min_length[10]|max_length[500]'
-    ])) {
-        return redirect()->back()->with('error', 'Data tidak valid: ' . implode(', ', $this->validator->getErrors()));
-    }
-
-    $db = \Config\Database::connect();
-    $db->transStart();
-
-    try {
-        $idIklan = $this->request->getPost('id_iklan_utama');
-        $alasanPenolakan = $this->request->getPost('alasan_penolakan');
-        
-        // 1. Update status iklan menjadi ditolak
-        $updateData = [
-            'status' => 'ditolak',
-            'tanggal_mulai' => null,
-            'tanggal_selesai' => null,
-            'alasan_penolakan' => $alasanPenolakan,
-            'diperbarui_pada' => date('Y-m-d H:i:s')
-        ];
-
-        if (!$this->iklanUtamaModel->update($idIklan, $updateData)) {
-            throw new \Exception('Gagal mengupdate status iklan');
+    {
+        // Validasi input
+        if (!$this->validate([
+            'id_iklan_utama' => 'required|integer',
+            'status' => 'required|in_list[ditolak]',
+            'alasan_penolakan' => 'required|min_length[10]|max_length[500]'
+        ])) {
+            return redirect()->back()->with('error', 'Data tidak valid: ' . implode(', ', $this->validator->getErrors()));
         }
 
-        // 2. Hapus komisi yang terkait dengan iklan ini
-        $this->komisiIklanModel->where('id_iklan', $idIklan)
-                              ->where('tipe_iklan', 'utama')
-                              ->delete();
-                              
-        $this->pemasukanKomisiModel->where('id_iklan', $idIklan)
-                                   ->where('tipe_iklan', 'utama')
-                                   ->delete();
+        $db = \Config\Database::connect();
+        $db->transStart();
 
-        $db->transComplete();
+        try {
+            $idIklan = $this->request->getPost('id_iklan_utama');
+            $alasanPenolakan = $this->request->getPost('alasan_penolakan');
 
-        if ($db->transStatus() === false) {
-            throw new \Exception('Transaksi database gagal');
+            // 1. Update status iklan menjadi ditolak
+            $updateData = [
+                'status' => 'ditolak',
+                'tanggal_mulai' => null,
+                'tanggal_selesai' => null,
+                'alasan_penolakan' => $alasanPenolakan,
+                'diperbarui_pada' => date('Y-m-d H:i:s')
+            ];
+
+            if (!$this->iklanUtamaModel->update($idIklan, $updateData)) {
+                throw new \Exception('Gagal mengupdate status iklan');
+            }
+
+            // 2. Hapus komisi yang terkait dengan iklan ini
+            $this->komisiIklanModel->where('id_iklan', $idIklan)
+                ->where('tipe_iklan', 'utama')
+                ->delete();
+
+            $this->pemasukanKomisiModel->where('id_iklan', $idIklan)
+                ->where('tipe_iklan', 'utama')
+                ->delete();
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                throw new \Exception('Transaksi database gagal');
+            }
+
+            return redirect()->back()->with('success', 'Iklan berhasil ditolak');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            log_message('error', 'Error in tolakIklan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        return redirect()->back()->with('success', 'Iklan berhasil ditolak');
-    } catch (\Exception $e) {
-        $db->transRollback();
-        log_message('error', 'Error in tolakIklan: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
-}
 
     private function getAdminId()
     {
@@ -415,46 +412,83 @@ class IklanUtamaController extends BaseController
 
     public function edit($id)
     {
-        if (!session()->get('logged_in')) {
-            return redirect()->to(base_url('login'));
-        }
+        $iklanModel = new IklanUtamaModel();
+        $tipeModel = new TipeIklanUtamaModel();
 
-        // Ambil data iklan
-        $iklan = $this->iklanUtamaModel->find($id);
+        $iklan = $iklanModel->find($id);
         if (!$iklan) {
-            return redirect()->back()->with('error', 'Data tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
         }
 
+        $data = [
+            'iklanUtama' => $iklan,
+            'listJenisIklanUtama' => $tipeModel->findAll(),
+        ];
 
-        // Ambil konten sesuai tipe
-        $artikel_terpilih = $wisata_terpilih = $oleholeh_terpilih = [];
-
-        switch ($iklan['tipe_content']) {
-            case 'artikel':
-                $artikel_terpilih = $this->artikelModel->find($iklan['id_content']);
-                break;
-            case 'tempatwisata':
-                $wisata_terpilih = $this->wisataModel->find($iklan['id_content']);
-                break;
-            case 'oleholeh':
-                $oleholeh_terpilih = $this->olehOlehModel->find($iklan['id_content']);
-                break;
-        }
-
-        // Ambil data marketing
-        $marketing = $this->UsersModel->find($iklan['id_marketing']);
-
-        // Kirim ke view
-        return view('admin/artikel/edit_artikel_iklan', [
-            'iklan' => $iklan,
-            'harga_iklan' => $harga_iklan,
-            'artikel_terpilih' => $artikel_terpilih,
-            'wisata_terpilih' => $wisata_terpilih,
-            'oleholeh_terpilih' => $oleholeh_terpilih,
-            'marketing' => $marketing,
-            'validation' => \Config\Services::validation(),
-        ]);
+        return view('marketing/iklan_utama/edit', $data);
     }
+
+    public function proses_edit($id)
+    {
+        $iklanLama = $this->iklanUtamaModel->find($id);
+
+        if (!$iklanLama) {
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
+
+        // Validasi input
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'id_tipe_iklan_utama' => 'required',
+            'rentang_bulan'       => 'required|numeric|greater_than[0]',
+            'link_iklan'          => 'required|valid_url',
+            'thumbnail_iklan'     => 'if_exist|max_size[thumbnail_iklan,2048]|is_image[thumbnail_iklan]',
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $idTipeIklanUtama = $this->request->getPost('id_tipe_iklan_utama');
+        $idMarketing      = session()->get('id_user');
+        $linkIklan        = $this->request->getPost('link_iklan');
+        $jenis            = $this->request->getPost('jenis');
+        $rentangBulan     = $this->request->getPost('rentang_bulan');
+
+        // Bersihkan total harga
+        $totalHarga       = $this->request->getPost('total_harga');
+        $cleanTotalHarga  = floatval(str_replace([',', ' '], '', $totalHarga));
+
+        // Siapkan data update
+        $dataUpdate = [
+            'id_tipe_iklan_utama' => $idTipeIklanUtama,
+            'id_marketing'        => $idMarketing,
+            'jenis'               => $jenis,
+            'rentang_bulan'       => $rentangBulan,
+            'total_harga'         => $cleanTotalHarga,
+            'link_iklan'          => $linkIklan,
+        ];
+
+        // Handle upload gambar baru (jika ada)
+        $gambarBaru = $this->request->getFile('thumbnail_iklan');
+        if ($gambarBaru && $gambarBaru->isValid() && !$gambarBaru->hasMoved()) {
+            $newName = $gambarBaru->getRandomName();
+            $gambarBaru->move('assets/images/iklan_utama', $newName);
+
+            // Hapus gambar lama jika ada
+            if (!empty($iklanLama['thumbnail_iklan']) && file_exists('assets/images/iklan_utama/' . $iklanLama['thumbnail_iklan'])) {
+                unlink('assets/images/iklan_utama/' . $iklanLama['thumbnail_iklan']);
+            }
+
+            $dataUpdate['thumbnail_iklan'] = $newName;
+        }
+
+        // Simpan perubahan
+        $this->iklanUtamaModel->update($id, $dataUpdate);
+
+        return redirect()->to(base_url('marketing/iklanutama'))->with('success', 'Data iklan berhasil diperbarui.');
+    }
+
 
     public function klik($id)
     {
