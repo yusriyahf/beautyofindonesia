@@ -22,7 +22,7 @@
 
                     <div class="app-card-body">
 
-                    <?= $role = session()->get('role'); ?>
+                        <?= $role = session()->get('role'); ?>
                         <form method="post" action="<?= base_url($role . '/daftariklankonten/proses_tambah') ?>" enctype="multipart/form-data" class="needs-validation" novalidate>
                             <?= csrf_field() ?>
 
@@ -150,6 +150,20 @@
                                 </div>
 
                                 <div class="ps-5">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">No Telepon Pengaju <span class="text-danger">*</span></label>
+                                        <div class="card border">
+                                            <div class="card-body py-2">
+                                                <input
+                                                    type="text"
+                                                    name="no_pengaju"
+                                                    class="form-control border-0"
+                                                    placeholder="Masukkan nomor telepon"
+                                                    required>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="mb-3">
                                         <label class="form-label fw-semibold">Pemohon</label>
                                         <div class="card border">

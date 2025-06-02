@@ -189,6 +189,20 @@
                                 </h5>
 
                                 <div class="mb-3">
+                                    <label class="form-label fw-semibold">No Telepon Pengaju <span class="text-danger">*</span></label>
+                                    <div class="card border">
+                                        <div class="card-body py-2">
+                                            <input
+                                                type="number"
+                                                name="no_telp_pengaju"
+                                                class="form-control border-0"
+                                                placeholder="Masukkan nomor telepon"
+                                                value="<?= esc($iklan['no_pengaju']) ?>"
+                                                required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label fw-bold">Pemohon</label>
                                     <div class="card border-0 bg-light">
                                         <div class="card-body py-2">
@@ -262,15 +276,15 @@
         const preview = document.getElementById('imagePreview');
         const previewImg = document.getElementById('previewImg');
         const file = e.target.files[0];
-        
+
         if (file) {
             const reader = new FileReader();
-            
+
             reader.onload = function(e) {
                 previewImg.src = e.target.result;
                 preview.classList.remove('d-none');
             }
-            
+
             reader.readAsDataURL(file);
         } else {
             preview.classList.add('d-none');

@@ -7,8 +7,8 @@
         <div class="dashboard-header bg-gradient-primary rounded-4 p-4 mb-4 text-white shadow">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 class="mb-2 text-white"><i class="fas fa-ad me-2 text-white"></i> Daftar Permintaan Tampil Iklan</h1>
-                    <p class="mb-0 opacity-75">Kelola semua permintaan artikel beriklan di sini</p>
+                    <h1 class="mb-2 text-white"><i class="fas fa-ad me-2 text-white"></i> Permintaan Iklan Utama</h1>
+                    <p class="mb-0 opacity-75">Kelola semua artikel iklan utama di sini</p>
                 </div>
             </div>
         </div>

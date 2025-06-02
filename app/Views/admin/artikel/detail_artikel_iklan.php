@@ -158,7 +158,21 @@
                             </h5>
 
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <div class="card border-0 shadow-sm h-100">
+                                        <div class="card-body">
+                                            <h6 class="fw-semibold mb-3">
+                                                <i class="fas fa-user me-2 text-muted" style="font-size: small;"></i>No Telepon Pengaju
+                                            </h6>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 ms-3">
+                                                    <small class="text-muted"><?= $iklan['no_pengaju'] ?></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
                                     <div class="card border-0 shadow-sm h-100">
                                         <div class="card-body">
                                             <h6 class="fw-semibold mb-3">
@@ -175,7 +189,7 @@
                                                     <small class="text-muted">ID: <?= $iklan['id_marketing'] ?></small>
                                                     <div class="mt-1">
                                                         <small class="text-muted">
-                                                            <i class="fas fa-clock me-1"></i>Diajukan pada <?= date('d M Y H:i', strtotime($iklan['tanggal_pengajuan'])) ?>
+                                                            <i class="fas fa-clock me-1"></i>Diajukan pada <?= date('d M Y', strtotime($iklan['tanggal_pengajuan'])) ?>
                                                         </small>
                                                     </div>
                                                 </div>
@@ -184,7 +198,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="card border-0 shadow-sm h-100">
                                         <div class="card-body">
                                             <h6 class="fw-semibold mb-3">

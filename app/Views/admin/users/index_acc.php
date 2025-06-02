@@ -21,6 +21,7 @@
         <?php
         $AccUserModel = new App\Models\AccUserModel();
         $pending_users = $AccUserModel->where('status', 'pending')->findAll();
+        $rejected_users = $AccUserModel->where('status', 'rejected')->findAll();
         $penulis_count = $AccUserModel
             ->where('role', 'penulis')
             ->where('status', 'pending')
@@ -29,7 +30,7 @@
             ->where('role', 'marketing')
             ->where('status', 'pending')
             ->countAllResults();
-        $rejected_count = $AccUserModel->where('status', 'rejected')->countAllResults();
+        $rejected_count = count($rejected_users);
         ?>
 
         <!-- Summary Cards -->
@@ -92,256 +93,363 @@
             </div>
         <?php endif; ?>
 
-        <!-- Data Table Section -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-0">
-                <?php if (empty($pending_users)) : ?>
-                    <div class="text-center py-5">
-                        <div class="mb-3">
-                            <i class="bi bi-people display-5 text-muted opacity-50"></i>
-                        </div>
-                        <h5 class="text-muted mb-2">No pending approval requests</h5>
-                        <p class="text-muted mb-3">All requests have been processed</p>
-                    </div>
-                <?php else : ?>
-                    <div class="table-responsive">
-                        <table id="usersTable" class="table table-hover mb-0">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th width="40" class="text-center">No</th>
-                                    <th>User</th>
-                                    <th>Email</th>
-                                    <th>Full Name</th>
-                                    <th width="120" class="text-center">Role</th>
-                                    <th width="120" class="text-center">Status</th>
-                                    <th width="150" class="text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $i = 1; ?>
-                                <?php foreach ($pending_users as $user) : ?>
-                                    <tr>
-                                        <td class="text-center"><?= $i++ ?></td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <img src="<?= !empty($user['foto']) ? base_url('uploads/user/' . $user['foto']) : base_url('assets-baru/img/user/default_profil.jpg') ?>"
-                                                        class="rounded-circle border border-light shadow-sm"
-                                                        style="width: 40px; height: 40px; object-fit: cover;"
-                                                        alt="User Photo">
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="fw-medium"><?= esc($user['username'] ?? 'N/A') ?></div>
-                                                    <small class="text-muted">ID: <?= $user['id_pengajuan'] ?? '' ?></small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="d-block text-truncate" style="max-width: 200px;">
-                                                <?= esc($user['email'] ?? 'N/A') ?>
-                                            </span>
-                                        </td>
-                                        <td><?= esc($user['full_name'] ?? 'N/A') ?></td>
-                                        <td class="text-center">
-                                            <span class="badge rounded-pill py-1 px-3 <?=
-                                                                                        ($user['role'] == 'penulis') ? 'bg-info bg-opacity-10 text-info border border-info border-opacity-10' : (($user['role'] == 'marketing') ? 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10' :
-                                                                                            'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10') ?>">
-                                                <?= ucfirst($user['role'] ?? 'N/A') ?>
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge rounded-pill py-1 px-3 bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
-                                                <i class="bi bi-hourglass me-1"></i> Pending
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="d-flex gap-2 justify-content-center">
-                                                <!-- Approve Button -->
-                                                <button type="button"
-                                                    class="btn btn-sm rounded-pill px-3 d-flex align-items-center border-0 shadow-sm"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#approveModal<?= $user['id_pengajuan'] ?>"
-                                                    style="background-color: #e8f7ef; color: #198754;">
-                                                    <i class="bi bi-check-circle-fill me-1"></i>
-                                                    <span class="fw-medium">Approve</span>
-                                                </button>
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-4" id="userApprovalTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-tab-pane" type="button" role="tab">
+                    <i class="bi bi-hourglass me-1"></i> Pending Approval
+                    <span class="badge bg-warning text-dark ms-1"><?= count($pending_users) ?></span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected-tab-pane" type="button" role="tab">
+                    <i class="bi bi-x-circle me-1"></i> Rejected Users
+                    <span class="badge bg-danger ms-1"><?= count($rejected_users) ?></span>
+                </button>
+            </li>
+        </ul>
 
-                                                <!-- Reject Button -->
-                                                <button type="button"
-                                                    class="btn btn-sm rounded-pill px-3 d-flex align-items-center border-0 shadow-sm"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#rejectModal<?= $user['id_pengajuan'] ?>"
-                                                    style="background-color: #fce8e6; color: #dc3545;">
-                                                    <i class="bi bi-x-circle-fill me-1"></i>
-                                                    <span class="fw-medium">Reject</span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Modals for each user -->
-                    <?php foreach ($pending_users as $user) : ?>
-                        <!-- Approve Modal -->
-                        <div class="modal fade" id="approveModal<?= $user['id_pengajuan'] ?>" tabindex="-1" aria-labelledby="approveModalLabel<?= $user['id_pengajuan'] ?>" aria-hidden="true">
-                            <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 900px;">
-                                <div class="modal-content border-0 shadow">
-                                    <div class="modal-header border-0">
-                                        <h5 class="modal-title fs-5 fw-semibold text-gray-800" id="approveModalLabel<?= $user['id_pengajuan'] ?>">
-                                            <i class="bi bi-check-circle-fill text-success me-2"></i> Confirm Approval
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-
-                                    <div class="modal-body p-0">
-                                        <!-- Nav Tabs -->
-                                        <ul class="nav nav-tabs px-3 pt-2" id="userTab<?= $user['id_pengajuan'] ?>" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="profile-tab<?= $user['id_pengajuan'] ?>" data-bs-toggle="tab" data-bs-target="#profile<?= $user['id_pengajuan'] ?>" type="button" role="tab">
-                                                    <i class="bi bi-person me-1"></i> Detail Profile
-                                                </button>
-                                            </li>
-                                            <?php if ($user['role'] == 'penulis' && !empty($user['contoh_karya_artikel'])) : ?>
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="articles-tab<?= $user['id_pengajuan'] ?>" data-bs-toggle="tab" data-bs-target="#articles<?= $user['id_pengajuan'] ?>" type="button" role="tab">
-                                                        <i class="bi bi-file-text me-1"></i> Contoh Karya Artikel
-                                                    </button>
-                                                </li>
-                                            <?php endif; ?>
-                                        </ul>
-
-                                        <!-- Tab Content -->
-                                        <div class="tab-content p-3" id="userTabContent<?= $user['id_pengajuan'] ?>">
-                                            <!-- Profile Tab -->
-                                            <div class="tab-pane fade show active" id="profile<?= $user['id_pengajuan'] ?>" role="tabpanel">
-                                                <div class="row">
-                                                    <div class="col-md-4 text-center">
-                                                        <div class="mb-3 position-relative">
-                                                            <img src="<?= !empty($user['foto'])
-                                                                            ? base_url('uploads/user/' . $user['foto'])
-                                                                            : base_url('assets-baru/img/user/default_profil.jpg') ?>"
-                                                                class="img-thumbnail rounded-circle shadow-sm"
-                                                                style="width: 120px; height: 120px; object-fit: cover;"
+        <!-- Tab Content -->
+        <div class="tab-content" id="userApprovalTabContent">
+            <!-- Pending Users Tab -->
+            <div class="tab-pane fade show active" id="pending-tab-pane" role="tabpanel" aria-labelledby="pending-tab">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        <?php if (empty($pending_users)) : ?>
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    <i class="bi bi-people display-5 text-muted opacity-50"></i>
+                                </div>
+                                <h5 class="text-muted mb-2">No pending approval requests</h5>
+                                <p class="text-muted mb-3">All requests have been processed</p>
+                            </div>
+                        <?php else : ?>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th width="40" class="text-center">No</th>
+                                            <th>User</th>
+                                            <th>Email</th>
+                                            <th>Full Name</th>
+                                            <th width="120" class="text-center">Role</th>
+                                            <th width="120" class="text-center">Status</th>
+                                            <th width="150" class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 1; ?>
+                                        <?php foreach ($pending_users as $user) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $i++ ?></td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <img src="<?= !empty($user['foto']) ? base_url('uploads/user/' . $user['foto']) : base_url('assets-baru/img/user/default_profil.jpg') ?>"
+                                                                class="rounded-circle border border-light shadow-sm"
+                                                                style="width: 40px; height: 40px; object-fit: cover;"
                                                                 alt="User Photo">
                                                         </div>
-                                                        <h5 class="fw-semibold mb-1"><?= esc($user['full_name'] ?? 'N/A') ?></h5>
-                                                        <span class="text-muted small">@<?= esc($user['username']) ?></span>
-                                                    </div>
-
-                                                    <div class="col-md-8">
-                                                        <div class="table-responsive">
-                                                            <table class="table table-sm table-borderless">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <th width="30%" class="text-muted small">Email</th>
-                                                                        <td class="fw-medium"><?= esc($user['email']) ?></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th class="text-muted small">Role</th>
-                                                                        <td class="fw-medium">
-                                                                            <span class="badge <?=
-                                                                                                ($user['role'] == 'penulis') ? 'bg-info' : (($user['role'] == 'marketing') ? 'bg-primary' :
-                                                                                                    'bg-secondary') ?>">
-                                                                                <?= ucfirst($user['role']) ?>
-                                                                            </span>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th class="text-muted small">Join Date</th>
-                                                                        <td class="fw-medium"><?= date('d M Y', strtotime($user['created_at'])) ?></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th class="text-muted small">Phone</th>
-                                                                        <td class="fw-medium"><?= esc($user['kontak'] ?? '-') ?></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th class="text-muted small">Bank Account</th>
-                                                                        <td class="fw-medium">
-                                                                            <?= esc($user['bank_account_number'] ?? '-') ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                                        <div class="flex-grow-1">
+                                                            <div class="fw-medium"><?= esc($user['username'] ?? 'N/A') ?></div>
+                                                            <small class="text-muted">ID: <?= $user['id_pengajuan'] ?? '' ?></small>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                </td>
+                                                <td><?= esc($user['email'] ?? 'N/A') ?></td>
+                                                <td><?= esc($user['full_name'] ?? 'N/A') ?></td>
+                                                <td class="text-center">
+                                                    <span class="badge rounded-pill py-1 px-3 <?=
+                                                                                                ($user['role'] == 'penulis') ? 'bg-info bg-opacity-10 text-info border border-info border-opacity-10' : (($user['role'] == 'marketing') ? 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10' :
+                                                                                                    'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10') ?>">
+                                                        <?= ucfirst($user['role'] ?? 'N/A') ?>
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge rounded-pill py-1 px-3 bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
+                                                        <i class="bi bi-hourglass me-1"></i> Pending
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="d-flex gap-2 justify-content-center">
+                                                        <!-- Approve Button -->
+                                                        <button type="button"
+                                                            class="btn btn-sm rounded-pill px-3 d-flex align-items-center border-0 shadow-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#approveModal<?= $user['id_pengajuan'] ?>"
+                                                            style="background-color: #e8f7ef; color: #198754;">
+                                                            <i class="bi bi-check-circle-fill me-1"></i>
+                                                            <span class="fw-medium">Approve</span>
+                                                        </button>
 
-                                            <!-- Articles Tab (Only for Penulis) -->
-                                            <?php if ($user['role'] == 'penulis' && !empty($user['contoh_karya_artikel'])) : ?>
-                                                <div class="tab-pane fade" id="articles<?= $user['id_pengajuan'] ?>" role="tabpanel">
-                                                    <div class="card border-0 shadow-none">
-                                                        <div class="card-body">
-                                                            <h6 class="fw-semibold mb-3">Sample Article</h6>
-                                                            <div class="border rounded p-3 bg-light">
-                                                                <?= nl2br(esc($user['contoh_karya_artikel'])) ?>
-                                                            </div>
-                                                            <div class="mt-3 text-muted small">
-                                                                <i class="bi bi-info-circle me-1"></i> This article was submitted as a sample by the writer
-                                                            </div>
+                                                        <!-- Reject Button -->
+                                                        <button type="button"
+                                                            class="btn btn-sm rounded-pill px-3 d-flex align-items-center border-0 shadow-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#rejectModal<?= $user['id_pengajuan'] ?>"
+                                                            style="background-color: #fce8e6; color: #dc3545;">
+                                                            <i class="bi bi-x-circle-fill me-1"></i>
+                                                            <span class="fw-medium">Reject</span>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rejected Users Tab -->
+            <div class="tab-pane fade" id="rejected-tab-pane" role="tabpanel" aria-labelledby="rejected-tab">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        <?php if (empty($rejected_users)) : ?>
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    <i class="bi bi-people display-5 text-muted opacity-50"></i>
+                                </div>
+                                <h5 class="text-muted mb-2">No rejected users</h5>
+                                <p class="text-muted mb-3">All requests have been approved</p>
+                            </div>
+                        <?php else : ?>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th width="40" class="text-center">No</th>
+                                            <th>User</th>
+                                            <th>Email</th>
+                                            <th>Full Name</th>
+                                            <th width="120" class="text-center">Role</th>
+                                            <th width="120" class="text-center">Status</th>
+                                            <th width="150" class="text-center">Rejected Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 1; ?>
+                                        <?php foreach ($rejected_users as $user) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $i++ ?></td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <img src="<?= !empty($user['foto']) ? base_url('uploads/user/' . $user['foto']) : base_url('assets-baru/img/user/default_profil.jpg') ?>"
+                                                                class="rounded-circle border border-light shadow-sm"
+                                                                style="width: 40px; height: 40px; object-fit: cover;"
+                                                                alt="User Photo">
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="fw-medium"><?= esc($user['username'] ?? 'N/A') ?></div>
+                                                            <small class="text-muted">ID: <?= $user['id_pengajuan'] ?? '' ?></small>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer border-0">
-                                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                                        <form action="<?= base_url('admin/userRequest/approve/' . $user['id_pengajuan']) ?>" method="post" style="display: inline;">
-                                            <?= csrf_field() ?>
-                                            <button type="submit" class="btn btn-success rounded-pill px-4">
-                                                <i class="bi bi-check-lg me-1"></i> Confirm
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
+                                                </td>
+                                                <td><?= esc($user['email'] ?? 'N/A') ?></td>
+                                                <td><?= esc($user['full_name'] ?? 'N/A') ?></td>
+                                                <td class="text-center">
+                                                    <span class="badge rounded-pill py-1 px-3 <?=
+                                                                                                ($user['role'] == 'penulis') ? 'bg-info bg-opacity-10 text-info border border-info border-opacity-10' : (($user['role'] == 'marketing') ? 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10' :
+                                                                                                    'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10') ?>">
+                                                        <?= ucfirst($user['role'] ?? 'N/A') ?>
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge rounded-pill py-1 px-3 bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10">
+                                                        <i class="bi bi-x-circle me-1"></i> Rejected
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="d-block text-truncate" style="max-width: 250px;" title="<?= esc($user['reject_reason'] ?? 'No reason provided') ?>">
+                                                        <?= esc($user['alasan_penolakan'] ?? 'No reason provided') ?>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-
-                        <!-- Reject Modal -->
-                        <div class="modal fade" id="rejectModal<?= $user['id_pengajuan'] ?>" tabindex="-1" aria-labelledby="rejectModalLabel<?= $user['id_pengajuan'] ?>" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content border-0 shadow">
-                                    <div class="modal-header border-0 pb-0">
-                                        <h5 class="modal-title fs-5 fw-semibold text-gray-800" id="rejectModalLabel<?= $user['id_pengajuan'] ?>">
-                                            <i class="bi bi-x-circle-fill text-danger me-2"></i> Confirm Rejection
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <form action="<?= base_url('admin/userRequest/reject/' . $user['id_pengajuan']) ?>" method="post">
-                                        <div class="modal-body pt-0">
-                                            <div class="mb-4 text-center">
-                                                <div class="avatar avatar-lg mb-2">
-                                                    <img src="<?= !empty($user['foto'])
-                                                                    ? base_url('uploads/user/' . $user['foto'])
-                                                                    : base_url('assets-baru/img/user/default_profil.jpg') ?>"
-                                                        class="avatar-img rounded-circle border border-2 border-danger shadow-sm"
-                                                        style="width: 60px; height: 60px; object-fit: cover;"
-                                                        alt="User Photo">
-                                                </div>
-                                                <h6 class="fw-semibold mb-1"><?= esc($user['full_name'] ?? 'N/A') ?></h6>
-                                                <span class="text-muted small">@<?= esc($user['username']) ?></span>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer border-0">
-                                            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                                            <?= csrf_field() ?>
-                                            <button type="submit" class="btn btn-danger rounded-pill px-4">
-                                                <i class="bi bi-x-lg me-1"></i> Reject User
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Modals for each pending user -->
+        <?php foreach ($pending_users as $user) : ?>
+            <!-- Approve Modal -->
+            <div class="modal fade" id="approveModal<?= $user['id_pengajuan'] ?>" tabindex="-1" aria-labelledby="approveModalLabel<?= $user['id_pengajuan'] ?>" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 900px;">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title fs-5 fw-semibold text-gray-800" id="approveModalLabel<?= $user['id_pengajuan'] ?>">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i> Confirm Approval
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body p-0">
+                            <!-- Nav Tabs -->
+                            <ul class="nav nav-tabs px-3 pt-2" id="userTab<?= $user['id_pengajuan'] ?>" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="profile-tab<?= $user['id_pengajuan'] ?>" data-bs-toggle="tab" data-bs-target="#profile<?= $user['id_pengajuan'] ?>" type="button" role="tab">
+                                        <i class="bi bi-person me-1"></i> Detail Profile
+                                    </button>
+                                </li>
+                                <?php if ($user['role'] == 'penulis' && !empty($user['contoh_karya_artikel'])) : ?>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="articles-tab<?= $user['id_pengajuan'] ?>" data-bs-toggle="tab" data-bs-target="#articles<?= $user['id_pengajuan'] ?>" type="button" role="tab">
+                                            <i class="bi bi-file-text me-1"></i> Contoh Karya Artikel
+                                        </button>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content p-3" id="userTabContent<?= $user['id_pengajuan'] ?>">
+                                <!-- Profile Tab -->
+                                <div class="tab-pane fade show active" id="profile<?= $user['id_pengajuan'] ?>" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-4 text-center">
+                                            <div class="mb-3 position-relative">
+                                                <img src="<?= !empty($user['foto'])
+                                                                ? base_url('uploads/user/' . $user['foto'])
+                                                                : base_url('assets-baru/img/user/default_profil.jpg') ?>"
+                                                    class="img-thumbnail rounded-circle shadow-sm"
+                                                    style="width: 120px; height: 120px; object-fit: cover;"
+                                                    alt="User Photo">
+                                            </div>
+                                            <h5 class="fw-semibold mb-1"><?= esc($user['full_name'] ?? 'N/A') ?></h5>
+                                            <span class="text-muted small">@<?= esc($user['username']) ?></span>
+                                        </div>
+
+                                        <div class="col-md-8">
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-borderless">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th width="30%" class="text-muted small">Email</th>
+                                                            <td class="fw-medium"><?= esc($user['email']) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-muted small">Role</th>
+                                                            <td class="fw-medium">
+                                                                <span class="badge <?=
+                                                                                    ($user['role'] == 'penulis') ? 'bg-info' : (($user['role'] == 'marketing') ? 'bg-primary' :
+                                                                                        'bg-secondary') ?>">
+                                                                    <?= ucfirst($user['role']) ?>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-muted small">Join Date</th>
+                                                            <td class="fw-medium"><?= date('d M Y', strtotime($user['created_at'])) ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-muted small">Phone</th>
+                                                            <td class="fw-medium"><?= esc($user['kontak'] ?? '-') ?></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-muted small">Bank Account</th>
+                                                            <td class="fw-medium">
+                                                                <?= esc($user['bank_account_number'] ?? '-') ?>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Articles Tab (Only for Penulis) -->
+                                <?php if ($user['role'] == 'penulis' && !empty($user['contoh_karya_artikel'])) : ?>
+                                    <div class="tab-pane fade" id="articles<?= $user['id_pengajuan'] ?>" role="tabpanel">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="fw-semibold mb-3">Sample Article</h6>
+                                                <div class="border rounded p-3 bg-light">
+                                                    <?= nl2br(esc($user['contoh_karya_artikel'])) ?>
+                                                </div>
+                                                <div class="mt-3 text-muted small">
+                                                    <i class="bi bi-info-circle me-1"></i> This article was submitted as a sample by the writer
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer border-0">
+                            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                            <form action="<?= base_url('admin/userRequest/approve/' . $user['id_pengajuan']) ?>" method="post" style="display: inline;">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="btn btn-success rounded-pill px-4">
+                                    <i class="bi bi-check-lg me-1"></i> Confirm
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reject Modal -->
+            <div class="modal fade" id="rejectModal<?= $user['id_pengajuan'] ?>" tabindex="-1" aria-labelledby="rejectModalLabel<?= $user['id_pengajuan'] ?>" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header border-0 pb-0">
+                            <h5 class="modal-title fs-5 fw-semibold text-gray-800" id="rejectModalLabel<?= $user['id_pengajuan'] ?>">
+                                <i class="bi bi-x-circle-fill text-danger me-2"></i> Confirm Rejection
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="<?= base_url('admin/userRequest/reject/' . $user['id_pengajuan']) ?>" method="post">
+                            <div class="modal-body pt-0">
+                                <div class="alert alert-warning border-0 bg-warning-light rounded-3 mb-4">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    You are about to reject this user's access request. Please provide a clear reason.
+                                </div>
+
+                                <div class="mb-4 text-center">
+                                    <div class="avatar avatar-lg mb-2">
+                                        <img src="<?= !empty($user['foto'])
+                                                        ? base_url('uploads/user/' . $user['foto'])
+                                                        : base_url('assets-baru/img/user/default_profil.jpg') ?>"
+                                            class="avatar-img rounded-circle border border-2 border-danger shadow-sm"
+                                            style="width: 60px; height: 60px; object-fit: cover;"
+                                            alt="User Photo">
+                                    </div>
+                                    <h6 class="fw-semibold mb-1"><?= esc($user['full_name'] ?? 'N/A') ?></h6>
+                                    <span class="text-muted small">@<?= esc($user['username']) ?></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="rejectReason<?= $user['id_pengajuan'] ?>" class="form-label fw-semibold small">Reason for Rejection <span class="text-danger">*</span></label>
+                                    <textarea class="form-control rounded-3"
+                                        id="rejectReason<?= $user['id_pengajuan'] ?>"
+                                        name="alasan_penolakan"
+                                        rows="4"
+                                        style="resize: none;"
+                                        required
+                                        placeholder="Example: Incomplete identity data, sample article doesn't meet quality standards, etc."></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                <?= csrf_field() ?>
+                                <button type="submit" class="btn btn-danger rounded-pill px-4">
+                                    <i class="bi bi-x-lg me-1"></i> Reject User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>
 
@@ -685,36 +793,108 @@
         border-top: none;
         padding: 15px;
     }
+
+    /* Custom styling for tabs */
+    .nav-tabs {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        color: #6c757d;
+        font-weight: 500;
+        padding: 0.75rem 1.25rem;
+        position: relative;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #0d6efd;
+        background-color: transparent;
+        border-bottom: 2px solid #0d6efd;
+    }
+
+    .nav-tabs .nav-link:hover:not(.active) {
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .nav-tabs .badge {
+        font-size: 0.65rem;
+        position: relative;
+        top: -1px;
+    }
+
+    /* Custom styling for tables */
+    .table {
+        font-size: 0.875rem;
+    }
+
+    .table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: #6c757d;
+        background-color: #f8f9fa;
+        padding: 0.75rem 1rem;
+    }
+
+    .table td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+    }
+
+    /* Truncate long text */
+    .text-truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 
+<!-- DataTables Initialization Script -->
 <script>
+    function initDataTable(selector, options) {
+        if (!$.fn.DataTable.isDataTable(selector)) {
+            $(selector).DataTable(options);
+        }
+    }
+
     $(document).ready(function() {
-        $('#usersTable').DataTable({
+        const pendingOptions = {
             responsive: true,
-            searching: true,
-            ordering: true,
-            paging: true,
-            info: true,
+            dom: '<"top"<"d-flex justify-content-between align-items-center"f<"ms-3"l>>>rt<"bottom"<"d-flex justify-content-between align-items-center"ip><"clear">>',
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
+                search: "",
+                searchPlaceholder: "Search pending users...",
+                lengthMenu: "Show _MENU_ entries",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                paginate: {
+                    previous: '<i class="bi bi-chevron-left"></i>',
+                    next: '<i class="bi bi-chevron-right"></i>'
+                }
             },
-            columnDefs: [{
-                    orderable: false,
-                    targets: [6]
-                } // Make actions column non-orderable
-            ],
             initComplete: function() {
-                $('[title]').tooltip({
-                    trigger: 'hover',
-                    placement: 'top'
-                });
+                $('.dataTables_filter input').addClass('form-control');
+                $('.dataTables_length select').addClass('form-select');
             }
+        };
+
+        const rejectedOptions = {
+            ...pendingOptions,
+            language: {
+                ...pendingOptions.language,
+                searchPlaceholder: "Search rejected users..."
+            }
+        };
+
+        initDataTable('.table', '#pending-tab-pane');
+
+        $('#pending-tab').on('shown.bs.tab', function() {
+            initDataTable('.table', '#pending-tab-pane');
         });
 
-        // Tooltip umum
-        $('[title]').tooltip({
-            trigger: 'hover',
-            placement: 'top'
+        $('#rejected-tab').on('shown.bs.tab', function() {
+            initDataTable('.table', '#rejected-tab-pane');
         });
     });
 </script>

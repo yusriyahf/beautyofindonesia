@@ -19,9 +19,11 @@ class ArtikelIklanModel extends Model
         'tanggal_pengajuan',
         'total_harga',
         'rentang_bulan',
+        'no_pengaju',
         'tanggal_mulai',
         'tanggal_selesai',
         'catatan_admin',
+        'alasan_penolakan',
         'dibuat_pada',
         'diperbarui_pada'
     ];

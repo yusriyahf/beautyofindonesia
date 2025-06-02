@@ -106,7 +106,7 @@
                                     <th width="120" class="text-center">Tanggal Mulai</th>
                                     <th width="120" class="text-center">Tanggal Selesai</th>
                                     <th width="120" class="text-center">Status</th>
-                                    <th width="120" class="text-center">Kontak</th>
+                                    <th width="120" class="text-center">Kontak Pengaju</th>
                                     <th width="140" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -212,8 +212,8 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            <?php if (!empty($artikelIklan['kontak'])) : ?>
-                                                <a href="https://wa.me/<?= esc($artikelIklan['kontak']) ?>" target="_blank" class="btn btn-sm btn-outline-success">
+                                            <?php if (!empty($artikelIklan['no_pengaju'])) : ?>
+                                                <a href="https://wa.me/<?= esc($artikelIklan['no_pengaju']) ?>" target="_blank" class="btn btn-sm btn-outline-success">
                                                     <i class="fab fa-whatsapp me-1"></i> Hubungi
                                                 </a>
                                             <?php else : ?>
@@ -274,6 +274,14 @@
                                                                 <li><i class="fas fa-ad me-2 text-success"></i>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
                                                                 <li><i class="fas fa-calendar-alt me-2 text-warning"></i>Durasi: <strong><?= $artikelIklan['rentang_bulan'] ?> Bulan</strong></li>
                                                                 <li><i class="fas fa-money-bill-wave me-2 text-danger"></i>Total Harga: <strong>Rp <?= number_format($artikelIklan['total_harga'], 0, ',', '.') ?></strong></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="info-list mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-clipboard-list me-2"></i>Informasi Marketing</h6>
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nama Marketing: <strong><?= esc($artikelIklan['username']) ?></strong></li>
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nomor Marketing: <strong><?= esc($artikelIklan['kontak']) ?></strong></li>
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nomor Klien: <strong><?= esc($artikelIklan['no_pengaju']) ?></strong></li>
                                                             </ul>
                                                         </div>
 
@@ -454,17 +462,19 @@
 
                                                     <div class="modal-body">
                                                         <div class="mb-3">
+                                                            <p>Anda akan menolak permintaan tampil iklan ini:</p>
+                                                            <ul class="mb-3">
+                                                                <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_konten']) ?></strong></li>
+                                                                <li>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
+                                                                <li>Harga: <strong><?= esc($artikelIklan['total_harga']) ?></strong></li>
+                                                            </ul>
                                                             <label for="alasan_penolakan<?= $artikelIklan['id_iklan'] ?>" class="form-label">
                                                                 <i class="fas fa-comment me-2"></i>Alasan Penolakan
                                                             </label>
                                                             <textarea class="form-control" id="alasan_penolakan<?= $artikelIklan['id_iklan'] ?>"
                                                                 name="alasan_penolakan" rows="3" required></textarea>
                                                         </div>
-                                                        <p>Anda akan menolak permintaan tampil iklan ini:</p>
-                                                        <ul class="mb-3">
-                                                            <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_konten']) ?></strong></li>
-                                                            <li>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
-                                                        </ul>
+
                                                     </div>
 
                                                     <div class="modal-footer">

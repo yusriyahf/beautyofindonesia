@@ -25,6 +25,7 @@ class AccUserModel extends Model
         'is_active',
         'contoh_karya_artikel',
         'status',
+        'alasan_penolakan',
         'created_at',
         'updated_at'
     ];
