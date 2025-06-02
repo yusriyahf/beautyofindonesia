@@ -70,8 +70,10 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('users/delete/(:any)', 'admin\Users::delete/$1');
 
     // Acc User Req
-    // Users
     $routes->get('userRequest', 'admin\AccUserController::index');
+    $routes->post('userRequest/approve/(:num)', 'admin\AccUserController::approve/$1');
+    $routes->post('userRequest/reject/(:num)', 'admin\AccUserController::reject/$1');
+
 
     $routes->get('komisi', 'admin\Komisi::index');
     $routes->get('komisi/tambah', 'admin\Komisi::tambah');
@@ -173,6 +175,8 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('profile/index', 'admin\Profile::index');
     $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
     $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
+
+    
 
 
     // IKLAN UTAMA
