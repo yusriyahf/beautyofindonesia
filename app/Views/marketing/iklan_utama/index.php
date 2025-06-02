@@ -197,8 +197,13 @@
                                                     class="btn btn-sm btn-outline-primary" title="Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?= base_url('marketing/iklanutama/edit/' . $item['id_iklan_utama']) ?>"
-                                                    class="btn btn-sm btn-outline-secondary" title="Edit">
+                                                <?php
+                                                $isEditable = strtolower($status) === 'diajukan';
+                                                ?>
+                                                <a href="<?= $isEditable ? base_url('marketing/iklanutama/edit/' . $item['id_iklan_utama']) : '#' ?>"
+                                                    class="btn btn-sm btn-outline-secondary <?= !$isEditable ? 'disabled' : '' ?>"
+                                                    title="Edit"
+                                                    <?= !$isEditable ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <button class="btn btn-sm btn-outline-danger delete-btn"
