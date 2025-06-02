@@ -301,4 +301,13 @@ class TempatWisataModel extends Model
     {
         return $this->where('id_penulis', $id_penulis)->countAllResults();
     }
+
+    public function getWisataByPenulis($idPenulis)
+    {
+        return $this->select('tb_tempatwisata.*, tb_kategori_wisata.nama_kategori_wisata, tb_kategori_wisata.nama_kategori_wisata_en, tb_kotakabupaten.nama_kotakabupaten')
+            ->join('tb_kategori_wisata', 'tb_kategori_wisata.id_kategori_wisata = tb_tempatwisata.id_kategori_wisata')
+            ->join('tb_kotakabupaten', 'tb_kotakabupaten.id_kotakabupaten = tb_tempatwisata.id_kotakabupaten')
+            ->where('tb_tempatwisata.id_penulis', $idPenulis)
+            ->paginate(10, 'tb_tempatwisata');
+    }
 }

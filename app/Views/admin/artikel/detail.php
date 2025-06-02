@@ -19,9 +19,12 @@
             </div>
             <div class="col-auto">
                 <div class="btn-group">
+                    <?php $role = session()->get('role'); ?>
+                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
                     <a href="<?= base_url('admin/artikel/edit/' . $artikel['id_artikel']) ?>" class="btn btn-primary btn-sm">
                         <i class="fas fa-edit me-1"></i> Edit Artikel
                     </a>
+                    
                     <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="visually-hidden">Toggle Dropdown</span>
@@ -35,6 +38,7 @@
                                 <i class="fas fa-trash-alt me-2"></i> Hapus
                             </a></li>
                     </ul>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

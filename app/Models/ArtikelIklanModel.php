@@ -106,4 +106,69 @@ class ArtikelIklanModel extends Model
             ->where('id_marketing', $id_user)
             ->countAllResults();
     }
+
+    // Untuk marketing - tampilkan iklan yang dibuat oleh marketing tersebut
+    public function getArtikelIklanByMarketing($idMarketing, $startDate = null, $endDate = null)
+    {
+        $builder = $this->db->table('tb_artikel_iklan')
+            ->where('id_marketing', $idMarketing);
+
+        if ($startDate && $endDate) {
+            $builder->where('created_at >=', $startDate)
+                ->where('created_at <=', $endDate);
+        }
+
+        return $builder->get()->getResultArray();
+    }
+
+    // Untuk penulis - tampilkan iklan yang kontennya dibuat oleh penulis tersebut
+    public function getArtikelIklanByPenulis($idPenulis, $startDate = null, $endDate = null)
+    {
+        // Dapatkan semua konten yang dibuat oleh penulis ini
+        $artikelPenulis = $this->db->table('tb_artikel')
+            ->where('id_penulis', $idPenulis)
+            ->get()->getResultArray();
+
+        $wisataPenulis = $this->db->table('tb_tempatwisata')
+            ->where('id_penulis', $idPenulis)
+            ->get()->getResultArray();
+
+        $olehOlehPenulis = $this->db->table('tb_oleholeh')
+            ->where('id_penulis', $idPenulis)
+            ->get()->getResultArray();
+
+        // Kumpulkan semua id konten
+        $contentIds = [];
+        foreach ($artikelPenulis as $artikel) {
+            $contentIds[] = ['id' => $artikel['id_artikel'], 'type' => 'artikel'];
+        }
+        foreach ($wisataPenulis as $wisata) {
+            $contentIds[] = ['id' => $wisata['id_wisata'], 'type' => 'tempatwisata'];
+        }
+        foreach ($olehOlehPenulis as $oleholeh) {
+            $contentIds[] = ['id' => $oleholeh['id_oleholeh'], 'type' => 'oleholeh'];
+        }
+
+        // Jika tidak ada konten, return array kosong
+        if (empty($contentIds)) {
+            return [];
+        }
+
+        // Buat query untuk mencari iklan yang terkait dengan konten penulis
+        $builder = $this->db->table('tb_artikel_iklan');
+
+        $whereGroup = [];
+        foreach ($contentIds as $content) {
+            $whereGroup[] = "(id_content = {$content['id']} AND tipe_content = '{$content['type']}')";
+        }
+
+        $builder->where('(' . implode(' OR ', $whereGroup) . ')');
+
+        if ($startDate && $endDate) {
+            $builder->where('created_at >=', $startDate)
+                ->where('created_at <=', $endDate);
+        }
+
+        return $builder->get()->getResultArray();
+    }
 }

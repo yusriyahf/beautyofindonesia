@@ -8,6 +8,7 @@ use App\Models\HargaIklanModel;
 use App\Models\KategoriModel;
 use App\Models\PenulisModel;
 use App\Models\TentangModel;
+use App\Models\UserModel;
 use CodeIgniter\Config\Services;
 use CodeIgniter\Exceptions\PageNotFoundException;
 
@@ -19,6 +20,7 @@ class Artikel extends BaseController
     private $KategoriModel;
     private $PenulisModel;
     private $TentangModel;
+    private $UserModel;
 
 
     public function __construct()
@@ -28,6 +30,7 @@ class Artikel extends BaseController
         $this->KategoriModel = new KategoriModel();
         $this->PenulisModel = new PenulisModel();
         $this->TentangModel = new TentangModel();
+        $this->UserModel = new UserModel();
     }
 
     public function index()
@@ -35,13 +38,21 @@ class Artikel extends BaseController
         // Pengecekan apakah pengguna sudah login atau belum
         if (!session()->get('logged_in')) {
             return redirect()->to(base_url('login'));
-            // Ubah 'login' sesuai dengan halaman login Anda
         }
 
+        $role = session()->get('role');
+        $userId = session()->get('id_user'); // Asumsikan id user disimpan di session
         $startDate = $this->request->getGet('start_date');
-        $endDate   = $this->request->getGet('end_date');
+        $endDate = $this->request->getGet('end_date');
 
-        $all_data_artikel = $this->ArtikelModel->getArtikel(10, $startDate, $endDate);
+        // Modifikasi pemanggilan model berdasarkan role
+        if ($role == 'penulis') {
+            // Jika penulis, hanya ambil artikel yang dibuatnya
+            $all_data_artikel = $this->ArtikelModel->getArtikelByPenulis($userId, 10, $startDate, $endDate);
+        } else {
+            // Jika admin, ambil semua artikel
+            $all_data_artikel = $this->ArtikelModel->getArtikel(10, $startDate, $endDate);
+        }
 
         $validation = \Config\Services::validation();
         return view('admin/artikel/index', [
@@ -89,11 +100,13 @@ class Artikel extends BaseController
         $all_data_artikel = $this->ArtikelModel->findAll();
         $all_data_kategori = $this->KategoriModel->findAll();
         $all_data_penulis = $this->PenulisModel->findAll();
+        $all_users_penulis = $this->UserModel->where('role', 'penulis')->findAll();
         $validation = \Config\Services::validation();
         return view('admin/artikel/tambah', [
             'all_data_artikel' => $all_data_artikel,
             'all_data_kategori' => $all_data_kategori,
             'all_data_penulis' => $all_data_penulis,
+            'all_users_penulis' => $all_users_penulis,
             'validation' => $validation
         ]);
     }
@@ -125,6 +138,9 @@ class Artikel extends BaseController
 
                 $this->resizeImage($path, 572, 572); // Mengubah ukuran gambar
 
+                // dd($this->request->getPost()); // Debug semua data POST
+
+
                 $data = [
                     'judul_artikel' => $this->request->getPost("judul_artikel"),
                     'judul_artikel_en' => $this->request->getPost("judul_artikel_en"),
@@ -149,7 +165,18 @@ class Artikel extends BaseController
                 $this->ArtikelModel->insert($data);
 
                 session()->setFlashdata('success', 'Data berhasil disimpan');
-                return redirect()->to(base_url('admin/artikel/index'));
+                $role = session()->get('role'); // Ambil role dari session
+
+                switch ($role) {
+                    case 'admin':
+                        return redirect()->to(base_url('admin/artikel/index'));
+                    case 'penulis':
+                        return redirect()->to(base_url('penulis/artikel/index'));
+                    case 'marketing':
+                        return redirect()->to(base_url('marketing/artikel/index'));
+                    default:
+                        return redirect()->to(base_url('/')); // fallback ke home atau error page
+                }
             } else {
                 session()->setFlashdata('error', 'File gagal diunggah');
                 return redirect()->back()->withInput();
@@ -208,7 +235,8 @@ class Artikel extends BaseController
         $this->ArtikelModel->update($id_artikel, $data);
 
         session()->setFlashdata('success', 'Data berhasil diperbarui');
-        return redirect()->to(base_url('admin/artikel/index'));
+        $role = session()->get('role'); // Ambil role dari session
+        return redirect()->to(base_url($role . '/artikel/index'));
     }
 
 
@@ -229,7 +257,8 @@ class Artikel extends BaseController
 
         if (!$data) {
             session()->setFlashdata('error', 'Data artikel tidak ditemukan');
-            return redirect()->to(base_url('admin/artikel/index'));
+            $role = session()->get('role'); // Ambil role dari session
+            return redirect()->to(base_url($role . '/artikel/index'));
         }
 
         // Lokasi file gambar
@@ -246,6 +275,7 @@ class Artikel extends BaseController
         $artikelModel->delete($id);
 
         session()->setFlashdata('success', 'Artikel berhasil dihapus');
-        return redirect()->to(base_url('admin/artikel/index'));
+        $role = session()->get('role'); // Ambil role dari session
+        return redirect()->to(base_url($role . '/artikel/index'));
     }
 }

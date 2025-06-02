@@ -11,9 +11,12 @@
                     <p class="mb-0 opacity-75">Kelola semua tujuan wisata di website Anda</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                    <?php $role = session()->get('role'); ?>
+                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                    <a href="<?= base_url($role . '/tempat_wisata/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
                         <i class="fas fa-plus me-1"></i>Tambah Wisata
                     </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -90,7 +93,7 @@
                         </div>
                         <h5 class="text-muted mb-2">Belum ada tempat wisata</h5>
                         <p class="text-muted mb-3">Mulai dengan menambahkan tempat wisata baru</p>
-                        <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" class="btn btn-primary btn-sm">
+                        <a href="<?= base_url($role . '/tempat_wisata/tambah') ?>" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus me-1"></i>Tambah Wisata
                         </a>
                     </div>
@@ -155,11 +158,12 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                <a href="<?= base_url('admin/tempat_wisata/detail/' . $w['id_wisata']) ?>"
+                                                <a href="<?= base_url($role . '/tempat_wisata/detail/' . $w['id_wisata']) ?>"
                                                     class="btn btn-sm btn-outline-primary" title="Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?= base_url('admin/tempat_wisata/edit/' . $w['id_wisata']) ?>"
+                                                <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                                <a href="<?= base_url($role . '/tempat_wisata/edit/' . $w['id_wisata']) ?>"
                                                     class="btn btn-sm btn-outline-secondary" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
@@ -167,6 +171,7 @@
                                                     title="Hapus" data-id="<?= $w['id_wisata'] ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>
@@ -346,7 +351,7 @@
         // Delete button handler
         $('.delete-btn').on('click', function() {
             var id = $(this).data('id');
-            var url = '<?= base_url("admin/tempat_wisata/delete/") ?>' + id;
+            var url = '<?= base_url($role . "/tempat_wisata/delete/") ?>' + id;
             $('#confirmDelete').attr('href', url);
             $('#deleteModal').modal('show');
         });

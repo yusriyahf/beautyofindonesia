@@ -37,10 +37,19 @@ class IklanController extends BaseController
             return redirect()->to(base_url('login'));
         }
 
+        $role = session()->get('role');
+        $userId = session()->get('id_user');
         $startDate = $this->request->getGet('created_at');
         $endDate = $this->request->getGet('updated_at');
 
-        $all_data = $this->artikelIklanModel->getArtikelIklanByDateFilter($startDate, $endDate) ?? [];
+        // Ambil data berdasarkan role
+        if ($role == 'marketing') {
+            $all_data = $this->artikelIklanModel->getArtikelIklanByMarketing($userId, $startDate, $endDate) ?? [];
+        } elseif ($role == 'penulis') {
+            $all_data = $this->artikelIklanModel->getArtikelIklanByPenulis($userId, $startDate, $endDate) ?? [];
+        } else {
+            $all_data = $this->artikelIklanModel->getArtikelIklanByDateFilter($startDate, $endDate) ?? [];
+        }
 
         foreach ($all_data as &$iklan) {
             $judul = 'Tidak ditemukan';
@@ -94,10 +103,10 @@ class IklanController extends BaseController
     {
 
 
-        // $idPenulis = session()->get('id_user');
-        // if (!$idPenulis) {
-        //     return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
-        // }
+        $idMarketing = session()->get('id_user');
+        if (!$idMarketing) {
+            return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
+        }
 
         $idHargaIklan = $this->request->getPost('id_harga_iklan');
         $hargaData = $this->hargaIklanModel->find($idHargaIklan);
@@ -129,8 +138,8 @@ class IklanController extends BaseController
             'id_content'        => $idContent,
             'tipe_content'      => $tipeContent,
             'id_harga_iklan'    => $idHargaIklan,
-            'id_marketing'      => 1,
-            // 'id_marketing'      => $idPenulis,
+            // 'id_marketing'      => 1,
+            'id_marketing'      => $idMarketing,
             'rentang_bulan'     => $rentangBulan,
             'total_harga'       => $totalHargaFix,
             'tanggal_pengajuan' => date('Y-m-d'),
@@ -245,30 +254,24 @@ class IklanController extends BaseController
             'marketing' => $marketing,
         ]);
     }
+    public function delete($id)
+    {
+        // Cek login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
 
+        // Cek apakah data iklan ada
+        $iklan = $this->artikelIklanModel->find($id);
+        if (!$iklan) {
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
 
-
-
-    // public function delete($id = false)
-    // {
-    //     // Cari data iklan berdasarkan ID
-    //     $iklanData = $this->artikelIklanModel->asObject()->find($id);
-
-    //     if (!$iklanData) {
-    //         session()->setFlashdata('error', 'Data iklan tidak ditemukan');
-    //         return redirect()->to(base_url('admin/artikel/artikel_beriklan'));
-    //     }
-
-    //     // Jika suatu saat ada file gambar terkait iklan, tambahkan penghapusan file di sini
-    //     // Contoh (opsional, jika ada file):
-    //     // if ($iklanData->gambar && file_exists('uploads/iklan/' . $iklanData->gambar)) {
-    //     //     unlink('uploads/iklan/' . $iklanData->gambar);
-    //     // }
-
-    //     // Hapus data dari database
-    //     $this->artikelIklanModel->delete($id);
-
-    //     session()->setFlashdata('success', 'Data iklan berhasil dihapus');
-    //     return redirect()->to(base_url('admin/artikel/artikel_beriklan'));
-    // }
+        // Lakukan penghapusan
+        if ($this->artikelIklanModel->delete($id)) {
+            return redirect()->to(base_url('admin/daftariklankonten'))->with('success', 'Data iklan berhasil dihapus.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menghapus data iklan.');
+        }
+    }
 }

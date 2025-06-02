@@ -4,25 +4,32 @@ namespace App\Controllers\Admin;
 
 use App\Models\IklanUtamaModel;
 use App\Models\JenisIklanUtama;
-use App\Models\PemasukanUserModel;
+use App\Models\KomisiModel;
 use App\Models\TipeIklanUtama;
 use App\Models\TipeIklanUtamaModel;
 use App\Models\UserModel;
+
 
 class IklanUtamaController extends BaseController
 {
 
     private $iklanUtamaModel;
     private $tipeIklanUtamaModel;
-    private $PemasukanUserModel;
-    private $usermodel;
+    private $TipeIklanUtama;
+    private $UserModel;
+    private $komisiIklanModel;
+    private $pemasukanKomisiModel;
+    private $komisiModel;
 
     public function __construct()
     {
         $this->iklanUtamaModel = new IklanUtamaModel();
         $this->tipeIklanUtamaModel = new TipeIklanUtamaModel();
-        $this->PemasukanUserModel = new PemasukanUserModel();
-        $this->usermodel = new UserModel();
+        $this->TipeIklanUtama = new \App\Models\TipeIklanUtama();
+        $this->UserModel = new UserModel();
+        $this->komisiIklanModel = new \App\Models\KomisiIklanModel();
+        $this->komisiModel = new KomisiModel();
+        $this->pemasukanKomisiModel = new \App\Models\PemasukanUserModel();
     }
 
     public function index()
@@ -42,7 +49,23 @@ class IklanUtamaController extends BaseController
     {
         $all_data_iklan_utama = $this->iklanUtamaModel->findAll();
         $validation = \Config\Services::validation();
+        $komisiModel = new KomisiModel();
+        // Ambil komisi admin (id 4)
+        $komisiAdmin = $komisiModel->find(4);
+        // Ambil komisi marketing (id 5)
+        $komisiMarketing = $komisiModel->find(5);
+        foreach ($all_data_iklan_utama as &$iklan) {
+            $harga = $this->TipeIklanUtama->find($iklan['id_tipe_iklan_utama']);
+            $iklan['nama'] = $harga['nama'] ?? 'Tidak ditemukan';
+
+            // Ambil username dari tb_users
+            $user = $this->UserModel->find($iklan['id_marketing']);
+            $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
+        }
         return view('admin/iklan_utama/index', [
+            'komisiMarketing' => (float)$komisiMarketing['komisi'],
+            'komisiPenulis' => 0, // Diset 0 sesuai permintaan
+            'komisiAdmin' => (float)$komisiAdmin['komisi'],
             'all_data_iklan_utama' => $all_data_iklan_utama,
             'validation' => $validation
         ]);
@@ -65,14 +88,30 @@ class IklanUtamaController extends BaseController
             return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
         }
 
+        // Validasi input
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'id_tipe_iklan_utama' => 'required',
+            'rentang_bulan' => 'required|numeric|greater_than[0]',
+            'link_iklan' => 'required|valid_url',
+            'thumbnail_iklan' => 'uploaded[thumbnail_iklan]|max_size[thumbnail_iklan,2048]|is_image[thumbnail_iklan]'
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
         $idTipeIklanUtama = $this->request->getPost('id_tipe_iklan_utama');
         $idMarketing = $this->request->getPost('id_marketing');
         $linkIklan = $this->request->getPost('link_iklan');
         $jenis = $this->request->getPost('jenis');
         $rentangBulan = $this->request->getPost('rentang_bulan');
+
+        // Bersihkan format total harga
         $totalHarga = $this->request->getPost('total_harga');
         $cleanTotalHarga = floatval(str_replace([',', ' '], '', $totalHarga));
 
+        // Handle upload gambar
         $gambar = $this->request->getFile('thumbnail_iklan');
         if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
             $newName = $gambar->getRandomName(); // nama file unik
@@ -106,69 +145,272 @@ class IklanUtamaController extends BaseController
 
     public function ubahStatus()
     {
-        $id_iklan_utama = $this->request->getPost('id_iklan_utama');
-        $id_tipe_iklan_utama = $this->request->getPost('id_tipe_iklan_utama');
-        $status = $this->request->getPost('status');
-        $tanggal_mulai = $this->request->getPost('tanggal_mulai');
-        $durasi_bulan = (int) $this->request->getPost('durasi_bulan');
-
-        // Validasi status
-        if (!in_array($status, ['diterima', 'ditolak'])) {
-            return redirect()->back()->with('error', 'Status tidak valid.');
+        if (!$this->validate([
+            'id_iklan_utama' => 'required|integer',
+            'status' => 'required|in_list[diterima,ditolak]',
+            'total_harga' => 'required|numeric',
+            'id_tipe_iklan_utama' => 'required|integer'
+        ])) {
+            return redirect()->back()->with('error', 'Data tidak valid: ' . implode(', ', $this->validator->getErrors()));
         }
 
-        // Data yang mau diupdate di tb_artikel_iklan
-        $dataIklan = [
-            'status' => $status
-        ];
+        $db = \Config\Database::connect();
+        $db->transStart();
 
-        if ($status == 'diterima') {
-            if (!$tanggal_mulai || !$durasi_bulan) {
-                return redirect()->back()->with('error', 'Tanggal mulai dan durasi bulan wajib diisi.');
-            }
+        try {
+            $idIklan = $this->request->getPost('id_iklan_utama');
+            $status = $this->request->getPost('status');
+            $tanggalMulai = $this->request->getPost('tanggal_mulai');
+            $tanggalSelesai = $this->request->getPost('tanggal_selesai');
+            $durasiBulan = (int)$this->request->getPost('durasi_bulan');
+            $totalHarga = floatval($this->request->getPost('total_harga'));
+            $idMarketing = $this->request->getPost('id_marketing');
+            $idTipeIklan = $this->request->getPost('id_tipe_iklan_utama');
+            $useCustomCommission = $this->request->getPost('use_custom_commission');
 
-            // Hitung tanggal selesai otomatis
-            $tanggal_mulai_obj = new \DateTime($tanggal_mulai);
-            $tanggal_selesai_obj = clone $tanggal_mulai_obj;
-            $tanggal_selesai_obj->modify("+{$durasi_bulan} months");
-
-            $dataIklan['tanggal_mulai'] = $tanggal_mulai_obj->format('Y-m-d');
-            $dataIklan['tanggal_selesai'] = $tanggal_selesai_obj->format('Y-m-d');
-
-            // Insert Komisi Pemasukan
-            $user_id = $this->request->getPost('user_id');
-            $total_harga = (float) $this->request->getPost('total_harga');
-
-            $dataPemasukan = [
-                'user_id'    => $user_id,
-                'jumlah'    => $total_harga,
-                'status'    => 'disetujui',
-                'tanggal'    => date('Y-m-d'),
+            // 1. Update status iklan dan tanggal
+            $updateData = [
+                'status' => $status,
+                'tanggal_mulai' => $tanggalMulai,
+                'tanggal_selesai' => $tanggalSelesai,
+                // 'diperbarui_pada' => date('Y-m-d H:i:s')
             ];
 
-            $this->tipeIklanUtamaModel->update($id_tipe_iklan_utama, [
-                'status' => 'tidak'
-            ]);
-            $this->iklanUtamaModel->update($id_iklan_utama, [
-                'status' => 'diterima',
-                'tanggal_mulai' =>  $dataIklan['tanggal_mulai'],
-                'tanggal_selesai' =>  $dataIklan['tanggal_selesai'],
-            ]);
+            if ($status == 'diterima') {
+                // Hitung tanggal selesai
+                $tanggalMulaiObj = new \DateTime($tanggalMulai);
+                $tanggalSelesaiObj = clone $tanggalMulaiObj;
+                $tanggalSelesaiObj->modify("+{$durasiBulan} months");
+
+                $updateData['tanggal_mulai'] = $tanggalMulaiObj->format('Y-m-d');
+                $updateData['tanggal_selesai'] = $tanggalSelesaiObj->format('Y-m-d');
+
+                // Update status tipe iklan
+                $this->tipeIklanUtamaModel->update($idTipeIklan, ['status' => 'tidak']);
+            } else {
+                $updateData['tanggal_mulai'] = null;
+                $updateData['tanggal_selesai'] = null;
+            }
+
+            if (!$this->iklanUtamaModel->update($idIklan, $updateData)) {
+                throw new \Exception('Gagal mengupdate status iklan');
+            }
+
+            // 2. Handle komisi hanya jika status diterima
+            if ($status == 'diterima') {
+                // Handle komisi custom jika dipilih
+                if ($useCustomCommission == '1') {
+                    $komisiMarketing = floatval($this->request->getPost('komisi_marketing') ?? 0);
+                    $komisiPenulis = 0; // Set komisi penulis ke 0
+                    $komisiAdmin = floatval($this->request->getPost('komisi_admin') ?? 0); // Karena penulis 0, admin dapat sisanya
+
+                    // Validasi total komisi tidak lebih dari 100%
+                    $totalKomisiPersen = $komisiMarketing + $komisiPenulis + $komisiAdmin;
+                    if ($totalKomisiPersen > 100) {
+                        throw new \Exception('Total komisi tidak boleh melebihi 100%');
+                    }
+
+                    // Dapatkan admin ID
+                    $adminId = $this->getAdminId();
+
+                    // Simpan komisi custom ke tb_komisi_iklan
+                    $komisiData = [
+                        [
+                            'id_iklan' => (int)$idIklan,
+                            'id_user' => (int)$idMarketing,
+                            'tipe_iklan' => 'utama',
+                            'peran' => 'marketing',
+                            'persen' => (int)$komisiMarketing,
+                            'jumlah_komisi' => (int)round($totalHarga * $komisiMarketing / 100),
+                            'created_at' => date('Y-m-d H:i:s')
+                        ],
+                        [
+                            'id_iklan' => (int)$idIklan,
+                            'id_user' => (int)$adminId,
+                            'tipe_iklan' => 'utama',
+                            'peran' => 'admin',
+                            'persen' => (int)$komisiAdmin,
+                            'jumlah_komisi' => (int)round($totalHarga * $komisiAdmin / 100),
+                            'created_at' => date('Y-m-d H:i:s')
+                        ]
+                    ];
+
+                    // Hapus komisi custom sebelumnya jika ada
+                    $this->komisiIklanModel->where('id_iklan', $idIklan)->delete();
+
+                    // Insert komisi custom baru
+                    if (!$this->komisiIklanModel->insertBatch($komisiData)) {
+                        throw new \Exception('Gagal menyimpan komisi custom');
+                    }
+                }
+
+                // 3. Proses perhitungan dan penyimpanan komisi ke tb_pemasukan_komisi
+                $this->prosesKomisiPemasukan($idIklan, $totalHarga, $idMarketing);
+            }
+
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                throw new \Exception('Transaksi database gagal');
+            }
+
+            return redirect()->back()->with('success', 'Status iklan berhasil diubah');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            log_message('error', 'Error in ubahStatus: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 
 
+    private function prosesKomisiPemasukan($idIklan, $totalHarga, $idMarketing)
+    {
+        // Cek apakah ada komisi custom untuk iklan ini
+        $komisiCustom = $this->komisiIklanModel->where('id_iklan', $idIklan)->findAll();
 
-            $this->PemasukanUserModel->insert($dataPemasukan);
+        if (!empty($komisiCustom)) {
+            // Gunakan komisi custom
+            foreach ($komisiCustom as $komisi) {
+                // Skip penulis karena komisi 0
+                if ($komisi['peran'] === 'penulis') continue;
+
+                $userId = (int)$komisi['id_user'];
+                if ($userId === 0) continue;
+
+                $pemasukanData = [
+                    'user_id' => $userId,
+                    'jumlah' => (int)$komisi['jumlah_komisi'],
+                    'status' => 'disetujui',
+                    'tanggal_pemasukan' => date('Y-m-d H:i:s'),
+                    'keterangan' => "Komisi {$komisi['peran']} untuk iklan utama ID: {$idIklan} ({$komisi['persen']}%)",
+                    'id_iklan' => (int)$idIklan,
+                    'jenis_komisi' => $komisi['peran'],
+                    'tipe_iklan' => 'utama',
+
+                ];
+
+                if (!$this->pemasukanKomisiModel->insert($pemasukanData)) {
+                    throw new \Exception("Gagal menyimpan komisi {$komisi['peran']} - user_id: {$userId}");
+                }
+            }
         } else {
-            // Kalau ditolak, kosongkan tanggal_mulai dan tanggal_selesai
-            $dataIklan['tanggal_mulai'] = null;
-            $dataIklan['tanggal_selesai'] = null;
+            // Gunakan komisi default (marketing 30%, penulis 0%, admin 70%)
+            // Ambil semua data komisi dari database
+            $komisiDefault = $this->komisiModel->findAll();
+
+            $komisiMap = [];
+            foreach ($komisiDefault as $komisi) {
+                $komisiMap[$komisi['id']] = $komisi['komisi'];
+            }
+
+            // Ambil persen komisi marketing dan admin, jika tidak ada set 0
+            $komisiMarketing = isset($komisiMap['5']) ? $komisiMap['5'] : 0;
+            $komisiAdmin = isset($komisiMap['4']) ? $komisiMap['4'] : 0;
+
+            $komisiData = [
+                'marketing' => [
+                    'id_user' => (int)$idMarketing,
+                    'persen' => (int)$komisiMarketing,
+                    'jumlah' => (int)round($totalHarga * $komisiMarketing / 100)
+                ],
+                'admin' => [
+                    'id_user' => (int)$this->getAdminId(),
+                    'persen' => (int)$komisiAdmin,
+                    'jumlah' => (int)round($totalHarga * $komisiAdmin / 100)
+                ]
+            ];
+
+            foreach ($komisiData as $peran => $data) {
+                if ($data['id_user']) {
+                    $pemasukanData = [
+                        'user_id' => $data['id_user'],
+                        'jumlah' => $data['jumlah'],
+                        'status' => 'disetujui',
+                        'tanggal_pemasukan' => date('Y-m-d H:i:s'),
+                        'keterangan' => "Komisi {$peran} untuk iklan utama ID: {$idIklan} ({$data['persen']}%)",
+                        'id_iklan' => (int)$idIklan,
+                        'tipe_iklan' => 'utama',
+                    ];
+
+                    if (!$this->pemasukanKomisiModel->insert($pemasukanData)) {
+                        throw new \Exception("Gagal menyimpan komisi {$peran}");
+                    }
+                }
+            }
+        }
+    }
+
+    public function tolakIklan()
+{
+    // Validasi input
+    if (!$this->validate([
+        'id_iklan_utama' => 'required|integer',
+        'status' => 'required|in_list[ditolak]',
+        'alasan_penolakan' => 'required|min_length[10]|max_length[500]'
+    ])) {
+        return redirect()->back()->with('error', 'Data tidak valid: ' . implode(', ', $this->validator->getErrors()));
+    }
+
+    $db = \Config\Database::connect();
+    $db->transStart();
+
+    try {
+        $idIklan = $this->request->getPost('id_iklan_utama');
+        $alasanPenolakan = $this->request->getPost('alasan_penolakan');
+        
+        // 1. Update status iklan menjadi ditolak
+        $updateData = [
+            'status' => 'ditolak',
+            'tanggal_mulai' => null,
+            'tanggal_selesai' => null,
+            'alasan_penolakan' => $alasanPenolakan,
+            'diperbarui_pada' => date('Y-m-d H:i:s')
+        ];
+
+        if (!$this->iklanUtamaModel->update($idIklan, $updateData)) {
+            throw new \Exception('Gagal mengupdate status iklan');
         }
 
-        // Update status iklan di tb_artikel_iklan
+        // 2. Hapus komisi yang terkait dengan iklan ini
+        $this->komisiIklanModel->where('id_iklan', $idIklan)
+                              ->where('tipe_iklan', 'utama')
+                              ->delete();
+                              
+        $this->pemasukanKomisiModel->where('id_iklan', $idIklan)
+                                   ->where('tipe_iklan', 'utama')
+                                   ->delete();
 
+        $db->transComplete();
 
+        if ($db->transStatus() === false) {
+            throw new \Exception('Transaksi database gagal');
+        }
 
-        return redirect()->back()->with('success', 'Status berhasil diubah.');
+        return redirect()->back()->with('success', 'Iklan berhasil ditolak');
+    } catch (\Exception $e) {
+        $db->transRollback();
+        log_message('error', 'Error in tolakIklan: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    }
+}
+
+    private function getAdminId()
+    {
+        try {
+            // Ambil ID user dari session yang sedang login
+            $session = session();
+            $adminId = $session->get('id_user');
+
+            if (!$adminId) {
+                log_message('warning', 'No admin ID found in session, using default ID 1');
+                return 1; // Default admin ID
+            }
+
+            return (int)$adminId;
+        } catch (\Exception $e) {
+            log_message('error', 'Error getting admin ID from session: ' . $e->getMessage());
+            return 1; // Default admin ID
+        }
     }
 
     public function edit($id)

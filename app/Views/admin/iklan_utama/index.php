@@ -39,7 +39,7 @@
                         <div class="col-md-3">
                             <label class="form-label small text-muted mb-1">TANGGAL MULAI</label>
                             <div class="input-group">
-                                <input type="date" id="start_date" name="start_date" class="form-control" 
+                                <input type="date" id="start_date" name="start_date" class="form-control"
                                     value="<?= esc($_GET['start_date'] ?? '') ?>">
                                 <span class="input-group-text bg-transparent">
                                     <i class="far fa-calendar-alt text-muted"></i>
@@ -204,56 +204,196 @@
 
                                     <!-- Modal Acc -->
                                     <div class="modal fade" id="accModal<?= $iklan['id_iklan_utama'] ?>" tabindex="-1" aria-labelledby="accModalLabel<?= $iklan['id_iklan_utama'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
-                                                <form action="<?= base_url('admin/iklanutama/ubahStatus') ?>" method="post">
+                                                <form action="<?= base_url('admin/acciklanutama/ubahStatus') ?>" method="post">
                                                     <?= csrf_field() ?>
                                                     <?php $durasiBulan = isset($iklan['rentang_bulan']) ? (int)$iklan['rentang_bulan'] : 0; ?>
 
-                                                    <!-- untuk pemasukan komisi -->
-                                                    <input type="hidden" name="user_id" value="<?= $iklan['id_marketing'] ?>">
-                                                    <input type="hidden" name="total_harga" value="<?= $iklan['total_harga'] ?>">
-
+                                                    <!-- Hidden inputs untuk data -->
                                                     <input type="hidden" name="id_iklan_utama" value="<?= $iklan['id_iklan_utama'] ?>">
-                                                    <input type="hidden" name="id_tipe_iklan_utama" value="<?= $iklan['id_tipe_iklan_utama'] ?>">
+                                                    <input type="hidden" name="id_marketing" value="<?= $iklan['id_marketing'] ?>">
+                                                    <input type="hidden" name="total_harga" value="<?= $iklan['total_harga'] ?>">
                                                     <input type="hidden" name="status" value="diterima">
                                                     <input type="hidden" name="durasi_bulan" value="<?= $durasiBulan ?>">
+                                                    <input type="hidden" name="id_tipe_iklan_utama" value="<?= $iklan['id_tipe_iklan_utama'] ?>">
 
-                                                    <div class="modal-header bg-success text-white">
-                                                        <h5 class="modal-title" id="accModalLabel<?= $iklan['id_iklan_utama'] ?>">Konfirmasi Persetujuan</h5>
+                                                    <div class="modal-header modal-header-custom text-white">
+                                                        <h5 class="modal-title" id="accModalLabel<?= $iklan['id_iklan_utama'] ?>">
+                                                            <i class="fas fa-check-circle me-2"></i>Konfirmasi Persetujuan Iklan
+                                                        </h5>
                                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
 
                                                     <div class="modal-body">
-                                                        <p>Anda akan menyetujui permintaan tampil iklan ini:</p>
-                                                        <ul class="mb-3">
-                                                            <li>Durasi: <strong><?= $durasiBulan ?> Bulan</strong></li>
-                                                        </ul>
-
-                                                        <div class="mb-3">
-                                                            <label for="tanggalMulai_<?= $iklan['id_iklan_utama'] ?>" class="form-label">Tanggal Mulai:</label>
-                                                            <input type="date" class="form-control tanggalMulai"
-                                                                id="tanggalMulai_<?= $iklan['id_iklan_utama'] ?>"
-                                                                name="tanggal_mulai"
-                                                                min="<?= date('Y-m-d') ?>"
-                                                                required>
+                                                        <div class="alert alert-info border-0 mb-4">
+                                                            <i class="fas fa-info-circle me-2"></i>
+                                                            <strong>Perhatian:</strong> Anda akan menyetujui permintaan tampil iklan berikut ini.
                                                         </div>
 
-                                                        <div class="mb-3">
-                                                            <label for="tanggalSelesai_<?= $iklan['id_iklan_utama'] ?>" class="form-label">Tanggal Selesai:</label>
-                                                            <input type="text" class="form-control tanggalSelesai"
-                                                                id="tanggalSelesai_<?= $iklan['id_iklan_utama'] ?>"
-                                                                name="tanggal_selesai"
-                                                                readonly>
+                                                        <!-- Info Iklan -->
+                                                        <div class="info-list mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-clipboard-list me-2"></i>Detail Iklan</h6>
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li><i class="fas fa-ad me-2 text-primary"></i>Nama Iklan: <strong><?= esc($iklan['nama']) ?></strong></li>
+                                                                <li><i class="fas fa-calendar-alt me-2 text-warning"></i>Durasi: <strong><?= $durasiBulan ?> Bulan</strong></li>
+                                                                <li><i class="fas fa-money-bill-wave me-2 text-danger"></i>Total Harga: <strong>Rp <?= number_format($iklan['total_harga'], 0, ',', '.') ?></strong></li>
+                                                            </ul>
                                                         </div>
 
-                                                        <p class="text-muted">Pastikan tanggal sudah benar sebelum menyetujui.</p>
+                                                        <div class="row mb-4">
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="tanggalMulai_<?= $iklan['id_iklan_utama'] ?>" class="form-label">
+                                                                        <i class="fas fa-play-circle me-2 text-success"></i>Tanggal Mulai
+                                                                    </label>
+                                                                    <input type="date" class="form-control commission-input"
+                                                                        id="tanggalMulai_<?= $iklan['id_iklan_utama'] ?>"
+                                                                        name="tanggal_mulai"
+                                                                        min="<?= date('Y-m-d') ?>"
+                                                                        required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="tanggalSelesai_<?= $iklan['id_iklan_utama'] ?>" class="form-label">
+                                                                        <i class="fas fa-stop-circle me-2 text-danger"></i>Tanggal Selesai
+                                                                    </label>
+                                                                    <input type="text" class="form-control commission-input"
+                                                                        id="tanggalSelesai_<?= $iklan['id_iklan_utama'] ?>"
+                                                                        name="tanggal_selesai_display"
+                                                                        readonly>
+                                                                    <input type="hidden" id="tanggalSelesaiValue_<?= $iklan['id_iklan_utama'] ?>" name="tanggal_selesai">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Section Komisi -->
+                                                        <div class="commission-card">
+                                                            <div class="commission-header text-white">
+                                                                <h6 class="mb-0">
+                                                                    <i class="fas fa-percentage me-2"></i>Pengaturan Komisi
+                                                                </h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="form-check mb-3">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        id="useCustomCommission_<?= $iklan['id_iklan_utama'] ?>"
+                                                                        name="use_custom_commission" value="1">
+                                                                    <label class="form-check-label fw-bold" for="useCustomCommission_<?= $iklan['id_iklan_utama'] ?>">
+                                                                        <i class="fas fa-cog me-2"></i>Gunakan Komisi Custom
+                                                                    </label>
+                                                                    <small class="d-block text-muted mt-1">Centang untuk mengatur komisi secara manual</small>
+                                                                </div>
+
+                                                                <div id="customCommissionSection_<?= $iklan['id_iklan_utama'] ?>" class="custom-commission-section" style="display: none;">
+                                                                    <div class="row">
+                                                                        <div class="col-md-4">
+                                                                            <div class="mb-3">
+                                                                                <label for="komisiMarketing_<?= $iklan['id_iklan_utama'] ?>" class="form-label">
+                                                                                    <i class="fas fa-bullhorn me-2 text-primary"></i>Marketing (%)
+                                                                                </label>
+                                                                                <input type="number" step="0.01" min="0" max="100"
+                                                                                    class="form-control commission-input"
+                                                                                    id="komisiMarketing_<?= $iklan['id_iklan_utama'] ?>"
+                                                                                    name="komisi_marketing"
+                                                                                    value="<?= $komisiMarketing ?? 0 ?>"
+                                                                                    placeholder="<?= $komisiMarketing ?? 0 ?>">
+                                                                                <small class="text-muted">Default: <?= $komisiMarketing ?? 0 ?>%</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <div class="mb-3">
+                                                                                <label for="komisiPenulis_<?= $iklan['id_iklan_utama'] ?>" class="form-label">
+                                                                                    <i class="fas fa-pen me-2 text-success"></i>Penulis (%)
+                                                                                </label>
+                                                                                <input type="number" step="0.01" min="0" max="100"
+                                                                                    class="form-control commission-input"
+                                                                                    id="komisiPenulis_<?= $iklan['id_iklan_utama'] ?>"
+                                                                                    name="komisi_penulis"
+                                                                                    value="<?= $komisiPenulis ?? 0 ?>"
+                                                                                    placeholder="<?= $komisiPenulis ?? 0 ?>" <?= ($komisiPenulis ?? 0) == 0 ? 'disabled' : '' ?>>
+                                                                                <small class="text-muted">Default: <?= $komisiPenulis ?? 0 ?>%</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <div class="mb-3">
+                                                                                <label for="komisiAdmin_<?= $iklan['id_iklan_utama'] ?>" class="form-label">
+                                                                                    <i class="fas fa-user-cog me-2 text-warning"></i>Admin (%)
+                                                                                </label>
+                                                                                <input type="number" step="0.01" min="0" max="100"
+                                                                                    class="form-control commission-input"
+                                                                                    id="komisiAdmin_<?= $iklan['id_iklan_utama'] ?>"
+                                                                                    name="komisi_admin"
+                                                                                    value="<?= $komisiAdmin ?? 0 ?>"
+                                                                                    placeholder="<?= $komisiAdmin ?? 0 ?>">
+                                                                                <small class="text-muted">Default: <?= $komisiAdmin ?? 0 ?>%</small>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="alert alert-custom">
+                                                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                                                        <strong>Catatan:</strong> Total komisi sebaiknya tidak melebihi 100%. Sistem akan menghitung komisi berdasarkan persentase yang dimasukkan.
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Preview Komisi -->
+                                                                <div class="mt-4">
+                                                                    <h6 class="mb-3">
+                                                                        <i class="fas fa-eye me-2 text-info"></i>Preview Pembagian Komisi
+                                                                    </h6>
+                                                                    <div class="preview-card">
+                                                                        <div class="preview-item">
+                                                                            <span class="preview-label">
+                                                                                <i class="fas fa-bullhorn me-2"></i>Marketing
+                                                                            </span>
+                                                                            <span class="preview-amount">
+                                                                                Rp <span id="previewMarketing_<?= $iklan['id_iklan_utama'] ?>"><?= number_format($iklan['total_harga'] * ($komisiMarketing ?? 0) / 100, 0, ',', '.') ?></span> (<span id="percentMarketing_<?= $iklan['id_iklan_utama'] ?>"><?= $komisiMarketing ?? 0 ?></span>%)
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="preview-item">
+                                                                            <span class="preview-label">
+                                                                                <i class="fas fa-pen me-2"></i>Penulis
+                                                                            </span>
+                                                                            <span class="preview-amount">
+                                                                                Rp <span id="previewPenulis_<?= $iklan['id_iklan_utama'] ?>"><?= number_format($iklan['total_harga'] * ($komisiPenulis ?? 0) / 100, 0, ',', '.') ?></span> (<span id="percentPenulis_<?= $iklan['id_iklan_utama'] ?>"><?= $komisiPenulis ?? 0 ?></span>%)
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="preview-item">
+                                                                            <span class="preview-label">
+                                                                                <i class="fas fa-user-cog me-2"></i>Admin
+                                                                            </span>
+                                                                            <span class="preview-amount">
+                                                                                Rp <span id="previewAdmin_<?= $iklan['id_iklan_utama'] ?>"><?= number_format($iklan['total_harga'] * ($komisiAdmin ?? 0) / 100, 0, ',', '.') ?></span> (<span id="percentAdmin_<?= $iklan['id_iklan_utama'] ?>"><?= $komisiAdmin ?? 0 ?></span>%)
+                                                                            </span>
+                                                                        </div>
+                                                                        <hr class="my-2">
+                                                                        <div class="preview-item">
+                                                                            <span class="preview-label fw-bold">
+                                                                                <i class="fas fa-calculator me-2"></i>Total Komisi
+                                                                            </span>
+                                                                            <span class="preview-amount text-primary">
+                                                                                Rp <span id="totalCommission_<?= $iklan['id_iklan_utama'] ?>"><?= number_format($iklan['total_harga'], 0, ',', '.') ?></span> (<span id="totalPercent_<?= $iklan['id_iklan_utama'] ?>">100</span>%)
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="alert alert-light border mt-4">
+                                                            <i class="fas fa-shield-alt me-2 text-success"></i>
+                                                            <strong>Konfirmasi:</strong> Pastikan semua data sudah benar sebelum menyetujui permintaan iklan ini.
+                                                        </div>
                                                     </div>
 
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-success">
-                                                            <i class="bi bi-check-circle me-1"></i> Setujui
+                                                    <div class="modal-footer bg-light">
+                                                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                                                            <i class="fas fa-times me-1"></i> Batal
+                                                        </button>
+                                                        <button type="submit" class="btn btn-success-custom">
+                                                            <i class="fas fa-check-circle me-2"></i> Setujui Permintaan
                                                         </button>
                                                     </div>
                                                 </form>
@@ -265,9 +405,10 @@
                                     <div class="modal fade" id="tolakModal<?= $iklan['id_iklan_utama'] ?>" tabindex="-1" aria-labelledby="tolakModalLabel<?= $iklan['id_iklan_utama'] ?>" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
-                                                <form action="<?= base_url('admin/artikeliklan/ubahStatus') ?>" method="post">
+                                                <form action="<?= base_url('admin/acciklanutama/tolakiklan') ?>" method="post">
                                                     <?= csrf_field() ?>
-                                                    <input type="hidden" name="id" value="<?= $iklan['id_iklan_utama'] ?>">
+                                                    <input type="hidden" name="id_iklan_utama" value="<?= $iklan['id_iklan_utama'] ?>">
+                                                    <input type="hidden" name="status" value="ditolak">
 
                                                     <div class="modal-header bg-danger text-white">
                                                         <h5 class="modal-title" id="tolakModalLabel<?= $iklan['id_iklan_utama'] ?>">Konfirmasi Penolakan</h5>
@@ -281,6 +422,12 @@
                                                             <li>Durasi: <strong><?= esc($iklan['rentang_bulan'] ?? 'N/A') ?> Bulan</strong></li>
                                                             <li>Harga: <strong>Rp <?= number_format($iklan['total_harga'] ?? 0, 0, ',', '.') ?></strong></li>
                                                         </ul>
+
+                                                        <div class="mb-3">
+                                                            <label for="alasan_penolakan<?= $iklan['id_iklan_utama'] ?>" class="form-label">Alasan Penolakan</label>
+                                                            <textarea class="form-control" id="alasan_penolakan<?= $iklan['id_iklan_utama'] ?>" name="alasan_penolakan" rows="3" required placeholder="Masukkan alasan penolakan..."></textarea>
+                                                            <div class="invalid-feedback">Harap isi alasan penolakan.</div>
+                                                        </div>
                                                     </div>
 
                                                     <div class="modal-footer">
@@ -364,7 +511,7 @@
     }
 
     .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%,rgb(100, 181, 201) 100%);
+        background: linear-gradient(135deg, #667eea 0%, rgb(100, 181, 201) 100%);
     }
 
     .table {
@@ -404,9 +551,119 @@
         font-weight: 600;
     }
 
-    .btn-sm {
-        padding: 4px 8px;
-        font-size: 12px;
+    /* enhance modal acc */
+    .commission-card {
+        border: 2px solid #e3f2fd;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .commission-card:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .commission-header {
+        background: linear-gradient(135deg, #2196f3, #1976d2);
+        border-radius: 10px 10px 0 0;
+        padding: 1rem;
+    }
+
+    .custom-commission-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .commission-input {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .commission-input:focus {
+        border-color: #2196f3;
+        box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+    }
+
+    .preview-card {
+        background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+        border: 2px solid #ffb74d;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+
+    .preview-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 183, 77, 0.3);
+    }
+
+    .preview-item:last-child {
+        border-bottom: none;
+    }
+
+    .preview-label {
+        font-weight: 600;
+        color: #e65100;
+    }
+
+    .preview-amount {
+        font-weight: 700;
+        font-size: 1.1em;
+        color: #bf360c;
+    }
+
+    .modal-header-custom {
+        background: linear-gradient(135deg, #4caf50, #388e3c);
+        border-radius: 0.375rem 0.375rem 0 0;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .btn-success-custom {
+        background: linear-gradient(135deg, #4caf50, #388e3c);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success-custom:hover {
+        background: linear-gradient(135deg, #388e3c, #2e7d32);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    .alert-custom {
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        border-left: 4px solid #ffc107;
+    }
+
+    .info-list {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        border-left: 4px solid #17a2b8;
+    }
+
+    .info-list li {
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+
+    .info-list strong {
+        color: #212529;
     }
 
     /* Enhanced DataTables Styling dengan Spacing yang Lebih Baik */
@@ -616,6 +873,121 @@
             max-width: 250px !important;
         }
     }
+
+    /* enhance modal acc */
+    .commission-card {
+        border: 2px solid #e3f2fd;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .commission-card:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .commission-header {
+        background: linear-gradient(135deg, #2196f3, #1976d2);
+        border-radius: 10px 10px 0 0;
+        padding: 1rem;
+    }
+
+    .custom-commission-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .commission-input {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .commission-input:focus {
+        border-color: #2196f3;
+        box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+    }
+
+    .preview-card {
+        background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+        border: 2px solid #ffb74d;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+
+    .preview-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 183, 77, 0.3);
+    }
+
+    .preview-item:last-child {
+        border-bottom: none;
+    }
+
+    .preview-label {
+        font-weight: 600;
+        color: #e65100;
+    }
+
+    .preview-amount {
+        font-weight: 700;
+        font-size: 1.1em;
+        color: #bf360c;
+    }
+
+    .modal-header-custom {
+        background: linear-gradient(135deg, #4caf50, #388e3c);
+        border-radius: 0.375rem 0.375rem 0 0;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .btn-success-custom {
+        background: linear-gradient(135deg, #4caf50, #388e3c);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success-custom:hover {
+        background: linear-gradient(135deg, #388e3c, #2e7d32);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    .alert-custom {
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        border-left: 4px solid #ffc107;
+    }
+
+    .info-list {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        border-left: 4px solid #17a2b8;
+    }
+
+    .info-list li {
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+
+    .info-list strong {
+        color: #212529;
+    }
 </style>
 
 <script>
@@ -647,6 +1019,205 @@
             trigger: 'hover',
             placement: 'top'
         });
+
+        // Setup modal functionality for each modal when shown
+        $('.modal').on('show.bs.modal', function() {
+            const modalId = $(this).attr('id');
+            if (modalId.startsWith('accModal')) {
+                const iklanId = modalId.replace('accModal', '');
+                const durasiBulan = parseInt($(`#accModal${iklanId} input[name="durasi_bulan"]`).val());
+                const totalHarga = parseInt($(`#accModal${iklanId} input[name="total_harga"]`).val());
+
+                setupModalFunctionality({
+                    iklanId: iklanId,
+                    durasiBulan: durasiBulan,
+                    totalHarga: totalHarga
+                });
+            }
+        });
     });
+
+    function setupModalFunctionality(config) {
+        const {
+            iklanId,
+            durasiBulan,
+            totalHarga
+        } = config;
+
+        // Get default values from the inputs
+        const defaultMarketing = parseFloat(document.getElementById(`komisiMarketing_${iklanId}`).placeholder) || 0;
+        const defaultPenulis = parseFloat(document.getElementById(`komisiPenulis_${iklanId}`).placeholder) || 0;
+        const defaultAdmin = parseFloat(document.getElementById(`komisiAdmin_${iklanId}`).placeholder) || 0;
+
+        // 1. Setup toggle komisi custom
+        const commissionCheckbox = document.getElementById(`useCustomCommission_${iklanId}`);
+        const commissionSection = document.getElementById(`customCommissionSection_${iklanId}`);
+
+        if (commissionCheckbox && commissionSection) {
+            commissionCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    commissionSection.style.display = 'block';
+                    commissionSection.style.animation = 'fadeIn 0.3s ease-in-out';
+                } else {
+                    commissionSection.style.display = 'none';
+                    // Reset ke nilai default
+                    document.getElementById(`komisiMarketing_${iklanId}`).value = 0;
+                    document.getElementById(`komisiPenulis_${iklanId}`).value = 0;
+                    document.getElementById(`komisiAdmin_${iklanId}`).value = 0;
+                    updateCommissionPreview();
+                }
+            });
+        }
+
+        // 2. Setup tanggal otomatis
+        const startDateInput = document.getElementById(`tanggalMulai_${iklanId}`);
+        const endDateInput = document.getElementById(`tanggalSelesai_${iklanId}`);
+        const endDateValueInput = document.getElementById(`tanggalSelesaiValue_${iklanId}`);
+
+        if (startDateInput && endDateInput && endDateValueInput) {
+            // Set min date to today
+            const today = new Date().toISOString().split('T')[0];
+            startDateInput.min = today;
+            startDateInput.value = today; // Set default ke hari ini
+
+            // Hitung tanggal selesai default
+            calculateEndDate();
+
+            startDateInput.addEventListener('change', function() {
+                calculateEndDate();
+            });
+
+            function calculateEndDate() {
+                if (startDateInput.value) {
+                    const startDate = new Date(startDateInput.value);
+                    startDate.setMonth(startDate.getMonth() + durasiBulan);
+
+                    // Format tanggal untuk tampilan yang lebih baik
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    const endDateFormatted = startDate.toLocaleDateString('id-ID', options);
+                    const endDateValue = startDate.toISOString().split('T')[0];
+
+                    endDateInput.value = endDateFormatted;
+                    endDateValueInput.value = endDateValue;
+                }
+            }
+        }
+
+        // 3. Setup perhitungan komisi
+        const komisiInputs = [
+            document.getElementById(`komisiMarketing_${iklanId}`),
+            document.getElementById(`komisiPenulis_${iklanId}`),
+            document.getElementById(`komisiAdmin_${iklanId}`)
+        ];
+
+        komisiInputs.forEach(input => {
+            if (input) {
+                input.addEventListener('input', updateCommissionPreview);
+                input.addEventListener('blur', validateCommission);
+            }
+        });
+
+        function updateCommissionPreview() {
+            const marketing = parseFloat(komisiInputs[0]?.value) || defaultMarketing;
+            const penulis = parseFloat(komisiInputs[1]?.value) || defaultPenulis;
+            const admin = parseFloat(komisiInputs[2]?.value) || defaultAdmin;
+
+            const marketingAmount = Math.round(totalHarga * marketing / 100);
+            const penulisAmount = Math.round(totalHarga * penulis / 100);
+            const adminAmount = Math.round(totalHarga * admin / 100);
+            const totalCommission = marketingAmount + penulisAmount + adminAmount;
+            const totalPercent = marketing + penulis + admin;
+
+            // Update preview amounts
+            updatePreviewElement(`previewMarketing_${iklanId}`, marketingAmount);
+            updatePreviewElement(`previewPenulis_${iklanId}`, penulisAmount);
+            updatePreviewElement(`previewAdmin_${iklanId}`, adminAmount);
+            updatePreviewElement(`totalCommission_${iklanId}`, totalCommission);
+
+            // Update percentages
+            updateTextElement(`percentMarketing_${iklanId}`, marketing);
+            updateTextElement(`percentPenulis_${iklanId}`, penulis);
+            updateTextElement(`percentAdmin_${iklanId}`, admin);
+            updateTextElement(`totalPercent_${iklanId}`, totalPercent.toFixed(1));
+
+            // Highlight if total exceeds 100%
+            const totalElement = document.getElementById(`totalPercent_${iklanId}`);
+            if (totalElement) {
+                if (totalPercent > 100) {
+                    totalElement.style.color = '#dc3545';
+                    totalElement.style.fontWeight = 'bold';
+                } else {
+                    totalElement.style.color = '#28a745';
+                    totalElement.style.fontWeight = 'bold';
+                }
+            }
+        }
+
+        function updatePreviewElement(id, amount) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = new Intl.NumberFormat('id-ID').format(amount);
+            }
+        }
+
+        function updateTextElement(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
+        }
+
+        function validateCommission() {
+            const marketing = parseFloat(komisiInputs[0]?.value) || 0;
+            const penulis = parseFloat(komisiInputs[1]?.value) || 0;
+            const admin = parseFloat(komisiInputs[2]?.value) || 0;
+            const total = marketing + penulis + admin;
+
+            if (total > 100) {
+                showAlert('Peringatan: Total komisi melebihi 100%!', 'warning');
+            }
+        }
+
+        function showAlert(message, type = 'info') {
+            // Create alert element
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            // Insert at top of modal body
+            const modalBody = document.querySelector(`#accModal${iklanId} .modal-body`);
+            if (modalBody) {
+                modalBody.insertBefore(alertDiv, modalBody.firstChild);
+
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.remove();
+                    }
+                }, 5000);
+            }
+        }
+
+        // Initialize preview
+        updateCommissionPreview();
+    }
+
+    // CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    `;
+    document.head.appendChild(style);
 </script>
 <?= $this->endSection('content'); ?>

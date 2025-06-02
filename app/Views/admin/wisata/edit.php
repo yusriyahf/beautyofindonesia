@@ -9,7 +9,8 @@
             </div>
             <div class="col-auto">
                 <div class="page-utilities">
-                    <a href="<?= base_url('admin/tempat_wisata/index') ?>" class="btn app-btn-secondary">
+                    <?php $role = session()->get('role');?>
+                    <a href="<?= base_url($role . '/tempat_wisata/index') ?>" class="btn app-btn-secondary">
                         <i class="fas fa-arrow-left me-2"></i>Kembali
                     </a>
                 </div>
@@ -37,7 +38,8 @@
                     </div>
                 <?php endif; ?>
                 
-                <form action="<?= base_url('admin/tempat_wisata/proses_edit/' . $wisata['id_wisata']) ?>" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
+
+                <form action="<?= base_url($role . '/tempat_wisata/proses_edit/' . $wisata['id_wisata']) ?>" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
                     <?= csrf_field() ?>
                     
                     <div class="row g-3 mb-4">

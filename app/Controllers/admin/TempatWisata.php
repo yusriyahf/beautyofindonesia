@@ -20,17 +20,23 @@ class TempatWisata extends BaseController
         $this->kabupatenModel = new KabupatenModel();  // Corrected initialization
     }
 
-    // Display list of wisata
     public function index()
     {
-        $data['wisata'] = $this->tempatWisataModel->getAllWisataAdmin();
-        return view(
-            'admin/wisata/index',
-            [
-                'wisata' => $this->tempatWisataModel->getAllWisataAdmin(),
-                'pager' => $this->tempatWisataModel->pager
-            ]
-        );
+        $role = session()->get('role');
+        $userId = session()->get('id_user'); // Asumsikan id user disimpan di session
+
+        if ($role == 'penulis') {
+            // Jika penulis, hanya ambil wisata yang dibuatnya
+            $data['wisata'] = $this->tempatWisataModel->getWisataByPenulis($userId);
+        } else {
+            // Jika admin, ambil semua wisata
+            $data['wisata'] = $this->tempatWisataModel->getAllWisataAdmin();
+        }
+
+        return view('admin/wisata/index', [
+            'wisata' => $data['wisata'],
+            'pager' => $this->tempatWisataModel->pager
+        ]);
     }
 
     // Show the form to add new wisata
@@ -99,12 +105,13 @@ class TempatWisata extends BaseController
                     'slug_wisata_ind' => url_title($this->request->getPost('nama_wisata_ind'), '-', true),
                     'slug_wisata_eng' => url_title($this->request->getPost('nama_wisata_eng'), '-', true),
                     'views' => 0,
-                    'id_penulis' => 1, // Ganti dengan ID user aktif
+                    'id_penulis' => session()->get('id_user'),
                 ];
                 $this->tempatWisataModel->insert($data);
 
                 session()->setFlashdata('success', 'Data berhasil disimpan');
-                return redirect()->to(base_url('admin/tempat_wisata/index'));
+                $role = session()->get('role');
+                return redirect()->to(base_url($role . '/tempat_wisata/index'));
             } else {
                 session()->setFlashdata('error', 'File gagal diunggah');
                 return redirect()->back()->withInput();
@@ -189,7 +196,8 @@ class TempatWisata extends BaseController
         $this->tempatWisataModel->update($id_wisata, $data);
 
         session()->setFlashdata('success', 'Data berhasil diperbarui');
-        return redirect()->to(base_url('admin/tempat_wisata/index'));
+        $role = session()->get('role');
+        return redirect()->to(base_url($role . '/tempat_wisata/index'));
     }
 
     // View detail wisata
@@ -217,6 +225,7 @@ class TempatWisata extends BaseController
     public function delete($id_wisata)
     {
         $this->tempatWisataModel->delete($id_wisata);
-        return redirect()->to('admin/tempat_wisata/index');
+        $role = session()->get('role');
+        return redirect()->to($role . '/tempat_wisata/index');
     }
 }

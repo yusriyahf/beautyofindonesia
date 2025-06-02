@@ -11,9 +11,12 @@
                     <p class="mb-0 opacity-75">Kelola kategori untuk mengorganisir wisata Anda</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <button class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
-                        <i class="fas fa-plus me-1"></i>Tambah Kategori
-                    </button>
+                    <?php $role = session()->get('role'); ?>
+                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                        <button class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
+                            <i class="fas fa-plus me-1"></i>Tambah Kategori
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -40,7 +43,9 @@
                                     <th width="60" class="text-center">No</th>
                                     <th>Kategori Wisata (Indonesia)</th>
                                     <th>Kategori Wisata (English)</th>
-                                    <th width="120" class="text-center">Aksi</th>
+                                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                        <th width="120" class="text-center">Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,22 +63,24 @@
                                                 <?= esc($kategori_wisata->nama_kategori_wisata_en) ?>
                                             </span>
                                         </td>
-                                        <td class="text-center">
-                                            <div class="d-flex justify-content-center gap-1">
-                                                <button class="btn btn-sm btn-outline-primary edit-btn"
-                                                    data-id="<?= $kategori_wisata->id_kategori_wisata ?>"
-                                                    data-nama="<?= esc($kategori_wisata->nama_kategori_wisata) ?>"
-                                                    data-nama-en="<?= esc($kategori_wisata->nama_kategori_wisata_en) ?>"
-                                                    title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                    data-id="<?= $kategori_wisata->id_kategori_wisata ?>"
-                                                    title="Hapus">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </td>
+                                        <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center gap-1">
+                                                    <button class="btn btn-sm btn-outline-primary edit-btn"
+                                                        data-id="<?= $kategori_wisata->id_kategori_wisata ?>"
+                                                        data-nama="<?= esc($kategori_wisata->nama_kategori_wisata) ?>"
+                                                        data-nama-en="<?= esc($kategori_wisata->nama_kategori_wisata_en) ?>"
+                                                        title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger delete-btn"
+                                                        data-id="<?= $kategori_wisata->id_kategori_wisata ?>"
+                                                        title="Hapus">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -95,7 +102,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?= base_url('admin/kategori_wisata/tambah') ?>" method="post">
+            <form action="<?= base_url($role . '/kategori_wisata/tambah') ?>" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="nama_kategori_wisata" class="form-label small text-muted mb-1">NAMA KATEGORI WISATA (INDONESIA)</label>
@@ -300,8 +307,11 @@
 
 <script>
     $(document).ready(function() {
-        // Initialize DataTable
-        var table = $('#kategoriTable').DataTable({
+        // Cek apakah user memiliki akses ke kolom aksi
+        var hasActionAccess = <?= in_array($role, ['admin', 'penulis']) ? 'true' : 'false' ?>;
+
+        // Konfigurasi dasar DataTables
+        var tableConfig = {
             responsive: true,
             dom: '<"top"<"row"<"col-md-6"l><"col-md-6"f>>>rt<"bottom"<"row"<"col-md-6"i><"col-md-6"p>><"clear">>',
             language: {
@@ -309,33 +319,43 @@
             },
             columnDefs: [{
                     orderable: false,
-                    targets: [3]
-                }, // Disable sorting for action column
+                    targets: [0] // Kolom No tidak bisa di-sort
+                },
                 {
                     className: "text-center",
-                    targets: [0, 3]
-                }, // Center align these columns
+                    targets: [0] // Kolom No di tengah
+                },
                 {
                     width: "60px",
                     targets: 0
-                }, // Set width for No column
-                {
-                    width: "120px",
-                    targets: 3
-                } // Set width for Action column
+                }
             ],
             initComplete: function() {
-                // Add custom styling after initialization
                 $('.dataTables_length select').addClass('form-select-sm');
                 $('.dataTables_filter input').addClass('form-control-sm');
-
-                // Initialize tooltips
                 $('[title]').tooltip({
                     trigger: 'hover',
                     placement: 'top'
                 });
             }
-        });
+        };
+
+        // Tambahkan konfigurasi untuk kolom aksi jika ada
+        if (hasActionAccess) {
+            tableConfig.columnDefs.push({
+                orderable: false,
+                targets: [3] // Kolom aksi
+            }, {
+                className: "text-center",
+                targets: [3] // Kolom aksi di tengah
+            }, {
+                width: "120px",
+                targets: 3
+            });
+        }
+
+        // Inisialisasi DataTables
+        var table = $('#kategoriTable').DataTable(tableConfig);
 
         // Handle edit button click (using event delegation for dynamic content)
         $('#kategoriTable').on('click', '.edit-btn', function() {
@@ -345,7 +365,7 @@
 
             $('#edit_nama_kategori_wisata').val(nama);
             $('#edit_nama_kategori_wisata_en').val(nama_en);
-            $('#editForm').attr('action', '<?= base_url("admin/kategori_wisata/edit") ?>/' + id);
+            $('#editForm').attr('action', '<?= base_url($role . "/kategori_wisata/edit") ?>/' + id);
 
             $('#editKategoriModal').modal('show');
         });
@@ -353,7 +373,7 @@
         // Handle delete button click (using event delegation for dynamic content)
         $('#kategoriTable').on('click', '.delete-btn', function() {
             var id = $(this).data('id');
-            var url = '<?= base_url("admin/kategori_wisata/delete") ?>/' + id;
+            var url = '<?= base_url($role . "/kategori_wisata/delete") ?>/' + id;
             $('#confirmDelete').attr('href', url);
             $('#deleteModal').modal('show');
         });

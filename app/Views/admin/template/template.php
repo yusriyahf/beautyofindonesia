@@ -20,7 +20,9 @@
     <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet">
     <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"> -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 
     <!-- 1. jQuery (HARUS PALING ATAS) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

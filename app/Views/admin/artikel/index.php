@@ -11,9 +11,12 @@
                     <p class="mb-0 opacity-75">Kelola konten artikel Anda dengan mudah</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <a href="<?= base_url("admin/artikel/tambah") ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                    <?php $role = session()->get('role'); ?>
+                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                    <a href="<?= base_url($role . "/artikel/tambah") ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
                         <i class="fas fa-plus me-1"></i>Tambah Artikel
                     </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -84,7 +87,7 @@
                         </div>
                         <h5 class="text-muted mb-2">Belum ada artikel</h5>
                         <p class="text-muted mb-3">Mulai dengan membuat artikel baru</p>
-                        <a href="<?= base_url("admin/artikel/tambah") ?>" class="btn btn-primary btn-sm">
+                        <a href="<?= base_url($role ."/artikel/tambah") ?>" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus me-1"></i>Tambah Artikel
                         </a>
                     </div>
@@ -159,13 +162,15 @@
                                                 <div class="text-muted small"><?= date('M Y', strtotime($tglPublish)) ?></div>
                                             </div>
                                         </td>
+                                        
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                <a href="<?= base_url('admin/artikel/viewArtikel/' . $tampilArtikel['id_artikel'] . '/' . $tampilArtikel['slug']) ?>"
+                                                <a href="<?= base_url($role . '/artikel/detail/' . $tampilArtikel['id_artikel'] . '/' . $tampilArtikel['slug']) ?>"
                                                     class="btn btn-sm btn-outline-primary" title="Lihat">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="<?= base_url('admin/artikel/edit/' . $tampilArtikel['id_artikel']) ?>"
+                                                <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                                <a href="<?= base_url($role . '/artikel/edit/' . $tampilArtikel['id_artikel']) ?>"
                                                     class="btn btn-sm btn-outline-secondary" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
@@ -173,6 +178,7 @@
                                                     title="Hapus" data-id="<?= $tampilArtikel['id_artikel'] ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>
@@ -358,7 +364,7 @@
         // Delete button handler
         $('.delete-btn').on('click', function() {
             var id = $(this).data('id');
-            var url = '<?= base_url("admin/artikel/delete/") ?>' + id;
+            var url = '<?= base_url($role . "/artikel/delete/") ?>' + id;
             $('#confirmDelete').attr('href', url);
             $('#deleteModal').modal('show');
         });

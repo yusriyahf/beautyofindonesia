@@ -11,9 +11,12 @@
                     <p class="mb-0 opacity-75">Kelola kategori untuk mengorganisir konten Anda</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <button class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
-                        <i class="fas fa-plus me-1"></i>Tambah Kategori
-                    </button>
+                    <?php $role = session()->get('role'); ?>
+                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                        <button class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
+                            <i class="fas fa-plus me-1"></i>Tambah Kategori
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -40,7 +43,9 @@
                                     <th width="60" class="text-center">No</th>
                                     <th>Kategori (Indonesia)</th>
                                     <th>Kategori (English)</th>
-                                    <th width="120" class="text-center">Aksi</th>
+                                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                        <th width="120" class="text-center">Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,22 +63,24 @@
                                                 <?= esc($tampilKategori->nama_kategori_en) ?>
                                             </span>
                                         </td>
-                                        <td class="text-center">
-                                            <div class="d-flex justify-content-center gap-1">
-                                                <button class="btn btn-sm btn-outline-primary edit-btn"
-                                                    data-id="<?= $tampilKategori->id_kategori ?>"
-                                                    data-nama="<?= esc($tampilKategori->nama_kategori) ?>"
-                                                    data-nama-en="<?= esc($tampilKategori->nama_kategori_en) ?>"
-                                                    title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                    data-id="<?= $tampilKategori->id_kategori ?>"
-                                                    title="Hapus">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </td>
+                                        <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center gap-1">
+                                                    <button class="btn btn-sm btn-outline-primary edit-btn"
+                                                        data-id="<?= $tampilKategori->id_kategori ?>"
+                                                        data-nama="<?= esc($tampilKategori->nama_kategori) ?>"
+                                                        data-nama-en="<?= esc($tampilKategori->nama_kategori_en) ?>"
+                                                        title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger delete-btn"
+                                                        data-id="<?= $tampilKategori->id_kategori ?>"
+                                                        title="Hapus">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -95,7 +102,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?= base_url('admin/kategori/tambah') ?>" method="post">
+            <form action="<?= base_url($role . '/kategori/tambah') ?>" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="nama_kategori" class="form-label small text-muted mb-1">NAMA KATEGORI (INDONESIA)</label>
@@ -300,41 +307,54 @@
 
 <script>
     $(document).ready(function() {
-        // Initialize DataTable
-        var table = $('#kategoriTable').DataTable({
-            responsive: true,
-            dom: '<"top"<"row"<"col-md-6"l><"col-md-6"f>>>rt<"bottom"<"row"<"col-md-6"i><"col-md-6"p>><"clear">>',
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
-            },
-            columnDefs: [{
+        $(document).ready(function() {
+            // Cek apakah kolom aksi ada
+            var hasActionColumn = <?= in_array($role, ['admin', 'penulis']) ? 'true' : 'false' ?>;
+            var columnDefs = [{
                     orderable: false,
-                    targets: [3]
-                }, // Disable sorting for action column
+                    targets: [0] // Kolom No selalu tidak bisa di-sort
+                },
                 {
                     className: "text-center",
-                    targets: [0, 3]
-                }, // Center align these columns
+                    targets: [0] // Kolom No selalu di tengah
+                },
                 {
                     width: "60px",
                     targets: 0
-                }, // Set width for No column
-                {
-                    width: "120px",
-                    targets: 3
-                } // Set width for Action column
-            ],
-            initComplete: function() {
-                // Add custom styling after initialization
-                $('.dataTables_length select').addClass('form-select-sm');
-                $('.dataTables_filter input').addClass('form-control-sm');
+                }
+            ];
 
-                // Initialize tooltips
-                $('[title]').tooltip({
-                    trigger: 'hover',
-                    placement: 'top'
+            // Tambahkan pengaturan untuk kolom aksi jika ada
+            if (hasActionColumn) {
+                columnDefs.push({
+                    orderable: false,
+                    targets: [3] // Kolom aksi
+                }, {
+                    className: "text-center",
+                    targets: [3] // Kolom aksi di tengah
+                }, {
+                    width: "120px",
+                    targets: 3 // Lebar kolom aksi
                 });
             }
+
+            // Initialize DataTable
+            var table = $('#kategoriTable').DataTable({
+                responsive: true,
+                dom: '<"top"<"row"<"col-md-6"l><"col-md-6"f>>>rt<"bottom"<"row"<"col-md-6"i><"col-md-6"p>><"clear">>',
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
+                },
+                columnDefs: columnDefs,
+                initComplete: function() {
+                    $('.dataTables_length select').addClass('form-select-sm');
+                    $('.dataTables_filter input').addClass('form-control-sm');
+                    $('[title]').tooltip({
+                        trigger: 'hover',
+                        placement: 'top'
+                    });
+                }
+            });
         });
 
         // Handle edit button click (using event delegation for dynamic content)
@@ -345,7 +365,7 @@
 
             $('#edit_nama_kategori').val(nama);
             $('#edit_nama_kategori_en').val(nama_en);
-            $('#editForm').attr('action', '<?= base_url("admin/kategori/edit") ?>/' + id);
+            $('#editForm').attr('action', '<?= base_url($role . "/kategori/edit") ?>/' + id);
 
             $('#editKategoriModal').modal('show');
         });
@@ -353,7 +373,7 @@
         // Handle delete button click (using event delegation for dynamic content)
         $('#kategoriTable').on('click', '.delete-btn', function() {
             var id = $(this).data('id');
-            var url = '<?= base_url("admin/kategori/delete") ?>/' + id;
+            var url = '<?= base_url($role . "/kategori/delete") ?>/' + id;
             $('#confirmDelete').attr('href', url);
             $('#deleteModal').modal('show');
         });

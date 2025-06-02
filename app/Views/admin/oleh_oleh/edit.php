@@ -11,7 +11,8 @@
                 <p class="text-muted">Perbarui data oleh-oleh dengan informasi terbaru</p>
             </div>
             <div>
-                <a href="<?= base_url('admin/oleh_oleh/index') ?>" class="btn btn-outline-secondary">
+                 <?php $role = session()->get('role');?>
+                <a href="<?= base_url($role . '/oleh_oleh/index') ?>" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
@@ -21,7 +22,8 @@
             <div class="col-12">
                 <div class="app-card app-card-settings shadow-sm p-4">
                     <div class="app-card-body">
-                        <form action="<?= base_url('admin/oleh_oleh/proses_edit/' . $oleh_oleh['id_oleholeh']) ?>" method="POST" enctype="multipart/form-data">
+                         <?php $role = session()->get('role');?>
+                        <form action="<?= base_url($role . '/oleh_oleh/proses_edit/' . $oleh_oleh['id_oleholeh']) ?>" method="POST" enctype="multipart/form-data">
                             <?= csrf_field(); ?>
 
                             <!-- Progress Steps Indicator -->
