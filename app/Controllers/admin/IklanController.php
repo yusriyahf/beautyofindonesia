@@ -143,6 +143,7 @@ class IklanController extends BaseController
             'rentang_bulan'     => $rentangBulan,
             'total_harga'       => $totalHargaFix,
             'tanggal_pengajuan' => date('Y-m-d'),
+            'no_pengaju'        => $this->request->getPost('no_pengaju'),
             'status_iklan'      => 'diajukan',
             'catatan_admin'     => $this->request->getPost('catatan_admin'),
             'created_at'        => date('Y-m-d H:i:s'),
@@ -244,7 +245,7 @@ class IklanController extends BaseController
 
         // Ambil data user marketing
         $marketing = $this->UsersModel->find($iklan['id_marketing']);
-        $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
+        $iklan['username'] = $marketing['username'] ?? 'Tidak ditemukan';
 
         // Kirim data ke view
         return view('admin/artikel/detail_artikel_iklan', [

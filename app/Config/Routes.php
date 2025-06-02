@@ -61,6 +61,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
     $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
     $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
+    $routes->post('saldo/tolakstatus', 'admin\Komisi::tolakstatus');
 
     // Users
     $routes->get('users', 'admin\Users::index');

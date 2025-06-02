@@ -62,21 +62,26 @@ class AccUserController extends BaseController
 
     public function reject($id_pengajuan)
     {
-        // Validasi ID pengajuan
         if (!is_numeric($id_pengajuan)) {
             return redirect()->back()->with('error', 'ID Pengajuan tidak valid');
         }
 
-        // Cari data pengajuan
         $pengajuan = $this->AccUserModel->find($id_pengajuan);
-
         if (!$pengajuan) {
             return redirect()->back()->with('error', 'Data pengajuan tidak ditemukan');
         }
 
-        // Update status menjadi rejected
+        // Ambil alasan dari input
+        $alasan = $this->request->getPost('alasan_penolakan');
+
+        if (!$alasan) {
+            return redirect()->back()->with('error', 'Alasan penolakan wajib diisi');
+        }
+
+        // Update status dan alasan
         $data = [
             'status' => 'rejected',
+            'alasan_penolakan' => $alasan // pastikan kolom ini ada di DB
         ];
 
         if ($this->AccUserModel->update($id_pengajuan, $data)) {
