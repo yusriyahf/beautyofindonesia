@@ -273,7 +273,9 @@
                             </h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="<?= base_url('admin/penarikan/reject/' . $saldo['id_penarikan_komisi']) ?>" method="POST">
+                        <form action="<?= base_url('admin/saldo/tolakstatus') ?>" method="POST">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="id_penarikan_komisi" value="<?= $saldo['id_penarikan_komisi'] ?>">
                             <div class="modal-body">
                                 <div class="mb-4 text-center">
                                     <i class="fas fa-times-circle text-danger fa-4x mb-3"></i>
@@ -282,8 +284,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="alasan<?= $saldo['id_penarikan_komisi'] ?>" class="form-label">Alasan Penolakan</label>
-                                    <textarea class="form-control" id="alasan<?= $saldo['id_penarikan_komisi'] ?>" name="alasan" rows="3" required placeholder="Berikan alasan penolakan"></textarea>
+                                    <label for="catatan<?= $saldo['id_penarikan_komisi'] ?>" class="form-label">Alasan Penolakan</label>
+                                    <textarea class="form-control" id="catatan<?= $saldo['id_penarikan_komisi'] ?>" name="catatan" rows="3" required placeholder="Berikan alasan penolakan"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -650,15 +652,15 @@
         padding: 0.25rem 1.75rem 0.25rem 0.75rem;
         font-size: 0.875rem;
     }
-    
+
     .bg-white.bg-opacity-20 {
         background-color: rgba(255, 255, 255, 0.2) !important;
     }
-    
+
     .bg-white.bg-opacity-10 {
         background-color: rgba(255, 255, 255, 0.1) !important;
     }
-    
+
     .date-cell {
         min-width: 120px;
     }
@@ -676,9 +678,10 @@
             language: {
                 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
             },
-            order: [[5, 'desc']], // Default sorting by date (column index 5) descending
-            columnDefs: [
-                {
+            order: [
+                [5, 'desc']
+            ], // Default sorting by date (column index 5) descending
+            columnDefs: [{
                     orderable: false,
                     targets: [0, 6] // Disable sorting for No and Action columns
                 },
@@ -696,7 +699,7 @@
                     trigger: 'hover',
                     placement: 'top'
                 });
-                
+
                 // Move the filter dropdown to the header
                 $('#filter-status').appendTo('#withdrawalTable_wrapper .dataTables_filter');
             }
@@ -719,15 +722,15 @@
                 table.columns(4).search('^' + status + '$', true, false).draw();
             }
         });
-        
+
         // Format date cells for better display
         $('.date-cell').each(function() {
             const dateText = $(this).text().trim();
             if (dateText) {
                 const parts = dateText.split(' ');
                 if (parts.length >= 2) {
-                    $(this).html('<div class="d-flex flex-column"><small class="text-muted">' + 
-                                parts[0] + '</small><small>' + parts[1] + '</small></div>');
+                    $(this).html('<div class="d-flex flex-column"><small class="text-muted">' +
+                        parts[0] + '</small><small>' + parts[1] + '</small></div>');
                 }
             }
         });
