@@ -39,10 +39,12 @@ class RegistrasiController extends BaseController
             return redirect()->back()->withInput();
         }
 
-       // Set artikel to null if role is marketing or admin
+        // Set artikel to null if role is marketing or admin
         if ($role === 'marketing' || $role === 'admin') {
             $artikel = null;
         }
+
+        
 
         // Data untuk disimpan
         $data = [
@@ -61,10 +63,9 @@ class RegistrasiController extends BaseController
 
         // Simpan data
         if ($model->save($data)) {
-            session()->setFlashdata('success', 'Registrasi akan segera diproses! Mohon ditunggu, pemberitahuan akan dikirimkan melalui email.');
-
-            // Tampilkan kembali halaman yang sama dengan pesan sukses
-            return view('admin/registrasi/index');
+            session()->setFlashdata('success', true);
+            return view('admin/registrasi/index'); // atau view yang sesuai
+        
         } else {
             // Jika gagal simpan, tampilkan error
             $errors = $model->errors();

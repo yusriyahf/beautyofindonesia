@@ -4,7 +4,6 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
-use App\Models\UsersModel;
 
 class Profile extends BaseController
 {
@@ -21,12 +20,12 @@ class Profile extends BaseController
 
         // Ambil data pengguna dari session atau database
         $userModel = new UserModel();
-        $userId = session()->get('user_id'); // Pastikan nama key-nya sesuai
-        $user = $userModel->find($userId);
-        
+
         $id_user = session()->get('id_user');
-        $usersModel = new UsersModel();
-        $userData = $usersModel->getUsernameById($id_user);
+
+        $user = $userModel->find($id_user);
+        $usersModel = new UserModel();
+        $userData = $usersModel->getUserById($id_user);
         $photo_user = $userData['photo_user'] ?? null;
         $profileImage = $photo_user ? base_url('assets-baru/img/user/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
 
@@ -38,7 +37,7 @@ class Profile extends BaseController
     }
 
 
-    public function edit()
+    public function edit($id)
     {
         // Cek apakah user sudah login
         if (!session()->get('logged_in')) {
@@ -47,14 +46,12 @@ class Profile extends BaseController
 
         // Ambil data user dari session atau database
         $userModel = new UserModel();
-        $userId = session()->get('user_id'); // Contoh mengambil user_id dari session
+        $userId = session()->get('id_user'); // Contoh mengambil user_id dari session
         $user = $userModel->find($userId);
-         
 
-        $id_user = session()->get('id_user');
-        $usersModel = new UsersModel();
-        
-        $userData = $usersModel->getUsernameById($id_user);
+        $usersModel = new UserModel();
+
+        $userData = $usersModel->getUserById($userId);
         $photo_user = $userData['photo_user'] ?? null;
         $profileImage = $photo_user ? base_url('assets-baru/img/user/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
 
@@ -62,7 +59,7 @@ class Profile extends BaseController
         return view('admin/profile/edit', ['user' => $user, 'profileImage' => $profileImage]);
     }
 
-    public function update()
+    public function update($id)
     {
         // Pastikan user sudah login
         if (!session()->get('logged_in')) {
@@ -81,7 +78,7 @@ class Profile extends BaseController
         }
 
         $profilePictures = $this->request->getFile('profilePictureInput');
-        log_message('debug', 'File anjing: ' . $profilePictures);
+        log_message('debug', 'File: ' . $profilePictures);
 
         // Validasi form input
         $validation = \Config\Services::validation();
@@ -154,7 +151,9 @@ class Profile extends BaseController
             'email' => $this->request->getPost('email'),
             'kontak' => $this->request->getPost('kontak'),
             'bank_account_number' => $this->request->getPost('rekening'),
-            'photo_user' => $profilePictureName
+            'photo_user' => $profilePictureName,
+            'deskripsi_profile' => $this->request->getPost('deskripsi_profile'),
+            'updated_at' => date('Y-m-d H:i:s')
         ];
 
         // Jika password diisi, update
@@ -170,13 +169,61 @@ class Profile extends BaseController
 
         // Update session
         $updatedUser = $userModel->find($userId);
+        $role   = session('role');
         session()->set([
             'username' => $updatedUser['username'],
             'email' => $updatedUser['email'],
             'photo_user' => base_url($updatedUser['photo_user'] ?? 'assets-baru/img/user/default_profil.jpg')
         ]);
 
-        return redirect()->to('/admin/profile')->with('success', 'Profil berhasil diperbarui');
+        return redirect()->to($role.'/profile/index')->with('success', 'Profil berhasil diperbarui');
     }
-    
+
+    public function updatePassword()
+    {
+        // Cek apakah user sudah login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        // Validasi input dari form
+        $currentPassword = $this->request->getPost('current_password');
+        $newPassword     = $this->request->getPost('new_password');
+        $confirmPassword = $this->request->getPost('confirm_password');
+
+        // Ambil user dari database
+        $userId = session()->get('id_user');
+        $usersModel = new UserModel();
+        $user = $usersModel->find($userId);
+
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan.');
+        }
+
+        // Debug: tampilkan password dari form, hash dari database, dan hasil verifikasi
+        // dd($userId, $newPassword, password_hash($newPassword, PASSWORD_DEFAULT));
+
+
+        // Cek apakah password saat ini cocok
+        if (!password_verify($currentPassword, $user['password'])) {
+            return redirect()->back()->with('error', 'Password saat ini salah.');
+        }
+
+        // Validasi tambahan
+        if ($newPassword !== $confirmPassword) {
+            return redirect()->back()->with('error', 'Password baru dan konfirmasi tidak cocok.');
+        }
+
+        if (strlen($newPassword) < 8) {
+            return redirect()->back()->with('error', 'Password baru minimal 8 karakter.');
+        }
+
+        // Update password di database
+        $usersModel->update($userId, [
+            'password' => password_hash($newPassword, PASSWORD_DEFAULT)
+        ]);
+
+        return redirect()->back()->with('success', 'Password berhasil diperbarui.');
+    }
 }

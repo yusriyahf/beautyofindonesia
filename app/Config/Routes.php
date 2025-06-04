@@ -177,8 +177,7 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('profile/index', 'admin\Profile::index');
     $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
     $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
-
-    
+    $routes->post('profile/update-password', 'admin\Profile::updatePassword');
 
 
     // IKLAN UTAMA
@@ -283,6 +282,12 @@ $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) 
     $routes->get('saldo', 'admin\Komisi::saldo/$1');
     $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
     $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
+
+    // Profil Pengguna
+    $routes->get('profile/index', 'admin\Profile::index');
+    $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
+    $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
+    $routes->post('profile/update-password', 'admin\Profile::updatePassword');
 });
 
 
@@ -332,6 +337,13 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
 
     // KATEGORI OLEH OLEH
     $routes->get('kategori_oleholeh/index', 'admin\KategoriOlehOleh::index');
+
+    // Profil Pengguna
+    $routes->get('profile/index', 'admin\Profile::index');
+    $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
+    $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
+    $routes->post('profile/update-password', 'admin\Profile::updatePassword');
+
 });
 
 
