@@ -66,7 +66,7 @@
                             <span class="input-group-text bg-transparent border-end-0">
                                 <i class="fas fa-search text-muted"></i>
                             </span>
-                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Nama, lokasi...">
+                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Nama wisata...">
                         </div>
                     </div>
 
@@ -371,7 +371,7 @@
             $('.table-row').each(function () {
                 const rowLocation = $(this).data('location');
                 const rowCategory = $(this).data('category');
-                const rowName = $(this).data('name'); // nama tempat wisata
+                const rowName = $(this).data('search'); // nama tempat wisata
 
                 // Location filter
                 const locationPass = !location || rowLocation === location;

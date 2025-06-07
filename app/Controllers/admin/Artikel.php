@@ -192,7 +192,7 @@ class Artikel extends BaseController
 
         $validation = \Config\Services::validation();
 
-        return view('admin/artikel/edit', [
+        return view('admin/artikel/index', [
             'artikelData' => $artikelData,
             'validation' => $validation
         ]);
@@ -262,7 +262,7 @@ class Artikel extends BaseController
         }
 
         // Lokasi file gambar
-        $filePath = 'assets-baru/img/foto_artikel/' . $data->foto_artikel;
+        $filePath = 'assets-baru/img/foto_artikel/' . $data['foto_artikel'];
 
         // Cek apakah file ada sebelum menghapus
         if (file_exists($filePath)) {

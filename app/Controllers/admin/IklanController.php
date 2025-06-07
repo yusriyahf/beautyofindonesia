@@ -270,7 +270,7 @@ class IklanController extends BaseController
 
         // Lakukan penghapusan
         if ($this->artikelIklanModel->delete($id)) {
-            return redirect()->to(base_url('admin/daftariklankonten'))->with('success', 'Data iklan berhasil dihapus.');
+            return redirect()->to(base_url('marketing/daftariklankonten'))->with('success', 'Data iklan berhasil dihapus.');
         } else {
             return redirect()->back()->with('error', 'Gagal menghapus data iklan.');
         }

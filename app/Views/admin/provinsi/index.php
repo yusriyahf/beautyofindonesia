@@ -94,7 +94,8 @@
 <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="<?= base_url('admin/provinsi/tambah') ?>" method="POST">
+            <form action="<?= base_url('admin/provinsi/proses_tambah') ?>" method="POST">
+                <?= csrf_field() ?>
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Provinsi</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -124,6 +125,7 @@
         <div class="modal-content">
             <form action="" method="POST" id="editForm">
                 <div class="modal-header">
+                    <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
                     <h5 class="modal-title">Edit Provinsi</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -460,7 +462,7 @@
 
             $('#edit_nama_provinsi').val(nama);
             $('#edit_nama_provinsi_eng').val(nama_eng);
-            $('#editForm').attr('action', '<?= base_url("admin/provinsi/edit/") ?>' + id);
+            $('#editForm').attr('action', '<?= base_url("admin/provinsi/proses_edit/") ?>' + id);
 
             $('#editModal').modal('show');
         });

@@ -38,7 +38,11 @@ class ArtikelIklan extends BaseController
 
     public function index()
     {
-        $all_data = $this->artikelIklanModel->getArtikelIklan();
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+        $status = $this->request->getGet('status');
+        
+        $all_data = $this->artikelIklanModel->getArtikelByFilter();
         $validation = \Config\Services::validation();
         foreach ($all_data as &$iklan) {
             $judul = 'Tidak ditemukan';
@@ -250,6 +254,7 @@ class ArtikelIklan extends BaseController
 
         try {
             $idIklan = $this->request->getPost('id_iklan');
+            $status = $this->request->getPost('status');
             $tanggalMulai = $this->request->getPost('tanggal_mulai');
             $tanggalSelesai = $this->request->getPost('tanggal_selesai');
             $totalHarga = floatval($this->request->getPost('total_harga'));
@@ -271,6 +276,7 @@ class ArtikelIklan extends BaseController
             }
 
             // 2. Handle komisi custom jika dipilih
+            if ($status == 'diterima') {
             if ($useCustomCommission == '1') {
                 $komisiMarketing = floatval($this->request->getPost('komisi_marketing') ?? 0);
                 $komisiPenulis = floatval($this->request->getPost('komisi_penulis') ?? 0);
@@ -337,6 +343,7 @@ class ArtikelIklan extends BaseController
 
             // 3. Proses perhitungan dan penyimpanan komisi ke tb_pemasukan_komisi
             $this->prosesKomisiPemasukan($idIklan, $totalHarga, $idMarketing, $tipeContent, $idContent);
+        }
 
             $db->transComplete();
 
@@ -449,7 +456,7 @@ class ArtikelIklan extends BaseController
                     break;
 
                 case 'tempatwisata':
-                    $query = $db->query("SELECT id_penulis FROM tb_tempat_wisata WHERE id_tempat_wisata = ?", [$idContent]);
+                    $query = $db->query("SELECT id_penulis FROM tb_tempatwisata WHERE id_tempat_wisata = ?", [$idContent]);
                     break;
 
                 default:

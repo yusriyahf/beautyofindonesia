@@ -102,7 +102,8 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?= base_url($role . '/kategori/tambah') ?>" method="post">
+            <form action="<?= base_url($role . '/kategori/proses_tambah') ?>" method="post">
+                <?= csrf_field() ?>
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="nama_kategori" class="form-label small text-muted mb-1">NAMA KATEGORI (INDONESIA)</label>
@@ -137,6 +138,7 @@
             <form id="editForm" method="post">
                 <div class="modal-body">
                     <div class="mb-3">
+                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>"> 
                         <label for="edit_nama_kategori" class="form-label small text-muted mb-1">NAMA KATEGORI (INDONESIA)</label>
                         <input type="text" class="form-control py-2" id="edit_nama_kategori" name="nama_kategori" required>
                     </div>
@@ -365,7 +367,7 @@
 
             $('#edit_nama_kategori').val(nama);
             $('#edit_nama_kategori_en').val(nama_en);
-            $('#editForm').attr('action', '<?= base_url($role . "/kategori/edit") ?>/' + id);
+            $('#editForm').attr('action', '<?= base_url($role . "/kategori/proses_edit") ?>/' + id);
 
             $('#editKategoriModal').modal('show');
         });

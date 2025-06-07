@@ -87,6 +87,28 @@ class ArtikelIklanModel extends Model
             ->findAll();
     }
 
+    public function getArtikelByFilter($startDate = null, $endDate = null, $status = null) {
+        $builder = $this->table('tb_artikel_iklan')
+                    ->select('tb_artikel_iklan.*, tb_artikel.judul_artikel, tb_harga_iklan.nama AS nama_iklan, tb_users.username, tb_users.kontak')
+                    ->join('tb_artikel', 'tb_artikel.id_artikel = tb_artikel_iklan.id_content')
+                    ->join('tb_harga_iklan', 'tb_harga_iklan.id_harga_iklan = tb_artikel_iklan.id_harga_iklan')
+                    ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_marketing');
+                    // ->findAll();
+        if ($startDate) {
+            $builder->where('tanggal_mulai >=', $startDate);
+        }
+
+        if ($endDate) {
+            $builder->where('tanggal_selesai <=', $endDate);
+        }
+
+        if ($status) {
+            $builder->where('status = ', $status);
+        }
+
+        return $builder->get()->getResultArray();
+    }
+
     //ngitung iklan diterima/disetujui(?)
     public function countIklanDiterimaByMarketing($id_user)
     {

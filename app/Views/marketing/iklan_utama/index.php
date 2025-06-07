@@ -41,9 +41,9 @@
                         <label class="form-label small text-muted mb-1">STATUS</label>
                         <select id="statusFilter" class="form-select">
                             <option value="">Semua Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
+                            <option value="diajukan">Diajukan</option>
+                            <option value="diterima">Diterima</option>
+                            <option value="ditolak">Ditolak</option>
                         </select>
                     </div>
 
@@ -131,7 +131,7 @@
                                     <tr class="table-row"
                                         data-date="<?= date('Y-m-d', strtotime($item['tanggal_pengajuan'])) ?>"
                                         data-status="<?= esc($item['status']) ?>"
-                                        data-search="<?= strtolower(esc($item['id_marketing'] . ' ' . $item['id_tipe_iklan_utama'])) ?>">
+                                        data-search="<?= strtolower(esc(($item['id_marketing'] ?? '') . ' ' . ($item['id_tipe_iklan_utama'] ?? '') . ' ' . ($item['username'] ?? '') . ' ' . ($item['nama_tipe_iklan_utama'] ?? ''))) ?>">
                                         <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -174,7 +174,7 @@
                                             </span>
                                         </td>
                                         <td class="text-end">
-                                            Rp <?= number_format(esc($item['total_harga']), 0, ',', '.') ?>
+                                            Rp <?= number_format($item['total_harga'], 0, ',', '.') ?>
                                         </td>
                                         <td class="text-center">
                                             <?php if ($item['tanggal_mulai']): ?>

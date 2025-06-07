@@ -109,6 +109,13 @@ $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     $routes->get('meta/delete/(:any)', 'admin\MetaController::delete/$1');
 
     // Artikel
+    $routes->get('artikel/index', 'admin\Artikel::index');
+    $routes->get('artikel/tambah', 'admin\Artikel::tambah');
+    $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
+    $routes->post('artikel/proses_tambah', 'admin\Artikel::proses_tambah');
+    $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
+    $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
+    $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
 
     // Daftar Penulis
     $routes->get('penulis/index', 'admin\Penulis::index');
@@ -311,6 +318,8 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
     $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
     $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
     $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
+    $routes->post('daftariklankonten/delete/(:num)', 'Admin\IklanController::delete/$1');
+
 
     // Saldo
     $routes->get('saldo', 'admin\Komisi::saldo/$1');

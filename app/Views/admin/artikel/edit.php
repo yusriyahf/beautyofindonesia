@@ -3,13 +3,24 @@
 
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="app-page-title mb-0">Edit Artikel</h1>
-            <div>
-                <?php $role = session()->get('role'); ?>
-                <a href="<?= base_url($role . '/artikel') ?>" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Kembali
-                </a>
+        <div class="col-auto">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="app-page-title mb-0">Edit Artikel</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item small"><a href="<?= base_url('admin/dashboard') ?>" class="text-decoration-none">Dashboard</a></li>
+                            <li class="breadcrumb-item small"><a href="<?= base_url('admin/artikel') ?>" class="text-decoration-none">Manajemen Artikel</a></li>
+                            <li class="breadcrumb-item small active" aria-current="page">Edit Artikel</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div>
+                    <?php $role = session()->get('role'); ?>
+                    <a href="<?= base_url($role . '/artikel') ?>" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Kembali
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -23,7 +34,7 @@
                     </div>
 
                     <div class="app-card-body">
-                        <?php $role = session()->get('role');?>
+                        <?php $role = session()->get('role'); ?>
                         <form action="<?= base_url($role . '/artikel/proses_edit/' . $artikelData['id_artikel']) ?>" method="POST" enctype="multipart/form-data">
                             <?= csrf_field(); ?>
 
@@ -200,4 +211,110 @@
     </div>
 </div>
 
+<style>
+/* Style untuk Tab Navigation */
+.nav-tabs {
+    border-bottom: 2px solid #e9ecef;
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -2px;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #6c757d;
+    background-color: transparent;
+    border-radius: 8px 8px 0 0;
+    margin-right: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-tabs .nav-link i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #ff8c00;
+    background-color: rgba(255, 140, 0, 0.05);
+    border-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+    color: #ff8c00;
+    background-color: #fff;
+    border: none;
+    position: relative;
+}
+
+.nav-tabs .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(135deg, #ff8c00, #ffd700);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Efek hover yang lebih halus */
+.nav-tabs .nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(255, 215, 0, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover::before {
+    opacity: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 5px;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+    
+    .nav-tabs .nav-link i {
+        margin-right: 5px;
+        font-size: 14px;
+    }
+}
+
+/* Animasi saat tab aktif berubah */
+.tab-content > .tab-pane {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
 <?= $this->endSection('content') ?>

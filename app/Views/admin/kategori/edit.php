@@ -9,8 +9,8 @@
             <div class="col-12 col-md-8">
                 <div class="app-card app-card-settings shadow-sm p-4">
                     <div class="card-body">
-                        <form action="<?= base_url('admin/kategori/proses_edit/' . $kategoriData->id_kategori) ?>" method="POST" enctype="multipart/form-data">
-                            <?= csrf_field(); ?>
+                        <form action="<?= base_url($role . '/kategori/proses_tambah') ?>" method="post">
+                            <?= csrf_field() ?>
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">

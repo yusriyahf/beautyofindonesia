@@ -70,10 +70,10 @@
 
                         <!-- Action Buttons -->
                         <div class="col-md-3 d-flex">
-                            <a href="<?= base_url('admin/artikel_iklan') ?>" class="btn btn-outline-secondary me-2 flex-grow-1">
+                            <button type="button" id="resetButton" class="btn btn-outline-secondary me-2 flex-grow-1">
                                 <i class="fas fa-undo me-1"></i> Reset
-                            </a>
-                            <button type="submit" class="btn btn-info flex-grow-1 text-white">
+                            </button>
+                            <button type="button" id="filterButton" class="btn btn-info flex-grow-1 text-white">
                                 <i class="fas fa-filter me-1"></i> Filter
                             </button>
                         </div>
@@ -156,7 +156,10 @@
                                             break;
                                     }
                                     ?>
-                                    <tr>
+                                    <tr class="table-row"
+                                        data-start-date="<?= date('Y-m-d', strtotime($artikelIklan['tanggal_mulai'] ?? '')) ?>"
+                                        data-end-date="<?= date('Y-m-d', strtotime($artikelIklan['tanggal_selesai'] ?? '')) ?>"
+                                        data-status="<?= strtolower($status) ?>">
                                         <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td>
                                             <div class="fw-medium text-truncate" style="max-width: 200px;"><?= esc($artikelIklan['judul_konten'] ?? 'N/A') ?></div>
@@ -981,6 +984,55 @@
                 });
             }
         });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        const statusSelect = document.getElementById('status');
+        const resetBtn = document.getElementById('resetButton');
+        const rows = document.querySelectorAll('.table-row');
+
+        function applyFilters() {
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+            const status = statusSelect.value.toLowerCase();
+
+            rows.forEach(row => {
+                const rowStart = row.dataset.startDate || '';
+                const rowEnd = row.dataset.endDate || '';
+                const rowStatus = row.dataset.status || '';
+
+                let show = true;
+
+                if (startDate && rowStart) {
+                    show = show && (rowStart >= startDate);
+                }
+
+                if (endDate && rowEnd) {
+                    show = show && (rowEnd <= endDate);
+                }
+
+                if (status) {
+                    show = show && (rowStatus === status);
+                }
+
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function resetFilters() {
+            startDateInput.value = '';
+            endDateInput.value = '';
+            statusSelect.value = '';
+            applyFilters();
+        }
+
+        startDateInput.addEventListener('change', applyFilters);
+        endDateInput.addEventListener('change', applyFilters);
+        statusSelect.addEventListener('change', applyFilters);
+
+        resetBtn.addEventListener('click', resetFilters);
     });
 
     function setupModalFunctionality(config) {

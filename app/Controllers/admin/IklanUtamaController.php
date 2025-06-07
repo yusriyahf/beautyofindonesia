@@ -109,7 +109,7 @@ class IklanUtamaController extends BaseController
 
         // Bersihkan format total harga
         $totalHarga = $this->request->getPost('total_harga');
-        $cleanTotalHarga = floatval(str_replace([',', ' '], '', $totalHarga));
+        $totalHargaFix = floatval(preg_replace('/[^\d]/', '', $totalHarga));
 
         // Handle upload gambar
         $gambar = $this->request->getFile('thumbnail_iklan');
@@ -127,7 +127,7 @@ class IklanUtamaController extends BaseController
             'jenis'        => $jenis,
             'rentang_bulan'        => $rentangBulan,
             'status'        => 'diajukan',
-            'total_harga'        => $cleanTotalHarga,
+            'total_harga'        => $totalHargaFix,
             'tanggal_pengajuan' => date('Y-m-d'),
             'link_iklan' => $linkIklan,
             'thumbnail_iklan' => $newName,
