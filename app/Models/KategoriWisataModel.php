@@ -16,7 +16,11 @@ class KategoriWisataModel extends Model
         'id_kotakabupaten',
         'nama_kotakabupaten',
         'slug_kategori_wisata',
-        'slug_kategori_wisata_en'
+        'slug_kategori_wisata_en',
+        'meta_title_id',
+        'meta_title_en',
+        'meta_description_id',
+        'meta_description_en'
     ];
 
     public function getKategoriWisata()

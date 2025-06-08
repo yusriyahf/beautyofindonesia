@@ -60,6 +60,10 @@ class KategoriOlehOleh extends BaseController
             'nama_kategori_oleholeh_en' => $nama_kategori_oleholeh_en,
             'slug_kategori_oleholeh' => $slug_kategori_oleholeh,
             'slug_kategori_oleholeh_en' => $slug_kategori_oleholeh_en,
+            'meta_title_id' => $this->request->getVar("meta_title_id"),
+            'meta_title_en' => $this->request->getVar("meta_title_en"),
+            'meta_description_id' => $this->request->getVar("meta_description_id"),
+            'meta_description_en' => $this->request->getVar("meta_description_en"),
         ];
 
         // Simpan data ke database
@@ -127,6 +131,10 @@ class KategoriOlehOleh extends BaseController
             'nama_kategori_oleholeh_en' => $namaKategoriEn,
             'slug_kategori_oleholeh' => $slugKategori,
             'slug_kategori_oleholeh_en' => $slugKategoriEn,
+            'meta_title_id' => $this->request->getPost("meta_title_id"),
+            'meta_title_en' => $this->request->getPost("meta_title_en"),
+            'meta_description_id' => $this->request->getPost("meta_description_id"),
+            'meta_description_en' => $this->request->getPost("meta_description_en"),
         ];
 
         // Update the category data

@@ -44,7 +44,7 @@
                                     <th>Kategori Wisata (Indonesia)</th>
                                     <th>Kategori Wisata (English)</th>
                                     <?php if (in_array($role, ['admin', 'penulis'])): ?>
-                                        <th width="120" class="text-center">Aksi</th>
+                                        <th width="150" class="text-center">Aksi</th>
                                     <?php endif; ?>
                                 </tr>
                             </thead>
@@ -66,15 +66,33 @@
                                         <?php if (in_array($role, ['admin', 'penulis'])): ?>
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center gap-1">
+                                                    <button class="btn btn-sm btn-outline-secondary detail-btn"
+                                                        data-id="<?= $kategori_wisata->id_kategori_wisata ?>"
+                                                        data-nama="<?= esc($kategori_wisata->nama_kategori_wisata) ?>"
+                                                        data-nama-en="<?= esc($kategori_wisata->nama_kategori_wisata_en) ?>"
+                                                        data-slug="<?= esc($kategori_wisata->slug_kategori_wisata) ?>"
+                                                        data-slug-en="<?= esc($kategori_wisata->slug_kategori_wisata_en) ?>"
+                                                        data-meta-title-id="<?= esc($kategori_wisata->meta_title_id ?? '') ?>"
+                                                        data-meta-title-en="<?= esc($kategori_wisata->meta_title_en ?? '') ?>"
+                                                        data-meta-desc-id="<?= esc($kategori_wisata->meta_description_id ?? '') ?>"
+                                                        data-meta-desc-en="<?= esc($kategori_wisata->meta_description_en ?? '') ?>"
+                                                        title="Detail">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
                                                     <button class="btn btn-sm btn-outline-primary edit-btn"
                                                         data-id="<?= $kategori_wisata->id_kategori_wisata ?>"
                                                         data-nama="<?= esc($kategori_wisata->nama_kategori_wisata) ?>"
                                                         data-nama-en="<?= esc($kategori_wisata->nama_kategori_wisata_en) ?>"
+                                                        data-meta-title-id="<?= esc($kategori_wisata->meta_title_id ?? '') ?>"
+                                                        data-meta-title-en="<?= esc($kategori_wisata->meta_title_en ?? '') ?>"
+                                                        data-meta-desc-id="<?= esc($kategori_wisata->meta_description_id ?? '') ?>"
+                                                        data-meta-desc-en="<?= esc($kategori_wisata->meta_description_en ?? '') ?>"
                                                         title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-outline-danger delete-btn"
                                                         data-id="<?= $kategori_wisata->id_kategori_wisata ?>"
+                                                        data-nama="<?= esc($kategori_wisata->nama_kategori_wisata) ?>"
                                                         title="Hapus">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
@@ -94,7 +112,7 @@
 
 <!-- Add Category Modal -->
 <div class="modal fade" id="tambahKategoriModal" tabindex="-1" aria-labelledby="tambahKategoriModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-primary text-white border-0">
                 <h5 class="modal-title" id="tambahKategoriModalLabel">
@@ -105,13 +123,74 @@
             <form action="<?= base_url($role . '/kategori_wisata/proses_tambah') ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nama_kategori_wisata" class="form-label small text-muted mb-1">NAMA KATEGORI WISATA (INDONESIA)</label>
-                        <input type="text" class="form-control py-2" id="nama_kategori_wisata" name="nama_kategori_wisata" required placeholder="Contoh: Pantai">
-                    </div>
-                    <div class="mb-3">
-                        <label for="nama_kategori_wisata_en" class="form-label small text-muted mb-1">NAMA KATEGORI WISATA (ENGLISH)</label>
-                        <input type="text" class="form-control py-2" id="nama_kategori_wisata_en" name="nama_kategori_wisata_en" required placeholder="Contoh: Beach">
+                    <div class="row">
+                        <!-- Indonesian Section -->
+                        <div class="col-md-6 border-end pe-3">
+                            <h6 class="text-primary mb-3 d-flex align-items-center">
+                                <i class="fas fa-flag me-2"></i> Bahasa Indonesia
+                            </h6>
+                            <div class="mb-3">
+                                <label for="nama_kategori_wisata" class="form-label small text-muted mb-1">NAMA KATEGORI WISATA</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-tag text-primary"></i></span>
+                                    <input type="text" class="form-control py-2" id="nama_kategori_wisata" name="nama_kategori_wisata" required placeholder="Contoh: Pantai">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="meta_title_id" class="form-label small text-muted mb-1">META TITLE</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-heading text-primary"></i></span>
+                                    <input type="text" class="form-control py-2" id="meta_title_id" name="meta_title_id" placeholder="Judul untuk SEO (max 60 karakter)" maxlength="60">
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar" id="titleProgressId" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="meta_description_id" class="form-label small text-muted mb-1">META DESCRIPTION</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-align-left text-primary"></i></span>
+                                    <textarea class="form-control py-2" id="meta_description_id" name="meta_description_id" rows="3" placeholder="Deskripsi untuk SEO (max 160 karakter)" maxlength="160"></textarea>
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar" id="descProgressId" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- English Section -->
+                        <div class="col-md-6 ps-3">
+                            <h6 class="text-info mb-3 d-flex align-items-center">
+                                <i class="fas fa-flag-usa me-2"></i> English
+                            </h6>
+                            <div class="mb-3">
+                                <label for="nama_kategori_wisata_en" class="form-label small text-muted mb-1">TOURISM CATEGORY NAME</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-tag text-info"></i></span>
+                                    <input type="text" class="form-control py-2" id="nama_kategori_wisata_en" name="nama_kategori_wisata_en" required placeholder="Example: Beach">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="meta_title_en" class="form-label small text-muted mb-1">META TITLE</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-heading text-info"></i></span>
+                                    <input type="text" class="form-control py-2" id="meta_title_en" name="meta_title_en" placeholder="SEO Title (max 60 chars)" maxlength="60">
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar bg-info" id="titleProgressEn" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="meta_description_en" class="form-label small text-muted mb-1">META DESCRIPTION</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-align-left text-info"></i></span>
+                                    <textarea class="form-control py-2" id="meta_description_en" name="meta_description_en" rows="3" placeholder="SEO Description (max 160 chars)" maxlength="160"></textarea>
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar bg-info" id="descProgressEn" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0">
@@ -127,7 +206,7 @@
 
 <!-- Edit Category Modal -->
 <div class="modal fade" id="editKategoriModal" tabindex="-1" aria-labelledby="editKategoriModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-primary text-white border-0">
                 <h5 class="modal-title" id="editKategoriModalLabel">
@@ -136,15 +215,76 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editForm" method="post">
+                <?= csrf_field() ?>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
-                        <label for="edit_nama_kategori_wisata" class="form-label small text-muted mb-1">NAMA KATEGORI WISATA (INDONESIA)</label>
-                        <input type="text" class="form-control py-2" id="edit_nama_kategori_wisata" name="nama_kategori_wisata" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_nama_kategori_wisata_en" class="form-label small text-muted mb-1">NAMA KATEGORI WISATA (ENGLISH)</label>
-                        <input type="text" class="form-control py-2" id="edit_nama_kategori_wisata_en" name="nama_kategori_wisata_en" required>
+                    <div class="row">
+                        <!-- Indonesian Section -->
+                        <div class="col-md-6 border-end pe-3">
+                            <h6 class="text-primary mb-3 d-flex align-items-center">
+                                <i class="fas fa-flag me-2"></i> Bahasa Indonesia
+                            </h6>
+                            <div class="mb-3">
+                                <label for="edit_nama_kategori_wisata" class="form-label small text-muted mb-1">NAMA KATEGORI WISATA</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-tag text-primary"></i></span>
+                                    <input type="text" class="form-control py-2" id="edit_nama_kategori_wisata" name="nama_kategori_wisata" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_meta_title_id" class="form-label small text-muted mb-1">META TITLE</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-heading text-primary"></i></span>
+                                    <input type="text" class="form-control py-2" id="edit_meta_title_id" name="meta_title_id" maxlength="60">
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar" id="editTitleProgressId" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_meta_description_id" class="form-label small text-muted mb-1">META DESCRIPTION</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-align-left text-primary"></i></span>
+                                    <textarea class="form-control py-2" id="edit_meta_description_id" name="meta_description_id" rows="3" maxlength="160"></textarea>
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar" id="editDescProgressId" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- English Section -->
+                        <div class="col-md-6 ps-3">
+                            <h6 class="text-info mb-3 d-flex align-items-center">
+                                <i class="fas fa-flag-usa me-2"></i> English
+                            </h6>
+                            <div class="mb-3">
+                                <label for="edit_nama_kategori_wisata_en" class="form-label small text-muted mb-1">TOURISM CATEGORY NAME</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-tag text-info"></i></span>
+                                    <input type="text" class="form-control py-2" id="edit_nama_kategori_wisata_en" name="nama_kategori_wisata_en" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_meta_title_en" class="form-label small text-muted mb-1">META TITLE</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-heading text-info"></i></span>
+                                    <input type="text" class="form-control py-2" id="edit_meta_title_en" name="meta_title_en" maxlength="60">
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar bg-info" id="editTitleProgressEn" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_meta_description_en" class="form-label small text-muted mb-1">META DESCRIPTION</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="fas fa-align-left text-info"></i></span>
+                                    <textarea class="form-control py-2" id="edit_meta_description_en" name="meta_description_en" rows="3" maxlength="160"></textarea>
+                                </div>
+                                <div class="progress mt-1" style="height: 3px;">
+                                    <div class="progress-bar bg-info" id="editDescProgressEn" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0">
@@ -158,20 +298,107 @@
     </div>
 </div>
 
+<!-- Detail Category Modal -->
+<div class="modal fade" id="detailKategoriModal" tabindex="-1" aria-labelledby="detailKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-info text-white border-0">
+                <h5 class="modal-title" id="detailKategoriModalLabel">
+                    <i class="fas fa-info-circle me-2"></i>Detail Kategori Wisata
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Indonesian Section -->
+                    <div class="col-md-6 border-end pe-3">
+                        <h6 class="text-primary mb-3 d-flex align-items-center">
+                            <i class="fas fa-flag me-2"></i> Bahasa Indonesia
+                        </h6>
+
+                        <div class="detail-item mb-3">
+                            <div class="detail-label text-muted small mb-1">NAMA KATEGORI WISATA</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_nama_kategori_wisata"></div>
+                        </div>
+                        <div class="detail-item mb-3">
+                            <div class="detail-label text-muted small mb-1">SLUG</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_slug_kategori"></div>
+                        </div>
+
+                        <div class="detail-item mb-3">
+                            <div class="detail-label text-muted small mb-1">META TITLE</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_meta_title_id"></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-label text-muted small mb-1">META DESCRIPTION</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_meta_description_id"></div>
+                        </div>
+                    </div>
+
+                    <!-- English Section -->
+                    <div class="col-md-6 ps-3">
+                        <h6 class="text-info mb-3 d-flex align-items-center">
+                            <i class="fas fa-flag-usa me-2"></i> English
+                        </h6>
+
+                        <div class="detail-item mb-3">
+                            <div class="detail-label text-muted small mb-1">TOURISM CATEGORY NAME</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_nama_kategori_wisata_en"></div>
+                        </div>
+                        <div class="detail-item mb-3">
+                            <div class="detail-label text-muted small mb-1">SLUG</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_slug_kategori_en"></div>
+                        </div>
+
+                        <div class="detail-item mb-3">
+                            <div class="detail-label text-muted small mb-1">META TITLE</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_meta_title_en"></div>
+                        </div>
+
+                        <div class="detail-item">
+                            <div class="detail-label text-muted small mb-1">META DESCRIPTION</div>
+                            <div class="detail-content p-3 bg-light rounded-2" id="detail_meta_description_en"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-body p-4 text-center">
                 <div class="mb-3">
-                    <i class="fas fa-exclamation-circle fa-3x text-danger"></i>
+                    <div class="icon-circle bg-danger bg-opacity-10 text-danger mb-3 mx-auto">
+                        <i class="fas fa-exclamation-circle fa-2x"></i>
+                    </div>
+                    <h5 class="mb-2">Konfirmasi Hapus</h5>
+                    <p class="text-muted mb-3">Anda akan menghapus kategori wisata berikut:</p>
+                    <div class="alert alert-light py-2 mb-3">
+                        <strong id="deleteCategoryName"></strong>
+                    </div>
+                    <p class="text-danger small mb-0">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Aksi ini tidak dapat dibatalkan. Semua wisata dalam kategori ini akan menjadi tidak terkategori.
+                    </p>
                 </div>
-                <h5 class="mb-3">Konfirmasi Hapus</h5>
-                <p class="text-muted mb-0">Apakah Anda yakin ingin menghapus kategori wisata ini?</p>
             </div>
             <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                <a href="#" id="confirmDelete" class="btn btn-danger rounded-pill px-4">Ya, Hapus</a>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Batal
+                </button>
+                <a href="#" id="confirmDelete" class="btn btn-danger rounded-pill px-4">
+                    <i class="fas fa-trash-alt me-1"></i> Ya, Hapus
+                </a>
             </div>
         </div>
     </div>
@@ -274,6 +501,63 @@
         border: none !important;
     }
 
+    /* Detail Item Styling */
+    .detail-item {
+        margin-bottom: 1.25rem;
+    }
+
+    .detail-label {
+        font-weight: 500;
+        color: #6c757d;
+    }
+
+    .detail-content {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        word-break: break-word;
+    }
+
+    .detail-content:empty::before {
+        content: "-";
+        color: #adb5bd;
+    }
+
+    /* Icon Circle */
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+
+    /* Input Group Enhancements */
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+
+    .form-control {
+        border-left: none;
+        padding: 0.5rem 0.75rem;
+    }
+
+    /* Progress Bar Colors */
+    .progress-bar {
+        transition: width 0.3s ease;
+    }
+
+    .progress-bar.bg-warning {
+        background-color: #ffc107 !important;
+    }
+
+    .progress-bar.bg-danger {
+        background-color: #dc3545 !important;
+    }
+
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
         .dashboard-header {
             text-align: center;
@@ -289,31 +573,26 @@
             text-align: left !important;
             margin-bottom: 1rem;
         }
-    }
 
-    /* Mencegah scroll horizontal */
-    #kategoriTable {
-        width: 100% !important;
-        table-layout: auto;
-    }
+        .modal-body .row>[class^="col-"] {
+            border-right: none !important;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
 
-    .dataTables_wrapper .dataTables_scroll {
-        overflow-x: hidden;
-    }
-
-    /* Optional: pastikan container tidak menyumbang scroll */
-    .table-responsive {
-        overflow-x: hidden;
+        .modal-body .row>[class^="col-"]:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
     }
 </style>
 
 <script>
     $(document).ready(function() {
-        // Cek apakah user memiliki akses ke kolom aksi
-        var hasActionAccess = <?= in_array($role, ['admin', 'penulis']) ? 'true' : 'false' ?>;
-
-        // Konfigurasi dasar DataTables
-        var tableConfig = {
+        // Initialize DataTable
+        var table = $('#kategoriTable').DataTable({
             responsive: true,
             dom: '<"top"<"row"<"col-md-6"l><"col-md-6"f>>>rt<"bottom"<"row"<"col-md-6"i><"col-md-6"p>><"clear">>',
             language: {
@@ -331,6 +610,19 @@
                     width: "60px",
                     targets: 0
                 }
+                <?php if (in_array($role, ['admin', 'penulis'])): ?>, {
+                        orderable: false,
+                        targets: [3] // Kolom aksi tidak bisa di-sort
+                    },
+                    {
+                        className: "text-center",
+                        targets: [3] // Kolom aksi di tengah
+                    },
+                    {
+                        width: "150px",
+                        targets: 3 // Lebar kolom aksi
+                    }
+                <?php endif; ?>
             ],
             initComplete: function() {
                 $('.dataTables_length select').addClass('form-select-sm');
@@ -340,44 +632,85 @@
                     placement: 'top'
                 });
             }
-        };
+        });
 
-        // Tambahkan konfigurasi untuk kolom aksi jika ada
-        if (hasActionAccess) {
-            tableConfig.columnDefs.push({
-                orderable: false,
-                targets: [3] // Kolom aksi
-            }, {
-                className: "text-center",
-                targets: [3] // Kolom aksi di tengah
-            }, {
-                width: "120px",
-                targets: 3
-            });
-        }
+        // Handle detail button click
+        $('#kategoriTable').on('click', '.detail-btn', function() {
+            $('#detail_nama_kategori_wisata').text($(this).data('nama') || '-');
+            $('#detail_nama_kategori_wisata_en').text($(this).data('nama-en') || '-');
+            $('#detail_slug_kategori').text($(this).data('slug'));
+            $('#detail_slug_kategori_en').text($(this).data('slug-en'));
+            $('#detail_meta_title_id').text($(this).data('meta-title-id') || '-');
+            $('#detail_meta_title_en').text($(this).data('meta-title-en') || '-');
+            $('#detail_meta_description_id').text($(this).data('meta-desc-id') || '-');
+            $('#detail_meta_description_en').text($(this).data('meta-desc-en') || '-');
+            $('#detailKategoriModal').modal('show');
+        });
 
-        // Inisialisasi DataTables
-        var table = $('#kategoriTable').DataTable(tableConfig);
-
-        // Handle edit button click (using event delegation for dynamic content)
+        // Handle edit button click
         $('#kategoriTable').on('click', '.edit-btn', function() {
             var id = $(this).data('id');
             var nama = $(this).data('nama');
             var nama_en = $(this).data('nama-en');
+            var meta_title_id = $(this).data('meta-title-id');
+            var meta_title_en = $(this).data('meta-title-en');
+            var meta_desc_id = $(this).data('meta-desc-id');
+            var meta_desc_en = $(this).data('meta-desc-en');
 
             $('#edit_nama_kategori_wisata').val(nama);
             $('#edit_nama_kategori_wisata_en').val(nama_en);
+            $('#edit_meta_title_id').val(meta_title_id);
+            $('#edit_meta_title_en').val(meta_title_en);
+            $('#edit_meta_description_id').val(meta_desc_id);
+            $('#edit_meta_description_en').val(meta_desc_en);
             $('#editForm').attr('action', '<?= base_url($role . "/kategori_wisata/proses_edit") ?>/' + id);
+
+            // Update progress bars for edit modal
+            updateProgressBar('#edit_meta_title_id', '#editTitleProgressId');
+            updateProgressBar('#edit_meta_title_en', '#editTitleProgressEn');
+            updateProgressBar('#edit_meta_description_id', '#editDescProgressId');
+            updateProgressBar('#edit_meta_description_en', '#editDescProgressEn');
 
             $('#editKategoriModal').modal('show');
         });
 
-        // Handle delete button click (using event delegation for dynamic content)
+        // Handle delete button click
         $('#kategoriTable').on('click', '.delete-btn', function() {
             var id = $(this).data('id');
+            var nama = $(this).data('nama');
             var url = '<?= base_url($role . "/kategori_wisata/delete") ?>/' + id;
             $('#confirmDelete').attr('href', url);
+            $('#deleteCategoryName').text(nama);
             $('#deleteModal').modal('show');
+        });
+
+        // Function to update progress bars
+        function updateProgressBar(inputSelector, progressBarSelector) {
+            var length = $(inputSelector).val().length;
+            var maxLength = $(inputSelector).attr('maxlength') || 160;
+            var percent = (length / maxLength) * 100;
+
+            $(progressBarSelector).css('width', percent + '%')
+                .toggleClass('bg-warning', percent > 80)
+                .toggleClass('bg-danger', percent > 95);
+        }
+
+        // Character count progress for meta fields in add modal
+        $('#meta_title_id, #meta_title_en').on('input', function() {
+            updateProgressBar(this, this.id === 'meta_title_id' ? '#titleProgressId' : '#titleProgressEn');
+        });
+
+        $('#meta_description_id, #meta_description_en').on('input', function() {
+            updateProgressBar(this, this.id === 'meta_description_id' ? '#descProgressId' : '#descProgressEn');
+        });
+
+        // Character count progress for meta fields in edit modal
+        $('#edit_meta_title_id, #edit_meta_title_en').on('input', function() {
+            updateProgressBar(this, this.id === 'edit_meta_title_id' ? '#editTitleProgressId' : '#editTitleProgressEn');
+        });
+
+        $('#edit_meta_description_id, #edit_meta_description_en').on('input', function() {
+            updateProgressBar(this, this.id === 'edit_meta_description_id' ? '#editDescProgressId' : '#editDescProgressEn');
         });
 
         // Reinitialize tooltips when DataTable redraws
@@ -386,6 +719,11 @@
                 trigger: 'hover',
                 placement: 'top'
             });
+        });
+
+        // Auto-focus first input when modal opens
+        $('#tambahKategoriModal, #editKategoriModal').on('shown.bs.modal', function() {
+            $(this).find('input[type="text"]').first().focus();
         });
     });
 </script>

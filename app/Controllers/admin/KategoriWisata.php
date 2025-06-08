@@ -57,6 +57,10 @@ class KategoriWisata extends BaseController
             'nama_kategori_wisata_en' => $namaKategoriEn,
             'slug_kategori_wisata' => $slugKategori,
             'slug_kategori_wisata_en' => $slugKategoriEn,
+            'meta_title_id' => $this->request->getPost("meta_title_id"),
+            'meta_title_en' => $this->request->getPost("meta_title_en"),
+            'meta_description_id' => $this->request->getPost("meta_description_id"),
+            'meta_description_en' => $this->request->getPost("meta_description_en"),
         ];
 
         // Simpan data ke database
@@ -123,6 +127,10 @@ class KategoriWisata extends BaseController
             'nama_kategori_wisata_en' => $namaKategoriEn,
             'slug_kategori_wisata' => $slugKategori,
             'slug_kategori_wisata_en' => $slugKategoriEn,
+            'meta_title_id' => $this->request->getPost("meta_title_id"),
+            'meta_title_en' => $this->request->getPost("meta_title_en"),
+            'meta_description_id' => $this->request->getPost("meta_description_id"),
+            'meta_description_en' => $this->request->getPost("meta_description_en"),
         ];
 
         // Update data
