@@ -101,11 +101,25 @@ class IklanController extends BaseController
 
     public function proses_tambah()
     {
-
-
         $idMarketing = session()->get('id_user');
         if (!$idMarketing) {
             return redirect()->back()->with('error', 'User tidak ditemukan dalam sesi.');
+        }
+
+        // Validasi input
+        $validation = Services::validation();
+        $validation->setRules([
+            'id_harga_iklan' => 'required',
+            'rentang_bulan' => 'required|numeric|greater_than[0]',
+            'tipe_content' => 'required',
+            'id_content' => 'required',
+            'total_harga' => 'required',
+            'thumbnail_iklan' => 'uploaded[thumbnail_iklan]|max_size[thumbnail_iklan,2048]|is_image[thumbnail_iklan]',
+            'link_iklan' => 'required|valid_url'
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
         $idHargaIklan = $this->request->getPost('id_harga_iklan');
@@ -121,6 +135,14 @@ class IklanController extends BaseController
         $totalHargaFix = $this->request->getPost('total_harga');
         $totalHargaFix = floatval(preg_replace('/[^\d]/', '', $totalHargaFix));
 
+        // Handle upload gambar
+        $gambar = $this->request->getFile('thumbnail_iklan');
+        if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
+            $newName = $gambar->getRandomName();
+            $gambar->move('assets/images/iklan_konten', $newName);
+        } else {
+            return redirect()->back()->with('error', 'Gagal mengupload gambar thumbnail iklan.');
+        }
 
         // Validasi konten
         $modelMap = [
@@ -138,11 +160,12 @@ class IklanController extends BaseController
             'id_content'        => $idContent,
             'tipe_content'      => $tipeContent,
             'id_harga_iklan'    => $idHargaIklan,
-            // 'id_marketing'      => 1,
             'id_marketing'      => $idMarketing,
             'rentang_bulan'     => $rentangBulan,
             'total_harga'       => $totalHargaFix,
             'tanggal_pengajuan' => date('Y-m-d'),
+            'thumbnail_iklan'   => $newName,
+            'link_iklan'        => $this->request->getPost('link_iklan'),
             'no_pengaju'        => $this->request->getPost('no_pengaju'),
             'status_iklan'      => 'diajukan',
             'catatan_admin'     => $this->request->getPost('catatan_admin'),
@@ -163,7 +186,6 @@ class IklanController extends BaseController
 
     public function edit($id)
     {
-        // Cek login
         if (!session()->get('logged_in')) {
             return redirect()->to(base_url('login'));
         }
@@ -203,13 +225,101 @@ class IklanController extends BaseController
             'wisata_terpilih' => $wisata_terpilih,
             'oleholeh_terpilih' => $oleholeh_terpilih,
             'marketing' => $marketing,
-            'validation' => \Config\Services::validation(),
+            'validation' => Services::validation(),
         ]);
+    }
+
+    public function proses_edit($id)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        // Validasi input
+        $validation = Services::validation();
+        $validation->setRules([
+            'id_harga_iklan' => 'required',
+            'rentang_bulan' => 'required|numeric|greater_than[0]',
+            'tipe_content' => 'required',
+            'id_content' => 'required',
+            'total_harga' => 'required',
+            'thumbnail_iklan' => 'if_exist|max_size[thumbnail_iklan,2048]|is_image[thumbnail_iklan]',
+            'link_iklan' => 'required|valid_url'
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        // Ambil data lama
+        $iklanLama = $this->artikelIklanModel->find($id);
+        if (!$iklanLama) {
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
+
+        // Ambil data yang dikirim dari form
+        $tipeContent = $this->request->getPost('tipe_content');
+        $idContent = $this->request->getPost('id_content');
+        $idHargaIklan = $this->request->getPost('id_harga_iklan');
+        $rentangBulan = $this->request->getPost('rentang_bulan');
+        $totalHargaFix = $this->request->getPost('total_harga');
+        $totalHargaFix = floatval(preg_replace('/[^\d]/', '', $totalHargaFix));
+        $linkIklan = $this->request->getPost('link_iklan');
+        $noPengaju = $this->request->getPost('no_pengaju');
+        $catatanAdmin = $this->request->getPost('catatan_admin');
+
+        // Handle upload gambar baru jika ada
+        $gambar = $this->request->getFile('thumbnail_iklan');
+        $newName = $iklanLama['thumbnail_iklan'];
+
+        if ($gambar && $gambar->isValid() && !$gambar->hasMoved()) {
+            $newName = $gambar->getRandomName();
+            $gambar->move('assets/images/iklan_konten', $newName);
+            
+            // Hapus gambar lama jika ada
+            if ($iklanLama['thumbnail_iklan'] && file_exists('assets/images/iklan_konten/' . $iklanLama['thumbnail_iklan'])) {
+                unlink('assets/images/iklan_konten/' . $iklanLama['thumbnail_iklan']);
+            }
+        }
+
+        // Validasi tipe konten
+        $modelMap = [
+            'artikel'       => $this->artikelModel,
+            'tempatwisata'  => $this->wisataModel,
+            'oleholeh'      => $this->olehOlehModel,
+        ];
+
+        if (!isset($modelMap[$tipeContent]) || !$modelMap[$tipeContent]->find($idContent)) {
+            return redirect()->back()->with('error', ucfirst($tipeContent) . ' tidak ditemukan.');
+        }
+
+        // Data untuk update
+        $dataUpdate = [
+            'tipe_content'      => $tipeContent,
+            'id_content'        => $idContent,
+            'id_harga_iklan'    => $idHargaIklan,
+            'rentang_bulan'     => $rentangBulan,
+            'total_harga'       => $totalHargaFix,
+            'thumbnail_iklan'   => $newName,
+            'link_iklan'        => $linkIklan,
+            'no_pengaju'        => $noPengaju,
+            'catatan_admin'     => $catatanAdmin,
+            'updated_at'        => date('Y-m-d H:i:s'),
+        ];
+
+        // Proses update
+        if ($this->artikelIklanModel->update($id, $dataUpdate)) {
+            $role = session()->get('role');
+            return redirect()->to(base_url($role . '/daftariklankonten'))->with('success', 'Data iklan berhasil diperbarui.');
+        } else {
+            // Ambil error jika update gagal
+            $errors = $this->artikelIklanModel->errors();
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui data: ' . implode(', ', $errors));
+        }
     }
 
     public function detail($id)
     {
-        // Cek login
         if (!session()->get('logged_in')) {
             return redirect()->to(base_url('login'));
         }
@@ -255,9 +365,9 @@ class IklanController extends BaseController
             'marketing' => $marketing,
         ]);
     }
+
     public function delete($id)
     {
-        // Cek login
         if (!session()->get('logged_in')) {
             return redirect()->to(base_url('login'));
         }
@@ -266,6 +376,11 @@ class IklanController extends BaseController
         $iklan = $this->artikelIklanModel->find($id);
         if (!$iklan) {
             return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
+
+        // Hapus gambar thumbnail jika ada
+        if ($iklan['thumbnail_iklan'] && file_exists('assets/images/iklan_konten/' . $iklan['thumbnail_iklan'])) {
+            unlink('assets/images/iklan_konten/' . $iklan['thumbnail_iklan']);
         }
 
         // Lakukan penghapusan

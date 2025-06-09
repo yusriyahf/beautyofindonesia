@@ -13,9 +13,9 @@
                 <div class="col-md-4 text-md-end">
                     <?php $role = session()->get('role'); ?>
                     <?php if ($role === 'marketing'): ?>
-                    <a href="<?= base_url('marketing/iklanutama/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
-                        <i class="fas fa-plus me-1"></i>Tambah Iklan
-                    </a>
+                        <a href="<?= base_url('marketing/iklanutama/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                            <i class="fas fa-plus me-1"></i>Tambah Iklan
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -44,6 +44,8 @@
                             <option value="diajukan">Diajukan</option>
                             <option value="diterima">Diterima</option>
                             <option value="ditolak">Ditolak</option>
+                            <option value="berjalan">Berjalan</option>
+                            <option value="selesai">Selesai</option>
                         </select>
                     </div>
 
@@ -97,10 +99,8 @@
                                     <th width="120" class="text-center">Tanggal Pengajuan</th>
                                     <th width="120" class="text-center">Status</th>
                                     <th width="100" class="text-center">Harga</th>
-                                     <th width="150" class="text-center">Periode</th>
-                                    <?php if ($role === 'marketing'): ?>
-                                        <th width="140" class="text-center">Aksi</th>
-                                    <?php endif; ?>
+                                    <th width="150" class="text-center">Periode</th>
+                                    <th width="140" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -187,31 +187,32 @@
                                                 <span class="text-muted" style="font-size: small;">Menunggu Persetujuan Admin</span>
                                             <?php endif; ?>
                                         </td>
-                                        
-                                        <?php if ($role === 'marketing'): ?>
+
+
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                <a href="<?= base_url('marketing/iklanutama/detail/' . $item['id_iklan_utama']) ?>"
+                                                <a href="<?= base_url($role . '/iklanutama/detail/' . $item['id_iklan_utama']) ?>"
                                                     class="btn btn-sm btn-outline-primary" title="Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <?php
-                                                $isEditable = strtolower($statusIklan) === 'diajukan';
-                                                ?>
-                                                <a href="<?= $isEditable ? base_url('marketing/iklanutama/edit/' . $item['id_iklan_utama']) : '#' ?>"
-                                                    class="btn btn-sm btn-outline-secondary <?= !$isEditable ? 'disabled' : '' ?>"
-                                                    title="Edit"
-                                                    <?= !$isEditable ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                    title="Hapus"
-                                                    data-id="<?= $item['id_iklan_utama'] ?>">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                                <?php if ($role === 'marketing'): ?>
+                                                    <?php
+                                                    $isEditable = strtolower($statusIklan) === 'diajukan';
+                                                    ?>
+                                                    <a href="<?= $isEditable ? base_url('marketing/iklanutama/edit/' . $item['id_iklan_utama']) : '#' ?>"
+                                                        class="btn btn-sm btn-outline-secondary <?= !$isEditable ? 'disabled' : '' ?>"
+                                                        title="Edit"
+                                                        <?= !$isEditable ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button class="btn btn-sm btn-outline-danger delete-btn"
+                                                        title="Hapus"
+                                                        data-id="<?= $item['id_iklan_utama'] ?>">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
                                             </div>
                                         </td>
-                                        <?php endif; ?>
+                                    <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

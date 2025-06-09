@@ -83,18 +83,21 @@ class Profile extends BaseController
         // Validasi form input
         $validation = \Config\Services::validation();
         if (!$this->validate([
-            'username' => 'required|min_length[3]|max_length[20]',
-            'full_name' => 'required|min_length[3]|max_length[100]',
-            'email' => 'required|valid_email',
-            'kontak' => 'required',
-            'rekening' => 'required',
+            'username' => 'min_length[3]|max_length[20]',
+            'full_name' => 'min_length[3]|max_length[100]',
+            'email' => 'valid_email',
+            // 'kontak' => 'required',
+            // 'rekening' => 'required',
             // 'photo_user' => 'uploaded[photo_user]|mime_in[photo_user,image/jpg,image/jpeg,image/png]|max_size[photo_user,2048]',  // Validasi foto jika ada
         ])) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
+        // apa kena validasi ini ya
 
         // Proses upload gambar jika ada
         $profilePicture = $this->request->getFile('photo_user');
+        log_message('debug', 'File poto hehe: ' . $profilePicture);
+
         // if (!$profilePicture->isValid()) {
         //     log_message('error', 'File not valid: ' . $profilePicture->getErrorString());
         // } else {
@@ -104,7 +107,7 @@ class Profile extends BaseController
         $profilePictureName = $currentPhoto;
 
         if ($profilePicture && $profilePicture->isValid() && !$profilePicture->hasMoved()) {
-            log_message('debug', 'Gambar valid: ' . $profilePicture->getName());
+            log_message('debug', 'Gambar valid: ' . $profilePicture->getName()); //dia tadi gk masuk sini
 
             // Hapus gambar lama jika bukan default
             if (!empty($currentPhoto) && $currentPhoto !== 'assets-baru/img/user/default_profil.jpg') {
@@ -176,7 +179,7 @@ class Profile extends BaseController
             'photo_user' => base_url($updatedUser['photo_user'] ?? 'assets-baru/img/user/default_profil.jpg')
         ]);
 
-        return redirect()->to($role.'/profile/index')->with('success', 'Profil berhasil diperbarui');
+        return redirect()->to($role . '/profile/index')->with('success', 'Profil berhasil diperbarui');
     }
 
     public function updatePassword()
@@ -225,5 +228,100 @@ class Profile extends BaseController
         ]);
 
         return redirect()->back()->with('success', 'Password berhasil diperbarui.');
+    }
+
+    public function update_photo($id)
+    {
+        // Pastikan user sudah login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+        }
+
+        $userId = session()->get('id_user');
+        if (!$userId) {
+            return redirect()->to('/login')->with('error', 'Silakan login terlebih dahulu');
+        }
+
+        $userModel = new \App\Models\UserModel();
+        $user = $userModel->find($userId);
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan');
+        }
+
+        $profilePictures = $this->request->getFile('profilePictureInput');
+        log_message('debug', 'File: ' . $profilePictures);
+
+        $profilePicture = $this->request->getFile('photo_user');
+        $currentPhoto = $user['photo_user'] ?? 'assets-baru/img/user/default_profil.jpg';
+        $profilePictureName = $currentPhoto;
+
+        if ($profilePicture && $profilePicture->isValid() && !$profilePicture->hasMoved()) {
+            log_message('debug', 'Gambar valid: ' . $profilePicture->getName());
+
+            // Hapus gambar lama jika bukan default
+            if (!empty($currentPhoto) && $currentPhoto !== 'assets-baru/img/user/default_profil.jpg') {
+                $oldImagePath = ROOTPATH . 'public/' . $currentPhoto;
+                // Pastikan file benar-benar ada sebelum dihapus
+                if (is_file($oldImagePath) && file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+
+            // Generate nama file baru
+            $newName = $profilePicture->getRandomName();
+
+            // Pastikan folder tujuan ada
+            $destination = ROOTPATH . 'public/assets-baru/img/user/';
+            if (!is_dir($destination)) {
+                mkdir($destination, 0755, true); // Buat folder jika belum ada
+            }
+
+            // Pindahkan file ke folder tujuan
+            if ($profilePicture->move($destination, $newName)) {
+                $profilePictureName = 'assets-baru/img/user/' . $newName;
+                log_message('debug', 'Upload sukses ke: ' . $profilePictureName);
+            } else {
+                log_message('error', 'Gagal memindahkan file.');
+            }
+        }
+
+        // Jika tombol hapus foto ditekan
+        if ($this->request->getPost('photo_user_removed') == '1') {
+            if ($currentPhoto !== 'assets-baru/img/user/default_profil.jpg') {
+                $oldImagePath = ROOTPATH . 'public/' . $currentPhoto;
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+            $profilePictureName = 'assets-baru/img/user/default_profil.jpg';
+        }
+
+        // Ambil data dari form
+        $data = [
+            'photo_user' => $profilePictureName,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        // Jika password diisi, update
+        if (!empty($this->request->getPost('password'))) {
+            $data['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+        }
+
+        // Simpan ke database
+        if (!$userModel->update($userId, $data)) {
+            log_message('error', 'Gagal update profil: ' . print_r($data, true));
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui profil');
+        }
+
+        // Update session
+        $updatedUser = $userModel->find($userId);
+        $role   = session('role');
+        session()->set([
+            'username' => $updatedUser['username'],
+            'email' => $updatedUser['email'],
+            'photo_user' => base_url($updatedUser['photo_user'] ?? 'assets-baru/img/user/default_profil.jpg')
+        ]);
+
+        return redirect()->to($role . '/profile/index')->with('success', 'Profil berhasil diperbarui');
     }
 }

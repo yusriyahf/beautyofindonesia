@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\admin;
+namespace App\Controllers\Admin;
 
 use App\Models\ArtikelIklanModel;
 use App\Models\ArtikelModel;
@@ -628,4 +628,6 @@ class ArtikelIklan extends BaseController
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+    
 }

@@ -1,6 +1,6 @@
 <?php 
     
-namespace App\Controllers\marketing;
+namespace App\Controllers\Marketing;
 use App\Controllers\BaseController;
 use App\Models\ArtikelIklanModel;
 use App\Models\ArtikelModel;
@@ -22,6 +22,8 @@ class Dashboard extends BaseController
         $wisataModel = new TempatWisataModel();
         $artikelIklanModel = new ArtikelIklanModel();
         $usersModel = new UsersModel();
+        $ArtikelIklanModel = new \App\Models\ArtikelIklanModel();
+        $ArtikelIklanModel->updateStatusIklan();
 
         $userData = $usersModel->getUsernameById($id_user);
 

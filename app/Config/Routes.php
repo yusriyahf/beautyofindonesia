@@ -43,9 +43,9 @@ $routes->get('login', 'Login::index');
 $routes->post('login/process', 'Login::process');
 $routes->get('logout', 'Login::logout');
 
-$routes->get('admin/acc/(:num)', 'AdminController::accPengajuan/$1');
-$routes->get('admin/tolak/(:num)', 'AdminController::tolakPengajuan/$1');
-$routes->get('admin/prosesuser', 'AdminController::index');
+$routes->get('Admin/acc/(:num)', 'AdminController::accPengajuan/$1');
+$routes->get('Admin/tolak/(:num)', 'AdminController::tolakPengajuan/$1');
+$routes->get('Admin/prosesuser', 'AdminController::index');
 // Daftarkan rute-rute admin di sini
 $routes->get('sitemap.xml', 'Sitemap::index');
 $routes->get('iklan-klik/(:num)', 'IklanUtamaController::klik/$1');
@@ -54,304 +54,308 @@ $routes->get('oleholeh/whatsapp-click/(:num)', 'OlehOleh::countWhatsappClick/$1'
 
 $routes->group('admin', ['filter' => 'rolecheck:admin'], function ($routes) {
     // Dashboard
-    $routes->get('dashboard', 'admin\Dashboardctrl::index');
+    $routes->get('dashboard', 'Admin\Dashboardctrl::index');
+    $routes->get('update-status-iklan', 'Admin\ArtikelIklan::updateStatusIklan');
 
-    $routes->get('saldo', 'admin\Komisi::saldo/$1');
-    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
-    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
-    $routes->get('saldo/permintaan', 'admin\Komisi::permintaan');
-    $routes->post('saldo/ubahstatus', 'admin\Komisi::ubahstatus');
-    $routes->post('saldo/tolakstatus', 'admin\Komisi::tolakstatus');
+    $routes->get('saldo', 'Admin\Komisi::saldo/$1');
+    $routes->get('saldo/penarikan', 'Admin\Komisi::penarikan');
+    $routes->post('saldo/proses_penarikan', 'Admin\Komisi::proses_penarikan');
+    $routes->get('saldo/permintaan', 'Admin\Komisi::permintaan');
+    $routes->post('saldo/ubahstatus', 'Admin\Komisi::ubahstatus');
+    $routes->post('saldo/tolakstatus', 'Admin\Komisi::tolakstatus');
 
     // Users
-    $routes->get('users', 'admin\Users::index');
-    $routes->get('users/tambah', 'admin\Users::tambah');
-    $routes->post('users/proses_tambah', 'admin\Users::proses_tambah');
-    $routes->get('users/edit/(:num)', 'admin\Users::edit/$1');
-    $routes->post('users/proses_edit/(:num)', 'admin\Users::proses_edit/$1');
-    $routes->get('users/delete/(:any)', 'admin\Users::delete/$1');
+    $routes->get('users', 'Admin\Users::index');
+    $routes->get('users/tambah', 'Admin\Users::tambah');
+    $routes->post('users/proses_tambah', 'Admin\Users::proses_tambah');
+    $routes->get('users/edit/(:num)', 'Admin\Users::edit/$1');
+    $routes->post('users/proses_edit/(:num)', 'Admin\Users::proses_edit/$1');
+    $routes->get('users/delete/(:any)', 'Admin\Users::delete/$1');
 
     // Acc User Req
-    $routes->get('userRequest', 'admin\AccUserController::index');
-    $routes->post('userRequest/approve/(:num)', 'admin\AccUserController::approve/$1');
-    $routes->post('userRequest/reject/(:num)', 'admin\AccUserController::reject/$1');
+    $routes->get('userRequest', 'Admin\AccUserController::index');
+    $routes->post('userRequest/approve/(:num)', 'Admin\AccUserController::approve/$1');
+    $routes->post('userRequest/reject/(:num)', 'Admin\AccUserController::reject/$1');
 
 
-    $routes->get('komisi', 'admin\Komisi::index');
-    $routes->get('komisi/tambah', 'admin\Komisi::tambah');
-    $routes->post('komisi/proses_tambah', 'admin\Komisi::proses_tambah');
-    $routes->get('komisi/edit/(:num)', 'admin\Komisi::edit/$1');
-    $routes->post('komisi/proses_edit/(:num)', 'admin\Komisi::proses_edit/$1');
-    $routes->get('komisi/delete/(:any)', 'admin\Komisi::delete/$1');
+    $routes->get('komisi', 'Admin\Komisi::index');
+    $routes->get('komisi/tambah', 'Admin\Komisi::tambah');
+    $routes->post('komisi/proses_tambah', 'Admin\Komisi::proses_tambah');
+    $routes->get('komisi/edit/(:num)', 'Admin\Komisi::edit/$1');
+    $routes->post('komisi/proses_edit/(:num)', 'Admin\Komisi::proses_edit/$1');
+    $routes->get('komisi/delete/(:any)', 'Admin\Komisi::delete/$1');
 
     // Popup
-    $routes->get('popup', 'admin\Popup::index');
-    $routes->get('popup/tambah', 'admin\Popup::tambah');
-    $routes->post('popup/proses_tambah', 'admin\Popup::proses_tambah');
-    $routes->get('popup/edit/(:num)', 'admin\Popup::edit/$1');
-    $routes->post('popup/proses_edit/(:num)', 'admin\Popup::proses_edit/$1');
-    $routes->get('popup/delete/(:any)', 'admin\Popup::delete/$1');
+    $routes->get('popup', 'Admin\Popup::index');
+    $routes->get('popup/tambah', 'Admin\Popup::tambah');
+    $routes->post('popup/proses_tambah', 'Admin\Popup::proses_tambah');
+    $routes->get('popup/edit/(:num)', 'Admin\Popup::edit/$1');
+    $routes->post('popup/proses_edit/(:num)', 'Admin\Popup::proses_edit/$1');
+    $routes->get('popup/delete/(:any)', 'Admin\Popup::delete/$1');
 
     // Kategori Artikel
-    $routes->get('kategori/index', 'admin\Kategori::index');
-    $routes->get('kategori/tambah', 'admin\Kategori::tambah');
-    $routes->post('kategori/proses_tambah', 'admin\Kategori::proses_tambah');
-    $routes->get('kategori/edit/(:num)', 'admin\Kategori::edit/$1');
-    $routes->post('kategori/proses_edit/(:num)', 'admin\Kategori::proses_edit/$1');
-    $routes->get('kategori/delete/(:any)', 'admin\Kategori::delete/$1');
+    $routes->get('kategori/index', 'Admin\Kategori::index');
+    $routes->get('kategori/tambah', 'Admin\Kategori::tambah');
+    $routes->post('kategori/proses_tambah', 'Admin\Kategori::proses_tambah');
+    $routes->get('kategori/edit/(:num)', 'Admin\Kategori::edit/$1');
+    $routes->post('kategori/proses_edit/(:num)', 'Admin\Kategori::proses_edit/$1');
+    $routes->get('kategori/delete/(:any)', 'Admin\Kategori::delete/$1');
 
     // Meta
-    $routes->get('meta/index', 'admin\MetaController::index');
-    $routes->get('meta/tambah', 'admin\MetaController::tambah');
-    $routes->post('meta/proses_tambah', 'admin\MetaController::proses_tambah');
-    $routes->get('meta/edit/(:num)', 'admin\MetaController::edit/$1');
-    $routes->post('meta/proses_edit/(:num)', 'admin\MetaController::proses_edit/$1');
-    $routes->get('meta/delete/(:any)', 'admin\MetaController::delete/$1');
+    $routes->get('meta/index', 'Admin\MetaController::index');
+    $routes->get('meta/tambah', 'Admin\MetaController::tambah');
+    $routes->post('meta/proses_tambah', 'Admin\MetaController::proses_tambah');
+    $routes->get('meta/edit/(:num)', 'Admin\MetaController::edit/$1');
+    $routes->post('meta/proses_edit/(:num)', 'Admin\MetaController::proses_edit/$1');
+    $routes->get('meta/delete/(:any)', 'Admin\MetaController::delete/$1');
 
     // Artikel
-    $routes->get('artikel/index', 'admin\Artikel::index');
-    $routes->get('artikel/tambah', 'admin\Artikel::tambah');
-    $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
-    $routes->post('artikel/proses_tambah', 'admin\Artikel::proses_tambah');
-    $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
-    $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
-    $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
+    $routes->get('artikel/index', 'Admin\Artikel::index');
+    $routes->get('artikel/tambah', 'Admin\Artikel::tambah');
+    $routes->get('artikel/detail/(:num)/(:any)', 'Admin\Artikel::viewArtikel/$1/$2');
+    $routes->post('artikel/proses_tambah', 'Admin\Artikel::proses_tambah');
+    $routes->get('artikel/edit/(:num)', 'Admin\Artikel::edit/$1');
+    $routes->post('artikel/proses_edit/(:num)', 'Admin\Artikel::proses_edit/$1');
+    $routes->get('artikel/delete/(:any)', 'Admin\Artikel::delete/$1');
 
     // Daftar Penulis
-    $routes->get('penulis/index', 'admin\Penulis::index');
-    $routes->get('penulis/tambah', 'admin\Penulis::tambah');
-    $routes->post('penulis/proses_tambah', 'admin\Penulis::proses_tambah');
-    $routes->get('penulis/edit/(:num)', 'admin\Penulis::edit/$1');
-    $routes->post('penulis/proses_edit/(:num)', 'admin\Penulis::proses_edit/$1');
-    $routes->get('penulis/delete/(:any)', 'admin\Penulis::delete/$1');
+    $routes->get('penulis/index', 'Admin\Penulis::index');
+    $routes->get('penulis/tambah', 'Admin\Penulis::tambah');
+    $routes->post('penulis/proses_tambah', 'Admin\Penulis::proses_tambah');
+    $routes->get('penulis/edit/(:num)', 'Admin\Penulis::edit/$1');
+    $routes->post('penulis/proses_edit/(:num)', 'Admin\Penulis::proses_edit/$1');
+    $routes->get('penulis/delete/(:any)', 'Admin\Penulis::delete/$1');
 
     // Profil Perusahaan
-    $routes->get('tentang/edit', 'admin\Tentang::edit');
-    $routes->post('tentang/edit', 'admin\Tentang::edit');
+    $routes->get('tentang/edit', 'Admin\Tentang::edit');
+    $routes->post('tentang/edit', 'Admin\Tentang::edit');
 
     // Provinsi
-    $routes->get('provinsi/index', 'admin\Provinsi::index');
-    $routes->get('provinsi/tambah', 'admin\Provinsi::tambah');
-    $routes->post('provinsi/proses_tambah', 'admin\Provinsi::proses_tambah');
-    $routes->get('provinsi/edit/(:num)', 'admin\Provinsi::edit/$1');
-    $routes->post('provinsi/proses_edit/(:num)', 'admin\Provinsi::proses_edit/$1');
-    $routes->get('provinsi/delete/(:any)', 'admin\Provinsi::delete/$1');
+    $routes->get('provinsi/index', 'Admin\Provinsi::index');
+    $routes->get('provinsi/tambah', 'Admin\Provinsi::tambah');
+    $routes->post('provinsi/proses_tambah', 'Admin\Provinsi::proses_tambah');
+    $routes->get('provinsi/edit/(:num)', 'Admin\Provinsi::edit/$1');
+    $routes->post('provinsi/proses_edit/(:num)', 'Admin\Provinsi::proses_edit/$1');
+    $routes->get('provinsi/delete/(:any)', 'Admin\Provinsi::delete/$1');
 
     // Kabupaten
-    $routes->get('kabupaten/index', 'admin\Kabupaten::index');
-    $routes->get('kabupaten/tambah', 'admin\Kabupaten::tambah');
-    $routes->post('kabupaten/proses_tambah', 'admin\Kabupaten::proses_tambah');
-    $routes->get('kabupaten/edit/(:num)', 'admin\Kabupaten::edit/$1');
-    $routes->post('kabupaten/proses_edit/(:num)', 'admin\Kabupaten::proses_edit/$1');
-    $routes->get('kabupaten/delete/(:any)', 'admin\Kabupaten::delete/$1');
+    $routes->get('kabupaten/index', 'Admin\Kabupaten::index');
+    $routes->get('kabupaten/tambah', 'Admin\Kabupaten::tambah');
+    $routes->post('kabupaten/proses_tambah', 'Admin\Kabupaten::proses_tambah');
+    $routes->get('kabupaten/edit/(:num)', 'Admin\Kabupaten::edit/$1');
+    $routes->post('kabupaten/proses_edit/(:num)', 'Admin\Kabupaten::proses_edit/$1');
+    $routes->get('kabupaten/delete/(:any)', 'Admin\Kabupaten::delete/$1');
 
     // Kategori Wisata
-    $routes->get('kategori_wisata/index', 'admin\KategoriWisata::index');
-    $routes->get('kategori_wisata/tambah', 'admin\KategoriWisata::tambah');
-    $routes->post('kategori_wisata/proses_tambah', 'admin\KategoriWisata::proses_tambah');
-    $routes->get('kategori_wisata/edit/(:num)', 'admin\KategoriWisata::edit/$1');
-    $routes->post('kategori_wisata/proses_edit/(:num)', 'admin\KategoriWisata::proses_edit/$1');
-    $routes->get('kategori_wisata/delete/(:any)', 'admin\KategoriWisata::delete/$1');
+    $routes->get('kategori_wisata/index', 'Admin\KategoriWisata::index');
+    $routes->get('kategori_wisata/tambah', 'Admin\KategoriWisata::tambah');
+    $routes->post('kategori_wisata/proses_tambah', 'Admin\KategoriWisata::proses_tambah');
+    $routes->get('kategori_wisata/edit/(:num)', 'Admin\KategoriWisata::edit/$1');
+    $routes->post('kategori_wisata/proses_edit/(:num)', 'Admin\KategoriWisata::proses_edit/$1');
+    $routes->get('kategori_wisata/delete/(:any)', 'Admin\KategoriWisata::delete/$1');
 
     // Kategori Oleh Oleh
-    $routes->get('kategori_oleholeh/index', 'admin\KategoriOlehOleh::index');
-    $routes->get('kategori_oleholeh/tambah', 'admin\KategoriOlehOleh::tambah');
-    $routes->post('kategori_oleholeh/proses_tambah', 'admin\KategoriOlehOleh::proses_tambah');
-    $routes->get('kategori_oleholeh/edit/(:num)', 'admin\KategoriOlehOleh::edit/$1');
-    $routes->post('kategori_oleholeh/proses_edit/(:num)', 'admin\KategoriOlehOleh::proses_edit/$1');
-    $routes->get('kategori_oleholeh/delete/(:num)', 'admin\KategoriOlehOleh::delete/$1');
+    $routes->get('kategori_oleholeh/index', 'Admin\KategoriOlehOleh::index');
+    $routes->get('kategori_oleholeh/tambah', 'Admin\KategoriOlehOleh::tambah');
+    $routes->post('kategori_oleholeh/proses_tambah', 'Admin\KategoriOlehOleh::proses_tambah');
+    $routes->get('kategori_oleholeh/edit/(:num)', 'Admin\KategoriOlehOleh::edit/$1');
+    $routes->post('kategori_oleholeh/proses_edit/(:num)', 'Admin\KategoriOlehOleh::proses_edit/$1');
+    $routes->get('kategori_oleholeh/delete/(:num)', 'Admin\KategoriOlehOleh::delete/$1');
 
     // Tempat Wisata
-    $routes->get('tempat_wisata/index', 'admin\TempatWisata::index');
-    $routes->get('tempat_wisata/tambah', 'admin\TempatWisata::tambah');
-    $routes->post('tempat_wisata/proses_tambah', 'admin\TempatWisata::proses_tambah');
-    $routes->get('tempat_wisata/edit/(:num)', 'admin\TempatWisata::edit/$1');
-    $routes->post('tempat_wisata/proses_edit/(:num)', 'admin\TempatWisata::proses_edit/$1');
-    $routes->get('tempat_wisata/detail/(:num)', 'admin\TempatWisata::detail/$1');
-    $routes->get('tempat_wisata/delete/(:num)', 'admin\TempatWisata::delete/$1');
+    $routes->get('tempat_wisata/index', 'Admin\TempatWisata::index');
+    $routes->get('tempat_wisata/tambah', 'Admin\TempatWisata::tambah');
+    $routes->post('tempat_wisata/proses_tambah', 'Admin\TempatWisata::proses_tambah');
+    $routes->get('tempat_wisata/edit/(:num)', 'Admin\TempatWisata::edit/$1');
+    $routes->post('tempat_wisata/proses_edit/(:num)', 'Admin\TempatWisata::proses_edit/$1');
+    $routes->get('tempat_wisata/detail/(:num)', 'Admin\TempatWisata::detail/$1');
+    $routes->get('tempat_wisata/delete/(:num)', 'Admin\TempatWisata::delete/$1');
 
     // Oleh Oleh
-    $routes->get('oleh_oleh/index', 'admin\OlehOleh::index');
-    $routes->get('oleh_oleh/tambah', 'admin\OlehOleh::tambah');
-    $routes->post('oleh_oleh/proses_tambah', 'admin\OlehOleh::proses_tambah');
-    $routes->get('oleh_oleh/edit/(:num)', 'admin\OlehOleh::edit/$1');
-    $routes->get('oleh_oleh/detail/(:segment)', 'admin\OlehOleh::detail/$1');
-    $routes->post('oleh_oleh/proses_edit/(:num)', 'admin\OlehOleh::proses_edit/$1');
-    $routes->get('oleh_oleh/delete/(:num)', 'admin\OlehOleh::delete/$1');
-    $routes->post('oleh_oleh/increment-whatsapp/(:num)', 'admin\OlehOleh::incrementWhatsapp/$1');
+    $routes->get('oleh_oleh/index', 'Admin\OlehOleh::index');
+    $routes->get('oleh_oleh/tambah', 'Admin\OlehOleh::tambah');
+    $routes->post('oleh_oleh/proses_tambah', 'Admin\OlehOleh::proses_tambah');
+    $routes->get('oleh_oleh/edit/(:num)', 'Admin\OlehOleh::edit/$1');
+    $routes->get('oleh_oleh/detail/(:segment)', 'Admin\OlehOleh::detail/$1');
+    $routes->post('oleh_oleh/proses_edit/(:num)', 'Admin\OlehOleh::proses_edit/$1');
+    $routes->get('oleh_oleh/delete/(:num)', 'Admin\OlehOleh::delete/$1');
+    $routes->post('oleh_oleh/increment-whatsapp/(:num)', 'Admin\OlehOleh::incrementWhatsapp/$1');
 
     // Profil Pengguna
-    $routes->get('profile/index', 'admin\Profile::index');
-    $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
-    $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
-    $routes->post('profile/update-password', 'admin\Profile::updatePassword');
+    $routes->get('profile/index', 'Admin\Profile::index');
+    $routes->get('profile/edit/(:num)', 'Admin\Profile::edit/$1');
+    $routes->post('profile/update/(:num)', 'Admin\Profile::update/$1');
+    $routes->post('profile/update-photo/(:num)', 'Admin\Profile::update_photo/$1');
+    $routes->post('profile/update-password', 'Admin\Profile::updatePassword');
 
 
     // IKLAN UTAMA
-    $routes->get('acciklanutama', 'admin\IklanUtamaController::index2');
-    $routes->post('acciklanutama/tolakiklan', 'admin\IklanUtamaController::tolakIklan');
-    $routes->post('acciklanutama/ubahStatus', 'admin\IklanUtamaController::ubahStatus');
+    $routes->get('acciklanutama', 'Admin\IklanUtamaController::index2');
+    $routes->post('acciklanutama/tolakiklan', 'Admin\IklanUtamaController::tolakIklan');
+    $routes->post('acciklanutama/ubahStatus', 'Admin\IklanUtamaController::ubahStatus');
     // Daftar Iklan Utama
-    $routes->get('iklanutama', 'admin\IklanUtamaController::index');
-    $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
-    $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
+    $routes->get('iklanutama', 'Admin\IklanUtamaController::index');
+    $routes->get('iklanutama/tambah', 'Admin\IklanUtamaController::tambah');
+    $routes->post('iklanutama/proses_tambah', 'Admin\IklanUtamaController::proses_tambah');
     // tipe iklan utama
-    $routes->get('tipeiklanutama', 'admin\TipeIklanUtama::index');
-    $routes->get('tipeiklanutama/tambah', 'admin\TipeIklanUtama::tambah');
-    $routes->post('tipeiklanutama/proses_tambah', 'admin\TipeIklanUtama::proses_tambah');
-    $routes->get('tipeiklanutama/edit/(:num)', 'admin\TipeIklanUtama::edit/$1');
-    $routes->post('tipeiklanutama/proses_edit/(:num)', 'admin\TipeIklanUtama::update/$1');
-    $routes->get('tipeiklanutama/delete/(:num)', 'admin\TipeIklanUtama::delete/$1');
+    $routes->get('tipeiklanutama', 'Admin\TipeIklanUtama::index');
+    $routes->get('tipeiklanutama/tambah', 'Admin\TipeIklanUtama::tambah');
+    $routes->post('tipeiklanutama/proses_tambah', 'Admin\TipeIklanUtama::proses_tambah');
+    $routes->get('tipeiklanutama/edit/(:num)', 'Admin\TipeIklanUtama::edit/$1');
+    $routes->post('tipeiklanutama/proses_edit/(:num)', 'Admin\TipeIklanUtama::update/$1');
+    $routes->get('tipeiklanutama/delete/(:num)', 'Admin\TipeIklanUtama::delete/$1');
 
     // IKLAN KONTEN
-    $routes->get('daftariklankonten', 'admin\IklanController::index');
-    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
-    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
-    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
+    $routes->get('daftariklankonten', 'Admin\IklanController::index');
+    $routes->get('daftariklankonten/tambah', 'Admin\IklanController::tambah_artikel_iklan');
+    $routes->post('daftariklankonten/proses_tambah', 'Admin\IklanController::proses_tambah');
+    $routes->get('daftariklankonten/edit/(:num)', 'Admin\IklanController::edit/$1');
+    $routes->get('daftariklankonten/detail/(:num)', 'Admin\IklanController::detail/$1');
     $routes->post('daftariklankonten/delete/(:num)', 'Admin\IklanController::delete/$1');
-    $routes->get('acciklankonten', 'admin\ArtikelIklan::index');
-    $routes->post('acciklankonten/ubahstatus', 'admin\ArtikelIklan::ubahStatus');
-    $routes->post('acciklankonten/tolakiklan', 'admin\ArtikelIklan::tolakIklan');
+    $routes->get('acciklankonten', 'Admin\ArtikelIklan::index');
+    $routes->post('acciklankonten/ubahstatus', 'Admin\ArtikelIklan::ubahStatus');
+    $routes->post('acciklankonten/tolakiklan', 'Admin\ArtikelIklan::tolakIklan');
 
     // komisi dan riwayat komisi
-    $routes->get('riwayatkomisi', 'admin\PersenKomisiController::index');
-    $routes->post('riwayatkomisi/tambah_default', 'admin\PersenKomisiController::tambah_default');
-    $routes->post('riwayatkomisi/update_default/(:num)', 'admin\PersenKomisiController::update_default/$1');
-    $routes->post('riwayatkomisi/delete_default/(:num)', 'admin\PersenKomisiController::delete_default/$1');
-    $routes->post('riwayatkomisi/tambah_custom', 'admin\PersenKomisiController::tambah_custom');
-    $routes->post('riwayatkomisi/delete_custom/(:num)', 'admin\PersenKomisiController::delete_custom/$1');
-    $routes->get('riwayatkomisi/get_detail_custom/(:num)', 'admin\PersenKomisiController::get_detail_custom/$1');
+    $routes->get('riwayatkomisi', 'Admin\PersenKomisiController::index');
+    $routes->post('riwayatkomisi/tambah_default', 'Admin\PersenKomisiController::tambah_default');
+    $routes->post('riwayatkomisi/update_default/(:num)', 'Admin\PersenKomisiController::update_default/$1');
+    $routes->post('riwayatkomisi/delete_default/(:num)', 'Admin\PersenKomisiController::delete_default/$1');
+    $routes->post('riwayatkomisi/tambah_custom', 'Admin\PersenKomisiController::tambah_custom');
+    $routes->post('riwayatkomisi/delete_custom/(:num)', 'Admin\PersenKomisiController::delete_custom/$1');
+    $routes->get('riwayatkomisi/get_detail_custom/(:num)', 'Admin\PersenKomisiController::get_detail_custom/$1');
 });
 
 $routes->group('penulis', ['filter' => 'rolecheck:penulis'], function ($routes) {
     // Dashboard
-    $routes->get('dashboard', 'penulis\Dashboard::index');
+    $routes->get('dashboard', 'Penulis\Dashboard::index');
 
     // Artikel Penulis
-    $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
-    $routes->get('artikel/tambah', 'admin\Artikel::tambah');
-    $routes->get('artikel/detail/(:num)/(:any)', 'admin\Artikel::viewArtikel/$1/$2');
-    $routes->post('artikel/proses_tambah', 'admin\Artikel::proses_tambah');
-    $routes->get('artikel/edit/(:num)', 'admin\Artikel::edit/$1');
-    $routes->post('artikel/proses_edit/(:num)', 'admin\Artikel::proses_edit/$1');
-    $routes->get('artikel/delete/(:any)', 'admin\Artikel::delete/$1');
+    $routes->get('artikel/index', 'Admin\Artikel::index');  // Artikel Penulis
+    $routes->get('artikel/tambah', 'Admin\Artikel::tambah');
+    $routes->get('artikel/detail/(:num)/(:any)', 'Admin\Artikel::viewArtikel/$1/$2');
+    $routes->post('artikel/proses_tambah', 'Admin\Artikel::proses_tambah');
+    $routes->get('artikel/edit/(:num)', 'Admin\Artikel::edit/$1');
+    $routes->post('artikel/proses_edit/(:num)', 'Admin\Artikel::proses_edit/$1');
+    $routes->get('artikel/delete/(:any)', 'Admin\Artikel::delete/$1');
 
     // Kategori Artikel
-    $routes->get('kategori/index', 'penulis\Kategori::index');
-    $routes->get('kategori/tambah', 'penulis\Kategori::tambah');
-    $routes->post('kategori/proses_tambah', 'penulis\Kategori::proses_tambah');
-    $routes->get('kategori/edit/(:num)', 'penulis\Kategori::edit/$1');
-    $routes->post('kategori/proses_edit/(:num)', 'penulis\Kategori::proses_edit/$1');
-    $routes->get('kategori/delete/(:any)', 'penulis\Kategori::delete/$1');
+    $routes->get('kategori/index', 'Admin\Kategori::index');
+    $routes->get('kategori/tambah', 'Admin\Kategori::tambah');
+    $routes->post('kategori/proses_tambah', 'Admin\Kategori::proses_tambah');
+    $routes->get('kategori/edit/(:num)', 'Admin\Kategori::edit/$1');
+    $routes->post('kategori/proses_edit/(:num)', 'Admin\Kategori::proses_edit/$1');
+    $routes->get('kategori/delete/(:any)', 'Admin\Kategori::delete/$1');
 
     // TEMPAT WISATA
-    $routes->get('tempat_wisata/index', 'admin\TempatWisata::index');
-    $routes->get('tempat_wisata/tambah', 'admin\TempatWisata::tambah');
-    $routes->post('tempat_wisata/proses_tambah', 'admin\TempatWisata::proses_tambah');
-    $routes->get('tempat_wisata/edit/(:num)', 'admin\TempatWisata::edit/$1');
-    $routes->post('tempat_wisata/proses_edit/(:num)', 'admin\TempatWisata::proses_edit/$1');
-    $routes->get('tempat_wisata/detail/(:num)', 'admin\TempatWisata::detail/$1');
-    $routes->get('tempat_wisata/delete/(:num)', 'admin\TempatWisata::delete/$1');
+    $routes->get('tempat_wisata/index', 'Admin\TempatWisata::index');
+    $routes->get('tempat_wisata/tambah', 'Admin\TempatWisata::tambah');
+    $routes->post('tempat_wisata/proses_tambah', 'Admin\TempatWisata::proses_tambah');
+    $routes->get('tempat_wisata/edit/(:num)', 'Admin\TempatWisata::edit/$1');
+    $routes->post('tempat_wisata/proses_edit/(:num)', 'Admin\TempatWisata::proses_edit/$1');
+    $routes->get('tempat_wisata/detail/(:num)', 'Admin\TempatWisata::detail/$1');
+    $routes->get('tempat_wisata/delete/(:num)', 'Admin\TempatWisata::delete/$1');
 
     // KATEGORI WISATA
-    $routes->get('kategori_wisata/index', 'admin\KategoriWisata::index');
-    $routes->get('kategori_wisata/tambah', 'admin\KategoriWisata::tambah');
-    $routes->post('kategori_wisata/proses_tambah', 'admin\KategoriWisata::proses_tambah');
-    $routes->get('kategori_wisata/edit/(:num)', 'admin\KategoriWisata::edit/$1');
-    $routes->post('kategori_wisata/proses_edit/(:num)', 'admin\KategoriWisata::proses_edit/$1');
-    $routes->get('kategori_wisata/delete/(:any)', 'admin\KategoriWisata::delete/$1');
+    $routes->get('kategori_wisata/index', 'Admin\KategoriWisata::index');
+    $routes->get('kategori_wisata/tambah', 'Admin\KategoriWisata::tambah');
+    $routes->post('kategori_wisata/proses_tambah', 'Admin\KategoriWisata::proses_tambah');
+    $routes->get('kategori_wisata/edit/(:num)', 'Admin\KategoriWisata::edit/$1');
+    $routes->post('kategori_wisata/proses_edit/(:num)', 'Admin\KategoriWisata::proses_edit/$1');
+    $routes->get('kategori_wisata/delete/(:any)', 'Admin\KategoriWisata::delete/$1');
 
     // OLEH OLEJ
-    $routes->get('oleh_oleh/index', 'admin\OlehOleh::index');
-    $routes->get('oleh_oleh/tambah', 'admin\OlehOleh::tambah');
-    $routes->post('oleh_oleh/proses_tambah', 'admin\OlehOleh::proses_tambah');
-    $routes->get('oleh_oleh/edit/(:num)', 'admin\OlehOleh::edit/$1');
-    $routes->get('oleh_oleh/detail/(:segment)', 'admin\OlehOleh::detail/$1');
-    $routes->post('oleh_oleh/proses_edit/(:num)', 'admin\OlehOleh::proses_edit/$1');
-    $routes->get('oleh_oleh/delete/(:num)', 'admin\OlehOleh::delete/$1');
+    $routes->get('oleh_oleh/index', 'Admin\OlehOleh::index');
+    $routes->get('oleh_oleh/tambah', 'Admin\OlehOleh::tambah');
+    $routes->post('oleh_oleh/proses_tambah', 'Admin\OlehOleh::proses_tambah');
+    $routes->get('oleh_oleh/edit/(:num)', 'Admin\OlehOleh::edit/$1');
+    $routes->get('oleh_oleh/detail/(:segment)', 'Admin\OlehOleh::detail/$1');
+    $routes->post('oleh_oleh/proses_edit/(:num)', 'Admin\OlehOleh::proses_edit/$1');
+    $routes->get('oleh_oleh/delete/(:num)', 'Admin\OlehOleh::delete/$1');
 
     // KATEGORI OLEH OLEH
-    $routes->get('kategori_oleholeh/index', 'admin\KategoriOlehOleh::index');
-    $routes->get('kategori_oleholeh/tambah', 'admin\KategoriOlehOleh::tambah');
-    $routes->post('kategori_oleholeh/proses_tambah', 'admin\KategoriOlehOleh::proses_tambah');
-    $routes->get('kategori_oleholeh/edit/(:num)', 'admin\KategoriOlehOleh::edit/$1');
-    $routes->post('kategori_oleholeh/proses_edit/(:num)', 'admin\KategoriOlehOleh::proses_edit/$1');
-    $routes->get('kategori_oleholeh/delete/(:num)', 'admin\KategoriOlehOleh::delete/$1');
+    $routes->get('kategori_oleholeh/index', 'Admin\KategoriOlehOleh::index');
+    $routes->get('kategori_oleholeh/tambah', 'Admin\KategoriOlehOleh::tambah');
+    $routes->post('kategori_oleholeh/proses_tambah', 'Admin\KategoriOlehOleh::proses_tambah');
+    $routes->get('kategori_oleholeh/edit/(:num)', 'Admin\KategoriOlehOleh::edit/$1');
+    $routes->post('kategori_oleholeh/proses_edit/(:num)', 'Admin\KategoriOlehOleh::proses_edit/$1');
+    $routes->get('kategori_oleholeh/delete/(:num)', 'Admin\KategoriOlehOleh::delete/$1');
 
     // Daftar Iklan Utama
-    $routes->get('iklanutama', 'admin\IklanUtamaController::index');
+    $routes->get('iklanutama', 'Admin\IklanUtamaController::index');
 
     // Iklan Konten
-    $routes->get('daftariklankonten', 'admin\IklanController::index');
+    $routes->get('daftariklankonten', 'Admin\IklanController::index');
 
     // saldo
-    $routes->get('saldo', 'admin\Komisi::saldo/$1');
-    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
-    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
+    $routes->get('saldo', 'Admin\Komisi::saldo/$1');
+    $routes->get('saldo/penarikan', 'Admin\Komisi::penarikan');
+    $routes->post('saldo/proses_penarikan', 'Admin\Komisi::proses_penarikan');
 
     // Profil Pengguna
-    $routes->get('profile/index', 'admin\Profile::index');
-    $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
-    $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
-    $routes->post('profile/update-password', 'admin\Profile::updatePassword');
+    $routes->get('profile/index', 'Admin\Profile::index');
+    $routes->get('profile/edit/(:num)', 'Admin\Profile::edit/$1');
+    $routes->post('profile/update/(:num)', 'Admin\Profile::update/$1');
+    $routes->post('profile/update-password', 'Admin\Profile::updatePassword');
 });
 
 
 $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($routes) {
     // Dashboard
-    $routes->get('dashboard', 'marketing\Dashboard::index');
+    $routes->get('dashboard', 'Marketing\Dashboard::index');
 
     // Artikel Iklan
-    $routes->get('artikeliklan/index', 'marketing\ArtikelIklan::index');
+    $routes->get('artikeliklan/index', 'Marketing\ArtikelIklan::index');
 
-    $routes->get('iklanutama', 'admin\IklanUtamaController::index');
-    $routes->get('iklanutama/tambah', 'admin\IklanUtamaController::tambah');
-    $routes->post('iklanutama/proses_tambah', 'admin\IklanUtamaController::proses_tambah');
-    $routes->get('iklanutama/edit/(:num)', 'admin\IklanUtamaController::edit/$1');
-    $routes->post('iklanutama/proses_edit/(:num)', 'admin\IklanUtamaController::proses_edit/$1');
-    $routes->get('iklanutama/delete/(:any)', 'admin\IklanUtamaController::delete/$1');
+    $routes->get('iklanutama', 'Admin\IklanUtamaController::index');
+    $routes->get('iklanutama/tambah', 'Admin\IklanUtamaController::tambah');
+    $routes->post('iklanutama/proses_tambah', 'Admin\IklanUtamaController::proses_tambah');
+    $routes->get('iklanutama/edit/(:num)', 'Admin\IklanUtamaController::edit/$1');
+    $routes->post('iklanutama/proses_edit/(:num)', 'Admin\IklanUtamaController::proses_edit/$1');
+    $routes->get('iklanutama/detail/(:num)', 'Admin\IklanUtamaController::detail/$1');
+    $routes->get('iklanutama/delete/(:any)', 'Admin\IklanUtamaController::delete/$1');
 
     // IKLAN KONTEN
-    $routes->get('daftariklankonten', 'admin\IklanController::index');
-    $routes->get('daftariklankonten/tambah', 'admin\IklanController::tambah_artikel_iklan');
-    $routes->post('daftariklankonten/proses_tambah', 'admin\IklanController::proses_tambah');
-    $routes->get('daftariklankonten/edit/(:num)', 'admin\IklanController::edit/$1');
-    $routes->get('daftariklankonten/detail/(:num)', 'admin\IklanController::detail/$1');
+    $routes->get('daftariklankonten', 'Admin\IklanController::index');
+    $routes->get('daftariklankonten/tambah', 'Admin\IklanController::tambah_artikel_iklan');
+    $routes->post('daftariklankonten/proses_tambah', 'Admin\IklanController::proses_tambah');
+    $routes->get('daftariklankonten/edit/(:num)', 'Admin\IklanController::edit/$1');
+    $routes->post('daftariklankonten/proses_edit/(:num)', 'Admin\IklanController::proses_edit/$1');
+    $routes->get('daftariklankonten/detail/(:num)', 'Admin\IklanController::detail/$1');
     $routes->post('daftariklankonten/delete/(:num)', 'Admin\IklanController::delete/$1');
 
 
     // Saldo
-    $routes->get('saldo', 'admin\Komisi::saldo/$1');
-    $routes->get('saldo/penarikan', 'admin\Komisi::penarikan');
-    $routes->post('saldo/proses_penarikan', 'admin\Komisi::proses_penarikan');
+    $routes->get('saldo', 'Admin\Komisi::saldo/$1');
+    $routes->get('saldo/penarikan', 'Admin\Komisi::penarikan');
+    $routes->post('saldo/proses_penarikan', 'Admin\Komisi::proses_penarikan');
 
     // Artikel
-    $routes->get('artikel/index', 'admin\Artikel::index');  // Artikel Penulis
+    $routes->get('artikel/index', 'Admin\Artikel::index');  // Artikel Penulis
     $routes->get('artikel/detail/(:num)/(:any)', 'Admin\Artikel::viewArtikel/$1/$2');
 
     // Kategori Artikel
-    $routes->get('kategori/index', 'admin\Kategori::index');
+    $routes->get('kategori/index', 'Admin\Kategori::index');
 
     // TEMPAT WISATA
-    $routes->get('tempat_wisata/index', 'admin\TempatWisata::index');
-    $routes->get('tempat_wisata/detail/(:num)', 'admin\TempatWisata::detail/$1');
+    $routes->get('tempat_wisata/index', 'Admin\TempatWisata::index');
+    $routes->get('tempat_wisata/detail/(:num)', 'Admin\TempatWisata::detail/$1');
 
     // KATEGORI WISATA
-    $routes->get('kategori_wisata/index', 'admin\KategoriWisata::index');
+    $routes->get('kategori_wisata/index', 'Admin\KategoriWisata::index');
 
     // OLEH OLEJ
-    $routes->get('oleh_oleh/index', 'admin\OlehOleh::index');
-    $routes->get('oleh_oleh/detail/(:segment)', 'admin\OlehOleh::detail/$1');
+    $routes->get('oleh_oleh/index', 'Admin\OlehOleh::index');
+    $routes->get('oleh_oleh/detail/(:segment)', 'Admin\OlehOleh::detail/$1');
 
     // KATEGORI OLEH OLEH
-    $routes->get('kategori_oleholeh/index', 'admin\KategoriOlehOleh::index');
+    $routes->get('kategori_oleholeh/index', 'Admin\KategoriOlehOleh::index');
 
     // Profil Pengguna
-    $routes->get('profile/index', 'admin\Profile::index');
-    $routes->get('profile/edit/(:num)', 'admin\Profile::edit/$1');
-    $routes->post('profile/update/(:num)', 'admin\Profile::update/$1');
-    $routes->post('profile/update-password', 'admin\Profile::updatePassword');
+    $routes->get('profile/index', 'Admin\Profile::index');
+    $routes->get('profile/edit/(:num)', 'Admin\Profile::edit/$1');
+    $routes->post('profile/update/(:num)', 'Admin\Profile::update/$1');
+    $routes->post('profile/update-password', 'Admin\Profile::updatePassword');
 
 });
 
@@ -360,22 +364,22 @@ $routes->group('marketing', ['filter' => 'rolecheck:marketing'], function ($rout
 
 // Define routes for Indonesian language
 $routes->group('id', function ($routes) {
-    $routes->get('tentang', 'user\Tentangctrl::index');
+    $routes->get('tentang', 'User\Tentangctrl::index');
 
     // start front end routes
 
-    $routes->get('/', 'user\Homectrl::index');
-    $routes->get('ajax/load-data', 'user\Homectrl::loadAjaxData');
+    $routes->get('/', 'User\Homectrl::index');
+    $routes->get('ajax/load-data', 'User\Homectrl::loadAjaxData');
 
 
     // route halaman ebook
-    $routes->get('/ebook', 'user\Ebookctrl::index');
-    $routes->get('/ebook/detail/(:any)', 'user\Ebookctrl::viewEbook/$1');
+    $routes->get('/ebook', 'User\Ebookctrl::index');
+    $routes->get('/ebook/detail/(:any)', 'User\Ebookctrl::viewEbook/$1');
 
     // route halaman penulis
-    $routes->get('/penulis', 'user\Penulisctrl::index');
-    $routes->get('/penulis/detail/(:any)', 'user\Penulisctrl::viewPenulis/$1');
-    $routes->get('/penulis/artikel_penulis/(:any)', 'user\Penulisctrl::artikelPenulis/$1');
+    $routes->get('/penulis', 'User\Penulisctrl::index');
+    $routes->get('/penulis/detail/(:any)', 'User\Penulisctrl::viewPenulis/$1');
+    $routes->get('/penulis/artikel_penulis/(:any)', 'User\Penulisctrl::artikelPenulis/$1');
 
     // route halaman tentang
 
@@ -387,17 +391,17 @@ $routes->group('id', function ($routes) {
     $routes->get('oleh-oleh/(:segment)', 'OlehOleh::kategoriOleh/$1');
     $routes->get('oleh-oleh/(:segment)/(:segment)', 'OlehOleh::detail/$1/$2');
 
-    $routes->get('lang/(:segment)', 'user\Homectrl::language/$1');
+    $routes->get('lang/(:segment)', 'User\Homectrl::language/$1');
 
     $routes->get('api/wisata', 'User\WisataController::index');
 
-    $routes->get('cari', 'user\Searchctrl::search');
-    $routes->get('tag', 'user\Searchctrl::searchByTag');
+    $routes->get('cari', 'User\Searchctrl::search');
+    $routes->get('tag', 'User\Searchctrl::searchByTag');
 
 
-    $routes->get('artikel', 'user\Artikelctrl::semuaArtikel');
-    $routes->get('artikel/(:segment)', 'user\Artikelctrl::index/$1');
-    $routes->get('artikel/(:segment)/(:segment)', 'user\Homectrl::viewArtikel/$1/$2');
+    $routes->get('artikel', 'User\Artikelctrl::semuaArtikel');
+    $routes->get('artikel/(:segment)', 'User\Artikelctrl::index/$1');
+    $routes->get('artikel/(:segment)/(:segment)', 'User\Homectrl::viewArtikel/$1/$2');
 
     // If using tags for search
 
@@ -406,10 +410,10 @@ $routes->group('id', function ($routes) {
 
     $routes->get('ajax/load-data', 'User\Homectrl::loadAjaxData');
 
-    $routes->get('popup', 'user\PopupController::index');
+    $routes->get('popup', 'User\PopupController::index');
 
-    $routes->get('sitemap', 'user\Sitemapctrl::');
-    $routes->get('sitemap.xml', 'user\Sitemapcontroller::generate');
+    $routes->get('sitemap', 'User\Sitemapctrl::');
+    $routes->get('sitemap.xml', 'User\Sitemapcontroller::generate');
     $routes->get('(:segment)', 'ContentController::index');
     $routes->get('(:segment)/(:segment)', 'ContentController::category');
     $routes->get('(:segment)/(:segment)/(:segment)', 'ContentController::detail');
@@ -421,26 +425,26 @@ $routes->group('id', function ($routes) {
 // Define routes for English language
 $routes->group('en', function ($routes) {
     // start front end routes
-    $routes->get('/', 'user\Homectrl::index');
-    $routes->get('ajax/load-data', 'user\Homectrl::loadAjaxData');
+    $routes->get('/', 'User\Homectrl::index');
+    $routes->get('ajax/load-data', 'User\Homectrl::loadAjaxData');
 
     // route ebook page
-    $routes->get('/ebook', 'user\Ebookctrl::index');
-    $routes->get('/ebook/detail/(:any)', 'user\Ebookctrl::viewEbook/$1');
+    $routes->get('/ebook', 'User\Ebookctrl::index');
+    $routes->get('/ebook/detail/(:any)', 'User\Ebookctrl::viewEbook/$1');
 
     // route author page
-    $routes->get('/penulis', 'user\Penulisctrl::index');
-    $routes->get('/penulis/detail/(:any)', 'user\Penulisctrl::viewPenulis/$1');
-    $routes->get('/penulis/artikel_penulis/(:any)', 'user\Penulisctrl::artikelPenulis/$1');
+    $routes->get('/penulis', 'User\Penulisctrl::index');
+    $routes->get('/penulis/detail/(:any)', 'User\Penulisctrl::viewPenulis/$1');
+    $routes->get('/penulis/artikel_penulis/(:any)', 'User\Penulisctrl::artikelPenulis/$1');
 
-    $routes->get('about', 'user\Tentangctrl::index');
+    $routes->get('about', 'User\Tentangctrl::index');
 
-    $routes->get('search', 'user\Searchctrl::search');
-    $routes->get('tag', 'user\Artikelctrl::searchByTag');
+    $routes->get('search', 'User\Searchctrl::search');
+    $routes->get('tag', 'User\Artikelctrl::searchByTag');
 
-    $routes->get('article', 'user\Artikelctrl::semuaArtikel');
-    $routes->get('article/(:segment)', 'user\Artikelctrl::index/$1');
-    $routes->get('article/(:segment)/(:segment)', 'user\Homectrl::viewArtikel/$1/$2');
+    $routes->get('article', 'User\Artikelctrl::semuaArtikel');
+    $routes->get('article/(:segment)', 'User\Artikelctrl::index/$1');
+    $routes->get('article/(:segment)/(:segment)', 'User\Homectrl::viewArtikel/$1/$2');
 
     $routes->get('destinations', 'Wisata::index');
     $routes->get('destinations/(:segment)', 'Wisata::kategoriWisata/$1');
@@ -453,20 +457,20 @@ $routes->group('en', function ($routes) {
     $routes->get('souvenirs/(:segment)', 'OlehOleh::kategoriOleh/$1');
     $routes->get('souvenirs/(:segment)/(:segment)', 'OlehOleh::detail/$1/$2');
 
-    $routes->get('lang/(:segment)', 'user\Homectrl::language/$1');
+    $routes->get('lang/(:segment)', 'User\Homectrl::language/$1');
 
     $routes->get('api/wisata', 'User\WisataController::index');
 
 
-    $routes->get('popup', 'user\PopupController::index');
+    $routes->get('popup', 'User\PopupController::index');
 
 
 
 
     $routes->get('ajax/load-data', 'User\Homectrl::loadAjaxData');
 
-    $routes->get('sitemap', 'user\Sitemapctrl::index');
-    $routes->get('sitemap.xml', 'user\Sitemapcontroller::generate');
+    $routes->get('sitemap', 'User\Sitemapctrl::index');
+    $routes->get('sitemap.xml', 'User\Sitemapcontroller::generate');
 
     $routes->addRedirect('natural-tourism/(:any)', 'nature-tourism/$1');
     $routes->addRedirect('natural-tourism', 'nature-tourism');

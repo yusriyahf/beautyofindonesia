@@ -31,4 +31,39 @@ class IklanUtamaModel extends Model
             ->join('tb_tipe_iklan_utama', 'tb_tipe_iklan_utama.id_tipe_iklan_utama = tb_iklan_utama.id_tipe_iklan_utama', 'left')
             ->findAll();
     }
+
+    public function getDetailWithUserAndTipe($id)
+    {
+        return $this->select('
+        tb_iklan_utama.*, 
+        tb_users.username, 
+        tb_tipe_iklan_utama.nama as nama_tipe_iklan_utama
+    ')
+            ->join('tb_users', 'tb_users.id_user = tb_iklan_utama.id_marketing', 'left')
+            ->join('tb_tipe_iklan_utama', 'tb_tipe_iklan_utama.id_tipe_iklan_utama = tb_iklan_utama.id_tipe_iklan_utama', 'left')
+            ->where('tb_iklan_utama.id_iklan_utama', $id)
+            ->first();
+    }
+
+    public function getArtikelByFilter($startDate = null, $endDate = null, $status = null)
+    {
+        $builder = $this->table('tb_iklan_utama')
+            ->select('tb_iklan_utama.*, tb_tipe_iklan_utama.nama, tb_users.full_name')
+            ->join('tb_tipe_iklan_utama', 'tb_tipe_iklan_utama.id_tipe_iklan_utama = tb_iklan_utama.id_tipe_iklan_utama ')
+            ->join('tb_users', 'tb_users.id_user = tb_iklan_utama.id_marketing');
+        // ->findAll();
+        if ($startDate) {
+            $builder->where('tanggal_mulai ==', $startDate);
+        }
+
+        if ($endDate) {
+            $builder->where('tanggal_selesai ==', $endDate);
+        }
+
+        if ($status) {
+            $builder->where('status = ', $status);
+        }
+
+        return $builder->get()->getResultArray();
+    }
 }

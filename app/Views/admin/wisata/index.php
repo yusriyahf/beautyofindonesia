@@ -119,7 +119,7 @@
                                     <tr class="table-row"
                                         data-location="<?= esc($w['nama_kotakabupaten']) ?>"
                                         data-category="<?= esc($w['nama_kategori_wisata']) ?>"
-                                        data-search="<?= strtolower(esc($w['nama_wisata_ind'] . ' ' . $w['nama_wisata_eng'])) ?>">
+                                        data-search="<?= strtolower(esc($w['nama_wisata_ind'] . ' ' . $w['nama_wisata_eng'] . ' ' . $w['nama_kotakabupaten'] . ' ' . $w['nama_kategori_wisata'])) ?>">
                                         <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -337,7 +337,7 @@
             },
             columnDefs: [{
                     orderable: false,
-                       targets: [5]
+                    targets: [5]
                 } // Disable sorting for action column
             ],
             initComplete: function() {
@@ -362,16 +362,16 @@
             placement: 'top'
         });
 
-         // Filter functionality
+        // Filter functionality
         function applyFilters() {
             const location = $('#locationFilter').val();
             const category = $('#kategoriFilter').val();
             const searchTerm = $('#searchInput').val().toLowerCase();
 
-            $('.table-row').each(function () {
+            $('.table-row').each(function() {
                 const rowLocation = $(this).data('location');
                 const rowCategory = $(this).data('category');
-                const rowName = $(this).data('search'); // nama tempat wisata
+                const rowSearch = $(this).data('search');
 
                 // Location filter
                 const locationPass = !location || rowLocation === location;
@@ -379,8 +379,8 @@
                 // Category filter
                 const categoryPass = !category || rowCategory === category;
 
-                // Search filter (hanya berdasarkan nama wisata, bukan lokasi)
-                const searchPass = !searchTerm || rowName.toLowerCase().includes(searchTerm);
+                // Search filter - search in all text fields (name, location, category)
+                const searchPass = !searchTerm || rowSearch.includes(searchTerm);
 
                 // Show/hide based on filters
                 if (locationPass && categoryPass && searchPass) {
@@ -395,16 +395,22 @@
         $('#applyFilter').on('click', applyFilters);
 
         // Reset filter button
-        $('#resetFilter').on('click', function () {
+        $('#resetFilter').on('click', function() {
             $('#locationFilter').val('');
             $('#kategoriFilter').val('');
             $('#searchInput').val('');
             applyFilters();
         });
 
-        // Auto-apply filter when inputs change
+        // Auto-apply filter when search input changes (with slight delay for better UX)
+        let searchTimeout;
+        $('#searchInput').on('keyup', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(applyFilters, 300);
+        });
+
+        // Auto-apply filter when select inputs change
         $('#locationFilter, #kategoriFilter').on('change', applyFilters);
-        $('#searchInput').on('keyup', applyFilters);
     });
 </script>
 

@@ -1,5 +1,7 @@
     <?= $this->extend('admin/template/template'); ?>
     <?= $this->Section('content'); ?>
+    <?php $role = session()->get('role'); ?>
+
 
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl">
@@ -21,7 +23,7 @@
                         </div>
 
                         <div class="app-card-body">
-                            <form action="<?= base_url('admin/artikel/proses_tambah') ?>" method="POST" enctype="multipart/form-data">
+                            <form action="<?= base_url($role . '/artikel/proses_tambah') ?>" method="POST" enctype="multipart/form-data">
                                 <?= csrf_field(); ?>
 
                                 <div class="tab-navigation-wrapper mb-4">

@@ -23,8 +23,8 @@
                     <div class="text-center mb-4">
                         <div class="position-relative d-inline-block">
                             <?php
-                            $photoPath = $user['photo_user']
-                                ? base_url('uploads/profile/' . $user['photo_user'])
+                            $photoPath = !empty($user['photo_user'])
+                                ? base_url($user['photo_user'])
                                 : base_url('assets-baru/img/user/default_profil.jpg');
                             ?>
 
@@ -305,7 +305,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="<?= base_url('/admin/profile/update-photo') ?>" method="POST" enctype="multipart/form-data">
+            <form action="<?= base_url('/admin/profile/update-photo/' . session()->get('id_user')) ?>" method="POST" enctype="multipart/form-data">
                 <?= csrf_field() ?>
                 <div class="modal-body p-4 text-center">
                     <div class="photo-upload-area mb-4">

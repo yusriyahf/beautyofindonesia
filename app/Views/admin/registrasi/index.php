@@ -123,13 +123,13 @@
                             Peran
                         </label>
                         <select id="role" name="role" required onchange="toggleArtikelField()">
-                            <option value="" disabled selected>Pilih peran Anda</option>
-                            <option value="penulis">Penulis</option>
-                            <option value="marketing">Marketing</option>
+                            <option value="" disabled <?= old('role') ? '' : 'selected' ?>>Pilih peran Anda</option>
+                            <option value="penulis" <?= old('role') === 'penulis' ? 'selected' : '' ?>>Penulis</option>
+                            <option value="marketing" <?= old('role') === 'marketing' ? 'selected' : '' ?>>Marketing</option>
                         </select>
                     </div>
 
-                    <div class="form-group full-width" id="artikel-group" style="display: none;">
+                    <div class="form-group full-width" id="artikel-group" style="<?= old('role') === 'penulis' ? '' : 'display: none;' ?>">
                         <label for="article">
                             <i class="fas fa-pen-fancy"></i>
                             Artikel Pertama
@@ -175,6 +175,29 @@
                     <a href="<?= base_url() ?>" class="btn-home">
                         <i class="fas fa-home"></i> Kembali ke Halaman Utama
                     </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal-error" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <!-- Ikon silang merah untuk menunjukkan error -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#f44336" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <h2 class="modal-title" style="color: #f44336;">Registrasi Gagal!</h2>
+                <div class="modal-body">
+                    <p>Maaf, registrasi Anda <strong>tidak berhasil</strong> diproses.</p>
+                    <p>Masukkan <strong>username, email, dan kontak</strong> yang belum pernah Anda daftarkan.</p>
+                    <p>Pastikan data yang Anda masukkan sudah lengkap dan benar.</p>
+                    <p>Jika masalah terus berlanjut, silakan hubungi tim support kami.</p>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeErrorModal()" style="padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 5px;">Tutup</button>
                 </div>
             </div>
         </div>
@@ -591,7 +614,7 @@
         }
 
         /* Modal Success Styles */
-        .modal-success {
+        .modal-success, .modal-error {
             position: fixed;
             top: 0;
             left: 0;
@@ -606,7 +629,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .modal-success.active {
+        .modal-success.active, .modal-error.active {
             opacity: 1;
         }
 
@@ -622,7 +645,7 @@
             transition: transform 0.3s ease;
         }
 
-        .modal-success.active .modal-content {
+        .modal-success.active .modal-content, .modal-error.active .modal-content {
             transform: translateY(0);
         }
 
@@ -715,6 +738,27 @@
             tinymce.triggerSave();
 
             // Add loading state to button
+            //const submitBtn = document.querySelector('.btn-register');
+            //submitBtn.classList.add('loading');
+            const role = document.getElementById('role').value;
+            const artikelInput = document.getElementById('article');
+            const artikelContent = tinymce.get('article').getContent({
+                format: 'text'
+            }).trim();
+
+            // Validasi khusus untuk artikel jika role = penulis
+            if (role === 'penulis') {
+                if (artikelContent === '') {
+                    alert('Artikel wajib diisi untuk peran Penulis.');
+                    return false;
+                } else {
+                    artikelInput.removeAttribute('disabled');
+                }
+            } else {
+                artikelInput.removeAttribute('required');
+                artikelInput.setAttribute('disabled', 'disabled');
+            }
+
             const submitBtn = document.querySelector('.btn-register');
             submitBtn.classList.add('loading');
 
@@ -728,10 +772,8 @@
             const artikelInput = document.getElementById('article');
 
             if (role === 'penulis') {
+                artikelInput.removeAttribute('disabled');
                 artikelGroup.style.display = 'block';
-                artikelInput.setAttribute('required', 'required');
-
-                // Smooth animation
                 artikelGroup.style.opacity = '0';
                 artikelGroup.style.transform = 'translateY(-10px)';
                 setTimeout(() => {
@@ -740,8 +782,9 @@
                     artikelGroup.style.transition = 'all 0.3s ease';
                 }, 50);
             } else {
-                artikelGroup.style.display = 'none';
                 artikelInput.removeAttribute('required');
+                artikelInput.setAttribute('disabled', 'disabled');
+                artikelGroup.style.display = 'none';
             }
         }
 
@@ -803,32 +846,66 @@
         });
 
         // Form validation
-        document.querySelector('.registration-form').addEventListener('submit', function(e) {
-            const inputs = this.querySelectorAll('input[required], select[required]');
-            let isValid = true;
+        // document.querySelector('.registration-form').addEventListener('submit', function(e) {
+        //     const inputs = this.querySelectorAll('input[required], select[required]');
+        //     let isValid = true;
 
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    input.style.borderColor = '#ff6b6b';
-                    input.style.animation = 'shake 0.5s ease-in-out';
-                } else {
-                    input.style.borderColor = '#51cf66';
-                    input.style.animation = '';
+        //     inputs.forEach(input => {
+        //         if (!input.value.trim()) {
+        //             isValid = false;
+        //             input.style.borderColor = '#ff6b6b';
+        //             input.style.animation = 'shake 0.5s ease-in-out';
+        //         } else {
+        //             input.style.borderColor = '#51cf66';
+        //             input.style.animation = '';
+        //         }
+        //     });
+
+        //     if (!isValid) {
+        //         e.preventDefault();
+        //         // Show error alert
+        //         const alert = document.querySelector('.alert');
+        //         alert.style.display = 'flex';
+        //         alert.querySelector('span').textContent = 'Mohon lengkapi semua field yang diperlukan';
+        //         alert.scrollIntoView({
+        //             behavior: 'smooth',
+        //             block: 'center'
+        //         });
+        //     }
+        // });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleArtikelField();
+
+            // Validasi visual form
+            document.querySelector('.registration-form').addEventListener('submit', function(e) {
+                const inputs = this.querySelectorAll('input[required], select[required]');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.style.borderColor = '#ff6b6b';
+                        input.style.animation = 'shake 0.5s ease-in-out';
+                    } else {
+                        input.style.borderColor = '#51cf66';
+                        input.style.animation = '';
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    const alert = document.querySelector('.alert');
+                    if (alert) {
+                        alert.style.display = 'flex';
+                        alert.querySelector('span').textContent = 'Mohon lengkapi semua field yang diperlukan';
+                        alert.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
                 }
             });
-
-            if (!isValid) {
-                e.preventDefault();
-                // Show error alert
-                const alert = document.querySelector('.alert');
-                alert.style.display = 'flex';
-                alert.querySelector('span').textContent = 'Mohon lengkapi semua field yang diperlukan';
-                alert.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
         });
 
         // Add shake animation
@@ -862,6 +939,8 @@
             // Ini adalah contoh, sesuaikan dengan kondisi aktual dari backend
             <?php if (session()->getFlashdata('success')): ?>
                 showSuccessModal();
+            <?php elseif (session()->getFlashdata('error')): ?>
+                showErrorModal();
             <?php endif; ?>
         });
 
@@ -884,9 +963,35 @@
             document.body.style.overflow = 'hidden';
         }
 
+        function showErrorModal() {
+            const modal = document.getElementById('errorModal');
+            modal.style.display = 'flex';
+
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            document.body.style.overflow = 'hidden';
+        }
+
         // Fungsi untuk menutup modal (jika diperlukan)
         function closeSuccessModal() {
             const modal = document.getElementById('successModal');
+            modal.classList.remove('active');
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        function closeErrorModal() {
+            const modal = document.getElementById('errorModal');
             modal.classList.remove('active');
 
             setTimeout(() => {

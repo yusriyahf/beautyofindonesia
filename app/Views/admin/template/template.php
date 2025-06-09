@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Admin</title>
+    <title> Dashboard <?= session()->get('role');?></title>
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -93,7 +93,7 @@
     <!--  -->
 
     <!-- Menambahkan class active pada navbar -->
-    <script>
+    <!-- <script>
         // Ambil URL saat ini
         var currentUrl = window.location.href;
 
@@ -116,7 +116,7 @@
                 link.classList.add("active");
             }
         });
-    </script>
+    </script> -->
 </body>
 
 </html>

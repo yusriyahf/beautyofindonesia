@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Controllers\penulis;
+namespace App\Controllers\Penulis;
 
 use App\Controllers\BaseController;
 use App\Models\ArtikelModel;
@@ -23,6 +23,8 @@ class Dashboard extends BaseController
         $pemasukanModel = new PemasukanUserModel();
         $penulisModel = new PenulisModel();
         $usersModel = new UsersModel();
+        $ArtikelIklanModel = new \App\Models\ArtikelIklanModel();
+        $ArtikelIklanModel->updateStatusIklan();
 
         $userData = $usersModel->getUsernameById($id_user);
 

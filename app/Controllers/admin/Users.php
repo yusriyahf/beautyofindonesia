@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\admin;
+namespace App\Controllers\Admin;
 
 use App\Models\UsersModel;
 
@@ -40,7 +40,7 @@ class Users extends BaseController
         $data = [
             'username' => $this->request->getVar("username"),
             'email' => $this->request->getVar("email"),
-            'password' => $this->request->getVar("password"),
+            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
             'full_name' => $this->request->getVar("full_name"),
             'role' => $this->request->getVar("role"),
             'bank_account_number' => $this->request->getVar("bank_account_number"),

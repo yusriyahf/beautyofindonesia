@@ -504,6 +504,21 @@
         border: none !important;
     }
 
+    .dataTables_wrapper .dataTables_length select {
+        width: auto !important;
+        display: inline-block !important;
+        margin: 0 0.5rem !important;
+        padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 14px;
+        background-color: #fff;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+    }
+
     @media (max-width: 768px) {
         .dashboard-header {
             text-align: center;

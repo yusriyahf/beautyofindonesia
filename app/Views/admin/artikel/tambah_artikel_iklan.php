@@ -134,10 +134,27 @@
                                         </div>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label for="alt_text" class="form-label fw-semibold">Deskripsi Gambar (Alt Text) <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="alt_text" name="alt_text" placeholder="Contoh: Pantai Sanur saat matahari terbenam" required>
-                                        <div class="invalid-feedback">Silakan isi deskripsi gambar</div>
+                                    <div class="mb-4">
+                                        <label for="link_iklan" class="form-label fw-semibold mb-2">Kontak/Link Iklan <span class="text-danger">*</span></label>
+                                        <input type="text"
+                                            class="form-control px-3 py-2 border-2 rounded-lg"
+                                            id="link_iklan"
+                                            name="link_iklan"
+                                            placeholder="Contoh: https://wa.me/628123456789 atau https://instagram.com/username"
+                                            pattern="^(https?:\/\/)?(wa\.me\/\d+|instagram\.com\/\w+|[\w\.-]+\.[a-z]{2,}\/?.*)$"
+                                            required
+                                            style="border-color: #e2e8f0; transition: border-color 0.3s;">
+                                        <div class="mt-1 text-sm text-muted">
+                                            Format yang diterima:
+                                            <ul class="list-unstyled mt-1">
+                                                <li><i class="bi bi-whatsapp me-1"></i> WhatsApp: <code>https://wa.me/628123456789</code></li>
+                                                <li><i class="bi bi-instagram me-1"></i> Instagram: <code>https://instagram.com/username</code></li>
+                                                <li><i class="bi bi-link me-1"></i> Website: <code>https://contoh.com</code></li>
+                                            </ul>
+                                        </div>
+                                        <div class="invalid-feedback text-red-500 mt-1 text-sm">
+                                            Harap masukkan format yang valid: wa.me/nomor, instagram.com/username, atau URL website
+                                        </div>
                                     </div>
                                 </div>
                             </div>

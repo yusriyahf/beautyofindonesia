@@ -27,8 +27,8 @@
                     <div class="text-center mb-4">
                         <div class="position-relative d-inline-block">
                             <?php
-                            $photoPath = !empty($user[0]['foto_tentang'])
-                                ? base_url('uploads/profile/' . $user[0]['foto_tentang'])
+                            $photoPath = !empty($user['photo_user'])
+                                ? base_url($user['photo_user'])
                                 : base_url('assets-baru/img/user/default_profil.jpg');
                             ?>
 
@@ -182,6 +182,10 @@
 </div>
 
 <style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, var(--bs-primary), var(--bs-info)) !important;
+    }
+
     /* Modern Card Styles */
     .modern-card {
         background: #fff;

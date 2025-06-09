@@ -47,7 +47,11 @@ class IklanUtamaController extends BaseController
 
     public function index2()
     {
-        $all_data_iklan_utama = $this->iklanUtamaModel->findAll();
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+        $status = $this->request->getGet('status');
+
+        $all_data_iklan_utama = $this->iklanUtamaModel->getArtikelByFilter($startDate, $endDate, $status);
         $validation = \Config\Services::validation();
         $komisiModel = new KomisiModel();
         // Ambil komisi admin (id 4)
@@ -525,4 +529,26 @@ class IklanUtamaController extends BaseController
         session()->setFlashdata('success', 'Data berhasil dihapus');
         return redirect()->to(base_url('marketing/iklanutama'));
     }
+
+    public function detail($id)
+{
+    // Ambil detail iklan utama dengan join ke user dan tipe
+    $iklan = $this->iklanUtamaModel->getDetailWithUserAndTipe($id);
+
+    if (!$iklan) {
+        return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+    }
+
+    // Ambil data komisi terkait iklan ini
+    $komisi = $this->komisiIklanModel
+        ->where('id_iklan', $id)
+        ->where('tipe_iklan', 'utama')
+        ->findAll();
+
+    return view('admin/iklan_utama/detail', [
+        'iklan' => $iklan,
+        'komisi' => $komisi
+    ]);
+}
+
 }
