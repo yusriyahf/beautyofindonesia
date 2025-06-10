@@ -10,4 +10,8 @@ class IklanModel extends Model
     protected $primaryKey = 'id';
     protected $returnType = 'array';
     protected $allowedFields = ['id_popup', 'nama', 'harga'];
+
+    
 }
+
+

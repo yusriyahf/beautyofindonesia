@@ -124,10 +124,7 @@
       <div class="chart-box" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
           <h3 style="font-size: 18px; font-weight: 600; color: #2d3748;">Total Komisi per Bulan</h3>
-          <div style="display: flex; gap: 10px;">
-            <button style="padding: 6px 12px; background: #f3f4f6; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">Bulanan</button>
-            <button style="padding: 6px 12px; background: #f3f4f6; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">Tahunan</button>
-          </div>
+          
         </div>
         <canvas id="komisiChart" height="250"></canvas>
       </div>
@@ -139,7 +136,7 @@
       <div class="quick-actions" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <h3 style="font-size: 18px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Quick Actions</h3>
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-          <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
+          <a href="<?= base_url('admin/artikel/tambah') ?>" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
             <div style="width: 32px; height: 32px; background: #e0e7ff; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -148,7 +145,7 @@
             </div>
             <span style="font-size: 12px; text-align: center;">Tambah Artikel</span>
           </a>
-          <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
+          <a href="<?= base_url('admin/tempat_wisata/tambah') ?>" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
             <div style="width: 32px; height: 32px; background: #d1fae5; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -156,7 +153,7 @@
             </div>
             <span style="font-size: 12px; text-align: center;">Tambah Wisata</span>
           </a>
-          <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
+          <a href="<?= base_url('admin/oleh_oleh/tambah') ?>" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
             <div style="width: 32px; height: 32px; background: #fef3c7; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -164,7 +161,7 @@
             </div>
             <span style="font-size: 12px; text-align: center;">Tambah Oleh-Oleh</span>
           </a>
-          <a href="#" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
+          <a href="<?= base_url('admin/users/tambah') ?>" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; background: #f3f4f6; border-radius: 8px; text-decoration: none; color: #4b5563; transition: all 0.2s;">
             <div style="width: 32px; height: 32px; background: #e0e7ff; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -172,7 +169,7 @@
                 <line x1="12" y1="17" x2="12" y2="21"></line>
               </svg>
             </div>
-            <span style="font-size: 12px; text-align: center;">Kelola Iklan</span>
+            <span style="font-size: 12px; text-align: center;">Tambah User</span>
           </a>
         </div>
       </div>
@@ -180,104 +177,136 @@
       <!-- Recent Activity -->
       <div class="recent-activity" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
         <h3 style="font-size: 18px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Aktivitas Terakhir</h3>
+
         <div style="display: flex; flex-direction: column; gap: 16px;">
-          <div style="display: flex; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: #e0e7ff; display: flex; align-items: center; justify-content: center;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <?php
+            if (!empty($aktivitas)) {
+              // Ambil 3 aktivitas terakhir
+              $aktivitas_terakhir = $aktivitas;
+
+              function waktu_lalu($datetime) {
+                $now = new DateTime();
+                $waktu = new DateTime($datetime);
+                $diff = $now->diff($waktu);
+
+                if ($diff->y > 0) return $diff->y . ' tahun lalu';
+                if ($diff->m > 0) return $diff->m . ' bulan lalu';
+                if ($diff->d > 0) return $diff->d . ' hari lalu';
+                if ($diff->h > 0) return $diff->h . ' jam lalu';
+                if ($diff->i > 0) return $diff->i . ' menit lalu';
+                return 'Baru saja';
+              }
+
+              foreach ($aktivitas_terakhir as $item):
+                $jenis = trim(strtolower($item['jenis']));
+                $tanggal = $item['tanggal']; // format: Y-m-d H:i:s atau hanya Y-m-d
+                $waktu_ago = waktu_lalu($tanggal);
+
+                switch ($jenis) {
+                  case 'pengajuan user':
+                      $title = 'Terdapat Pengajuan User Baru';
+                      $bgColor = '#cfe8fc';
+                      $iconColor = '#3b82f6';
+                      $icon = '<path d="M21 15a2 2 0 0 1-2 2H7l-4-4..."></path>';
+                      break;
+                  case 'iklan':
+                      $title = 'Terdapat Pengajuan Iklan Baru';
+                      $bgColor = '#fef3c7';
+                      $iconColor = '#f59e0b';
+                      $icon = '<path d="M21 15a2 2 0 0 1-2 2H7l-4-4..."></path>';
+                      break;
+                  // tambahkan jenis lain kalau ada
+                  default:
+                      $title = 'Aktivitas tidak dikenal';
+                      $bgColor = '#e5e7eb';
+                      $iconColor = '#6b7280';
+                      $icon = '';
+                }
+
+          ?>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: <?= $bgColor ?>; display: flex; align-items: center; justify-content: center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?= $iconColor ?>" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <?= $icon ?>
               </svg>
             </div>
             <div>
-              <p style="font-size: 14px; color: #2d3748; margin-bottom: 4px;">Artikel baru ditambahkan</p>
-              <p style="font-size: 12px; color: #718096;">"10 Destinasi Wisata Terbaik di Bali"</p>
-              <p style="font-size: 11px; color: #9ca3af;">2 jam yang lalu</p>
+              <p style="font-size: 14px; color: #2d3748; margin: 0;"><?= $title ?></p>
+              <p style="font-size: 12px; color: #718096; margin: 0;"><?= $waktu_ago ?></p>
             </div>
           </div>
-          <div style="display: flex; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: #d1fae5; display: flex; align-items: center; justify-content: center;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-              </svg>
-            </div>
-            <div>
-              <p style="font-size: 14px; color: #2d3748; margin-bottom: 4px;">Pembaruan sistem</p>
-              <p style="font-size: 12px; color: #718096;">Versi 2.3.0 telah dirilis</p>
-              <p style="font-size: 11px; color: #9ca3af;">5 jam yang lalu</p>
-            </div>
-          </div>
-          <div style="display: flex; gap: 12px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: #fef3c7; display: flex; align-items: center; justify-content: center;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-            </div>
-            <div>
-              <p style="font-size: 14px; color: #2d3748; margin-bottom: 4px;">Komentar baru</p>
-              <p style="font-size: 12px; color: #718096;">Pada artikel "Kuliner Khas Jawa Timur"</p>
-              <p style="font-size: 11px; color: #9ca3af;">1 hari yang lalu</p>
-            </div>
-          </div>
+          <?php endforeach;
+            } else {
+              echo "<p>Tidak ada aktivitas terbaru.</p>";
+            }
+          ?>
         </div>
+
+
+
       </div>
     </div>
+
   </div>
 
-  <!-- Commission History -->
+  <!-- Commission History / Riwayat komisi terakhir--> 
   <div class="history-table" style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <h3 style="font-size: 18px; font-weight: 600; color: #2d3748;">Riwayat Komisi</h3>
-      <button style="padding: 8px 16px; background: #4f46e5; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer;">Lihat Semua</button>
+      <button onclick="window.location.href='<?= base_url('admin/saldo')?>'" style="padding: 8px 16px; background: #4f46e5; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer;">Lihat Semua</button>
     </div>
+
+
     <div style="overflow-x: auto;">
-      <table style="width: 100%; border-collapse: collapse;">
+       <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
         <thead>
           <tr style="background-color: #f9fafb; border-bottom: 1px solid #e5e7eb;">
-            <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">Nama</th>
-            <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">ID</th>
+            <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">No</th>
+            <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">Jumlah</th>
             <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">Tanggal</th>
             <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">Jam</th>
             <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">Status</th>
-            <th style="padding: 12px; text-align: left; font-size: 14px; color: #6b7280; font-weight: 500;">Aksi</th>
           </tr>
         </thead>
         <tbody>
+          <?php 
+          $count = count($semua_jumlah); 
+          for ($i = 0; $i < $count; $i++): ?>
           <tr style="border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">Pradeep Bansal</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">PBSD8638</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">25 Jul 2020</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">10:00 AM</td>
-            <td style="padding: 12px;">
-              <span style="padding: 4px 8px; border-radius: 12px; background: #fef3c7; color: #92400e; font-size: 12px; display: inline-block;">Pending</span>
+            <td style="padding: 12px; font-size: 14px; color: #2d3748;"><?= $i + 1 ?></td>
+            <td style="padding: 12px; font-size: 14px; color: #2d3748;">
+              Rp <?= number_format($semua_jumlah[$i]['jumlah'], 0, ',', '.') ?>
             </td>
-            <td style="padding: 12px;">
-              <button style="padding: 4px 8px; background: #e0e7ff; color: #4f46e5; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">Detail</button>
+            <td style="padding: 12px; font-size: 14px; color: #2d3748;">
+              <?= date('d M Y', strtotime($tanggal_terakhir[$i]['tanggal_pemasukan'])) ?>
+            </td>
+            <td style="padding: 12px; font-size: 14px; color: #2d3748;">
+              <?= $jam_terakhir[$i]['jam'] ?>
+            </td>
+            <td>
+              <?php 
+                $status = strtolower(esc($status_terakhir[$i]['status']));
+                $bgColor = match ($status) {
+                    'disetujui' => '#d1fae5',     // hijau
+                    'diproses' => '#fef3c7',   // oranye
+                    'ditolak' => '#fee2e2',       // merah
+                };
+                $strokeColor = match ($status) {
+                    'disetujui' => '#065f46',     // hijau tua
+                    'diproses' => '#92400e',      // oranye tua
+                    'ditolak'  => '#991b1b',      // merah tua
+                };
+              ?>
+              <div style="margin-bottom: 6px;">
+                <span style="padding: 4px 12px; border-radius: 999px; background: <?= $bgColor ?>; color: <?= $strokeColor ?>; font-size: 12px; display: inline-block;">
+                  <?= ucfirst($status) ?>
+                </span>
+              </div>
             </td>
           </tr>
-          <tr style="border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">Sameer Sahay</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">SSND5668</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">28 Jul 2020</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">11:20 AM</td>
-            <td style="padding: 12px;">
-              <span style="padding: 4px 8px; border-radius: 12px; background: #d1fae5; color: #065f46; font-size: 12px; display: inline-block;">Selesai</span>
-            </td>
-            <td style="padding: 12px;">
-              <button style="padding: 4px 8px; background: #e0e7ff; color: #4f46e5; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">Detail</button>
-            </td>
-          </tr>
-          <tr style="border-bottom: 1px solid #e5e7eb;">
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">John Doe</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">JHDD9876</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">30 Jul 2020</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">02:45 PM</td>
-            <td style="padding: 12px;">
-              <span style="padding: 4px 8px; border-radius: 12px; background: #fee2e2; color: #991b1b; font-size: 12px; display: inline-block;">Ditolak</span>
-            </td>
-            <td style="padding: 12px;">
-              <button style="padding: 4px 8px; background: #e0e7ff; color: #4f46e5; border: none; border-radius: 4px; font-size: 12px; cursor: pointer;">Detail</button>
-            </td>
-          </tr>
+          <?php endfor; ?>
         </tbody>
+
       </table>
     </div>
   </div>
@@ -298,53 +327,59 @@
 
   // Komisi Chart
   const ctx = document.getElementById('komisiChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-      datasets: [{
-        label: 'Komisi Bulanan',
-        data: [1200000, 1500000, 1700000, 1400000, 2000000, 1800000, 2100000, 1900000, 2200000, 2300000, 2500000, 3000000],
-        backgroundColor: '#4f46e5',
-        borderRadius: 6,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return 'Rp ' + context.raw.toLocaleString('id-ID');
-            }
-          }
-        }
+  const komisiData = <?= json_encode($komisi_chart) ?>;
+new Chart(ctx, {
+  type: 'line', // Ganti dari 'bar' ke 'line'
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+    datasets: [{
+      label: 'Komisi Bulanan',
+      data: komisiData,
+      borderColor: '#4f46e5',       // Warna garis
+      backgroundColor: '#4f46e580', // Warna area bawah garis (dengan transparansi)
+      tension: 0.4,                 // Lengkung garis, mirip efek halus
+      fill: true,                  // Aktifkan fill di bawah garis
+      pointBackgroundColor: '#4f46e5',
+      pointRadius: 5,
+      pointHoverRadius: 7
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
       },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return 'Rp ' + value.toLocaleString('id-ID');
-            }
-          },
-          grid: {
-            drawBorder: false,
-            color: '#e5e7eb'
-          }
-        },
-        x: {
-          grid: {
-            display: false
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return 'Rp ' + context.raw.toLocaleString('id-ID');
           }
         }
       }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function(value) {
+            return 'Rp ' + value.toLocaleString('id-ID');
+          }
+        },
+        grid: {
+          drawBorder: false,
+          color: '#e5e7eb'
+        }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
     }
-  });
+  }
+});
+
 </script>
 
 <?= $this->endSection('content')?>

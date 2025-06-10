@@ -17,4 +17,17 @@ class PenarikanUserModel extends Model
             ->join('tb_users', 'tb_users.id_user = tb_penarikan_komisi.user_id')
             ->findAll();
     }
+
+    public function getAktivitasPenarikan($user_id)
+    {
+        return $this->select("tanggal_persetujuan as tanggal, 'penarikan' as jenis, 'Penarikan saldo Anda disetujui' as keterangan")
+                    ->where('user_id', $user_id)
+                    ->where('status', 'disetujui')
+                    ->where('tanggal_persetujuan IS NOT NULL', null, false)
+                    ->where('LENGTH(tanggal_persetujuan) > 0', null, false)
+                    ->orderBy('tanggal_persetujuan', 'DESC')
+                    ->findAll();
+    }
+
+
 }

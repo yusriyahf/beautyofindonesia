@@ -482,7 +482,7 @@ class ArtikelIklan extends BaseController
             log_message('error', 'Error getting penulis ID: ' . $e->getMessage());
             log_message('error', 'Trace: ' . $e->getTraceAsString());
             return null;
-        }
+        } 
     }
 
     private function getAdminId()

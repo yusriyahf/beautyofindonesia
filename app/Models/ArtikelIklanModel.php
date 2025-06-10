@@ -171,4 +171,25 @@ class ArtikelIklanModel extends Model
 
         return $builder->get()->getResultArray();
     }
+
+    //ambil tanggal mulai
+    public function getAktivitasIklan($user_id)
+    {
+        return $this->select("tanggal_mulai as tanggal, 'iklan' as jenis, 'Iklan ditayangkan di artikel Anda' as keterangan")
+                    ->where('id_marketing', $user_id)
+                    ->where('tanggal_mulai IS NOT NULL', null, false)
+                    ->where('LENGTH(tanggal_mulai) > 0', null, false)
+                    ->orderBy('tanggal_mulai', 'DESC')
+                    ->findAll();
+    }
+
+    public function getDiajukanAktivitas()
+    {
+        return $this->select('dibuat_pada AS tanggal')
+                    ->where('status_iklan', 'diajukan')
+                    ->findAll();
+    }
+
+
+
 }
