@@ -1,32 +1,44 @@
 <?= $this->extend('admin/template/template'); ?>
 <?= $this->section('content'); ?>
-<?= $role = session()->get('role'); ?>
+<?php $role = session()->get('role'); ?>
+
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="app-page-title mb-0">Detail Iklan Konten</h1>
-            <a href="<?= base_url($role . '/daftariklankonten') ?>" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left me-2"></i> Kembali
-            </a>
+        <!-- Header dengan Gradient -->
+        <div class="dashboard-header bg-gradient-primary rounded-4 p-4 mb-4 text-white shadow">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2 text-white"><i class="fas fa-ad me-2 text-white"></i> Detail Iklan Utama</h1>
+                    <p class="mb-0 opacity-75">ID Iklan: <?= $iklan['id_iklan_utama'] ?></p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a href="<?= base_url($role . '/iklanutama') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                        <i class="fas fa-arrow-left me-1"></i> Kembali
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="row g-4">
+            <!-- Konten Utama -->
             <div class="col-12 col-lg-8">
                 <div class="app-card app-card-settings shadow-sm p-4">
-                    <!-- Header Detail -->
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                    <!-- Header dengan Status -->
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
                         <div>
                             <h4 class="app-card-title text-primary mb-1">
-                                <i class="fas fa-ad me-2"></i>Detail Iklan
+                                <i class="fas fa-info-circle me-2"></i>Informasi Iklan
                             </h4>
                             <div class="text-muted small">
-                                ID Iklan: <?= $iklan['id_iklan'] ?> |
                                 Dibuat: <?= date('d/m/Y H:i', strtotime($iklan['dibuat_pada'])) ?>
+                                <?php if ($iklan['diperbarui_pada']): ?>
+                                    | Diperbarui: <?= date('d/m/Y H:i', strtotime($iklan['diperbarui_pada'])) ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div>
                             <?php
-                            $statusColor = match ($iklan['status_iklan']) {
+                            $statusColor = match ($iklan['status']) {
                                 'diajukan' => 'bg-warning',
                                 'diterima' => 'bg-primary',
                                 'ditolak' => 'bg-danger',
@@ -36,63 +48,93 @@
                             };
                             ?>
                             <span class="badge <?= $statusColor ?> text-capitalize py-2 px-3">
-                                <?= $iklan['status_iklan'] ?>
+                                <?= $iklan['status'] ?>
                             </span>
                         </div>
                     </div>
 
-                    <!-- Informasi Utama -->
-                    <div class="row mb-4">
-                        <div class="col-md-6 mb-3">
+                    <!-- Informasi Paket dan Periode -->
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-6">
                             <div class="card border-0 bg-light h-100">
                                 <div class="card-body">
                                     <h6 class="card-title text-muted mb-3">
                                         <i class="fas fa-box-open me-2"></i>Paket Iklan
                                     </h6>
-                                    <h5 class="fw-bold mb-1"><?= esc($iklan['judul_konten']) ?></h5>
+                                    <h5 class="fw-bold mb-1"><?= esc($iklan['nama_tipe_iklan_utama']) ?></h5>
                                     <div class="text-muted small mb-2">
-                                        Durasi: <?= $iklan['rentang_bulan'] ?> bulan
+                                        <span class="badge bg-info bg-opacity-10 text-info">
+                                            <?= esc($iklan['id_tipe_iklan_utama']) ?>
+                                        </span>
+                                        | Durasi: <?= $iklan['rentang_bulan'] ?> bulan
                                     </div>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center justify-content-between">
                                         <span class="fs-5 fw-bold text-success">
                                             Rp<?= number_format($iklan['total_harga'], 0, ',', '.') ?>
+                                        </span>
+                                        <span class="badge bg-light text-dark">
+                                            <?= $iklan['nama_tipe_iklan_utama'] ?>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+
+                        <div class="col-md-6">
                             <div class="card border-0 bg-light h-100">
                                 <div class="card-body">
                                     <h6 class="card-title text-muted mb-3">
                                         <i class="fas fa-calendar-alt me-2"></i>Periode Iklan
                                     </h6>
-
-                                    <div class="mb-2">
-                                        <div class="small text-muted">Mulai</div>
-                                        <div class="fw-bold">
-                                            <?php if ($iklan['status_iklan'] === 'diajukan'): ?>
-                                                Menunggu ACC admin
-                                            <?php elseif (is_null($iklan['tanggal_mulai'])): ?>
-                                                Iklan sudah ditolak
-                                            <?php else: ?>
-                                                <?= date('d F Y', strtotime($iklan['tanggal_mulai'])) ?>
-                                            <?php endif; ?>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <div>
+                                            <div class="small text-muted">Mulai</div>
+                                            <div class="fw-bold">
+                                                <?php if ($iklan['status'] === 'diajukan'): ?>
+                                                    <span class="text-warning">Menunggu ACC admin</span>
+                                                <?php elseif (empty($iklan['tanggal_mulai'])): ?>
+                                                    <span class="text-danger">Iklan ditolak</span>
+                                                <?php else: ?>
+                                                    <?= date('d F Y', strtotime($iklan['tanggal_mulai'])) ?>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="small text-muted">Selesai</div>
+                                            <div class="fw-bold">
+                                                <?php if ($iklan['status'] === 'diajukan'): ?>
+                                                    <span class="text-warning">Menunggu ACC admin</span>
+                                                <?php elseif (empty($iklan['tanggal_selesai'])): ?>
+                                                    <span class="text-danger">Iklan ditolak</span>
+                                                <?php else: ?>
+                                                    <?= date('d F Y', strtotime($iklan['tanggal_selesai'])) ?>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div>
-                                        <div class="small text-muted">Selesai</div>
-                                        <div class="fw-bold">
-                                            <?php if ($iklan['status_iklan'] === 'diajukan'): ?>
-                                                Menunggu ACC admin
-                                            <?php elseif (is_null($iklan['tanggal_selesai'])): ?>
-                                                Iklan sudah ditolak
-                                            <?php else: ?>
-                                                <?= date('d F Y', strtotime($iklan['tanggal_selesai'])) ?>
-                                            <?php endif; ?>
+                                    <?php if ($iklan['status'] === 'berjalan'): ?>
+                                        <div class="progress mt-3" style="height: 8px;">
+                                            <?php
+                                            $startDate = new DateTime($iklan['tanggal_mulai']);
+                                            $endDate = new DateTime($iklan['tanggal_selesai']);
+                                            $today = new DateTime();
+                                            $totalDays = $startDate->diff($endDate)->days;
+                                            $daysPassed = $startDate->diff($today)->days;
+                                            $percentage = min(100, max(0, ($daysPassed / $totalDays) * 100));
+                                            ?>
+                                            <div class="progress-bar bg-success" role="progressbar"
+                                                style="width: <?= $percentage ?>%"
+                                                aria-valuenow="<?= $percentage ?>"
+                                                aria-valuemin="0"
+                                                aria-valuemax="100"
+                                                data-bs-toggle="tooltip"
+                                                title="Progress: <?= round($percentage) ?>% (<?= $daysPassed ?> dari <?= $totalDays ?> hari)">
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="text-center small text-muted mt-1">
+                                            <?= round($percentage) ?>% selesai
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -101,38 +143,42 @@
                     <!-- Konten Iklan -->
                     <div class="mb-4">
                         <h5 class="fw-bold mb-3 border-bottom pb-2">
-                            <i class="fas fa-file-alt me-2"></i>Konten Iklan
+                            <i class="fas fa-image me-2"></i>Konten Iklan
                         </h5>
 
                         <div class="card border-0 bg-light mb-3">
                             <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0 me-3">
-                                        <?php if (!empty($iklan['thumbnail_iklan'])): ?>
-                                            <img src="<?= base_url('uploads/iklan/' . $iklan['thumbnail_iklan']) ?>"
-                                                class="rounded"
-                                                style="width: 100px; height: 100px; object-fit: cover;"
-                                                alt="Thumbnail Iklan">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3 mb-md-0">
+                                        <?php if (!empty($iklan['gambar'])): ?>
+                                            <img src="<?= base_url('assets/images/iklan_utama/' . $iklan['thumbnail_iklan']) ?>"
+                                                class="img-fluid rounded"
+                                                alt="Gambar Iklan"
+                                                style="max-height: 200px; object-fit: contain;">
                                         <?php else: ?>
                                             <div class="bg-white rounded d-flex align-items-center justify-content-center"
-                                                style="width: 100px; height: 100px;">
+                                                style="height: 200px;">
                                                 <i class="fas fa-image text-muted fs-3"></i>
                                             </div>
                                         <?php endif; ?>
                                     </div>
-                                    <div class="flex-grow-1">
-                                        <h5 class="mb-1">
-                                            <?= esc($iklan['judul_konten']) ?>
-                                        </h5>
-                                        <div class="text-muted small mb-2">
-                                            Jenis: <?= ucfirst($iklan['tipe_content']) ?>
-                                        </div>
-                                        <div>
+                                    <div class="col-md-8">
+                                        <h5 class="mb-2"><?= esc($iklan['nama_tipe_iklan_utama']) ?></h5>
+
+                                        <div class="d-flex flex-wrap gap-2">
                                             <a href="<?= esc($iklan['link_iklan']) ?>"
                                                 target="_blank"
                                                 class="btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-external-link-alt me-1"></i> Link Iklan
+                                                <i class="fas fa-external-link-alt me-1"></i> Kunjungi Link
                                             </a>
+
+                                            <?php if (!empty($iklan['gambar'])): ?>
+                                                <a href="<?= base_url('uploads/iklan_utama/' . $iklan['gambar']) ?>"
+                                                    target="_blank"
+                                                    class="btn btn-sm btn-outline-secondary">
+                                                    <i class="fas fa-expand me-1"></i> Lihat Full Gambar
+                                                </a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -143,47 +189,52 @@
                     <!-- Informasi Tambahan -->
                     <div class="mb-4">
                         <h5 class="fw-bold mb-3 border-bottom pb-2">
-                            <i class="fas fa-info-circle me-2"></i>Informasi Tambahan
+                            <i class="fas fa-user-tie me-2"></i>Informasi Pemohon
                         </h5>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
                                 <div class="card border-0 bg-light h-100">
                                     <div class="card-body">
-                                        <h6 class="card-title text-muted mb-3">
-                                            <i class="fas fa-user-tie me-2"></i>Pemohon
-                                        </h6>
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                                    style="width: 40px; height: 40px;">
+                                                    style="width: 50px; height: 50px;">
                                                     <i class="fas fa-user"></i>
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <div class="fw-bold"><?= esc($marketing['username']) ?></div>
+                                                <h6 class="mb-1"><?= esc($iklan['username']) ?></h6>
                                                 <div class="text-muted small">
-                                                    <?= date('d/m/Y', strtotime($iklan['tanggal_pengajuan'])) ?>
+                                                    Marketing
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <?= date('d/m/Y H:i', strtotime($iklan['tanggal_pengajuan'])) ?>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+
+                            <div class="col-md-6">
                                 <div class="card border-0 bg-light h-100">
                                     <div class="card-body">
                                         <h6 class="card-title text-muted mb-3">
                                             <i class="fas fa-phone-alt me-2"></i>Kontak Pengaju
                                         </h6>
-                                        <div class="fw-bold"><?= esc($iklan['no_pengaju']) ?></div>
-                                        <div class="text-muted small mt-2">
-                                            <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $iklan['no_pengaju']) ?>"
-                                                target="_blank"
-                                                class="text-success">
-                                                <i class="fab fa-whatsapp me-1"></i> Hubungi via WhatsApp
-                                            </a>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-phone me-2 text-muted"></i>
+                                            <div class="text-muted small">
+                                                <?= !empty($iklan['no_pengaju']) ? esc($iklan['no_pengaju']) : 'Mohon isikan nomor pengaju terlebih dahulu' ?>
+                                            </div>
+
                                         </div>
+                                        <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $iklan['no_pengaju']) ?>"
+                                            target="_blank"
+                                            class="btn btn-sm btn-success w-100">
+                                            <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -198,39 +249,52 @@
                             </h5>
                             <div class="card border-0 bg-light">
                                 <div class="card-body">
-                                    <?= nl2br(esc($iklan['catatan_admin'])) ?>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 me-3">
+                                            <i class="fas fa-info-circle text-primary mt-1"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <?= nl2br(esc($iklan['catatan_admin'])) ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     <?php endif; ?>
 
                     <!-- Tombol Aksi -->
-                    <div class="d-flex justify-content-end gap-3 pt-4 border-top">
-                        <?php if ($iklan['status_iklan'] == 'diajukan'): ?>
-                            <a href="<?= base_url($role . '/daftariklankonten/terima/' . $iklan['id_iklan']) ?>"
-                                class="btn btn-success px-4">
-                                <i class="fas fa-check me-2"></i> Terima
-                            </a>
-                            <a href="<?= base_url($role . '/daftariklankonten/tolak/' . $iklan['id_iklan']) ?>"
-                                class="btn btn-danger px-4">
-                                <i class="fas fa-times me-2"></i> Tolak
-                            </a>
-                        <?php elseif ($iklan['status_iklan'] == 'diterima'): ?>
-                            <a href="<?= base_url($role . '/daftariklankonten/aktifkan/' . $iklan['id_iklan']) ?>"
-                                class="btn btn-primary px-4">
-                                <i class="fas fa-play me-2"></i> Aktifkan
-                            </a>
-                        <?php elseif ($iklan['status_iklan'] == 'berjalan'): ?>
-                            <a href="<?= base_url($role . '/daftariklankonten/nonaktifkan/' . $iklan['id_iklan']) ?>"
-                                class="btn btn-warning px-4">
-                                <i class="fas fa-pause me-2"></i> Nonaktifkan
-                            </a>
-                        <?php endif; ?>
+                    <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+                        <div class="text-muted small">
+                            Terakhir diupdate: <?= date('d/m/Y H:i', strtotime($iklan['diperbarui_pada'])) ?>
+                        </div>
 
-                        <a href="<?= base_url($role . '/daftariklankonten/edit/' . $iklan['id_iklan']) ?>"
-                            class="btn btn-outline-primary px-4">
-                            <i class="fas fa-edit me-2"></i> Edit
-                        </a>
+                        <div class="d-flex gap-3">
+                            <?php if ($iklan['status'] == 'diajukan' && $role === 'admin'): ?>
+                                <a href="<?= base_url('admin/iklanutama/terima/' . $iklan['id_iklan_utama']) ?>"
+                                    class="btn btn-success px-4">
+                                    <i class="fas fa-check me-2"></i> Terima
+                                </a>
+                                <a href="<?= base_url('admin/iklanutama/tolak/' . $iklan['id_iklan_utama']) ?>"
+                                    class="btn btn-danger px-4">
+                                    <i class="fas fa-times me-2"></i> Tolak
+                                </a>
+                            <?php elseif ($iklan['status'] == 'diterima' && $role === 'admin'): ?>
+                                <a href="<?= base_url('admin/iklanutama/aktifkan/' . $iklan['id_iklan_utama']) ?>"
+                                    class="btn btn-primary px-4">
+                                    <i class="fas fa-play me-2"></i> Aktifkan
+                                </a>
+                            <?php elseif ($iklan['status'] == 'berjalan' && $role === 'admin'): ?>
+                                <a href="<?= base_url('admin/iklanutama/nonaktifkan/' . $iklan['id_iklan_utama']) ?>"
+                                    class="btn btn-warning px-4">
+                                    <i class="fas fa-pause me-2"></i> Nonaktifkan
+                                </a>
+                            <?php endif; ?>
+
+                            <a href="<?= base_url($role . '/iklanutama/edit/' . $iklan['id_iklan_utama']) ?>"
+                                class="btn btn-outline-primary px-4">
+                                <i class="fas fa-edit me-2"></i> Edit
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -240,11 +304,12 @@
                 <div class="app-card app-card-settings shadow-sm p-4 h-100">
                     <div class="app-card-header mb-4">
                         <h4 class="app-card-title text-primary">
-                            <i class="fas fa-info-circle me-2"></i>Informasi Iklan
+                            <i class="fas fa-chart-line me-2"></i>Statistik & Info
                         </h4>
                     </div>
+
                     <div class="app-card-body">
-                        <!-- Ganti bagian timeline dengan yang ini -->
+                        <!-- Timeline Status -->
                         <div class="mb-4">
                             <h6 class="fw-bold mb-3">Timeline Status</h6>
                             <div class="timeline-steps">
@@ -257,7 +322,7 @@
                                     'selesai' => ['icon' => 'stop-circle', 'color' => 'secondary', 'label' => 'Selesai']
                                 ];
 
-                                $currentStatus = $iklan['status_iklan'];
+                                $currentStatus = $iklan['status'];
                                 $statusKeys = array_keys($statuses);
                                 $currentIndex = array_search($currentStatus, $statusKeys);
 
@@ -285,9 +350,9 @@
                             </div>
                         </div>
 
-                        <!-- Statistik Tampilan -->
+                        <!-- Statistik -->
                         <div class="mb-4">
-                            <h6 class="fw-bold mb-3">Statistik Tampilan</h6>
+                            <h6 class="fw-bold mb-3">Statistik</h6>
                             <div class="row g-2">
                                 <div class="col-6">
                                     <div class="card border-0 bg-light">
@@ -313,18 +378,28 @@
                             <h6 class="fw-bold mb-3">Informasi Pembayaran</h6>
                             <div class="card border-0 bg-light">
                                 <div class="card-body">
-                                    <div class="mb-2">
-                                        <div class="small text-muted">Status Pembayaran</div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <div class="small text-muted">Status</div>
                                         <div class="fw-bold text-capitalize">
                                             <?= $iklan['status_pembayaran'] ?? 'belum dibayar' ?>
                                         </div>
                                     </div>
+
+                                    <?php if (!empty($iklan['tanggal_pembayaran'])): ?>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <div class="small text-muted">Tanggal</div>
+                                            <div class="fw-bold">
+                                                <?= date('d M Y', strtotime($iklan['tanggal_pembayaran'])) ?>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <?php if (!empty($iklan['bukti_pembayaran'])): ?>
                                         <div class="mt-3">
                                             <a href="<?= base_url('uploads/pembayaran/' . $iklan['bukti_pembayaran']) ?>"
                                                 target="_blank"
                                                 class="btn btn-sm btn-outline-primary w-100">
-                                                <i class="fas fa-receipt me-1"></i> Lihat Bukti Pembayaran
+                                                <i class="fas fa-receipt me-1"></i> Lihat Bukti
                                             </a>
                                         </div>
                                     <?php endif; ?>
@@ -332,13 +407,20 @@
                             </div>
                         </div>
 
-                        <!-- QR Code untuk Link Iklan -->
+                        <!-- QR Code -->
                         <div class="mb-4">
                             <h6 class="fw-bold mb-3">QR Code Iklan</h6>
                             <div class="card border-0 bg-light">
                                 <div class="card-body text-center py-4">
                                     <div id="qrcode" class="mb-3"></div>
                                     <small class="text-muted">Scan untuk membuka link iklan</small>
+                                    <div class="mt-2">
+                                        <a href="<?= esc($iklan['link_iklan']) ?>"
+                                            target="_blank"
+                                            class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-external-link-alt me-1"></i> <?= parse_url($iklan['link_iklan'], PHP_URL_HOST) ?>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -361,6 +443,12 @@
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     });
 </script>
@@ -446,6 +534,32 @@
 
     .timeline-step.completed:not(:first-child):before {
         background-color: var(--bs-success);
+    }
+
+    /* Progress bar styling */
+    .progress {
+        border-radius: 10px;
+        background-color: #f0f0f0;
+    }
+
+    .progress-bar {
+        border-radius: 10px;
+        transition: width 0.6s ease;
+    }
+
+    /* Card styling */
+    .card {
+        border-radius: 10px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, rgb(100, 181, 201) 100%);
     }
 </style>
 

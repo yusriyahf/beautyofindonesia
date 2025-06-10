@@ -1,45 +1,44 @@
 <?php
 
-    namespace App\Controllers\admin;
-    use App\Controllers\BaseController;
-    use App\Models\ArtikelModel;
-    use App\Models\IklanModel;
-    use App\Models\OlehOlehModel;
-    use App\Models\TempatWisataModel;
-    use App\Models\UsersModel;
-    use App\Models\PemasukanUserModel;
-    use App\Models\pengajuanModel;
-    use App\Models\ArtikelIklanModel;
+namespace App\Controllers\Admin;
 
+use App\Controllers\BaseController;
+use App\Models\ArtikelModel;
+use App\Models\IklanModel;
+use App\Models\OlehOlehModel;
+use App\Models\TempatWisataModel;
+use App\Models\UsersModel;
 
-    class Dashboardctrl extends BaseController
+class Dashboardctrl extends BaseController
+{
+    public function index()
     {
-        public function index()
-        {
-            // Pengecekan apakah pengguna sudah login atau belum
-            if (!session()->get('logged_in')) {
-                return redirect()->to(base_url('login')); 
-                // Ubah 'login' sesuai dengan halaman login Anda
-                
-            }
-            $id_user = session()->get('id_user');
+        // Pengecekan apakah pengguna sudah login atau belum
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'));
+            // Ubah 'login' sesuai dengan halaman login Anda
 
-            $iklanModel = new IklanModel();
-            $artikelModel = new ArtikelModel();
-            $olehModel = new OlehOlehModel();
-            $wisataModel = new TempatWisataModel();
-            $usersModel = new UsersModel();
+        }
+        $id_user = session()->get('id_user');
+
+        $iklanModel = new IklanModel();
+        $artikelModel = new ArtikelModel();
+        $olehModel = new OlehOlehModel();
+        $wisataModel = new TempatWisataModel();
+        $usersModel = new UsersModel();
+        $ArtikelIklanModel = new \App\Models\ArtikelIklanModel();
+        $ArtikelIklanModel->updateStatusIklan();
             $pemasukanModel = new PemasukanUserModel();
             $pengajuanUserModel = new PengajuanModel();
             $iklanModel = new ArtikelIklanModel();
 
-        
-            $userData = $usersModel->getUsernameById($id_user);
 
-            $username = $userData['username'] ?? 'Guest';
+        $userData = $usersModel->getUsernameById($id_user);
 
-            $photo_user = $userData['photo_user'] ?? null;
-            $profileImage = $photo_user ? base_url('assets-baru/img/user/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
+        $username = $userData['username'] ?? 'Guest';
+
+        $photo_user = $userData['photo_user'] ?? null;
+        $profileImage = $photo_user ? base_url('assets-baru/img/user/' . $photo_user) : base_url('assets-baru/img/user/default_profil.jpg');
 
             $data_komisi = $pemasukanModel->getTotalKomisi($id_user);
             $total_komisi = isset($data_komisi['jumlah']) ? (float)$data_komisi['jumlah'] : 0;
@@ -101,3 +100,4 @@
         }
 
     }
+}

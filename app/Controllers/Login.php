@@ -27,8 +27,8 @@ class Login extends BaseController
         $dataUser = $users->where('username', $username)->first();
 
         if ($dataUser) {
-            // Jika password belum di-hash
-            if ($password === $dataUser['password']) {
+            // Gunakan password_verify untuk cek password yang sudah di-hash
+            if (password_verify($password, $dataUser['password'])) {
                 session()->set([
                     'id_user'   => $dataUser['id_user'],
                     'username'  => $dataUser['username'],
@@ -60,6 +60,7 @@ class Login extends BaseController
             return redirect()->back();
         }
     }
+
 
     function logout()
     {

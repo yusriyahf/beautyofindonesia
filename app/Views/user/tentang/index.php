@@ -289,7 +289,7 @@
 
 <?php
 // Panggil PopupController untuk mengecek popup
-$popupController = new \App\Controllers\user\PopupController();
+$popupController = new \App\Controllers\User\PopupController();
 echo $popupController->checkPopup();
 ?>
 

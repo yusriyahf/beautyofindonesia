@@ -19,9 +19,13 @@ class ArtikelIklanModel extends Model
         'tanggal_pengajuan',
         'total_harga',
         'rentang_bulan',
+        'thumbnail_iklan',
+        'link_iklan',
+        'no_pengaju',
         'tanggal_mulai',
         'tanggal_selesai',
         'catatan_admin',
+        'alasan_penolakan',
         'dibuat_pada',
         'diperbarui_pada'
     ];
@@ -83,6 +87,29 @@ class ArtikelIklanModel extends Model
             ->join('tb_harga_iklan', 'tb_harga_iklan.id_harga_iklan = tb_artikel_iklan.id_harga_iklan')
             ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_marketing')
             ->findAll();
+    }
+
+    public function getArtikelByFilter($startDate = null, $endDate = null, $status = null)
+    {
+        $builder = $this->table('tb_artikel_iklan')
+            ->select('tb_artikel_iklan.*, tb_artikel.judul_artikel, tb_harga_iklan.nama AS nama_iklan, tb_users.username, tb_users.kontak')
+            ->join('tb_artikel', 'tb_artikel.id_artikel = tb_artikel_iklan.id_content')
+            ->join('tb_harga_iklan', 'tb_harga_iklan.id_harga_iklan = tb_artikel_iklan.id_harga_iklan')
+            ->join('tb_users', 'tb_users.id_user = tb_artikel_iklan.id_marketing');
+        // ->findAll();
+        if ($startDate) {
+            $builder->where('tanggal_mulai >=', $startDate);
+        }
+
+        if ($endDate) {
+            $builder->where('tanggal_selesai <=', $endDate);
+        }
+
+        if ($status) {
+            $builder->where('status = ', $status);
+        }
+
+        return $builder->get()->getResultArray();
     }
 
     //ngitung iklan diterima/disetujui(?)
@@ -170,6 +197,31 @@ class ArtikelIklanModel extends Model
         }
 
         return $builder->get()->getResultArray();
+    }
+
+    public function updateStatusIklan()
+    {
+        $today = date('Y-m-d');
+
+        // Update status 'berjalan'
+        $builder = $this->builder();
+
+        $builder->where('status_iklan', 'diterima')
+            ->where("tanggal_mulai IS NOT NULL", null, false)
+            ->where("tanggal_selesai IS NOT NULL", null, false)
+            ->where('tanggal_mulai <=', $today)
+            ->where('tanggal_selesai >=', $today)
+            ->set(['status_iklan' => 'berjalan'])
+            ->update();
+
+        // Update status 'selesai'
+        $builder = $this->builder();
+
+        $builder->where('status_iklan', 'berjalan')
+            ->where("tanggal_selesai IS NOT NULL", null, false)
+            ->where('tanggal_selesai <', $today)
+            ->set(['status_iklan' => 'selesai'])
+            ->update();
     }
 
     //ambil tanggal mulai

@@ -26,7 +26,7 @@
         <div class="app-card app-card-settings shadow-sm p-4">
             
             <div class="app-card-body">
-                <form action="<?= base_url('admin/users/simpan') ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <form action="<?= base_url('admin/users/proses_tambah') ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                     <?= csrf_field(); ?>
 
                     <div class="row g-4">

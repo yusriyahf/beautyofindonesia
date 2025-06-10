@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\admin; // Sesuaikan dengan namespace yang sesuai di aplikasi Anda
+namespace App\Controllers\Admin; // Sesuaikan dengan namespace yang sesuai di aplikasi Anda
 use App\Controllers\BaseController;
 use App\Models\TentangModel;
 

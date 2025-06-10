@@ -11,9 +11,12 @@
                     <p class="mb-0 opacity-75">Kelola semua iklan utama di sini</p>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <a href="<?= base_url('marketing/iklanutama/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
-                        <i class="fas fa-plus me-1"></i>Tambah Iklan
-                    </a>
+                    <?php $role = session()->get('role'); ?>
+                    <?php if ($role === 'marketing'): ?>
+                        <a href="<?= base_url('marketing/iklanutama/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                            <i class="fas fa-plus me-1"></i>Tambah Iklan
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -38,9 +41,11 @@
                         <label class="form-label small text-muted mb-1">STATUS</label>
                         <select id="statusFilter" class="form-select">
                             <option value="">Semua Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
+                            <option value="diajukan">Diajukan</option>
+                            <option value="diterima">Diterima</option>
+                            <option value="ditolak">Ditolak</option>
+                            <option value="berjalan">Berjalan</option>
+                            <option value="selesai">Selesai</option>
                         </select>
                     </div>
 
@@ -94,59 +99,39 @@
                                     <th width="120" class="text-center">Tanggal Pengajuan</th>
                                     <th width="120" class="text-center">Status</th>
                                     <th width="100" class="text-center">Harga</th>
+                                    <th width="150" class="text-center">Periode</th>
                                     <th width="140" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 $i = 1;
+                                $startDate = $_GET['start_date'] ?? null;
+                                $endDate = $_GET['end_date'] ?? null;
+                                $statusFilter = $_GET['status'] ?? null;
+
                                 foreach ($all_data_iklan_utama as $item):
-                                    $today = date('Y-m-d');
-                                    $tanggalMulai = $artikelIklan['tanggal_mulai'] ?? null;
-                                    $tanggalSelesai = $artikelIklan['tanggal_selesai'] ?? null;
-                                    $statusIklan = $item['status'] ?? null;
+                                    $tanggalMulai = $item['tanggal_mulai'];
+                                    $statusIklan = $item['status'];
 
-                                    if ($statusIklan == 'diajukan') {
-                                        $status = 'Diajukan';
-                                    } elseif ($statusIklan == 'ditolak') {
-                                        $status = 'Ditolak';
-                                    } elseif ($tanggalMulai && $tanggalSelesai) {
-                                        if ($today < $tanggalMulai) {
-                                            $status = 'Diterima';
-                                        } elseif ($today >= $tanggalMulai && $today <= $tanggalSelesai) {
-                                            $status = 'Berjalan';
-                                        } elseif ($today > $tanggalSelesai) {
-                                            $status = 'Selesai';
-                                        }
-                                    } else {
-                                        $status = 'Belum diproses';
-                                    }
+                                    // Filter logic
+                                    if ($startDate && $tanggalMulai < $startDate) continue;
+                                    if ($endDate && $tanggalMulai > $endDate) continue;
+                                    if ($statusFilter && $statusIklan != $statusFilter) continue;
 
-                                    switch (strtolower($status)) {
-                                        case 'diajukan':
-                                            $badgeClass = 'bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10';
-                                            break;
-                                        case 'ditolak':
-                                            $badgeClass = 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10';
-                                            break;
-                                        case 'diterima':
-                                            $badgeClass = 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10';
-                                            break;
-                                        case 'berjalan':
-                                            $badgeClass = 'bg-success bg-opacity-10 text-success border border-success border-opacity-10';
-                                            break;
-                                        case 'selesai':
-                                            $badgeClass = 'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10';
-                                            break;
-                                        default:
-                                            $badgeClass = 'bg-dark bg-opacity-10 text-dark border border-dark border-opacity-10';
-                                            break;
-                                    }
+                                    // Status badge styling
+                                    $badgeClass = [
+                                        'diajukan' => 'bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10',
+                                        'diterima' => 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10',
+                                        'ditolak' => 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10',
+                                        'berjalan' => 'bg-success bg-opacity-10 text-success border border-success border-opacity-10',
+                                        'selesai' => 'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10'
+                                    ][$statusIklan] ?? 'bg-light text-dark';
                                 ?>
                                     <tr class="table-row"
                                         data-date="<?= date('Y-m-d', strtotime($item['tanggal_pengajuan'])) ?>"
                                         data-status="<?= esc($item['status']) ?>"
-                                        data-search="<?= strtolower(esc($item['id_marketing'] . ' ' . $item['id_tipe_iklan_utama'])) ?>">
+                                        data-search="<?= strtolower(esc(($item['id_marketing'] ?? '') . ' ' . ($item['id_tipe_iklan_utama'] ?? '') . ' ' . ($item['username'] ?? '') . ' ' . ($item['nama_tipe_iklan_utama'] ?? ''))) ?>">
                                         <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -185,34 +170,49 @@
                                         <td class="text-center">
                                             <span class="badge <?= $badgeClass ?>">
                                                 <i class="fas fa-circle me-1" style="font-size: 6px; vertical-align: middle;"></i>
-                                                <?= $status ?>
+                                                <?= ucfirst($statusIklan) ?>
                                             </span>
                                         </td>
                                         <td class="text-end">
-                                            Rp <?= number_format(esc($item['total_harga']), 0, ',', '.') ?>
+                                            Rp <?= number_format($item['total_harga'], 0, ',', '.') ?>
                                         </td>
                                         <td class="text-center">
+                                            <?php if ($item['tanggal_mulai']): ?>
+                                                <small class="text-muted">
+                                                    <?= date('d M Y', strtotime($item['tanggal_mulai'])) ?>
+                                                    <br>s/d<br>
+                                                    <?= date('d M Y', strtotime($item['tanggal_selesai'])) ?>
+                                                </small>
+                                            <?php else: ?>
+                                                <span class="text-muted" style="font-size: small;">Menunggu Persetujuan Admin</span>
+                                            <?php endif; ?>
+                                        </td>
+
+
+                                        <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                <a href="<?= base_url('marketing/iklanutama/detail/' . $item['id_iklan_utama']) ?>"
+                                                <a href="<?= base_url($role . '/iklanutama/detail/' . $item['id_iklan_utama']) ?>"
                                                     class="btn btn-sm btn-outline-primary" title="Detail">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <?php
-                                                $isEditable = strtolower($status) === 'diajukan';
-                                                ?>
-                                                <a href="<?= $isEditable ? base_url('marketing/iklanutama/edit/' . $item['id_iklan_utama']) : '#' ?>"
-                                                    class="btn btn-sm btn-outline-secondary <?= !$isEditable ? 'disabled' : '' ?>"
-                                                    title="Edit"
-                                                    <?= !$isEditable ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                    title="Hapus"
-                                                    data-id="<?= $item['id_iklan_utama'] ?>">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                                <?php if ($role === 'marketing'): ?>
+                                                    <?php
+                                                    $isEditable = strtolower($statusIklan) === 'diajukan';
+                                                    ?>
+                                                    <a href="<?= $isEditable ? base_url('marketing/iklanutama/edit/' . $item['id_iklan_utama']) : '#' ?>"
+                                                        class="btn btn-sm btn-outline-secondary <?= !$isEditable ? 'disabled' : '' ?>"
+                                                        title="Edit"
+                                                        <?= !$isEditable ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button class="btn btn-sm btn-outline-danger delete-btn"
+                                                        title="Hapus"
+                                                        data-id="<?= $item['id_iklan_utama'] ?>">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
                                             </div>
                                         </td>
+                                    <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

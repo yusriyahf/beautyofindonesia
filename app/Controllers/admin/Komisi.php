@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\admin;
+namespace App\Controllers\Admin;
 
 use App\Models\KomisiModel;
 use App\Models\komisiUser;
@@ -236,5 +236,23 @@ class Komisi extends BaseController
         ]);
 
         return redirect()->back()->with('success', 'Status berhasil diubah.');
+    }
+
+    public function tolakstatus()
+    {
+        $id = $this->request->getPost('id_penarikan_komisi');
+        $catatan = $this->request->getPost('catatan');
+
+        if (!$id || empty($catatan)) {
+            return redirect()->back()->with('error', 'ID atau catatan tidak boleh kosong.');
+        }
+
+        // Update status penarikan menjadi ditolak
+        $this->penarikanSaldo->update($id, [
+            'status' => 'ditolak',
+            'catatan' => $catatan,
+        ]);
+
+        return redirect()->back()->with('success', 'Penarikan berhasil ditolak.');
     }
 }

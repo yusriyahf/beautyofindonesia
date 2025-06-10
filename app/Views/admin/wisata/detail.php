@@ -1,5 +1,6 @@
 <?= $this->extend('admin/template/template'); ?>
 <?= $this->Section('content'); ?>
+<?php $role = session()->get('role'); ?>
 
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
@@ -8,14 +9,14 @@
                 <h1 class="app-page-title mb-0">Detail Tempat Wisata</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="<?= base_url('admin') ?>">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="<?= base_url('admin/tempat_wisata') ?>">Tempat Wisata</a></li>
+                        <li class="breadcrumb-item"><a href="<?= base_url($role) ?>">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="<?= base_url($role . '/tempat_wisata') ?>">Tempat Wisata</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Detail</li>
                     </ol>
                 </nav>
             </div>
             <div class="col-auto">
-                <a href="<?= base_url('admin/tempat_wisata/index') ?>" class="btn btn-secondary">
+                <a href="<?= base_url($role . '/tempat_wisata/index') ?>" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-2"></i>Back to List
                 </a>
             </div>

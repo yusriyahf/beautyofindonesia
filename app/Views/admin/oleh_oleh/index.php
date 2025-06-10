@@ -12,66 +12,66 @@
                 </div>
                 <div class="col-md-4 text-md-end">
                     <?php $role = session()->get('role'); ?>
-                                <?php if (in_array($role, ['admin', 'penulis'])): ?>
-                    <a href="<?= base_url($role . '/oleh_oleh/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
-                        <i class="fas fa-plus me-1"></i>Tambah Oleh-Oleh
-                    </a>
+                    <?php if (in_array($role, ['admin', 'penulis'])): ?>
+                        <a href="<?= base_url($role . '/oleh_oleh/tambah') ?>" class="btn btn-light btn-lg rounded-pill px-4 shadow-sm text-info">
+                            <i class="fas fa-plus me-1"></i>Tambah Oleh-Oleh
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
 
         <!-- Filter & Search Form -->
-<div class="card border-0 mb-4">
-    <div class="card-body p-4">
-        <div class="row g-3 align-items-end">
-            <!-- Category Filter -->
-            <div class="col-md-4">
-                <label class="form-label small text-muted mb-1">KATEGORI</label>
-                <select id="kategoriFilter" class="form-select">
-                    <option value="">Semua Kategori</option>
-                    <?php
-                    $uniqueCategories = [];
-                    foreach ($data_oleh_oleh as $item) {
-                        if (!in_array($item['nama_kategori_oleholeh'], $uniqueCategories)) {
-                            $uniqueCategories[] = $item['nama_kategori_oleholeh'];
-                            echo '<option value="' . esc($item['nama_kategori_oleholeh']) . '">' . esc($item['nama_kategori_oleholeh']) . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
-            </div>
+        <div class="card border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="row g-3 align-items-end">
+                    <!-- Category Filter -->
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted mb-1">KATEGORI</label>
+                        <select id="kategoriFilter" class="form-select">
+                            <option value="">Semua Kategori</option>
+                            <?php
+                            $uniqueCategories = [];
+                            foreach ($data_oleh_oleh as $item) {
+                                if (!in_array($item['nama_kategori_oleholeh'], $uniqueCategories)) {
+                                    $uniqueCategories[] = $item['nama_kategori_oleholeh'];
+                                    echo '<option value="' . esc($item['nama_kategori_oleholeh']) . '">' . esc($item['nama_kategori_oleholeh']) . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-            <!-- Location Filter -->
-            <div class="col-md-4">
-                <label class="form-label small text-muted mb-1">LOKASI</label>
-                <select id="lokasiFilter" class="form-select">
-                    <option value="">Semua Lokasi</option>
-                    <?php
-                    $uniqueLocations = [];
-                    foreach ($data_oleh_oleh as $item) {
-                        if (!in_array($item['nama_kotakabupaten'], $uniqueLocations)) {
-                            $uniqueLocations[] = $item['nama_kotakabupaten'];
-                            echo '<option value="' . esc($item['nama_kotakabupaten']) . '">' . esc($item['nama_kotakabupaten']) . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
-            </div>
+                    <!-- Location Filter -->
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted mb-1">LOKASI</label>
+                        <select id="lokasiFilter" class="form-select">
+                            <option value="">Semua Lokasi</option>
+                            <?php
+                            $uniqueLocations = [];
+                            foreach ($data_oleh_oleh as $item) {
+                                if (!in_array($item['nama_kotakabupaten'], $uniqueLocations)) {
+                                    $uniqueLocations[] = $item['nama_kotakabupaten'];
+                                    echo '<option value="' . esc($item['nama_kotakabupaten']) . '">' . esc($item['nama_kotakabupaten']) . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-            <!-- Search Field -->
-            <div class="col-md-4">
-                <label class="form-label small text-muted mb-1">CARI OLEH-OLEH</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-transparent border-end-0">
-                        <i class="fas fa-search text-muted"></i>
-                    </span>
-                    <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Nama, lokasi...">
+                    <!-- Search Field -->
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted mb-1">CARI OLEH-OLEH</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Nama, lokasi...">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
         <!-- Flash Messages -->
         <?php if (session()->getFlashdata('success')): ?>
@@ -165,16 +165,16 @@
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <?php if (in_array($role, ['admin', 'penulis'])): ?>
-                                                <a href="<?= base_url($role . '/oleh_oleh/edit/' . $item['id_oleholeh']) ?>"
-                                                    class="btn btn-sm btn-outline-secondary" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                    title="Hapus"
-                                                    data-id="<?= $item['id_oleholeh'] ?>"
-                                                    data-name="<?= esc($item['nama_oleholeh']) ?>">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
+                                                    <a href="<?= base_url($role . '/oleh_oleh/edit/' . $item['id_oleholeh']) ?>"
+                                                        class="btn btn-sm btn-outline-secondary" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button class="btn btn-sm btn-outline-danger delete-btn"
+                                                        title="Hapus"
+                                                        data-id="<?= $item['id_oleholeh'] ?>"
+                                                        data-name="<?= esc($item['nama_oleholeh']) ?>">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
                                                 <?php endif; ?>
                                             </div>
                                         </td>

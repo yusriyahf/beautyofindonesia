@@ -39,7 +39,7 @@ class ArtikelModel extends Model
                ->select('tb_artikel.*, tb_kategori.nama_kategori, tb_penulis.nama_penulis')
                ->join('tb_kategori', 'tb_kategori.id_kategori = tb_artikel.id_kategori')
                ->join('tb_penulis', 'tb_penulis.id_penulis = tb_artikel.id_penulis')
-               ->orderBy('tgl_publish', 'DESC');
+               ->orderBy('id_artikel', 'DESC');
 
           if ($startDate) {
                $builder->where('tgl_publish >=', $startDate);

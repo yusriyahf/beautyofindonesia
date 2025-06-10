@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\AccUserModel;
 use App\Models\PengajuanModel;
+use App\Models\UsersModel;
 
 class RegistrasiController extends BaseController
 {
@@ -35,16 +36,24 @@ class RegistrasiController extends BaseController
             $model->where('email', $email)->first() ||
             $model->where('kontak', $kontak)->first()
         ) {
-            session()->setFlashdata('error', 'Username, email, atau kontak sudah terdaftar.');
+            $errorMsg = 'Username, email, atau kontak sudah terdaftar.';
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => $errorMsg,
+                ]);
+            }
+
+            session()->setFlashdata('error', $errorMsg);
             return redirect()->back()->withInput();
         }
 
-       // Set artikel to null if role is marketing or admin
-        if ($role === 'marketing' || $role === 'admin') {
+        // Set artikel ke null jika bukan penulis
+        if ($role !== 'penulis') {
             $artikel = null;
         }
 
-        // Data untuk disimpan
+        // Siapkan data
         $data = [
             'username' => $username,
             'email' => $email,
@@ -53,7 +62,7 @@ class RegistrasiController extends BaseController
             'role' => $role,
             'kontak' => $kontak,
             'bank_account_number' => $bankAccountNumber,
-            'artikel' => $artikel,
+            'contoh_karya_artikel' => $artikel,
             'is_active' => 1,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
@@ -61,15 +70,24 @@ class RegistrasiController extends BaseController
 
         // Simpan data
         if ($model->save($data)) {
-            session()->setFlashdata('success', 'Registrasi akan segera diproses! Mohon ditunggu, pemberitahuan akan dikirimkan melalui email.');
-
-            // Tampilkan kembali halaman yang sama dengan pesan sukses
-            return view('admin/registrasi/index');
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => true]);
+            } else {
+                session()->setFlashdata('success', true);
+                return redirect()->to('/registrasi');
+            }
         } else {
-            // Jika gagal simpan, tampilkan error
             $errors = $model->errors();
-            session()->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data.');
-            return redirect()->back()->withInput();
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan saat menyimpan data.',
+                    'errors' => $errors,
+                ]);
+            } else {
+                session()->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data.');
+                return redirect()->back()->withInput();
+            }
         }
     }
 }

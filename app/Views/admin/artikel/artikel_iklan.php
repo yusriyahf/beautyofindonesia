@@ -7,8 +7,8 @@
         <div class="dashboard-header bg-gradient-primary rounded-4 p-4 mb-4 text-white shadow">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 class="mb-2 text-white"><i class="fas fa-ad me-2 text-white"></i> Daftar Artikel Beriklan</h1>
-                    <p class="mb-0 opacity-75">Kelola semua artikel beriklan di sini</p>
+                    <h1 class="mb-2 text-white"><i class="fas fa-ad me-2 text-white"></i> Daftar Iklan Konten</h1>
+                    <p class="mb-0 opacity-75">Kelola semua iklan konten di sini</p>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <?php $role = session()->get('role'); ?>
@@ -24,54 +24,52 @@
         <!-- Modern Filter Section -->
         <div class="card border-0 mb-4">
             <div class="card-body p-4">
-                <form method="get" action="<?= base_url('admin/daftariklankonten') ?>">
-                    <div class="row g-3 align-items-end">
-                        <!-- Date Range Filter -->
-                        <div class="col-md-3">
-                            <label class="form-label small text-muted mb-1">TANGGAL MULAI</label>
-                            <div class="input-group">
-                                <input type="date" id="start_date" name="start_date" class="form-control"
-                                    value="<?= esc($_GET['start_date'] ?? '') ?>">
-                                <span class="input-group-text bg-transparent">
-                                    <i class="far fa-calendar-alt text-muted"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label small text-muted mb-1">TANGGAL AKHIR</label>
-                            <div class="input-group">
-                                <input type="date" id="end_date" name="end_date" class="form-control"
-                                    value="<?= esc($_GET['end_date'] ?? '') ?>">
-                                <span class="input-group-text bg-transparent">
-                                    <i class="far fa-calendar-alt text-muted"></i>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Status Filter -->
-                        <div class="col-md-3">
-                            <label class="form-label small text-muted mb-1">STATUS IKLAN</label>
-                            <select id="status" name="status" class="form-select">
-                                <option value="">Semua Status</option>
-                                <option value="diajukan" <?= (($_GET['status'] ?? '') == 'diajukan') ? 'selected' : '' ?>>Diajukan</option>
-                                <option value="diterima" <?= (($_GET['status'] ?? '') == 'diterima') ? 'selected' : '' ?>>Disetujui</option>
-                                <option value="ditolak" <?= (($_GET['status'] ?? '') == 'ditolak') ? 'selected' : '' ?>>Ditolak</option>
-                                <option value="berjalan" <?= (($_GET['status'] ?? '') == 'berjalan') ? 'selected' : '' ?>>Berjalan</option>
-                                <option value="selesai" <?= (($_GET['status'] ?? '') == 'selesai') ? 'selected' : '' ?>>Selesai</option>
-                            </select>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="col-md-3 d-flex">
-                            <a href="<?= base_url('admin/daftariklankonten') ?>" class="btn btn-outline-secondary me-2 flex-grow-1">
-                                <i class="fas fa-undo me-1"></i> Reset
-                            </a>
-                            <button type="submit" class="btn btn-info flex-grow-1 text-white">
-                                <i class="fas fa-filter me-1"></i> Filter
-                            </button>
+                <div class="row g-3 align-items-end">
+                    <!-- Date Range Filter -->
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted mb-1">TANGGAL PENGAJUAN</label>
+                        <div class="input-group">
+                            <input type="date" id="publish_date" class="form-control flatpickr-input" placeholder="Pilih rentang tanggal">
+                            <span class="input-group-text bg-transparent">
+                                <i class="far fa-calendar-alt text-muted"></i>
+                            </span>
                         </div>
                     </div>
-                </form>
+
+                    <!-- Status Filter -->
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted mb-1">STATUS</label>
+                        <select id="statusFilter" class="form-select">
+                            <option value="">Semua Status</option>
+                            <option value="diajukan">Diajukan</option>
+                            <option value="diterima">Diterima</option>
+                            <option value="ditolak">Ditolak</option>
+                            <option value="berjalan">Berjalan</option>
+                            <option value="selesai">Selesai</option>
+                        </select>
+                    </div>
+
+                    <!-- Search Field -->
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted mb-1">CARI IKLAN</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Judul, marketing, jenis iklan...">
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="col-md-2 d-flex">
+                        <button type="button" id="resetFilter" class="btn btn-outline-secondary me-2 flex-grow-1">
+                            <i class="fas fa-undo me-1"></i> Reset
+                        </button>
+                        <button type="button" id="applyFilter" class="btn btn-info flex-grow-1 text-white">
+                            <i class="fas fa-filter me-1"></i> Filter
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -85,10 +83,10 @@
                         </div>
                         <h5 class="text-muted mb-2">Belum ada artikel beriklan</h5>
                         <?php if (session()->get('role') === 'marketing'): ?>
-                        <p class="text-muted mb-3">Mulai dengan membuat iklan baru</p>
-                        <a href="<?= base_url($role . '/daftariklankonten/tambah') ?>" class="btn btn-primary btn-sm">
-                            <i class="fas fa-plus me-1"></i>Tambah Iklan
-                        </a>
+                            <p class="text-muted mb-3">Mulai dengan membuat iklan baru</p>
+                            <a href="<?= base_url($role . '/daftariklankonten/tambah') ?>" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i>Tambah Iklan
+                            </a>
                         <?php endif; ?>
                     </div>
                 <?php else: ?>
@@ -101,6 +99,7 @@
                                     <th width="150">Tipe Iklan</th>
                                     <th width="120">Penulis</th>
                                     <th width="120" class="text-center">Durasi</th>
+                                    <th width="120" class="text-center">Tanggal Pengajuan</th>
                                     <th width="120" class="text-end">Harga</th>
                                     <th width="120" class="text-center">Status</th>
                                     <th width="150" class="text-center">Periode</th>
@@ -112,19 +111,7 @@
                             <tbody>
                                 <?php
                                 $i = 1;
-                                $startDate = $_GET['start_date'] ?? null;
-                                $endDate = $_GET['end_date'] ?? null;
-                                $statusFilter = $_GET['status'] ?? null;
-
                                 foreach ($all_data as $item):
-                                    $tanggalMulai = $item['tanggal_mulai'];
-                                    $statusIklan = $item['status_iklan'];
-
-                                    // Filter logic
-                                    if ($startDate && $tanggalMulai < $startDate) continue;
-                                    if ($endDate && $tanggalMulai > $endDate) continue;
-                                    if ($statusFilter && $statusIklan != $statusFilter) continue;
-
                                     // Status badge styling
                                     $badgeClass = [
                                         'diajukan' => 'bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10',
@@ -132,9 +119,12 @@
                                         'ditolak' => 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10',
                                         'berjalan' => 'bg-success bg-opacity-10 text-success border border-success border-opacity-10',
                                         'selesai' => 'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10'
-                                    ][$statusIklan] ?? 'bg-light text-dark';
+                                    ][$item['status_iklan']] ?? 'bg-light text-dark';
                                 ?>
-                                    <tr>
+                                    <tr class="table-row"
+                                        data-date="<?= date('Y-m-d', strtotime($item['tanggal_pengajuan'])) ?>"
+                                        data-status="<?= esc($item['status_iklan']) ?>"
+                                        data-search="<?= strtolower(esc(($item['id_marketing'] ?? '') . ' ' . ($item['nama'] ?? '') . ' ' . ($item['username'] ?? '') . ' ' . ($item['judul_konten'] ?? ''))) ?>">
                                         <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td>
                                             <div class="fw-medium text-truncate" style="max-width: 250px;"><?= esc($item['judul_konten']) ?></div>
@@ -161,13 +151,19 @@
                                         <td class="text-center">
                                             <?= esc($item['rentang_bulan']) ?> Bulan
                                         </td>
+                                        <td class="text-center">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="text-dark fw-medium"><?= date('d', strtotime($item['tanggal_pengajuan'])) ?></div>
+                                                <div class="text-muted small"><?= date('M Y', strtotime($item['tanggal_pengajuan'])) ?></div>
+                                            </div>
+                                        </td>
                                         <td class="text-end">
                                             Rp <?= number_format($item['total_harga'], 0, ',', '.') ?>
                                         </td>
                                         <td class="text-center">
                                             <span class="badge <?= $badgeClass ?>">
                                                 <i class="fas fa-circle me-1" style="font-size: 6px; vertical-align: middle;"></i>
-                                                <?= ucfirst($statusIklan) ?>
+                                                <?= ucfirst($item['status_iklan']) ?>
                                             </span>
                                         </td>
                                         <td class="text-center">
@@ -188,46 +184,22 @@
                                                         class="btn btn-sm btn-outline-primary" title="Detail">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a href="<?= base_url('marketing/daftariklankonten/edit/' . $item['id_iklan']) ?>"
-                                                        class="btn btn-sm btn-outline-secondary" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <!-- Tombol Trigger Modal -->
+                                                    <?php if ($item['status_iklan'] === 'diajukan'): ?>
+                                                        <a href="<?= base_url('marketing/daftariklankonten/edit/' . $item['id_iklan']) ?>"
+                                                            class="btn btn-sm btn-outline-secondary" title="Edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <button class="btn btn-sm btn-outline-secondary" title="Tidak dapat diedit" disabled>
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    <?php endif; ?>
                                                     <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $item['id_iklan'] ?>">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
-
                                                 </div>
                                             </td>
                                         <?php endif; ?>
-                                        <!-- Modal Konfirmasi Hapus -->
-                                        <div class="modal fade" id="hapusModal<?= $item['id_iklan'] ?>" tabindex="-1" aria-labelledby="hapusModalLabel<?= $item['id_iklan'] ?>" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content border-0 shadow-sm rounded-3">
-                                                    <form action="<?= base_url('marketing/daftariklankonten/delete/' . $item['id_iklan']) ?>" method="post">
-                                                        <?= csrf_field() ?>
-                                                        <div class="modal-header bg-danger bg-opacity-10 text-danger border-0">
-                                                            <h5 class="modal-title fw-semibold" id="hapusModalLabel<?= $item['id_iklan'] ?>">
-                                                                <i class="fas fa-exclamation-triangle me-2"></i>Konfirmasi Hapus
-                                                            </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                                                        </div>
-                                                        <div class="modal-body text-center py-4">
-                                                            <i class="fas fa-trash-alt fa-3x text-danger mb-3"></i>
-                                                            <p class="mb-0">Apakah Anda yakin ingin menghapus iklan<br><strong><?= esc($item['judul_konten']) ?></strong>?</p>
-                                                        </div>
-                                                        <div class="modal-footer justify-content-between border-0 px-4 pb-4">
-                                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                                                <i class="fas fa-times me-1"></i> Batal
-                                                            </button>
-                                                            <button type="submit" class="btn btn-danger">
-                                                                <i class="fas fa-trash me-1"></i> Hapus
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -562,32 +534,16 @@
 
 <script>
     $(document).ready(function() {
-        // Dapatkan role dari PHP, kirim ke JS
-        var role = '<?= session()->get('role') ?>';
-
-        // Definisikan kolom dan columnDefs default (tanpa kolom aksi)
-        var columnDefs = [];
-        var hasActionColumn = false;
-
-        // Jika marketing, tambahkan kolom aksi (kolom ke-8)
-        if (role === 'marketing') {
-            hasActionColumn = true;
-            columnDefs = [{
-                orderable: false,
-                targets: [8]  // kolom aksi di index 8
-            }];
-        }
-
-        $('#iklanTable').DataTable({
+        // Initialize DataTable
+        var table = $('#iklanTable').DataTable({
             responsive: true,
             searching: true,
             ordering: true,
             paging: true,
-            info: false,
+            info: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/id.json'
             },
-            columnDefs: columnDefs,
             initComplete: function() {
                 $('[title]').tooltip({
                     trigger: 'hover',
@@ -596,7 +552,62 @@
             }
         });
 
-        // Tooltip umum
+
+
+        // Filter functionality
+        function applyFilters() {
+            const dateFilter = $('#publish_date').val();
+            const status = $('#statusFilter').val();
+            const searchTerm = $('#searchInput').val().toLowerCase();
+
+            $('.table-row').each(function() {
+                const rowDate = $(this).data('date');
+                const rowStatus = $(this).data('status');
+                const rowSearch = $(this).data('search');
+
+                // Date filter
+                const datePass = !dateFilter || rowDate === dateFilter;
+
+                // Status filter
+                const statusPass = !status || rowStatus === status;
+
+                // Search filter
+                const searchPass = !searchTerm || rowSearch.includes(searchTerm);
+
+                // Show/hide based on filters
+                if (datePass && statusPass && searchPass) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        // Apply filter button
+        $('#applyFilter').on('click', applyFilters);
+
+        // Reset filter button
+        $('#resetFilter').on('click', function() {
+            $('#publish_date').val('');
+            $('#statusFilter').val('');
+            $('#searchInput').val('');
+            applyFilters();
+        });
+
+        // Auto-apply filter when inputs change
+        $('#publish_date, #statusFilter').on('change', applyFilters);
+        $('#searchInput').on('keyup', applyFilters);
+
+        // Initialize date picker
+        flatpickr("#publish_date", {
+            dateFormat: "Y-m-d",
+            allowInput: true,
+            onChange: function() {
+                applyFilters();
+            }
+        });
+
+        // Tooltip initialization
         $('[title]').tooltip({
             trigger: 'hover',
             placement: 'top'

@@ -27,7 +27,7 @@
                             <div class="row g-0">
                                 <div class="col-md-4">
                                     <div class="p-3 text-center bg-light rounded-start">
-                                        <img src="<?= base_url('uploads/oleh_oleh/' . $oleholeh['foto_oleholeh']) ?>"
+                                        <img src="<?= base_url('assets-baru/img/foto_oleholeh/' . $oleholeh['foto_oleholeh']) ?>"
                                             class="img-fluid rounded" style="max-height: 250px; width: auto;"
                                             alt="<?= $oleholeh['nama_oleholeh'] ?>">
                                         <div class="mt-3">

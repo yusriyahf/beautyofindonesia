@@ -6,7 +6,7 @@ $id_user = $session->get('id_user');
 $defaultImage = base_url('assets-baru/img/user/default_profil.jpg');
 $profileImage = $defaultImage;
 
-$role = session()->get('role');
+$role = session()->get('role') ?? '';
 
 if ($id_user) {
     $usersModel = new \App\Models\UsersModel();
@@ -17,6 +17,7 @@ if ($id_user) {
         $profileImage = base_url('uploads/user_photos/' . $userData['photo_user']);
     }
 }
+$uri = service('uri');
 ?>
 <div id="app-sidepanel" class="app-sidepanel scroll-hidden">
     <div id="sidepanel-drop" class="sidepanel-drop"></div>
@@ -69,7 +70,7 @@ if ($id_user) {
                 <!-- Dashboard -->
                 <?php if (session()->get('role') === 'admin' || session()->get('role') === 'marketing' || session()->get('role') === 'penulis'): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url($role . '/dashboard') ?>">
+                        <a class="nav-link <?= ($uri->getSegment(2) === 'dashboard') ? 'active' : '' ?>" href="<?= base_url($role . '/dashboard') ?>">
                             <span class="nav-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-speedometer2" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z" />
@@ -87,8 +88,8 @@ if ($id_user) {
                 </li>
 
                 <!-- Artikel Section -->
-                <li class="nav-item has-submenu">
-                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#artikelMenu">
+                <li class="nav-item has-submenu <?= ($uri->getSegment(2) == 'artikel' || $uri->getSegment(2) == 'kategori') ? 'active' : '' ?>">
+                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#artikelMenu" aria-expanded="<?= ($uri->getSegment(2) == 'artikel' || $uri->getSegment(2) == 'kategori') ? 'true' : 'false' ?>">
                         <span class="nav-icon">
                             <i class="bi bi-journals"></i>
                         </span>
@@ -97,10 +98,10 @@ if ($id_user) {
                             <i class="bi bi-chevron-down"></i>
                         </span>
                     </a>
-                    <div id="artikelMenu" class="collapse submenu">
+                    <div id="artikelMenu" class="collapse submenu <?= ($uri->getSegment(2) == 'artikel' || $uri->getSegment(2) == 'kategori') ? 'show' : '' ?>">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url($role . '/artikel/index') ?>">
+                                <a class="nav-link <?= ($uri->getSegment(2) == 'artikel') ? 'active' : '' ?>" href="<?= base_url($role . '/artikel/index') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-file-earmark-text"></i>
                                     </span>
@@ -108,7 +109,7 @@ if ($id_user) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url($role . '/kategori/index') ?>">
+                                <a class="nav-link <?= ($uri->getSegment(2) == 'kategori') ? 'active' : '' ?>" href="<?= base_url($role . '/kategori/index') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-tags"></i>
                                     </span>
@@ -120,8 +121,8 @@ if ($id_user) {
                 </li>
 
                 <!-- Wisata Section -->
-                <li class="nav-item has-submenu">
-                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#wisataMenu">
+                <li class="nav-item has-submenu <?= ($uri->getSegment(2) == 'tempat_wisata' || $uri->getSegment(2) == 'kategori_wisata') ? 'active' : '' ?>">
+                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#wisataMenu" aria-expanded="<?= ($uri->getSegment(2) == 'tempat_wisata' || $uri->getSegment(2) == 'kategori_wisata') ? 'true' : 'false' ?>">
                         <span class="nav-icon">
                             <i class="bi bi-journals"></i>
                         </span>
@@ -130,10 +131,10 @@ if ($id_user) {
                             <i class="bi bi-chevron-down"></i>
                         </span>
                     </a>
-                    <div id="wisataMenu" class="collapse submenu">
+                    <div id="wisataMenu" class="collapse submenu <?= ($uri->getSegment(2) == 'tempat_wisata' || $uri->getSegment(2) == 'kategori_wisata') ? 'show' : '' ?>">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url($role . '/tempat_wisata/index') ?>">
+                                <a class="nav-link <?= ($uri->getSegment(2) == 'tempat_wisata') ? 'active' : '' ?>" href="<?= base_url($role . '/tempat_wisata/index') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-file-earmark-text"></i>
                                     </span>
@@ -141,7 +142,7 @@ if ($id_user) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url($role . '/kategori_wisata/index') ?>">
+                                <a class="nav-link <?= ($uri->getSegment(2) == 'kategori_wisata') ? 'active' : '' ?>" href="<?= base_url($role . '/kategori_wisata/index') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-tags"></i>
                                     </span>
@@ -153,8 +154,8 @@ if ($id_user) {
                 </li>
 
                 <!-- Oleh-Oleh Section -->
-                <li class="nav-item has-submenu">
-                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#olehMenu">
+                <li class="nav-item has-submenu <?= ($uri->getSegment(2) == 'oleh_oleh' || $uri->getSegment(2) == 'kategori_oleholeh') ? 'active' : '' ?>">
+                    <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#olehMenu" aria-expanded="<?= ($uri->getSegment(2) == 'oleh_oleh' || $uri->getSegment(2) == 'kategori_oleholeh') ? 'true' : 'false' ?>">
                         <span class="nav-icon">
                             <i class="bi bi-journals"></i>
                         </span>
@@ -163,10 +164,10 @@ if ($id_user) {
                             <i class="bi bi-chevron-down"></i>
                         </span>
                     </a>
-                    <div id="olehMenu" class="collapse submenu">
+                    <div id="olehMenu" class="collapse submenu <?= ($uri->getSegment(2) == 'oleh_oleh' || $uri->getSegment(2) == 'kategori_oleholeh') ? 'show' : '' ?>">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url($role . '/oleh_oleh/index') ?>">
+                                <a class="nav-link <?= ($uri->getSegment(2) == 'oleh_oleh') ? 'active' : '' ?>" href="<?= base_url($role . '/oleh_oleh/index') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-file-earmark-text"></i>
                                     </span>
@@ -174,7 +175,7 @@ if ($id_user) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= base_url($role . '/kategori_oleholeh/index') ?>">
+                                <a class="nav-link <?= ($uri->getSegment(2) == 'kategori_oleholeh') ? 'active' : '' ?>" href="<?= base_url($role . '/kategori_oleholeh/index') ?>">
                                     <span class="nav-icon">
                                         <i class="bi bi-tags"></i>
                                     </span>
@@ -192,7 +193,7 @@ if ($id_user) {
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/provinsi/index') ?>">
+                        <a class="nav-link <?= ($uri->getSegment(2) == 'provinsi') ? 'active' : '' ?>" href="<?= base_url('admin/provinsi/index') ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-map"></i>
                             </span>
@@ -200,7 +201,7 @@ if ($id_user) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/kabupaten/index') ?>">
+                        <a class="nav-link <?= ($uri->getSegment(2) == 'kabupaten') ? 'active' : '' ?>" href="<?= base_url('admin/kabupaten/index') ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-geo"></i>
                             </span>
@@ -216,8 +217,8 @@ if ($id_user) {
 
                 <?php if (session()->get('role') === 'admin' || session()->get('role') === 'marketing' || session()->get('role') === 'penulis'): ?>
                     <!-- Iklan Konten Menu -->
-                    <li class="nav-item has-submenu">
-                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#iklanKontenMenu">
+                    <li class="nav-item has-submenu <?= in_array($uri->getSegment(2), ['daftariklankonten', 'acciklankonten', 'tipeiklankonten']) ? 'active' : '' ?>">
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#iklanKontenMenu" aria-expanded="<?= in_array($uri->getSegment(2), ['daftariklankonten', 'acciklankonten', 'tipeiklankonten']) ? 'true' : 'false' ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-window-stack"></i>
                             </span>
@@ -226,10 +227,10 @@ if ($id_user) {
                                 <i class="bi bi-chevron-down"></i>
                             </span>
                         </a>
-                        <div id="iklanKontenMenu" class="collapse submenu">
+                        <div id="iklanKontenMenu" class="collapse submenu <?= in_array($uri->getSegment(2), ['daftariklankonten', 'acciklankonten', 'tipeiklankonten']) ? 'show' : '' ?>">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?= base_url($role . '/daftariklankonten') ?>">
+                                    <a class="nav-link <?= ($uri->getSegment(2) == 'daftariklankonten') ? 'active' : '' ?>" href="<?= base_url($role . '/daftariklankonten') ?>">
                                         <span class="nav-icon">
                                             <i class="bi bi-window-plus"></i>
                                         </span>
@@ -238,7 +239,7 @@ if ($id_user) {
                                 </li>
                                 <?php if (session()->get('role') === 'admin'): ?>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="<?= base_url('admin/acciklankonten') ?>">
+                                        <a class="nav-link <?= ($uri->getSegment(2) == 'acciklankonten') ? 'active' : '' ?>" href="<?= base_url('admin/acciklankonten') ?>">
                                             <span class="nav-icon">
                                                 <i class="bi bi-window-plus"></i>
                                             </span>
@@ -246,7 +247,7 @@ if ($id_user) {
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="<?= base_url('admin/tipeiklankonten') ?>">
+                                        <a class="nav-link <?= ($uri->getSegment(2) == 'tipeiklankonten') ? 'active' : '' ?>" href="<?= base_url('admin/tipeiklankonten') ?>">
                                             <span class="nav-icon">
                                                 <i class="bi bi-window"></i>
                                             </span>
@@ -261,8 +262,8 @@ if ($id_user) {
 
                 <?php if (in_array(session()->get('role'), ['admin', 'marketing'])): ?>
                     <!-- Iklan Utama Menu -->
-                    <li class="nav-item has-submenu">
-                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#iklanUtamaMenu">
+                    <li class="nav-item has-submenu <?= in_array($uri->getSegment(2), ['iklanutama', 'acciklanutama', 'tipeiklanutama']) ? 'active' : '' ?>">
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#iklanUtamaMenu" aria-expanded="<?= in_array($uri->getSegment(2), ['iklanutama', 'acciklanutama', 'tipeiklanutama']) ? 'true' : 'false' ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-window-stack"></i>
                             </span>
@@ -271,10 +272,10 @@ if ($id_user) {
                                 <i class="bi bi-chevron-down"></i>
                             </span>
                         </a>
-                        <div id="iklanUtamaMenu" class="collapse submenu">
+                        <div id="iklanUtamaMenu" class="collapse submenu <?= in_array($uri->getSegment(2), ['iklanutama', 'acciklanutama', 'tipeiklanutama']) ? 'show' : '' ?>">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?= base_url($role . '/iklanutama') ?>">
+                                    <a class="nav-link <?= ($uri->getSegment(2) == 'iklanutama') ? 'active' : '' ?>" href="<?= base_url($role . '/iklanutama') ?>">
                                         <span class="nav-icon">
                                             <i class="bi bi-window-plus"></i>
                                         </span>
@@ -283,7 +284,7 @@ if ($id_user) {
                                 </li>
                                 <?php if (session()->get('role') === 'admin'): ?>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="<?= base_url('admin/acciklanutama') ?>">
+                                        <a class="nav-link <?= ($uri->getSegment(2) == 'acciklanutama') ? 'active' : '' ?>" href="<?= base_url('admin/acciklanutama') ?>">
                                             <span class="nav-icon">
                                                 <i class="bi bi-window-plus"></i>
                                             </span>
@@ -291,7 +292,7 @@ if ($id_user) {
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="<?= base_url('admin/tipeiklanutama') ?>">
+                                        <a class="nav-link <?= ($uri->getSegment(2) == 'tipeiklanutama') ? 'active' : '' ?>" href="<?= base_url('admin/tipeiklanutama') ?>">
                                             <span class="nav-icon">
                                                 <i class="bi bi-window"></i>
                                             </span>
@@ -306,8 +307,8 @@ if ($id_user) {
 
                 <?php if (session()->get('role') === 'admin'): ?>
                     <!-- Popup Management -->
-                    <li class="nav-item has-submenu">
-                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#popupMenu">
+                    <li class="nav-item has-submenu <?= in_array($uri->getSegment(2), ['popup', 'tampilpopup']) ? 'active' : '' ?>">
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse" data-bs-target="#popupMenu" aria-expanded="<?= in_array($uri->getSegment(2), ['popup', 'tampilpopup']) ? 'true' : 'false' ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-window-stack"></i>
                             </span>
@@ -316,10 +317,10 @@ if ($id_user) {
                                 <i class="bi bi-chevron-down"></i>
                             </span>
                         </a>
-                        <div id="popupMenu" class="collapse submenu">
+                        <div id="popupMenu" class="collapse submenu <?= in_array($uri->getSegment(2), ['popup', 'tampilpopup']) ? 'show' : '' ?>">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?= base_url('admin/popup') ?>">
+                                    <a class="nav-link <?= ($uri->getSegment(2) == 'popup') ? 'active' : '' ?>" href="<?= base_url('admin/popup') ?>">
                                         <span class="nav-icon">
                                             <i class="bi bi-window-plus"></i>
                                         </span>
@@ -327,7 +328,7 @@ if ($id_user) {
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?= base_url('admin/tampilpopup') ?>">
+                                    <a class="nav-link <?= ($uri->getSegment(2) == 'tampilpopup') ? 'active' : '' ?>" href="<?= base_url('admin/tampilpopup') ?>">
                                         <span class="nav-icon">
                                             <i class="bi bi-window-plus"></i>
                                         </span>
@@ -346,7 +347,7 @@ if ($id_user) {
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url($role . '/saldo') ?>">
+                        <a class="nav-link <?= $uri->getSegment(2) == 'saldo' && !$uri->getSegment(3) ? 'active' : '' ?>" href="<?= base_url($role . '/saldo') ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-wallet2"></i>
                             </span>
@@ -355,7 +356,7 @@ if ($id_user) {
                     </li>
                     <?php if (session()->get('role') === 'admin'): ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/saldo/permintaan') ?>">
+                            <a class="nav-link <?= ($uri->getSegment(2) == 'saldo' && $uri->getSegment(3) == 'permintaan') ? 'active' : '' ?>" href="<?= base_url('admin/saldo/permintaan') ?>">
                                 <span class="nav-icon">
                                     <i class="bi bi-arrow-repeat"></i>
                                 </span>
@@ -363,7 +364,7 @@ if ($id_user) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/riwayatkomisi') ?>">
+                            <a class="nav-link <?= ($uri->getSegment(2) == 'riwayatkomisi') ? 'active' : '' ?>" href="<?= base_url('admin/riwayatkomisi') ?>">
                                 <span class="nav-icon">
                                     <i class="bi bi-percent"></i>
                                 </span>
@@ -380,7 +381,7 @@ if ($id_user) {
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/meta/index') ?>">
+                        <a class="nav-link <?= ($uri->getSegment(2) === 'meta') ? 'active' : '' ?>" href="<?= base_url('admin/meta/index') ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-card-checklist"></i>
                             </span>
@@ -388,7 +389,7 @@ if ($id_user) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/tentang/edit') ?>">
+                        <a class="nav-link <?= ($uri->getSegment(2) === 'tentang') ? 'active' : '' ?>" href="<?= base_url('admin/tentang/edit') ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-info-circle"></i>
                             </span>
@@ -396,7 +397,7 @@ if ($id_user) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/users') ?>">
+                        <a class="nav-link <?= ($uri->getSegment(2) === 'users') ? 'active' : '' ?>" href="<?= base_url('admin/users') ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-people-fill"></i>
                             </span>
@@ -404,7 +405,7 @@ if ($id_user) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('admin/userRequest') ?>">
+                        <a class="nav-link <?= ($uri->getSegment(2) === 'userRequest') ? 'active' : '' ?>" href="<?= base_url('admin/userRequest') ?>">
                             <span class="nav-icon">
                                 <i class="bi bi-people-fill"></i>
                             </span>

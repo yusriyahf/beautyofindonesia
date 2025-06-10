@@ -14,7 +14,11 @@ class KategoriOlehOlehModel extends Model
         'nama_kategori_oleholeh',
         'nama_kategori_oleholeh_en',
         'slug_kategori_oleholeh',
-        'slug_kategori_oleholeh_en'
+        'slug_kategori_oleholeh_en',
+        'meta_title_id',
+        'meta_title_en',
+        'meta_description_id',
+        'meta_description_en'
     ];
 
     public function getKategoriOlehOleh()

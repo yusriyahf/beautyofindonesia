@@ -7,8 +7,8 @@
         <div class="dashboard-header bg-gradient-primary rounded-4 p-4 mb-4 text-white shadow">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 class="mb-2 text-white"><i class="fas fa-ad me-2 text-white"></i> Daftar Permintaan Tampil Iklan</h1>
-                    <p class="mb-0 opacity-75">Kelola semua permintaan artikel beriklan di sini</p>
+                    <h1 class="mb-2 text-white"><i class="fas fa-ad me-2 text-white"></i> Permintaan Iklan Utama</h1>
+                    <p class="mb-0 opacity-75">Kelola semua artikel iklan utama di sini</p>
                 </div>
             </div>
         </div>
@@ -72,10 +72,10 @@
 
                         <!-- Action Buttons -->
                         <div class="col-md-3 d-flex">
-                            <a href="<?= base_url('admin/artikel_iklan') ?>" class="btn btn-outline-secondary me-2 flex-grow-1">
+                            <button type="button" id="resetButton" class="btn btn-outline-secondary me-2 flex-grow-1">
                                 <i class="fas fa-undo me-1"></i> Reset
-                            </a>
-                            <button type="submit" class="btn btn-info flex-grow-1 text-white">
+                            </button>
+                            <button type="button" id="filterButton" class="btn btn-info flex-grow-1 text-white">
                                 <i class="fas fa-filter me-1"></i> Filter
                             </button>
                         </div>
@@ -115,10 +115,14 @@
                             <tbody>
                                 <?php $i = 1; ?>
                                 <?php foreach ($all_data_iklan_utama as $iklan) : ?>
-                                    <tr>
+                                    <tr class="table-row"
+                                        data-start-date="<?= date('Y-m-d', strtotime($iklan['tanggal_mulai'] ?? '')) ?>"
+                                        data-end-date="<?= date('Y-m-d', strtotime($iklan['tanggal_selesai'] ?? '')) ?>"
+                                        data-status="<?= strtolower($iklan['status']) ?>">
+
                                         <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td><?= esc($iklan['jenis'] ?? 'N/A') ?></td>
-                                        <td><?= esc($iklan['id_tipe_iklan_utama'] ?? 'N/A') ?></td>
+                                        <td><?= esc($iklan['nama'] ?? 'N/A') ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 me-2">
@@ -128,7 +132,7 @@
                                                     </span>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <?= esc($iklan['id_marketing'] ?? 'N/A') ?>
+                                                    <?= esc($iklan['full_name'] ?? 'N/A') ?>
                                                 </div>
                                             </div>
                                         </td>
@@ -1035,6 +1039,55 @@
                 });
             }
         });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        const statusSelect = document.getElementById('status');
+        const resetBtn = document.getElementById('resetButton');
+        const rows = document.querySelectorAll('.table-row');
+
+        function applyFilters() {
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+            const status = statusSelect.value.toLowerCase();
+
+            rows.forEach(row => {
+                const rowStart = row.dataset.startDate || '';
+                const rowEnd = row.dataset.endDate || '';
+                const rowStatus = row.dataset.status || '';
+
+                let show = true;
+
+                if (startDate && rowStart) {
+                    show = show && (rowStart >= startDate);
+                }
+
+                if (endDate && rowEnd) {
+                    show = show && (rowEnd <= endDate);
+                }
+
+                if (status) {
+                    show = show && (rowStatus === status);
+                }
+
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function resetFilters() {
+            startDateInput.value = '';
+            endDateInput.value = '';
+            statusSelect.value = '';
+            applyFilters();
+        }
+
+        startDateInput.addEventListener('change', applyFilters);
+        endDateInput.addEventListener('change', applyFilters);
+        statusSelect.addEventListener('change', applyFilters);
+
+        resetBtn.addEventListener('click', resetFilters);
     });
 
     function setupModalFunctionality(config) {

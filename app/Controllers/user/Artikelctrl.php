@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers\user;
+namespace App\Controllers\User;
 
-use App\Controllers\user\BaseController;
+use App\Controllers\User\BaseController;
 use App\Models\ArtikelModel;
 use App\Models\IklanUtamaModel;
 use App\Models\KategoriModel;

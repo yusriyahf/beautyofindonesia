@@ -16,6 +16,7 @@ if ($id_user) {
     }
 }
 ?>
+<?php $role = session()->get('role'); ?>
 
 <header class="app-header fixed-top">
     <div class="app-header-inner">
@@ -52,7 +53,8 @@ if ($id_user) {
                             >
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
-                            <li><a href="<?= base_url('admin/profile') ?>" class="dropdown-item"><i class="fa-solid fa-user"></i> Detail Profile</a></li>
+
+                            <li><a href="<?= base_url($role . '/profile/index') ?>" class="dropdown-item"><i class="fa-solid fa-user"></i> Detail Profile</a></li>
                             <li><a class="dropdown-item" href="<?= site_url('logout') ?>" style="color: red;"><i class="fa-solid fa-right-from-bracket" style="color: #ff0000;"></i> Log Out</a></li>
                         </ul>
                     </div><!--//app-user-dropdown-->

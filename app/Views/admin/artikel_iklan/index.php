@@ -70,10 +70,10 @@
 
                         <!-- Action Buttons -->
                         <div class="col-md-3 d-flex">
-                            <a href="<?= base_url('admin/artikel_iklan') ?>" class="btn btn-outline-secondary me-2 flex-grow-1">
+                            <button type="button" id="resetButton" class="btn btn-outline-secondary me-2 flex-grow-1">
                                 <i class="fas fa-undo me-1"></i> Reset
-                            </a>
-                            <button type="submit" class="btn btn-info flex-grow-1 text-white">
+                            </button>
+                            <button type="button" id="filterButton" class="btn btn-info flex-grow-1 text-white">
                                 <i class="fas fa-filter me-1"></i> Filter
                             </button>
                         </div>
@@ -106,7 +106,7 @@
                                     <th width="120" class="text-center">Tanggal Mulai</th>
                                     <th width="120" class="text-center">Tanggal Selesai</th>
                                     <th width="120" class="text-center">Status</th>
-                                    <th width="120" class="text-center">Kontak</th>
+                                    <th width="120" class="text-center">Kontak Pengaju</th>
                                     <th width="140" class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -156,7 +156,10 @@
                                             break;
                                     }
                                     ?>
-                                    <tr>
+                                    <tr class="table-row"
+                                        data-start-date="<?= date('Y-m-d', strtotime($artikelIklan['tanggal_mulai'] ?? '')) ?>"
+                                        data-end-date="<?= date('Y-m-d', strtotime($artikelIklan['tanggal_selesai'] ?? '')) ?>"
+                                        data-status="<?= strtolower($status) ?>">
                                         <td class="text-center text-muted"><?= $i++ ?></td>
                                         <td>
                                             <div class="fw-medium text-truncate" style="max-width: 200px;"><?= esc($artikelIklan['judul_konten'] ?? 'N/A') ?></div>
@@ -212,8 +215,8 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            <?php if (!empty($artikelIklan['kontak'])) : ?>
-                                                <a href="https://wa.me/<?= esc($artikelIklan['kontak']) ?>" target="_blank" class="btn btn-sm btn-outline-success">
+                                            <?php if (!empty($artikelIklan['no_pengaju'])) : ?>
+                                                <a href="https://wa.me/<?= esc($artikelIklan['no_pengaju']) ?>" target="_blank" class="btn btn-sm btn-outline-success">
                                                     <i class="fab fa-whatsapp me-1"></i> Hubungi
                                                 </a>
                                             <?php else : ?>
@@ -274,6 +277,14 @@
                                                                 <li><i class="fas fa-ad me-2 text-success"></i>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
                                                                 <li><i class="fas fa-calendar-alt me-2 text-warning"></i>Durasi: <strong><?= $artikelIklan['rentang_bulan'] ?> Bulan</strong></li>
                                                                 <li><i class="fas fa-money-bill-wave me-2 text-danger"></i>Total Harga: <strong>Rp <?= number_format($artikelIklan['total_harga'], 0, ',', '.') ?></strong></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="info-list mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-clipboard-list me-2"></i>Informasi Marketing</h6>
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nama Marketing: <strong><?= esc($artikelIklan['username']) ?></strong></li>
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nomor Marketing: <strong><?= esc($artikelIklan['kontak']) ?></strong></li>
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nomor Klien: <strong><?= esc($artikelIklan['no_pengaju']) ?></strong></li>
                                                             </ul>
                                                         </div>
 
@@ -454,17 +465,19 @@
 
                                                     <div class="modal-body">
                                                         <div class="mb-3">
+                                                            <p>Anda akan menolak permintaan tampil iklan ini:</p>
+                                                            <ul class="mb-3">
+                                                                <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_konten']) ?></strong></li>
+                                                                <li>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
+                                                                <li>Harga: <strong><?= esc($artikelIklan['total_harga']) ?></strong></li>
+                                                            </ul>
                                                             <label for="alasan_penolakan<?= $artikelIklan['id_iklan'] ?>" class="form-label">
                                                                 <i class="fas fa-comment me-2"></i>Alasan Penolakan
                                                             </label>
                                                             <textarea class="form-control" id="alasan_penolakan<?= $artikelIklan['id_iklan'] ?>"
                                                                 name="alasan_penolakan" rows="3" required></textarea>
                                                         </div>
-                                                        <p>Anda akan menolak permintaan tampil iklan ini:</p>
-                                                        <ul class="mb-3">
-                                                            <li>Judul Artikel: <strong><?= esc($artikelIklan['judul_konten']) ?></strong></li>
-                                                            <li>Nama Iklan: <strong><?= esc($artikelIklan['nama_iklan']) ?></strong></li>
-                                                        </ul>
+
                                                     </div>
 
                                                     <div class="modal-footer">
@@ -971,6 +984,55 @@
                 });
             }
         });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        const statusSelect = document.getElementById('status');
+        const resetBtn = document.getElementById('resetButton');
+        const rows = document.querySelectorAll('.table-row');
+
+        function applyFilters() {
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+            const status = statusSelect.value.toLowerCase();
+
+            rows.forEach(row => {
+                const rowStart = row.dataset.startDate || '';
+                const rowEnd = row.dataset.endDate || '';
+                const rowStatus = row.dataset.status || '';
+
+                let show = true;
+
+                if (startDate && rowStart) {
+                    show = show && (rowStart >= startDate);
+                }
+
+                if (endDate && rowEnd) {
+                    show = show && (rowEnd <= endDate);
+                }
+
+                if (status) {
+                    show = show && (rowStatus === status);
+                }
+
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function resetFilters() {
+            startDateInput.value = '';
+            endDateInput.value = '';
+            statusSelect.value = '';
+            applyFilters();
+        }
+
+        startDateInput.addEventListener('change', applyFilters);
+        endDateInput.addEventListener('change', applyFilters);
+        statusSelect.addEventListener('change', applyFilters);
+
+        resetBtn.addEventListener('click', resetFilters);
     });
 
     function setupModalFunctionality(config) {

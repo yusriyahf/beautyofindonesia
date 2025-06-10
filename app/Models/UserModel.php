@@ -17,6 +17,7 @@ class UserModel extends Model
         'role',
         'bank_account_number',
         'contact',
+        'deskripsi_profile',
         'is_active',
         'created_at',
         'updated_at'
@@ -77,7 +78,7 @@ class UserModel extends Model
     // Fungsi untuk mendapatkan data user berdasarkan ID
     public function getUserById($id)
     {
-        return $this->where('id', $id)->first();
+        return $this->where('id_user', $id)->first();
     }
 
     // Fungsi untuk mendapatkan data user berdasarkan username
