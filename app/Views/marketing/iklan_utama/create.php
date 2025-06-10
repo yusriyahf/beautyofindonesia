@@ -23,24 +23,32 @@
                         <form method="post" action="<?= base_url('/marketing/iklanutama/proses_tambah') ?>" enctype="multipart/form-data">
                             <?= csrf_field() ?>
 
-                            <!-- Paket Iklan Section -->
+                            <!-- Paket Iklan Secti  on -->
                             <div class="mb-4">
 
 
                                 <h5 class="mb-3 border-bottom pb-2">
                                     <i class="fas fa-tags me-2"></i>Paket Iklan
                                 </h5>
-                                <img src="<?= base_url('assets\images\iklan\wireframe_beranda.png'); ?>" style="width: 100%; display: block; margin: 0 auto;" alt="" class="mb-3">
-
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Jenis</label>
-                                    <select class="form-control form-control-lg" id="jenis" name="jenis" onchange="filterPaketIklan();">
-                                        <option value="Beranda" <?= old('jenis') == 'Beranda' ? 'selected' : '' ?>>Beranda</option>
-                                        <option value="Wisata" <?= old('jenis') == 'Wisata' ? 'selected' : '' ?>>Wisata</option>
-                                        <option value="Oleh-Oleh" <?= old('jenis') == 'Oleh-Oleh' ? 'selected' : '' ?>>Oleh-Oleh</option>
-                                        <option value="Artikel" <?= old('jenis') == 'Artikel' ? 'selected' : '' ?>>Artikel</option>
-                                    </select>
-                                </div>
+                                 <div class="alert alert-info mb-4">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <div>
+                                                <strong>Perhatian:</strong> Gambar di bawah menunjukkan posisi iklan Anda akan ditampilkan
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <img id="previewImage" src="" style="width: 100%; display: block; margin: 0 auto;" alt="Preview Iklan" class="mb-3">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Jenis</label>
+                                        <select class="form-control form-control-lg" id="jenis" name="jenis" onchange="filterPaketIklan();">
+                                            <option value="">-- Pilih Jenis --</option>
+                                            <option value="Beranda" <?= old('jenis') == 'Beranda' ? 'selected' : '' ?>>Beranda</option>
+                                            <option value="Wisata" <?= old('jenis') == 'Wisata' ? 'selected' : '' ?>>Wisata</option>
+                                            <option value="Oleh-Oleh" <?= old('jenis') == 'Oleh-Oleh' ? 'selected' : '' ?>>Oleh-Oleh</option>
+                                            <option value="Artikel" <?= old('jenis') == 'Artikel' ? 'selected' : '' ?>>Artikel</option>
+                                        </select>   
+                                    </div>
 
 
                                 <div class="mb-3">
@@ -181,34 +189,47 @@
         }
     }
 
-    function filterPaketIklan() {
-        const jenisTerpilih = document.getElementById('jenis').value;
-        const paketSelect = document.getElementById('id_tipe_iklan_utama');
-        const options = paketSelect.querySelectorAll('option');
-        const img = document.getElementById('previewImage');
+ function filterPaketIklan() {
+    const jenisSelect = document.getElementById("jenis");
+    const jenisTerpilih = jenisSelect.value;
+    const paketSelect = document.getElementById("id_tipe_iklan_utama");
+    const options = document.querySelectorAll("#id_tipe_iklan_utama  option");
+    const img = document.getElementById("previewImage");
 
-        if (jenisTerpilih) {
-            // Tampilkan dropdown
-            paketSelect.disabled = false;
+    const imageMap = {
+        "Beranda": "wireframe_beranda.png",
+        "Artikel": "wireframe_artikel.png",
+        "Wisata": "wireframe_wisata.png",
+        "Oleh-Oleh": "wireframe_oleholeh.png" // <== yang benar
+    };
 
-            // Tampilkan option yang sesuai jenis
-            options.forEach(option => {
-                const jenis = option.getAttribute('data-jenis');
-                option.style.display = (!jenis || jenis === jenisTerpilih) ? '' : 'none';
-            });
+    if (jenisTerpilih && imageMap[jenisTerpilih]) {
+        // Aktifkan dropdown
+        paketSelect.disabled = false;
 
-            // Ubah gambar sesuai jenis
-            const fileName = `wireframe_${jenisTerpilih.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z\-]/g, '')}.png`;
-            img.src = `<?= base_url('assets/images/iklan/'); ?>${fileName}`;
-        } else {
-            paketSelect.disabled = true;
-            paketSelect.value = '';
-            options.forEach(option => option.style.display = 'none');
+        // Filter opsi
+        options.forEach(option => {
+            const jenis = option.getAttribute('data-jenis');
+            option.style.display = (!jenis || jenis === jenisTerpilih) ? '' : 'none';
+        });
 
-            // Reset gambar (jika ingin default)
-            img.src = '<?= base_url('assets/images/iklan/wireframe_beranda.png'); ?>';
-        }
+        // Tampilkan gambar dari mapping
+        img.src = "<?= base_url('assets/images/') ?>" + imageMap[jenisTerpilih];
+        img.style.display = "block";
+
+    } else {
+        // Reset kalau belum pilih
+        paketSelect.disabled = true;
+        paketSelect.value = '';
+        options.forEach(option => option.style.display = 'none');
+        img.src = ""; // Kosongin atau kasih default
+        img.style.display = "none";
     }
+}
+
+
+
+
 </script>
 
 <?= $this->endSection('content'); ?>

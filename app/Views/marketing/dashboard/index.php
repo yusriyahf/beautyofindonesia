@@ -4,10 +4,7 @@
    
 <div class="dashboard-wrapper" style="padding: 20px; background: #f5f7fa;">
 
-  <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-    <h1 style="font-size: 24px; font-weight: 600;"> Dashboard Marketing -Beauty Of Indonesia</h1>
-    <p>Selamat datang, <?= esc($username) ?>!</p>
-  </div>
+  
 
     <!-- Header Section -->
   <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
