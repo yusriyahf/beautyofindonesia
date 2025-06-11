@@ -235,6 +235,43 @@
                                                             <strong>Perhatian:</strong> Anda akan menyetujui permintaan tampil iklan berikut ini.
                                                         </div>
 
+                                                        <!-- Tambahan: Gambar Iklan -->
+                                                        <div class="mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-image me-2"></i>Gambar Iklan</h6>
+                                                            <?php if (!empty($iklan['thumbnail_iklan'])): ?>
+                                                                <img src="<?= base_url('assets/images/iklan_utama/' . $iklan['thumbnail_iklan']) ?>"
+                                                                    class="img-thumbnail"
+                                                                    style="max-height: 200px;">
+                                                            <?php else: ?>
+                                                                <div class="alert alert-warning">
+                                                                    <i class="fas fa-exclamation-triangle me-2"></i>Tidak ada gambar iklan yang diupload
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+
+                                                        <!-- Tambahan: Link Iklan -->
+                                                        <div class="mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-link me-2"></i>Link Iklan</h6>
+                                                            <?php if (!empty($iklan['link_iklan'])): ?>
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        class="form-control"
+                                                                        value="<?= esc($iklan['link_iklan']) ?>"
+                                                                        readonly>
+                                                                    <button class="btn btn-outline-primary"
+                                                                        type="button"
+                                                                        onclick="window.open('<?= esc($iklan['link_iklan']) ?>', '_blank')">
+                                                                        <i class="fas fa-external-link-alt"></i> Buka Link
+                                                                    </button>
+                                                                </div>
+                                                                <small class="text-muted">Klik tombol untuk membuka link di tab baru</small>
+                                                            <?php else: ?>
+                                                                <div class="alert alert-warning">
+                                                                    <i class="fas fa-exclamation-triangle me-2"></i>Tidak ada link iklan yang dimasukkan
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+
                                                         <!-- Info Iklan -->
                                                         <div class="info-list mb-4">
                                                             <h6 class="text-primary mb-3"><i class="fas fa-clipboard-list me-2"></i>Detail Iklan</h6>

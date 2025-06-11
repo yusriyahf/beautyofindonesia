@@ -272,7 +272,7 @@
                                                     <input type="hidden" name="tipe_content" value="<?= esc($artikelIklan['tipe_content']) ?>">
                                                     <input type="hidden" name="id_content" value="<?= $artikelIklan['id_content'] ?>">
                                                     <input type="hidden" name="durasi_bulan" value="<?= $artikelIklan['rentang_bulan'] ?>">
-                                                    
+
 
                                                     <div class="modal-header modal-header-custom text-white">
                                                         <h5 class="modal-title" id="accModalLabel<?= $artikelIklan['id_iklan'] ?>">
@@ -285,6 +285,44 @@
                                                         <div class="alert alert-info border-0 mb-4">
                                                             <i class="fas fa-info-circle me-2"></i>
                                                             <strong>Perhatian:</strong> Anda akan menyetujui permintaan tampil iklan berikut ini.
+                                                        </div>
+
+                                                        <!-- Tambahan: Gambar Iklan -->
+                                                        <div class="mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-image me-2"></i>Gambar Iklan</h6>
+                                                            <?php if (!empty($artikelIklan['thumbnail_iklan'])): ?>
+                                                                <img src="<?= base_url('assets/images/iklan_konten/' . $artikelIklan['thumbnail_iklan']) ?>"
+                                                                    class="img-thumbnail"
+                                                                    style="max-height: 200px;"
+                                                                    alt="Gambar Iklan <?= esc($artikelIklan['nama_iklan']) ?>">
+                                                            <?php else: ?>
+                                                                <div class="alert alert-warning">
+                                                                    <i class="fas fa-exclamation-triangle me-2"></i>Tidak ada gambar iklan yang diupload
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+
+                                                        <!-- Tambahan: Link Iklan -->
+                                                        <div class="mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-link me-2"></i>Link Iklan</h6>
+                                                            <?php if (!empty($artikelIklan['link_iklan'])): ?>
+                                                                <div class="input-group">
+                                                                    <input type="text"
+                                                                        class="form-control"
+                                                                        value="<?= esc($artikelIklan['link_iklan']) ?>"
+                                                                        readonly>
+                                                                    <button class="btn btn-outline-primary"
+                                                                        type="button"
+                                                                        onclick="window.open('<?= esc($artikelIklan['link_iklan']) ?>', '_blank')">
+                                                                        <i class="fas fa-external-link-alt"></i> Buka Link
+                                                                    </button>
+                                                                </div>
+                                                                <small class="text-muted">Klik tombol untuk membuka link di tab baru</small>
+                                                            <?php else: ?>
+                                                                <div class="alert alert-warning">
+                                                                    <i class="fas fa-exclamation-triangle me-2"></i>Tidak ada link iklan yang dimasukkan
+                                                                </div>
+                                                            <?php endif; ?>
                                                         </div>
 
                                                         <!-- Info Iklan -->
