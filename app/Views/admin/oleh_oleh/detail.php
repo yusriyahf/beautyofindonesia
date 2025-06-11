@@ -106,6 +106,11 @@
                                     <i class="fas fa-search me-1"></i> SEO
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="iklan-tab" data-bs-toggle="tab" data-bs-target="#iklan" type="button" role="tab">
+                                    <i class="fas fa-search me-1"></i> Status Iklan
+                                </button>
+                            </li>
                         </ul>
 
                         <!-- Tab Content -->
@@ -204,6 +209,67 @@
 
                                                 <h6 class="text-muted">English</h6>
                                                 <p><?= $oleholeh['meta_description_en'] ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- iklan tab -->
+                            <div class="tab-pane fade" id="iklan" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card mb-4 border-0 shadow-sm">
+                                            <div class="card-header bg-primary text-white">
+                                                <i class="fas fa-ad me-1"></i> Status Iklan
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <h6 class="text-muted">Iklan Banner</h6>
+                                                    <p>
+                                                        <?php if ($oleholeh['iklan_banner'] == 'ada') : ?>
+                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
+                                                                <i class="fas fa-check-circle me-1"></i> Sedang ada Iklan
+                                                            </span>
+                                                        <?php else : ?>
+                                                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
+                                                                <i class="fas fa-times-circle me-1"></i> Tidak ada Iklan
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </p>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <h6 class="text-muted">Iklan Sidebar</h6>
+                                                    <p>
+                                                        <?php if ($oleholeh['iklan_sidebar'] == 'ada') : ?>
+                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
+                                                                <i class="fas fa-check-circle me-1"></i> Sedang ada Iklan
+                                                            </span>
+                                                        <?php else : ?>
+                                                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
+                                                                <i class="fas fa-times-circle me-1"></i> Tidak ada Iklan
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </p>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <h6 class="text-muted">Iklan Footer</h6>
+                                                    <p>
+                                                        <?php if ($oleholeh['iklan_footer'] == 'ada') : ?>
+                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
+                                                                <i class="fas fa-check-circle me-1"></i> Sedang ada Iklan
+                                                            </span>
+                                                        <?php else : ?>
+                                                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
+                                                                <i class="fas fa-times-circle me-1"></i> Tidak ada Iklan
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </p>
+                                                </div>
+                                                <div class="alert alert-info mt-4">
+                                                    <i class="fas fa-info-circle me-2"></i>
+                                                    Status iklan menunjukkan ketersediaan slot iklan untuk konten ini. "Sedang ada Iklan" berarti slot sedang digunakan, "Tidak ada Iklan" berarti slot tersedia.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

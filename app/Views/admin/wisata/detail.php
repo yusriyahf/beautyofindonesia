@@ -236,6 +236,77 @@
                                 </div>
                             </div>
                         <?php endif; ?>
+
+                        <!-- status iklan -->
+                        <div class="app-card app-card-detail shadow-sm mb-4">
+                            <div class="accordion" id="statusIklanAccordion">
+                                <div class="accordion-item border-0">
+                                    <h2 class="accordion-header" id="headingStatusIklan">
+                                        <button class="accordion-button bg-light fw-semibold px-4 py-3 collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseStatusIklan"
+                                            aria-expanded="false" aria-controls="collapseStatusIklan">
+                                            <i class="fas fa-ad me-2"></i>Status Iklan Artikel
+                                        </button>
+                                    </h2>
+                                    <div id="collapseStatusIklan" class="accordion-collapse collapse"
+                                        aria-labelledby="headingStatusIklan" data-bs-parent="#statusIklanAccordion">
+                                        <div class="accordion-body px-4 py-3">
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label small fw-bold mb-1 d-block text-center">Iklan Banner</label>
+                                                    <div class="text-center">
+                                                        <?php if ($wisata['iklan_banner'] == 'ada') : ?>
+                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
+                                                                <i class="fas fa-check-circle me-1"></i> Sedang ada Iklan
+                                                            </span>
+                                                        <?php else : ?>
+                                                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
+                                                                <i class="fas fa-times-circle me-1"></i> Tidak ada Iklan
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label small fw-bold mb-1 d-block text-center">Iklan Sidebar</label>
+                                                    <div class="text-center">
+                                                        <?php if ($wisata['iklan_sidebar'] == 'ada') : ?>
+                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
+                                                                <i class="fas fa-check-circle me-1"></i> Sedang ada Iklan
+                                                            </span>
+                                                        <?php else : ?>
+                                                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
+                                                                <i class="fas fa-times-circle me-1"></i> Tidak ada Iklan
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label small fw-bold mb-1 d-block text-center">Iklan Footer</label>
+                                                    <div class="text-center">
+                                                        <?php if ($wisata['iklan_footer'] == 'ada') : ?>
+                                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
+                                                                <i class="fas fa-check-circle me-1"></i> Sedang ada Iklan
+                                                            </span>
+                                                        <?php else : ?>
+                                                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10">
+                                                                <i class="fas fa-times-circle me-1"></i> Tidak ada Iklan
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3 small text-muted">
+                                                <p class="mb-1">Keterangan:</p>
+                                                <ul class="mb-0">
+                                                    <li>"Sedang ada Iklan" berarti slot iklan sedang digunakan/dibooking</li>
+                                                    <li>"Tidak ada Iklan" berarti slot iklan tersedia untuk dipesan</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

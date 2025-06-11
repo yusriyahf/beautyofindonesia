@@ -77,11 +77,11 @@
                                         <td class="text-center">
                                             <?php if ($tipe['status'] == 'ada') : ?>
                                                 <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
-                                                    <i class="fas fa-check-circle me-1"></i> Aktif
+                                                    <i class="fas fa-check-circle me-1"></i> Ada Slot Iklan
                                                 </span>
                                             <?php else : ?>
-                                                <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10">
-                                                    <i class="fas fa-times-circle me-1"></i> Nonaktif
+                                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10">
+                                                    <i class="fas fa-times-circle me-1"></i> Tidak ada Slot Iklan
                                                 </span>
                                             <?php endif; ?>
                                         </td>

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Elecomp Indonesia</title>
+    <title>BeautyofIndonesia Login</title>
 
     <!-- Meta -->
     <meta charset="utf-8">

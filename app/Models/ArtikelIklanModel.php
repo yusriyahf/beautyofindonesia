@@ -228,20 +228,50 @@ class ArtikelIklanModel extends Model
     public function getAktivitasIklan($user_id)
     {
         return $this->select("tanggal_mulai as tanggal, 'iklan' as jenis, 'Iklan ditayangkan di artikel Anda' as keterangan")
-                    ->where('id_marketing', $user_id)
-                    ->where('tanggal_mulai IS NOT NULL', null, false)
-                    ->where('LENGTH(tanggal_mulai) > 0', null, false)
-                    ->orderBy('tanggal_mulai', 'DESC')
-                    ->findAll();
+            ->where('id_marketing', $user_id)
+            ->where('tanggal_mulai IS NOT NULL', null, false)
+            ->where('LENGTH(tanggal_mulai) > 0', null, false)
+            ->orderBy('tanggal_mulai', 'DESC')
+            ->findAll();
     }
 
     public function getDiajukanAktivitas()
     {
         return $this->select('dibuat_pada AS tanggal')
-                    ->where('status_iklan', 'diajukan')
-                    ->findAll();
+            ->where('status_iklan', 'diajukan')
+            ->findAll();
     }
 
+    public function getLinkIklanByArtikelId($id_artikel)
+    {
+        return $this->db->table('tb_artikel_iklan')
+            ->select('link_iklan, thumbnail_iklan')
+            ->where('id_content', $id_artikel)
+            ->where('tipe_content', 'artikel')
+            ->where('status_iklan', 'berjalan') // ambil hanya iklan yang aktif
+            ->get()
+            ->getRowArray();
+    }
 
+    public function getTipeIklanArtikel($id_content, $tipe_konten)
+    {
+        return $this->db->table('tb_artikel_iklan')
+            ->select('tb_artikel_iklan.id_content, tb_harga_iklan.nama')
+            ->where('tb_artikel_iklan.id_content', $id_content)
+            ->where('tb_artikel_iklan.tipe_content', $tipe_konten)
+            ->join('tb_harga_iklan', 'tb_harga_iklan.id_harga_iklan = tb_artikel_iklan.id_harga_iklan')
+            ->get()
+            ->getResult();
+    }
 
+    public function updateCustomField($id_content, $column, $tipe_content)
+    {
+        $table = 'tb_' . $tipe_content;
+        $column = ($column === 'iklan_header') ? 'iklan_banner' : $column;
+        $id = ($tipe_content === 'tempatwisata') ? 'id_wisata' : 'id_' . $tipe_content;
+
+        return $this->db->table($table)
+            ->where($id, $id_content)
+            ->update([$column => 'ada']);
+    }
 }

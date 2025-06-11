@@ -58,20 +58,29 @@ class IklanUtamaController extends BaseController
         $komisiAdmin = $komisiModel->find(4);
         // Ambil komisi marketing (id 5)
         $komisiMarketing = $komisiModel->find(5);
-        foreach ($all_data_iklan_utama as &$iklan) {
+        foreach ($all_data_iklan_utama as $iklan) {
             $harga = $this->TipeIklanUtama->find($iklan['id_tipe_iklan_utama']);
             $iklan['nama'] = $harga['nama'] ?? 'Tidak ditemukan';
-
-            // Ambil username dari tb_users
-            $user = $this->UserModel->find($iklan['id_marketing']);
-            $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
         }
+
+        // Ambil data user dari UserModel berdasarkan id_marketing
+        $user = $this->UserModel->find($iklan['id_marketing'] ?? 0);
+
+        // Isi nilai default jika user tidak ditemukan
+        $infoUser['username'] = $user['username'] ?? 'Tidak ditemukan';
+        $infoUser['kontak']   = $user['kontak'] ?? 'Tidak ditemukan';
+
+
+        $nopengaju = $this->iklanUtamaModel->find($iklan['id_iklan_utama'] ?? 0);
+        $infoUser['no_pengaju'] = $nopengaju['no_pengaju'] ?? 'Tidak ditemukan';
+
         return view('admin/iklan_utama/index', [
             'komisiMarketing' => (float)$komisiMarketing['komisi'],
             'komisiPenulis' => 0, // Diset 0 sesuai permintaan
             'komisiAdmin' => (float)$komisiAdmin['komisi'],
             'all_data_iklan_utama' => $all_data_iklan_utama,
-            'validation' => $validation
+            'validation' => $validation,
+            'infoUser' => $infoUser,
         ]);
     }
 
@@ -196,6 +205,15 @@ class IklanUtamaController extends BaseController
             if (!$this->iklanUtamaModel->update($idIklan, $updateData)) {
                 throw new \Exception('Gagal mengupdate status iklan');
             }
+
+            // update status iklan di artikel
+            $data = $this->iklanUtamaModel->getAllIklanUtamaWithTipe($idTipeIklan);
+
+            foreach ($data as $row) {
+                $sanitizedName = $row->nama_tipe; // langsung pakai nama di tb_tipe_iklan_utama
+                $this->iklanUtamaModel->updateStatusTipeIklan($sanitizedName, 'tidak');
+            }
+
 
             // 2. Handle komisi hanya jika status diterima
             if ($status == 'diterima') {
@@ -531,24 +549,23 @@ class IklanUtamaController extends BaseController
     }
 
     public function detail($id)
-{
-    // Ambil detail iklan utama dengan join ke user dan tipe
-    $iklan = $this->iklanUtamaModel->getDetailWithUserAndTipe($id);
+    {
+        // Ambil detail iklan utama dengan join ke user dan tipe
+        $iklan = $this->iklanUtamaModel->getDetailWithUserAndTipe($id);
 
-    if (!$iklan) {
-        return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        if (!$iklan) {
+            return redirect()->back()->with('error', 'Data iklan tidak ditemukan.');
+        }
+
+        // Ambil data komisi terkait iklan ini
+        $komisi = $this->komisiIklanModel
+            ->where('id_iklan', $id)
+            ->where('tipe_iklan', 'utama')
+            ->findAll();
+
+        return view('admin/iklan_utama/detail', [
+            'iklan' => $iklan,
+            'komisi' => $komisi
+        ]);
     }
-
-    // Ambil data komisi terkait iklan ini
-    $komisi = $this->komisiIklanModel
-        ->where('id_iklan', $id)
-        ->where('tipe_iklan', 'utama')
-        ->findAll();
-
-    return view('admin/iklan_utama/detail', [
-        'iklan' => $iklan,
-        'komisi' => $komisi
-    ]);
-}
-
 }

@@ -245,6 +245,15 @@
                                                             </ul>
                                                         </div>
 
+                                                        <div class="info-list mb-4">
+                                                            <h6 class="text-primary mb-3"><i class="fas fa-clipboard-list me-2"></i>Informasi Marketing</h6>
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nama Marketing: <strong><?= esc($infoUser['username']) ?></strong></li>
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nomor Marketing: <strong><?= esc($infoUser['kontak']) ?></strong></li>
+                                                                <li><i class="fas fa-newspaper me-2 text-primary"></i>Nomor Klien: <strong><?= esc($infoUser['no_pengaju']) ?></strong></li>
+                                                            </ul>
+                                                        </div>
+
                                                         <div class="row mb-4">
                                                             <div class="col-md-6">
                                                                 <div class="mb-3">

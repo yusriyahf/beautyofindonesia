@@ -41,4 +41,19 @@ class KomisiModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getDefaultKomisiIklanKonten()
+    {
+        $data = [];
+        foreach (['admin', 'marketing', 'penulis'] as $role) {
+            $result = $this->select('komisi')
+                           ->where('nama', $role)
+                           ->orderBy('id', 'ASC')
+                           ->limit(1)
+                           ->get()
+                           ->getRow();
+            $data[$role] = $result ? (float)$result->komisi : 0;
+        }
+        return $data;
+    }
 }

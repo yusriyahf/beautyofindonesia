@@ -186,28 +186,45 @@
                                         <td class="text-center">
                                             <?= esc($artikelIklan['rentang_bulan'] ?? 'N/A') ?> Bulan
                                         </td>
+                                        <?php
+                                        $tanggalMulai = $artikelIklan['tanggal_mulai'] ?? null;
+                                        $tanggalSelesai = $artikelIklan['tanggal_selesai'] ?? null;
+                                        $statusIklan = $artikelIklan['status_iklan'] ?? null;
+
+                                        // Logika badge tanggal mulai
+                                        if ($statusIklan === 'ditolak') {
+                                            $badgeMulai = ['text' => 'Iklan sudah ditolak', 'color' => 'danger'];
+                                        } elseif ($statusIklan === 'diajukan') {
+                                            $badgeMulai = ['text' => 'Menunggu diproses', 'color' => 'warning'];
+                                        } elseif ($tanggalMulai) {
+                                            $badgeMulai = ['text' => date('d M Y', strtotime($tanggalMulai)), 'color' => 'success'];
+                                        } else {
+                                            $badgeMulai = ['text' => 'Belum ditentukan', 'color' => 'secondary'];
+                                        }
+
+                                        // Logika badge tanggal selesai
+                                        if ($statusIklan === 'ditolak') {
+                                            $badgeSelesai = ['text' => 'Iklan sudah ditolak', 'color' => 'danger'];
+                                        } elseif ($statusIklan === 'diajukan') {
+                                            $badgeSelesai = ['text' => 'Menunggu diproses', 'color' => 'warning'];
+                                        } elseif ($tanggalSelesai) {
+                                            $badgeSelesai = ['text' => date('d M Y', strtotime($tanggalSelesai)), 'color' => 'success'];
+                                        } else {
+                                            $badgeSelesai = ['text' => 'Belum ditentukan', 'color' => 'secondary'];
+                                        }
+                                        ?>
+
                                         <td class="text-center">
-                                            <?php if (!empty($artikelIklan['tanggal_mulai'])) : ?>
-                                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
-                                                    <?= date('d M Y', strtotime($artikelIklan['tanggal_mulai'])) ?>
-                                                </span>
-                                            <?php else : ?>
-                                                <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10">
-                                                    Belum ditentukan
-                                                </span>
-                                            <?php endif; ?>
+                                            <span class="badge bg-<?= $badgeMulai['color'] ?> bg-opacity-10 text-<?= $badgeMulai['color'] ?> border border-<?= $badgeMulai['color'] ?> border-opacity-10">
+                                                <?= $badgeMulai['text'] ?>
+                                            </span>
                                         </td>
                                         <td class="text-center">
-                                            <?php if (!empty($artikelIklan['tanggal_selesai'])) : ?>
-                                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">
-                                                    <?= date('d M Y', strtotime($artikelIklan['tanggal_selesai'])) ?>
-                                                </span>
-                                            <?php else : ?>
-                                                <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10">
-                                                    Belum ditentukan
-                                                </span>
-                                            <?php endif; ?>
+                                            <span class="badge bg-<?= $badgeSelesai['color'] ?> bg-opacity-10 text-<?= $badgeSelesai['color'] ?> border border-<?= $badgeSelesai['color'] ?> border-opacity-10">
+                                                <?= $badgeSelesai['text'] ?>
+                                            </span>
                                         </td>
+
                                         <td class="text-center">
                                             <span class="badge <?= $badgeClass ?>">
                                                 <i class="fas fa-circle me-1" style="font-size: 6px; vertical-align: middle;"></i>
@@ -255,6 +272,7 @@
                                                     <input type="hidden" name="tipe_content" value="<?= esc($artikelIklan['tipe_content']) ?>">
                                                     <input type="hidden" name="id_content" value="<?= $artikelIklan['id_content'] ?>">
                                                     <input type="hidden" name="durasi_bulan" value="<?= $artikelIklan['rentang_bulan'] ?>">
+                                                    
 
                                                     <div class="modal-header modal-header-custom text-white">
                                                         <h5 class="modal-title" id="accModalLabel<?= $artikelIklan['id_iklan'] ?>">

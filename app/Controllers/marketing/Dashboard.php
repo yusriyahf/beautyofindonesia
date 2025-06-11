@@ -23,8 +23,12 @@ class Dashboard extends BaseController
         $wisataModel = new TempatWisataModel();
         $artikelIklanModel = new ArtikelIklanModel();
         $usersModel = new UsersModel();
+
         $ArtikelIklanModel = new \App\Models\ArtikelIklanModel();
         $ArtikelIklanModel->updateStatusIklan();
+        $IklanUtamaModel = new \App\Models\IklanUtamaModel();
+        $IklanUtamaModel->updateStatusIklan();
+
         $pemasukanModel = new PemasukanUserModel();
         $penarikanModel = new \App\Models\PenarikanUserModel();
 

@@ -5,7 +5,7 @@
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="app-page-title mb-0">Buat Iklan Baru</h1>
-            <?= $role = session()->get('role'); ?>
+            <?php $role = session()->get('role'); ?>
             <a href="<?= base_url($role . '/daftariklankonten') ?>" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i> Kembali
             </a>
@@ -21,8 +21,6 @@
                     </div>
 
                     <div class="app-card-body">
-
-                        <?= $role = session()->get('role'); ?>
                         <form method="post" action="<?= base_url($role . '/daftariklankonten/proses_tambah') ?>" enctype="multipart/form-data" class="needs-validation" novalidate>
                             <?= csrf_field() ?>
 

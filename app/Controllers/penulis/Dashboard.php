@@ -23,9 +23,15 @@ class Dashboard extends BaseController
         $pemasukanModel = new PemasukanUserModel();
         $penulisModel = new PenulisModel();
         $usersModel = new UsersModel();
+
         $ArtikelIklanModel = new \App\Models\ArtikelIklanModel();
         $ArtikelIklanModel->updateStatusIklan();
+
+        $IklanUtamaModel = new \App\Models\IklanUtamaModel();
+        $IklanUtamaModel->updateStatusIklan();
+        
         $penarikanModel = new \App\Models\PenarikanUserModel();
+
         $iklanModel = new \App\Models\ArtikelIklanModel();
 
         $userData = $usersModel->getUsernameById($id_user);

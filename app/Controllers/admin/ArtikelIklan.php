@@ -41,7 +41,7 @@ class ArtikelIklan extends BaseController
         $startDate = $this->request->getGet('start_date');
         $endDate = $this->request->getGet('end_date');
         $status = $this->request->getGet('status');
-        
+
         $all_data = $this->artikelIklanModel->getArtikelByFilter();
         $validation = \Config\Services::validation();
         foreach ($all_data as &$iklan) {
@@ -254,7 +254,7 @@ class ArtikelIklan extends BaseController
 
         try {
             $idIklan = $this->request->getPost('id_iklan');
-            $status = $this->request->getPost('status');
+            $status = $this->request->getPost('status_iklan');
             $tanggalMulai = $this->request->getPost('tanggal_mulai');
             $tanggalSelesai = $this->request->getPost('tanggal_selesai');
             $totalHarga = floatval($this->request->getPost('total_harga'));
@@ -275,75 +275,83 @@ class ArtikelIklan extends BaseController
                 throw new \Exception('Gagal mengupdate status iklan');
             }
 
-            // 2. Handle komisi custom jika dipilih
-            if ($status == 'diterima') {
-            if ($useCustomCommission == '1') {
-                $komisiMarketing = floatval($this->request->getPost('komisi_marketing') ?? 0);
-                $komisiPenulis = floatval($this->request->getPost('komisi_penulis') ?? 0);
-                $komisiAdmin = floatval($this->request->getPost('komisi_admin') ?? 0);
-
-                // Validasi total komisi tidak lebih dari 100%
-                $totalKomisiPersen = $komisiMarketing + $komisiPenulis + $komisiAdmin;
-                if ($totalKomisiPersen > 100) {
-                    throw new \Exception('Total komisi tidak boleh melebihi 100%');
-                }
-
-                // Dapatkan user ID untuk masing-masing peran
-                $penulisId = $this->getPenulisId($tipeContent, $idContent);
-                $adminId = $this->getAdminId();
-
-                // Validasi apakah semua user ID ditemukan
-                if (!$penulisId) {
-                    throw new \Exception("Penulis tidak ditemukan untuk {$tipeContent} ID: {$idContent}");
-                }
-
-                if (!$adminId) {
-                    throw new \Exception("Admin tidak ditemukan");
-                }
-
-                // Simpan komisi custom ke tb_komisi_iklan
-                $komisiData = [
-                    [
-                        'id_iklan' => (int)$idIklan,
-                        'id_user' => (int)$idMarketing, // Marketing user
-                        'tipe_iklan' => 'konten',
-                        'peran' => 'marketing',
-                        'persen' => (int)$komisiMarketing,
-                        'jumlah_komisi' => (int)round($totalHarga * $komisiMarketing / 100),
-                        'created_at' => date('Y-m-d H:i:s')
-                    ],
-                    [
-                        'id_iklan' => (int)$idIklan,
-                        'id_user' => (int)$penulisId, // Penulis user
-                        'tipe_iklan' => 'konten',
-                        'peran' => 'penulis',
-                        'persen' => (int)$komisiPenulis,
-                        'jumlah_komisi' => (int)round($totalHarga * $komisiPenulis / 100),
-                        'created_at' => date('Y-m-d H:i:s')
-                    ],
-                    [
-                        'id_iklan' => (int)$idIklan,
-                        'id_user' => (int)$adminId, // Admin user
-                        'tipe_iklan' => 'konten',
-                        'peran' => 'admin',
-                        'persen' => (int)$komisiAdmin,
-                        'jumlah_komisi' => (int)round($totalHarga * $komisiAdmin / 100),
-                        'created_at' => date('Y-m-d H:i:s')
-                    ]
-                ];
-
-                // Hapus komisi custom sebelumnya jika ada
-                $this->komisiIklanModel->where('id_iklan', $idIklan)->delete();
-
-                // Insert komisi custom baru
-                if (!$this->komisiIklanModel->insertBatch($komisiData)) {
-                    throw new \Exception('Gagal menyimpan komisi custom');
-                }
+            // update status iklan di artikel
+            $data = $this->artikelIklanModel->getTipeIklanArtikel($idContent, $tipeContent);
+            foreach ($data as $row) {
+                $sanitizedName = strtolower(str_replace(' ', '_', $row->nama));
+                $this->artikelIklanModel->updateCustomField($row->id_content, $sanitizedName, $tipeContent);
             }
 
-            // 3. Proses perhitungan dan penyimpanan komisi ke tb_pemasukan_komisi
-            $this->prosesKomisiPemasukan($idIklan, $totalHarga, $idMarketing, $tipeContent, $idContent);
-        }
+            // 2. Handle komisi custom jika dipilih
+            if ($status == 'diterima') {
+
+                if ($useCustomCommission == '1') {
+                    $komisiMarketing = floatval($this->request->getPost('komisi_marketing') ?? 0);
+                    $komisiPenulis = floatval($this->request->getPost('komisi_penulis') ?? 0);
+                    $komisiAdmin = floatval($this->request->getPost('komisi_admin') ?? 0);
+                    
+                    $totalKomisiPersen = $komisiMarketing + $komisiPenulis + $komisiAdmin;
+                    if ($totalKomisiPersen > 100) {
+                        throw new \Exception('Total komisi tidak boleh melebihi 100%');
+                    }
+
+                    // Dapatkan user ID untuk masing-masing peran
+                    $penulisId = $this->getPenulisId($tipeContent, $idContent);
+                    $adminId = $this->getAdminId();
+
+                    // Validasi apakah semua user ID ditemukan
+                    if (!$penulisId) {
+                        throw new \Exception("Penulis tidak ditemukan untuk {$tipeContent} ID: {$idContent}");
+                    }
+
+                    if (!$adminId) {
+                        throw new \Exception("Admin tidak ditemukan");
+                    }
+
+                    // Simpan komisi custom ke tb_komisi_iklan
+                    $komisiData = [
+                        [
+                            'id_iklan' => (int)$idIklan,
+                            'id_user' => (int)$idMarketing, // Marketing user
+                            'tipe_iklan' => 'konten',
+                            'peran' => 'marketing',
+                            'persen' => (int)$komisiMarketing,
+                            'jumlah_komisi' => (int)round($totalHarga * $komisiMarketing / 100),
+                            'created_at' => date('Y-m-d H:i:s')
+                        ],
+                        [
+                            'id_iklan' => (int)$idIklan,
+                            'id_user' => (int)$penulisId, // Penulis user
+                            'tipe_iklan' => 'konten',
+                            'peran' => 'penulis',
+                            'persen' => (int)$komisiPenulis,
+                            'jumlah_komisi' => (int)round($totalHarga * $komisiPenulis / 100),
+                            'created_at' => date('Y-m-d H:i:s')
+                        ],
+                        [
+                            'id_iklan' => (int)$idIklan,
+                            'id_user' => (int)$adminId, // Admin user
+                            'tipe_iklan' => 'konten',
+                            'peran' => 'admin',
+                            'persen' => (int)$komisiAdmin,
+                            'jumlah_komisi' => (int)round($totalHarga * $komisiAdmin / 100),
+                            'created_at' => date('Y-m-d H:i:s')
+                        ]
+                    ];
+
+                    // Hapus komisi custom sebelumnya jika ada
+                    $this->komisiIklanModel->where('id_iklan', $idIklan)->delete();
+
+                    // $this->komisiIklanModel->updateOrInsertKomisi($idIklan);
+                    // Insert komisi custom baru
+                    if (!$this->komisiIklanModel->insertBatch($komisiData)) {
+                        throw new \Exception('Gagal menyimpan komisi custom');
+                    }
+                }
+
+                // 3. Proses perhitungan dan penyimpanan komisi ke tb_pemasukan_komisi
+                $this->prosesKomisiPemasukan($idIklan, $totalHarga, $idMarketing, $tipeContent, $idContent);
+            }
 
             $db->transComplete();
 
@@ -362,7 +370,7 @@ class ArtikelIklan extends BaseController
     private function prosesKomisiPemasukan($idIklan, $totalHarga, $idMarketing, $tipeContent, $idContent)
     {
         // Cek apakah ada komisi custom untuk iklan ini
-        $komisiCustom = $this->komisiIklanModel->where('id_iklan', $idIklan)->findAll();
+        $komisiCustom = $this->komisiIklanModel->where('id_iklan', $idIklan)->findAll(); //anomali
 
         if (!empty($komisiCustom)) {
             // Gunakan komisi custom
@@ -379,7 +387,7 @@ class ArtikelIklan extends BaseController
                     'tanggal_pemasukan' => date('Y-m-d H:i:s'),
                     'keterangan' => "Komisi {$komisi['peran']} untuk iklan ID: {$idIklan} ({$komisi['persen']}%)",
                     'id_iklan' => (int)$idIklan,
-                    'jenis_komisi' => $komisi['peran']
+                    'tipe_iklan' => 'konten'
                 ];
 
                 if (!$this->PemasukanKomisiModel->insert($pemasukanData)) {
@@ -387,18 +395,10 @@ class ArtikelIklan extends BaseController
                 }
             }
         } else {
-            // Gunakan komisi default
-            $komisiDefault = $this->komisiModel->findAll();
-            $komisiMap = [];
-
-            foreach ($komisiDefault as $komisi) {
-                $komisiMap[$komisi['id']] = $komisi['komisi'];
-            }
-
-            // Hitung komisi berdasarkan nilai default
-            $komisiMarketing = isset($komisiMap['3']) ? $komisiMap['1'] : 0;
-            $komisiPenulis = isset($komisiMap['2']) ? $komisiMap['2'] : 0;
-            $komisiAdmin = isset($komisiMap['1']) ? $komisiMap['3'] : 0;
+            $komisiData = $this->komisiModel->getDefaultKomisiIklanKonten();
+            $komisiAdmin = $komisiData['admin'] ?? 0;
+            $komisiMarketing = $komisiData['marketing'] ?? 0;
+            $komisiPenulis = $komisiData['penulis'] ?? 0;
 
             $komisiData = [
                 'marketing' => [
@@ -489,7 +489,7 @@ class ArtikelIklan extends BaseController
             log_message('error', 'Error getting penulis ID: ' . $e->getMessage());
             log_message('error', 'Trace: ' . $e->getTraceAsString());
             return null;
-        } 
+        }
     }
 
     private function getAdminId()
@@ -628,6 +628,4 @@ class ArtikelIklan extends BaseController
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
-    
 }

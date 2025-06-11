@@ -66,4 +66,46 @@ class IklanUtamaModel extends Model
 
         return $builder->get()->getResultArray();
     }
+
+    public function updateStatusIklan()
+    {
+        $today = date('Y-m-d');
+
+        // Update status 'berjalan'
+        $builder = $this->builder();
+
+        $builder->where('status', 'diterima')
+            ->where("tanggal_mulai IS NOT NULL", null, false)
+            ->where("tanggal_selesai IS NOT NULL", null, false)
+            ->where('tanggal_mulai <=', $today)
+            ->where('tanggal_selesai >=', $today)
+            ->set(['status' => 'berjalan'])
+            ->update();
+
+        // Update status 'selesai'
+        $builder = $this->builder();
+
+        $builder->where('status', 'berjalan')
+            ->where("tanggal_selesai IS NOT NULL", null, false)
+            ->where('tanggal_selesai <', $today)
+            ->set(['status' => 'selesai'])
+            ->update();
+    }
+
+    public function getAllIklanUtamaWithTipe($id_content)
+    {
+        return $this->db->table('tb_iklan_utama')
+            ->select('tb_iklan_utama.*, tb_tipe_iklan_utama.nama as nama_tipe, tb_tipe_iklan_utama.harga as harga_tipe')
+            ->join('tb_tipe_iklan_utama', 'tb_tipe_iklan_utama.id_tipe_iklan_utama = tb_iklan_utama.id_tipe_iklan_utama')
+            ->get()
+            ->getResult();
+    }
+
+
+    public function updateStatusTipeIklan($namaTipe, $status)
+    {   
+        return $this->db->table('tb_tipe_iklan_utama')
+            ->where('nama', $namaTipe)
+            ->update(['status' => $status]);
+    }
 }

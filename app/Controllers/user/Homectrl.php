@@ -33,6 +33,7 @@ class Homectrl extends BaseController
     private $MetaModel;
     private $tipeIklanModel; // Add this line
     private $iklanUtamaModel; // Add this line
+    private $ArtikelIklanModel; // Add this line
 
     public function __construct()
     {
@@ -49,6 +50,7 @@ class Homectrl extends BaseController
         $this->MetaModel = new MetaModel();
         $this->tipeIklanModel = new TipeIklanUtama();
         $this->iklanUtamaModel = new IklanUtamaModel();
+        $this->ArtikelIklanModel = new \App\Models\ArtikelIklanModel();
     }
 
     public function index()
@@ -217,6 +219,10 @@ class Homectrl extends BaseController
             'type'        => 'article',
         ];
 
+        $link_iklan_data = $this->ArtikelIklanModel->getLinkIklanByArtikelId($detail_artikel['id_artikel'] ?? null);
+        $link_iklan = $link_iklan_data['link_iklan'] ?? null;
+
+
         // Prepare the data to be passed to the view
         $data = [
             'artikel' => $detail_artikel,
@@ -233,6 +239,8 @@ class Homectrl extends BaseController
             'lang' => $lang,
             'canonical' => $canonical,
             'metaOG' => $metaOG,
+            'link_iklan' => $link_iklan, // Link iklan yang terkait dengan artikel
+            'thumbnail_iklan' => $detail_artikel['thumbnail_iklan'] ?? null, // Thumbnail iklan jika ada
         ];
 
         return view('user/home/detail', $data);
