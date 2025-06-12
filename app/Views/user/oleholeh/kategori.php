@@ -6,7 +6,7 @@
     <!-- Oleh-Oleh Listing -->
     <div class="row mt-3">
         <div class="col-12 mt-3">
-            <?php if ($iklanHeaderCek): ?>
+            <?php if ($iklanHeaderCek): ?> 
                 <?php if ($iklanHeaderCek['status'] === 'ada'): ?>
 
                     <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">

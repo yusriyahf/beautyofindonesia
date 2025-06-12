@@ -4,6 +4,16 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
+                <!-- News Detail Start -->
+                <?php if ($wisata): ?>
+                    <?php if ($wisata['iklan_banner'] === 'tidak'): ?>
+                        <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
+                    <?php else: ?>
+                        <a href="<?= esc($link_iklan) ?>" target="_blank">
+                            <img src="<?= base_url('assets/images/iklan_konten/' . esc($thumbnail_iklan)) ?>" alt="" width="100%" class="mb-3" loading="lazy">
+                        </a>
+                    <?php endif; ?>
+                <?php endif; ?>
                 <!-- Main Content Start -->
                 <div class="position-relative mb-3">
                     <div class="image-container position-relative">
@@ -95,6 +105,15 @@
             </div>
 
             <div class="col-lg-4">
+                <?php if ($wisata): ?>
+                    <?php if ($wisata['iklan_sidebar'] === 'tidak'): ?>
+                        <img src="<?= base_url('assets-baru/img/banner_sidebar.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
+                    <?php else: ?>
+                        <a href="<?= esc($link_iklan) ?>" target="_blank">
+                            <img src="<?= base_url('assets/images/iklan_konten/' . esc($thumbnail_iklan)) ?>" alt="" width="100%" class="mt-2" loading="lazy">
+                        </a>
+                    <?php endif; ?> 
+                <?php endif; ?>
                 <!-- Sidebar Start -->
                 <div class="mb-3">
                     <div class="section-title mb-0">
@@ -296,6 +315,16 @@
                     </a>
                 </div>
             </div>
+
+            <?php if ($wisata): ?>
+                    <?php if ($wisata['iklan_footer'] === 'tidak'): ?>
+                        <img src="<?= base_url('assets-baru/img/banner_footer.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
+                    <?php else: ?>
+                        <a href="<?= esc($link_iklan) ?>" target="_blank">
+                            <img src="<?= base_url('assets/images/iklan_konten/' . esc($thumbnail_iklan)) ?>" alt="" width="100%" class="mt-2" loading="lazy">
+                        </a>
+                    <?php endif; ?> 
+                <?php endif; ?>
 
         </div>
 

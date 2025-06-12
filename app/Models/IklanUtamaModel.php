@@ -9,7 +9,7 @@ class IklanUtamaModel extends Model
     protected $table = 'tb_iklan_utama';
     protected $primaryKey = 'id_iklan_utama';
     protected $returnType = 'array';
-    protected $allowedFields = ['id_iklan_utama', 'id_tipe_iklan_utama', 'id_marketing', 'jenis', 'rentang_bulan', 'tanggal_mulai', 'tanggal_selesai', 'id_iklan_utama', 'thumbnail_iklan', 'tanggal_pengajuan', 'status', 'alasan_penolakan', 'total_harga', 'link_iklan', 'jumlah_klik', 'dibuat_pada', 'diupdate_pada', 'diperbarui_pada'];
+    protected $allowedFields = ['id_iklan_utama', 'no_pengaju', 'id_tipe_iklan_utama', 'id_marketing', 'jenis', 'rentang_bulan', 'tanggal_mulai', 'tanggal_selesai', 'id_iklan_utama', 'thumbnail_iklan', 'tanggal_pengajuan', 'status', 'alasan_penolakan', 'total_harga', 'link_iklan', 'jumlah_klik', 'dibuat_pada', 'diupdate_pada', 'diperbarui_pada'];
 
     public function getIklanAktifByTipe($idTipe)
     {
@@ -103,9 +103,30 @@ class IklanUtamaModel extends Model
 
 
     public function updateStatusTipeIklan($namaTipe, $status)
-    {   
+    {
         return $this->db->table('tb_tipe_iklan_utama')
             ->where('nama', $namaTipe)
             ->update(['status' => $status]);
+    }
+
+    // Untuk marketing - tampilkan iklan yang dibuat oleh marketing tersebut
+    public function getArtikelIklanByMarketing($idMarketing, $startDate = null, $endDate = null)
+    {
+        $builder = $this->db->table('tb_iklan_utama')
+            ->select('
+            tb_iklan_utama.*, 
+            tb_users.username, 
+            tb_tipe_iklan_utama.nama as nama_tipe_iklan_utama
+        ')
+            ->join('tb_users', 'tb_users.id_user = tb_iklan_utama.id_marketing', 'left')
+            ->join('tb_tipe_iklan_utama', 'tb_tipe_iklan_utama.id_tipe_iklan_utama = tb_iklan_utama.id_tipe_iklan_utama', 'left')
+            ->where('tb_iklan_utama.id_marketing', $idMarketing);
+
+        if ($startDate && $endDate) {
+            $builder->where('tb_iklan_utama.created_at >=', $startDate)
+                ->where('tb_iklan_utama.updated_at <=', $endDate);
+        }
+
+        return $builder->get()->getResultArray();
     }
 }

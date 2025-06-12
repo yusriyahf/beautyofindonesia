@@ -37,10 +37,29 @@ class IklanUtamaController extends BaseController
         // $all_data_iklan_utama = $this->iklanUtamaModel->findAll();
         $all_data_iklan_utama = $this->iklanUtamaModel->getAllWithUserAndTipe();
 
+        $role = session()->get('role');
+        $userId = session()->get('id_user');
+        $startDate = $this->request->getGet('created_at');
+        $endDate = $this->request->getGet('updated_at');
+        $user['username'] = '';
+
+        // Ambil data berdasarkan role
+        if ($role == 'marketing') {
+            $all_data_iklan_utama = $this->iklanUtamaModel->getArtikelIklanByMarketing($userId, $startDate, $endDate) ?? [];
+        }
+
+        // Ambil username dari tb_users
+        $userData = $this->UserModel->find($userId);
+        $username = $userData['username'] ?? 'Tidak ditemukan';
+        foreach ($all_data_iklan_utama as &$iklan) {
+            $iklan['username'] = $username;
+        }
+        $username = $userData['username'] ?? 'Tidak ditemukan';
 
         $validation = \Config\Services::validation();
         return view('marketing/iklan_utama/index', [
             'all_data_iklan_utama' => $all_data_iklan_utama,
+            'username' => $username,
             'validation' => $validation
         ]);
     }
@@ -144,6 +163,7 @@ class IklanUtamaController extends BaseController
             'tanggal_pengajuan' => date('Y-m-d'),
             'link_iklan' => $linkIklan,
             'thumbnail_iklan' => $newName,
+            'no_pengaju'        => $this->request->getPost('no_pengaju'),
         ];
 
         // Simpan ke database
@@ -476,6 +496,7 @@ class IklanUtamaController extends BaseController
         $linkIklan        = $this->request->getPost('link_iklan');
         $jenis            = $this->request->getPost('jenis');
         $rentangBulan     = $this->request->getPost('rentang_bulan');
+        $noPengaju = $this->request->getPost('no_pengaju');
 
         // Bersihkan total harga
         $totalHarga       = $this->request->getPost('total_harga');
@@ -489,6 +510,7 @@ class IklanUtamaController extends BaseController
             'rentang_bulan'       => $rentangBulan,
             'total_harga'         => $cleanTotalHarga,
             'link_iklan'          => $linkIklan,
+            'no_pengaju'        => $noPengaju,
         ];
 
         // Handle upload gambar baru (jika ada)

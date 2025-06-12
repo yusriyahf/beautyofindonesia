@@ -6,7 +6,7 @@
         <div class="col-md-12 text-center">
 
             <?php if ($iklanHeaderCek): ?>
-                <?php if ($iklanHeaderCek['status'] === 'tidak'): ?>
+                <?php if ($iklanHeaderCek['status'] === 'ada'): ?>
 
                     <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2" loading="lazy">
 
@@ -274,7 +274,7 @@
     <div class="col-md-12 text-center">
 
         <?php if ($iklanFooterCek): ?>
-            <?php if ($iklanFooterCek['status'] === 'tidak'): ?>
+            <?php if ($iklanFooterCek['status'] === 'ada'): ?>
 
                 <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mt-2" loading="lazy">
 

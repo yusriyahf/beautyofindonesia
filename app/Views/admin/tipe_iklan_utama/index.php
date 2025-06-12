@@ -28,6 +28,15 @@
                 </div>
             </div>
         <?php endif; ?>
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <div><?= session()->getFlashdata('error') ?></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Data Table Section -->
         <div class="card border-0 shadow-sm">
@@ -145,9 +154,43 @@
             <form action="<?= base_url('admin/tipeiklanutama/proses_tambah') ?>" method="POST">
                 <?= csrf_field(); ?>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nama Tipe Iklan</label>
-                        <input type="text" class="form-control" name="nama" value="<?= old('nama') ?>" required>
+                    <div class="mb-3 d-flex gap-3">
+                        <div>
+                            <label for="jenis_konten" class="form-label">Jenis Konten</label>
+                            <select class="form-select" name="jenis_konten" id="jenis_konten">
+                                <option disabled <?= old('jenis_konten') ? '' : 'selected' ?>>Pilih Jenis Konten</option>
+                                <option value="Beranda" <?= old('jenis_konten') == 'Beranda' ? 'selected' : '' ?>>Beranda</option>
+                                <option value="Artikel" <?= old('jenis_konten') == 'Artikel' ? 'selected' : '' ?>>Artikel</option>
+                                <option value="Wisata" <?= old('jenis_konten') == 'Wisata' ? 'selected' : '' ?>>Wisata</option>
+                                <option value="Oleh-Oleh" <?= old('jenis_konten') == 'Oleh-Oleh' ? 'selected' : '' ?>>Oleh-Oleh</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="kategori" class="form-label">Kategori</label>
+                            <select class="form-select" name="kategori" id="kategori">
+                                <option disabled selected>Pilih Kategori</option>
+                                <?php foreach (['Artikel' => $kategori, 'Wisata' => $wisata, 'Oleh-Oleh' => $oleholeh] as $jenis => $list): ?>
+                                    <?php foreach ($list as $item): ?>
+                                        <?php
+                                        $nama_kolom = 'nama_kategori';
+                                        if ($jenis === 'Wisata') $nama_kolom = 'nama_kategori_wisata';
+                                        if ($jenis === 'Oleh-Oleh') $nama_kolom = 'nama_kategori_oleholeh';
+                                        $nilai = $item->$nama_kolom;
+                                        ?>
+                                        <option value="<?= esc($nilai) ?>" data-jenis="<?= $jenis ?>"
+                                            <?= old('kategori') == $nilai ? 'selected' : '' ?>>
+                                            <?= esc($nilai) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="tipe" class="form-label">Tipe Iklan</label>
+                            <select class="form-select" name="tipe" id="tipe">
+                                <option disabled <?= old('tipe') ? '' : 'selected' ?>>Pilih Tipe Iklan</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Harga</label>
@@ -190,9 +233,56 @@
                 <form action="<?= base_url('admin/tipeiklanutama/update/' . $tipe['id_tipe_iklan_utama']) ?>" method="POST">
                     <?= csrf_field(); ?>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Tipe Iklan</label>
-                            <input type="text" class="form-control" name="nama" value="<?= old('nama', esc($tipe['nama'])) ?>" required>
+                        <div class="mb-3 d-flex gap-3">
+                            <div class="mb-3">
+                                <label class="form-label">Jenis Konten</label>
+                                <select class="form-select jenis-konten-edit" name="jenis_konten" required>
+                                    <option disabled>Pilih Jenis Konten</option>
+                                    <?php foreach (['Beranda', 'Artikel', 'Wisata', 'Oleh-Oleh'] as $jk): ?>
+                                        <option value="<?= $jk ?>" <?= ($tipe['jenis_konten'] === $jk) ? 'selected' : '' ?>><?= $jk ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Kategori</label>
+                                <select class="form-select kategori-edit" name="kategori" <?= $tipe['jenis_konten'] === 'Beranda' ? 'disabled' : 'required' ?>>
+                                    <option disabled>Pilih Kategori</option>
+                                    <?php
+                                    $field = '';
+                                    $kategoriList = [];
+
+                                    if ($tipe['jenis_konten'] === 'Artikel') {
+                                        $kategoriList = $kategori;
+                                        $field = 'nama_kategori';
+                                    } elseif ($tipe['jenis_konten'] === 'Wisata') {
+                                        $kategoriList = $wisata;
+                                        $field = 'nama_kategori_wisata';
+                                    } elseif ($tipe['jenis_konten'] === 'Oleh-Oleh') {
+                                        $kategoriList = $oleholeh;
+                                        $field = 'nama_kategori_oleholeh';
+                                    }
+
+                                    foreach ($kategoriList as $item):
+                                        $value = $item->$field;
+                                        $selected = ($value === $tipe['kategori']) ? 'selected' : '';
+                                    ?>
+                                        <option value="<?= esc($value) ?>" <?= $selected ?>><?= esc($value) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Tipe Iklan</label>
+                                <select class="form-select tipe-edit" name="tipe" required>
+                                    <option disabled>Pilih Tipe</option>
+                                    <?php
+                                    $opsi = ($tipe['jenis_konten'] === 'Beranda') ? ['1', '2', '3'] : ['Header', 'Sidebar', 'Footer'];
+                                    foreach ($opsi as $t):
+                                        $selected = ($t === $tipe['tipe']) ? 'selected' : '';
+                                    ?>
+                                        <option value="<?= $t ?>" <?= $selected ?>><?= $t ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Harga</label>
@@ -327,7 +417,8 @@
     }
 
     /* Form Styling */
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
         border-radius: 8px;
         padding: 0.5rem 1rem;
     }
@@ -373,6 +464,54 @@
                 addModal.show();
             <?php endif; ?>
         <?php endif; ?>
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const jenisKonten = document.getElementById('jenis_konten');
+        const tipe = document.getElementById('tipe');
+        const kategori = document.getElementById('kategori');
+
+        const tipeBeranda = ['1', '2', '3'];
+        const tipeLain = ['Header', 'Sidebar', 'Footer'];
+
+        function updateJenisKonten() {
+            const jenis = jenisKonten.value;
+
+            let options = '<option disabled selected>Pilih Tipe Iklan</option>';
+            const tipeList = jenis === 'Beranda' ? tipeBeranda : tipeLain;
+            tipeList.forEach(val => {
+                const selected = (val === "<?= old('tipe') ?>") ? 'selected' : '';
+                options += `<option value="${val}" ${selected}>${val}</option>`;
+            });
+            tipe.innerHTML = options;
+
+            let kategoriChanged = false;
+            Array.from(kategori.options).forEach(opt => {
+                if (!opt.value) return;
+                const isMatch = opt.getAttribute('data-jenis') === jenis;
+                opt.hidden = !isMatch;
+
+                if (!isMatch && opt.selected) {
+                    kategoriChanged = true;
+                    opt.selected = false;
+                }
+            });
+
+            if (jenis === 'Beranda') {
+                kategori.selectedIndex = 0;
+                kategori.disabled = true;
+                kategori.required = false;
+            } else {
+                kategori.disabled = false;
+                kategori.required = true;
+                if (kategoriChanged || kategori.selectedIndex < 0) {
+                    kategori.selectedIndex = 0;
+                }
+            }
+        }
+
+        updateJenisKonten();
+        jenisKonten.addEventListener('change', updateJenisKonten);
     });
 </script>
 

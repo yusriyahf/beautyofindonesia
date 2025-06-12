@@ -166,7 +166,7 @@
 
                                 <div class="ps-5">
                                     <div class="mb-3">
-                                        <label class="form-label fw-semibold">No Telepon Pengaju <span class="text-danger">*</span></label>
+                                        <label class="form-label fw-semibold">No Telepon Klien <span class="text-danger">*</span></label>
                                         <div class="card border">
                                             <div class="card-body py-2">
                                                 <input

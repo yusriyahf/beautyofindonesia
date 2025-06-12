@@ -10,11 +10,6 @@
                     <h1 class="mb-2 text-white"><i class="fas fa-percentage me-2 text-white"></i> Manajemen Komisi</h1>
                     <p class="mb-0 opacity-75">Kelola komisi default dan riwayat komisi custom</p>
                 </div>
-                <div class="col-md-4 text-md-end">
-                    <button class="btn btn-light btn-lg rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addCustomCommissionModal">
-                        <i class="fas fa-plus me-2"></i> Tambah Komisi Custom
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -177,9 +172,6 @@
                                     <option value="marketing">Marketing</option>
                                 </select>
                             </div>
-                            <button class="btn btn-sm btn-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#addDefaultModal">
-                                <i class="fas fa-plus me-1"></i> Tambah
-                            </button>
                         </div>
                     </div>
                 </div>

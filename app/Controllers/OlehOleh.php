@@ -31,6 +31,7 @@ class OlehOleh extends BaseController
     private $MetaModel; // Add this
     private $tipeIklanModel; // Add this line
     private $iklanUtamaModel; // Add this line
+    private $ArtikelIklanModel; // Add this line
 
     public function __construct()
     {
@@ -45,6 +46,7 @@ class OlehOleh extends BaseController
         $this->MetaModel = new MetaModel(); // Initialize KabupatenModel
         $this->tipeIklanModel = new TipeIklanUtama();
         $this->iklanUtamaModel = new IklanUtamaModel();
+        $this->ArtikelIklanModel = new \App\Models\ArtikelIklanModel();
     }
 
     public function index()
@@ -154,6 +156,11 @@ class OlehOleh extends BaseController
         if (!$oleh) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Oleh-Oleh with slug '$slug' not found");
         }
+        // dd($oleh);
+
+         // Ambil iklan berdasarkan id artikel (id_content)
+        $id_oleh = $oleh['id_oleholeh'];
+        $iklan = $this->ArtikelIklanModel->getLinkIklanByArtikelId($id_oleh);
 
         // Cek cookie apakah user sudah melihat halaman ini
         $cookieName = 'viewed_oleholeh_' . $oleh['id_oleholeh'];
@@ -212,6 +219,8 @@ class OlehOleh extends BaseController
             'meta' => $this->MetaModel->where('nama_halaman', 'Oleh')->first(),
             'canonical' => $canonical,
             'metaOG' => $metaOG,
+            'iklan' => $iklan['link_iklan'] ?? null,
+            'thumbnail_iklan'=>$iklan['thumbnail_iklan'] ?? null,
         ];
 
         return view('user/oleholeh/detail', $data);

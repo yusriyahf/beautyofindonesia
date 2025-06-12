@@ -176,6 +176,10 @@ class Homectrl extends BaseController
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Artikel tidak ditemukan");
         }
 
+        // Ambil iklan berdasarkan id artikel (id_content)
+        $id_artikel = $artikel_detail->id_artikel;
+        $iklan = $this->ArtikelIklanModel->getLinkIklanByArtikelId($id_artikel);
+        
         // Tentukan prefix berdasarkan bahasa (artikel untuk 'id' dan article untuk 'en')
         $url_prefix = $lang === 'id' ? 'artikel' : 'article';
 
@@ -219,8 +223,6 @@ class Homectrl extends BaseController
             'type'        => 'article',
         ];
 
-        $link_iklan_data = $this->ArtikelIklanModel->getLinkIklanByArtikelId($detail_artikel['id_artikel'] ?? null);
-        $link_iklan = $link_iklan_data['link_iklan'] ?? null;
 
 
         // Prepare the data to be passed to the view
@@ -239,8 +241,8 @@ class Homectrl extends BaseController
             'lang' => $lang,
             'canonical' => $canonical,
             'metaOG' => $metaOG,
-            'link_iklan' => $link_iklan, // Link iklan yang terkait dengan artikel
-            'thumbnail_iklan' => $detail_artikel['thumbnail_iklan'] ?? null, // Thumbnail iklan jika ada
+            'link_iklan' => $iklan['link_iklan'],
+            'thumbnail_iklan' => $iklan['thumbnail_iklan'],
         ];
 
         return view('user/home/detail', $data);

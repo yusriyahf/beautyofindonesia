@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\user\BaseController;
+use App\Models\ArtikelIklanModel;
 use App\Models\IklanUtamaModel;
 use App\Models\TempatWisataModel;
 use App\Models\KategoriModel;
@@ -28,6 +29,7 @@ class Wisata extends BaseController
     private $MetaModel; // Add this line
     private $tipeIklanModel; // Add this line
     private $iklanUtamaModel; // Add this line
+    private $ArtikelIklanModel; // Add this line
 
     public function __construct()
     {
@@ -42,6 +44,7 @@ class Wisata extends BaseController
         $this->MetaModel = new MetaModel();
         $this->tipeIklanModel = new TipeIklanUtama();
         $this->iklanUtamaModel = new IklanUtamaModel();
+        $this->ArtikelIklanModel = new ArtikelIklanModel();
     }
 
     public function index()
@@ -151,6 +154,10 @@ class Wisata extends BaseController
             throw new \CodeIgniter\Exceptions\PageNotFoundException("Wisata with slug $slug_wisata not found");
         }
 
+        // Ambil iklan berdasarkan id artikel (id_content)
+        $id_wisata = $wisata['id_wisata'];
+        $iklan = $this->ArtikelIklanModel->getLinkIklanByArtikelId($id_wisata);
+
         // Determine the URL prefix based on the language (wisata for 'id' and destinations for 'en')
         $url_prefix = $lang === 'id' ? 'wisata' : 'destinations';
 
@@ -237,6 +244,8 @@ class Wisata extends BaseController
             'lang' => $lang,
             'canonical' => $canonical,
             'metaOG' => $metaOG,
+            'iklan' => $iklan['link_iklan'] ?? '',
+            'thumbnail_iklan'=>$iklan['thumbnail_iklan'] ?? '',
         ];
 
         return view('user/wisata/detail', $data);

@@ -242,16 +242,40 @@ class ArtikelIklanModel extends Model
             ->findAll();
     }
 
-    public function getLinkIklanByArtikelId($id_artikel)
+    public function getLinkIklanByArtikelId($id_content)
     {
-        return $this->db->table('tb_artikel_iklan')
-            ->select('link_iklan, thumbnail_iklan')
-            ->where('id_content', $id_artikel)
-            ->where('tipe_content', 'artikel')
-            ->where('status_iklan', 'berjalan') // ambil hanya iklan yang aktif
+        $iklan = $this->db->table('tb_artikel_iklan')
+            ->where('id_content', $id_content)
+            ->where('status_iklan', 'berjalan')
             ->get()
             ->getRowArray();
+
+        if (!$iklan) {
+            return null; // Tidak ada iklan aktif
+        }
+
+        $tipe = $iklan['tipe_content'];
+        $valid = false;
+
+        // Validasi apakah id_content memang ada di tabel sesuai tipe
+        if ($tipe === 'artikel') {
+            $valid = $this->db->table('tb_artikel')->where('id_artikel', $id_content)->countAllResults() > 0;
+        } elseif ($tipe === 'tempatwisata') {
+            $valid = $this->db->table('tb_tempatwisata')->where('id_wisata', $id_content)->countAllResults() > 0;
+        } elseif ($tipe === 'oleholeh') {
+            $valid = $this->db->table('tb_oleholeh')->where('id_oleholeh', $id_content)->countAllResults() > 0;
+        }
+
+        if ($valid) {
+            return [
+                'link_iklan' => $iklan['link_iklan'],
+                'thumbnail_iklan' => $iklan['thumbnail_iklan'],
+            ];
+        }
+
+        return null; // Tidak valid, mungkin konten sudah dihapus
     }
+
 
     public function getTipeIklanArtikel($id_content, $tipe_konten)
     {
@@ -267,11 +291,28 @@ class ArtikelIklanModel extends Model
     public function updateCustomField($id_content, $column, $tipe_content)
     {
         $table = 'tb_' . $tipe_content;
-        $column = ($column === 'iklan_header') ? 'iklan_banner' : $column;
-        $id = ($tipe_content === 'tempatwisata') ? 'id_wisata' : 'id_' . $tipe_content;
+        $id = $this->getContentId($tipe_content);
 
         return $this->db->table($table)
             ->where($id, $id_content)
             ->update([$column => 'ada']);
+    }
+
+    public function checkCustomField($id_content, $column, $tipe_content)
+    {
+        $table = 'tb_' . $tipe_content;
+        $id = $this->getContentId($tipe_content);
+
+        return $this->db->table($table)
+            ->select($column)
+            ->where($id, $id_content)
+            ->get()
+            ->getResult();
+    }
+
+    // get field tempat wisata
+    private function getContentId($tipe_content): string
+    {
+        return ($tipe_content === 'tempatwisata') ? 'id_wisata' : 'id_' . $tipe_content;
     }
 }

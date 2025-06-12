@@ -81,6 +81,8 @@ class IklanController extends BaseController
             $iklan['username'] = $user['username'] ?? 'Tidak ditemukan';
         }
 
+        // dd($all_data);
+
         return view('admin/artikel/artikel_iklan', [
             'all_data' => $all_data,
             'validation' => Services::validation(),

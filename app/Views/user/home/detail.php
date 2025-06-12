@@ -13,11 +13,11 @@
                         <img src="<?= base_url('assets-baru/img/banner_utama.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
                     <?php else: ?>
                         <a href="<?= esc($link_iklan) ?>" target="_blank">
-                            <img src="<?= base_url('assets/images/iklan_konten/' . esc($thumbnail_iklan)) ?>" alt="" width="100%" class="mt-2" loading="lazy">
+                            <img src="<?= base_url('assets/images/iklan_konten/' . esc($thumbnail_iklan)) ?>" alt="" width="100%" class="mb-3" loading="lazy">
                         </a>
                     <?php endif; ?>
                 <?php endif; ?>
-
+                <br>
                 <div class="position-relative mb-3">
                     <div class="image-container">
                         <?php
@@ -162,9 +162,15 @@
                 <!-- Tags End -->
             </div>
 
-            <div class="col-lg-12">
-                <img src="<?= base_url('assets-baru/img/banner_footer.png'); ?>" alt="" width="100%" class="mb-3">
-            </div>
+            <?php if ($artikel): ?>
+                    <?php if ($artikel['iklan_footer'] === 'tidak'): ?>
+                        <img src="<?= base_url('assets-baru/img/banner_footer.png'); ?>" alt="" width="100%" class="mb-3" loading="lazy">
+                    <?php else: ?>
+                        <a href="<?= esc($link_iklan) ?>" target="_blank">
+                            <img src="<?= base_url('assets/images/iklan_konten/' . esc($thumbnail_iklan)) ?>" alt="" width="100%" class="mt-2" loading="lazy">
+                        </a>
+                    <?php endif; ?>
+                <?php endif; ?>
         </div>
     </div>
 </div>
