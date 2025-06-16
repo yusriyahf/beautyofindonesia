@@ -26,7 +26,7 @@
                         <h5 class="modal-title" id="withdrawalModalLabel"><i class="fas fa-money-bill-wave me-2"></i> Penarikan Saldo</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="<?= base_url(session('role') . '/saldo/proses_penarikan') ?>" method="POST" id="withdrawalForm">
+                    <form action="<?= base_url(session('role') . '/saldo/proses_penarikan') ?>" method="POST" id="withdrawalForm" class="m-4">
                         <div class="modal-body">
                             <?= csrf_field(); ?>
                             <input type="hidden" name="status" value="diproses">

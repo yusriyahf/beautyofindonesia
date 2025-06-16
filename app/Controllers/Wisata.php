@@ -244,7 +244,7 @@ class Wisata extends BaseController
             'lang' => $lang,
             'canonical' => $canonical,
             'metaOG' => $metaOG,
-            'iklan' => $iklan['link_iklan'] ?? '',
+            'link_iklan' => $iklan['link_iklan'] ?? '',
             'thumbnail_iklan'=>$iklan['thumbnail_iklan'] ?? '',
         ];
 

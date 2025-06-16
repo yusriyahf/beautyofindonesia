@@ -219,7 +219,7 @@ class OlehOleh extends BaseController
             'meta' => $this->MetaModel->where('nama_halaman', 'Oleh')->first(),
             'canonical' => $canonical,
             'metaOG' => $metaOG,
-            'iklan' => $iklan['link_iklan'] ?? null,
+            'link_iklan' => $iklan['link_iklan'] ?? null,
             'thumbnail_iklan'=>$iklan['thumbnail_iklan'] ?? null,
         ];
 

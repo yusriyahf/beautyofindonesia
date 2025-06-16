@@ -115,7 +115,7 @@
                     <?php endif; ?> 
                 <?php endif; ?>
                 <!-- Sidebar Start -->
-                <div class="mb-3">
+                <div class="mb-3 mt-3">
                     <div class="section-title mb-0">
                         <h4 class="m-0 text-uppercase font-weight-bold"><?= lang('Blog.btnOtherDestinationss') ?></h4>
                     </div>

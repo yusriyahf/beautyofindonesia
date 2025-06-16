@@ -192,7 +192,7 @@ class Artikel extends BaseController
 
         $validation = \Config\Services::validation();
 
-        return view('admin/artikel/index', [
+        return view('admin/artikel/edit', [
             'artikelData' => $artikelData,
             'validation' => $validation
         ]);
