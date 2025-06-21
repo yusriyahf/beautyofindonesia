@@ -11,7 +11,7 @@
                 <p class="text-muted">Perbarui data oleh-oleh dengan informasi terbaru</p>
             </div>
             <div>
-                 <?php $role = session()->get('role');?>
+                <?php $role = session()->get('role'); ?>
                 <a href="<?= base_url($role . '/oleh_oleh/index') ?>" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
@@ -22,7 +22,7 @@
             <div class="col-12">
                 <div class="app-card app-card-settings shadow-sm p-4">
                     <div class="app-card-body">
-                         <?php $role = session()->get('role');?>
+                        <?php $role = session()->get('role'); ?>
                         <form action="<?= base_url($role . '/oleh_oleh/proses_edit/' . $oleh_oleh['id_oleholeh']) ?>" method="POST" enctype="multipart/form-data">
                             <?= csrf_field(); ?>
 
@@ -115,9 +115,9 @@
                                             <option value="">Pilih Provinsi</option>
                                             <?php foreach ($all_data_provinsi as $provinsi) : ?>
                                                 <option value="<?= $provinsi->id_provinsi ?>"
-    <?= (isset($oleh_oleh['id_provinsi']) && $provinsi->id_provinsi == $oleh_oleh['id_provinsi']) ? 'selected' : '' ?>>
-    <?= $provinsi->nama_provinsi ?>
-</option>
+                                                    <?= (isset($oleh_oleh['id_provinsi']) && $provinsi->id_provinsi == $oleh_oleh['id_provinsi']) ? 'selected' : '' ?>>
+                                                    <?= $provinsi->nama_provinsi ?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -197,7 +197,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="sumber_foto" class="form-label">
@@ -234,7 +234,7 @@
                                     <textarea class="form-control form-control-lg" id="deskripsi_oleholeh" name="deskripsi_oleholeh" rows="5" required><?= $oleh_oleh['deskripsi_oleholeh'] ?></textarea>
                                     <small class="text-muted">Deskripsi lengkap produk dalam bahasa Indonesia</small>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="deskripsi_oleholeh_eng" class="form-label">
                                         <i class="fas fa-font me-1 text-muted"></i>Deskripsi (English) <span class="text-danger">*</span>
@@ -277,7 +277,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="meta_description_id" class="form-label">
@@ -315,7 +315,7 @@
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <?php if (!empty(session()->getFlashdata('success'))) : ?>
                                 <div class="alert alert-success mt-3" role="alert">
                                     <i class="fas fa-check-circle me-2"></i>
@@ -331,75 +331,76 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    // Initialize enhanced Select2
-    $('.select2-enhanced').select2({
-        language: 'id',
-        placeholder: "Pilih opsi",
-        allowClear: true,
-        width: '100%',
-        dropdownParent: $('.app-card-settings')
-    });
+    $(document).ready(function() {
+        // Initialize enhanced Select2
+        $('.select2-enhanced').select2({
+            language: 'id',
+            placeholder: "Pilih opsi",
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('.app-card-settings')
+        });
 
-    // Image preview functionality
-    $('#foto_oleholeh').change(function(e) {
-        const preview = $('#image-preview');
-        const file = e.target.files[0];
-        
-        if (file) {
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                preview.attr('src', e.target.result).show();
+        // Image preview functionality
+        $('#foto_oleholeh').change(function(e) {
+            const preview = $('#image-preview');
+            const file = e.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.attr('src', e.target.result).show();
+                }
+
+                reader.readAsDataURL(file);
             }
-            
-            reader.readAsDataURL(file);
-        }
+        });
+
+        // Get current location button
+        $('#get-location').click(function() {
+            if (navigator.geolocation) {
+                $('#get-location').html('<i class="fas fa-spinner fa-spin me-1"></i> Mendapatkan lokasi...');
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        $('#oleholeh_latitude').val(position.coords.latitude.toFixed(6));
+                        $('#oleholeh_longitude').val(position.coords.longitude.toFixed(6));
+                        $('#get-location').html('<i class="fas fa-location-arrow me-1"></i> Lokasi Saat Ini');
+
+                        // Show success toast
+                        toastr.success('Lokasi berhasil didapatkan!');
+                    },
+                    function(error) {
+                        $('#get-location').html('<i class="fas fa-location-arrow me-1"></i> Lokasi Saat Ini');
+                        toastr.error('Gagal mendapatkan lokasi: ' + error.message);
+                    }, {
+                        timeout: 10000
+                    }
+                );
+            } else {
+                toastr.error('Browser tidak mendukung geolocation');
+            }
+        });
+
+        // Character counters for SEO fields
+        $('#meta_title_id').on('input', function() {
+            $('#meta_title_id_counter').text($(this).val().length);
+        }).trigger('input');
+
+        $('#meta_title_en').on('input', function() {
+            $('#meta_title_en_counter').text($(this).val().length);
+        }).trigger('input');
+
+        $('#meta_description_id').on('input', function() {
+            $('#meta_description_id_counter').text($(this).val().length);
+        }).trigger('input');
+
+        $('#meta_description_en').on('input', function() {
+            $('#meta_description_en_counter').text($(this).val().length);
+        }).trigger('input');
+
     });
-
-    // Get current location button
-    $('#get-location').click(function() {
-        if (navigator.geolocation) {
-            $('#get-location').html('<i class="fas fa-spinner fa-spin me-1"></i> Mendapatkan lokasi...');
-            
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    $('#oleholeh_latitude').val(position.coords.latitude.toFixed(6));
-                    $('#oleholeh_longitude').val(position.coords.longitude.toFixed(6));
-                    $('#get-location').html('<i class="fas fa-location-arrow me-1"></i> Lokasi Saat Ini');
-                    
-                    // Show success toast
-                    toastr.success('Lokasi berhasil didapatkan!');
-                },
-                function(error) {
-                    $('#get-location').html('<i class="fas fa-location-arrow me-1"></i> Lokasi Saat Ini');
-                    toastr.error('Gagal mendapatkan lokasi: ' + error.message);
-                },
-                { timeout: 10000 }
-            );
-        } else {
-            toastr.error('Browser tidak mendukung geolocation');
-        }
-    });
-
-    // Character counters for SEO fields
-    $('#meta_title_id').on('input', function() {
-        $('#meta_title_id_counter').text($(this).val().length);
-    }).trigger('input');
-
-    $('#meta_title_en').on('input', function() {
-        $('#meta_title_en_counter').text($(this).val().length);
-    }).trigger('input');
-
-    $('#meta_description_id').on('input', function() {
-        $('#meta_description_id_counter').text($(this).val().length);
-    }).trigger('input');
-
-    $('#meta_description_en').on('input', function() {
-        $('#meta_description_en_counter').text($(this).val().length);
-    }).trigger('input');
-
-});
 </script>
 
 <style>
@@ -411,33 +412,33 @@ $(document).ready(function() {
         padding: 0.375rem 0.75rem;
         font-size: 1rem;
     }
-    
+
     .select2-container--default .select2-selection--single .select2-selection__rendered {
         line-height: 1.5 !important;
         color: #495057 !important;
         padding-left: 0 !important;
     }
-    
+
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 44px !important;
     }
-    
+
     .select2-container--default .select2-dropdown {
         border: 1px solid #ced4da !important;
         border-radius: 0.375rem !important;
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     }
-    
+
     .select2-container--default .select2-results__option--highlighted {
         background-color: #0d6efd !important;
         color: white !important;
     }
-    
+
     .select2-container--default .select2-results__option--selected {
         background-color: #e9ecef !important;
         color: #495057 !important;
     }
-    
+
     .select2-container--default .select2-search--dropdown .select2-search__field {
         border: 1px solid #ced4da !important;
         border-radius: 0.375rem !important;
@@ -449,13 +450,13 @@ $(document).ready(function() {
         justify-content: space-between;
         margin-bottom: 1rem;
     }
-    
+
     .step {
         flex: 1;
         text-align: center;
         position: relative;
     }
-    
+
     .step:not(:last-child):after {
         content: '';
         position: absolute;
@@ -466,22 +467,22 @@ $(document).ready(function() {
         background-color: #dee2e6;
         z-index: 0;
     }
-    
+
     .step.active .step-number {
         background-color: #0d6efd;
         color: white;
         border-color: #0d6efd;
     }
-    
+
     .step.active .step-label {
         color: #0d6efd;
         font-weight: 500;
     }
-    
+
     .step.active:after {
         background-color: #0d6efd;
     }
-    
+
     .step-number {
         display: inline-flex;
         align-items: center;
@@ -496,7 +497,7 @@ $(document).ready(function() {
         position: relative;
         z-index: 1;
     }
-    
+
     .step-label {
         display: block;
         margin-top: 0.5rem;
@@ -505,7 +506,8 @@ $(document).ready(function() {
     }
 
     /* Form Controls */
-    .form-control-lg, .form-select-lg {
+    .form-control-lg,
+    .form-select-lg {
         padding: 0.5rem 1rem;
         font-size: 1rem;
         border-radius: 0.375rem;
@@ -529,4 +531,3 @@ $(document).ready(function() {
 </style>
 
 <?= $this->endSection('content') ?>
-
